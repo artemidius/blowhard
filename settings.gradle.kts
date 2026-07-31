@@ -17,4 +17,7 @@ dependencyResolutionManagement {
 rootProject.name = "Blowhard"
 
 include(":apps:desktop")
+include(":core:api")
+include(":core:application")
+include(":core:domain")
 include(":shared-ui")
