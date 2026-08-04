@@ -19,6 +19,7 @@ import androidx.compose.ui.unit.dp
  * Platform applications own their lifecycle and call this composable from their composition
  * root. Application behavior will be supplied through a platform-neutral core API.
  */
+@Suppress("FunctionNaming", "ktlint:standard:function-naming")
 @Composable
 public fun BlowhardApp() {
     MaterialTheme {

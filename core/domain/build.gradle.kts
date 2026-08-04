@@ -8,6 +8,9 @@ plugins {
 kotlin {
     explicitApi()
 
+    @OptIn(org.jetbrains.kotlin.gradle.dsl.abi.ExperimentalAbiValidation::class)
+    abiValidation()
+
     android {
         namespace = "io.github.artemidius.blowhard.core.domain"
         compileSdk = libs.versions.android.compile.sdk.get().toInt()

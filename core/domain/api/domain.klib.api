@@ -1,0 +1,145 @@
+// Klib ABI Dump
+// Targets: [iosArm64, iosSimulatorArm64]
+// Rendering settings:
+// - Signature version: 2
+// - Show manifest properties: true
+// - Show declarations: true
+
+// Library unique name: <Blowhard.core:domain>
+final enum class io.github.artemidius.blowhard.core.domain/GenerationFailureKind : kotlin/Enum<io.github.artemidius.blowhard.core.domain/GenerationFailureKind> { // io.github.artemidius.blowhard.core.domain/GenerationFailureKind|null[0]
+    enum entry INVALID_REQUEST // io.github.artemidius.blowhard.core.domain/GenerationFailureKind.INVALID_REQUEST|null[0]
+    enum entry RATE_LIMITED // io.github.artemidius.blowhard.core.domain/GenerationFailureKind.RATE_LIMITED|null[0]
+    enum entry UNAUTHORIZED // io.github.artemidius.blowhard.core.domain/GenerationFailureKind.UNAUTHORIZED|null[0]
+    enum entry UNAVAILABLE // io.github.artemidius.blowhard.core.domain/GenerationFailureKind.UNAVAILABLE|null[0]
+    enum entry UNEXPECTED // io.github.artemidius.blowhard.core.domain/GenerationFailureKind.UNEXPECTED|null[0]
+
+    final val entries // io.github.artemidius.blowhard.core.domain/GenerationFailureKind.entries|#static{}entries[0]
+        final fun <get-entries>(): kotlin.enums/EnumEntries<io.github.artemidius.blowhard.core.domain/GenerationFailureKind> // io.github.artemidius.blowhard.core.domain/GenerationFailureKind.entries.<get-entries>|<get-entries>#static(){}[0]
+
+    final fun valueOf(kotlin/String): io.github.artemidius.blowhard.core.domain/GenerationFailureKind // io.github.artemidius.blowhard.core.domain/GenerationFailureKind.valueOf|valueOf#static(kotlin.String){}[0]
+    final fun values(): kotlin/Array<io.github.artemidius.blowhard.core.domain/GenerationFailureKind> // io.github.artemidius.blowhard.core.domain/GenerationFailureKind.values|values#static(){}[0]
+}
+
+final enum class io.github.artemidius.blowhard.core.domain/PromptRejection : kotlin/Enum<io.github.artemidius.blowhard.core.domain/PromptRejection> { // io.github.artemidius.blowhard.core.domain/PromptRejection|null[0]
+    enum entry BLANK // io.github.artemidius.blowhard.core.domain/PromptRejection.BLANK|null[0]
+
+    final val entries // io.github.artemidius.blowhard.core.domain/PromptRejection.entries|#static{}entries[0]
+        final fun <get-entries>(): kotlin.enums/EnumEntries<io.github.artemidius.blowhard.core.domain/PromptRejection> // io.github.artemidius.blowhard.core.domain/PromptRejection.entries.<get-entries>|<get-entries>#static(){}[0]
+
+    final fun valueOf(kotlin/String): io.github.artemidius.blowhard.core.domain/PromptRejection // io.github.artemidius.blowhard.core.domain/PromptRejection.valueOf|valueOf#static(kotlin.String){}[0]
+    final fun values(): kotlin/Array<io.github.artemidius.blowhard.core.domain/PromptRejection> // io.github.artemidius.blowhard.core.domain/PromptRejection.values|values#static(){}[0]
+}
+
+abstract fun interface io.github.artemidius.blowhard.core.domain/TextGenerationPort { // io.github.artemidius.blowhard.core.domain/TextGenerationPort|null[0]
+    abstract fun generate(io.github.artemidius.blowhard.core.domain/GenerationRequest): kotlinx.coroutines.flow/Flow<io.github.artemidius.blowhard.core.domain/GenerationEvent> // io.github.artemidius.blowhard.core.domain/TextGenerationPort.generate|generate(io.github.artemidius.blowhard.core.domain.GenerationRequest){}[0]
+}
+
+sealed interface io.github.artemidius.blowhard.core.domain/GenerationEvent { // io.github.artemidius.blowhard.core.domain/GenerationEvent|null[0]
+    final class Failed : io.github.artemidius.blowhard.core.domain/GenerationEvent { // io.github.artemidius.blowhard.core.domain/GenerationEvent.Failed|null[0]
+        constructor <init>(io.github.artemidius.blowhard.core.domain/GenerationFailure) // io.github.artemidius.blowhard.core.domain/GenerationEvent.Failed.<init>|<init>(io.github.artemidius.blowhard.core.domain.GenerationFailure){}[0]
+
+        final val failure // io.github.artemidius.blowhard.core.domain/GenerationEvent.Failed.failure|{}failure[0]
+            final fun <get-failure>(): io.github.artemidius.blowhard.core.domain/GenerationFailure // io.github.artemidius.blowhard.core.domain/GenerationEvent.Failed.failure.<get-failure>|<get-failure>(){}[0]
+
+        final fun component1(): io.github.artemidius.blowhard.core.domain/GenerationFailure // io.github.artemidius.blowhard.core.domain/GenerationEvent.Failed.component1|component1(){}[0]
+        final fun copy(io.github.artemidius.blowhard.core.domain/GenerationFailure = ...): io.github.artemidius.blowhard.core.domain/GenerationEvent.Failed // io.github.artemidius.blowhard.core.domain/GenerationEvent.Failed.copy|copy(io.github.artemidius.blowhard.core.domain.GenerationFailure){}[0]
+        final fun equals(kotlin/Any?): kotlin/Boolean // io.github.artemidius.blowhard.core.domain/GenerationEvent.Failed.equals|equals(kotlin.Any?){}[0]
+        final fun hashCode(): kotlin/Int // io.github.artemidius.blowhard.core.domain/GenerationEvent.Failed.hashCode|hashCode(){}[0]
+        final fun toString(): kotlin/String // io.github.artemidius.blowhard.core.domain/GenerationEvent.Failed.toString|toString(){}[0]
+    }
+
+    final class TextDelta : io.github.artemidius.blowhard.core.domain/GenerationEvent { // io.github.artemidius.blowhard.core.domain/GenerationEvent.TextDelta|null[0]
+        constructor <init>(kotlin/String) // io.github.artemidius.blowhard.core.domain/GenerationEvent.TextDelta.<init>|<init>(kotlin.String){}[0]
+
+        final val text // io.github.artemidius.blowhard.core.domain/GenerationEvent.TextDelta.text|{}text[0]
+            final fun <get-text>(): kotlin/String // io.github.artemidius.blowhard.core.domain/GenerationEvent.TextDelta.text.<get-text>|<get-text>(){}[0]
+
+        final fun component1(): kotlin/String // io.github.artemidius.blowhard.core.domain/GenerationEvent.TextDelta.component1|component1(){}[0]
+        final fun copy(kotlin/String = ...): io.github.artemidius.blowhard.core.domain/GenerationEvent.TextDelta // io.github.artemidius.blowhard.core.domain/GenerationEvent.TextDelta.copy|copy(kotlin.String){}[0]
+        final fun equals(kotlin/Any?): kotlin/Boolean // io.github.artemidius.blowhard.core.domain/GenerationEvent.TextDelta.equals|equals(kotlin.Any?){}[0]
+        final fun hashCode(): kotlin/Int // io.github.artemidius.blowhard.core.domain/GenerationEvent.TextDelta.hashCode|hashCode(){}[0]
+        final fun toString(): kotlin/String // io.github.artemidius.blowhard.core.domain/GenerationEvent.TextDelta.toString|toString(){}[0]
+    }
+
+    final object Completed : io.github.artemidius.blowhard.core.domain/GenerationEvent { // io.github.artemidius.blowhard.core.domain/GenerationEvent.Completed|null[0]
+        final fun equals(kotlin/Any?): kotlin/Boolean // io.github.artemidius.blowhard.core.domain/GenerationEvent.Completed.equals|equals(kotlin.Any?){}[0]
+        final fun hashCode(): kotlin/Int // io.github.artemidius.blowhard.core.domain/GenerationEvent.Completed.hashCode|hashCode(){}[0]
+        final fun toString(): kotlin/String // io.github.artemidius.blowhard.core.domain/GenerationEvent.Completed.toString|toString(){}[0]
+    }
+}
+
+sealed interface io.github.artemidius.blowhard.core.domain/PromptTextResult { // io.github.artemidius.blowhard.core.domain/PromptTextResult|null[0]
+    final class Accepted : io.github.artemidius.blowhard.core.domain/PromptTextResult { // io.github.artemidius.blowhard.core.domain/PromptTextResult.Accepted|null[0]
+        constructor <init>(io.github.artemidius.blowhard.core.domain/PromptText) // io.github.artemidius.blowhard.core.domain/PromptTextResult.Accepted.<init>|<init>(io.github.artemidius.blowhard.core.domain.PromptText){}[0]
+
+        final val prompt // io.github.artemidius.blowhard.core.domain/PromptTextResult.Accepted.prompt|{}prompt[0]
+            final fun <get-prompt>(): io.github.artemidius.blowhard.core.domain/PromptText // io.github.artemidius.blowhard.core.domain/PromptTextResult.Accepted.prompt.<get-prompt>|<get-prompt>(){}[0]
+
+        final fun component1(): io.github.artemidius.blowhard.core.domain/PromptText // io.github.artemidius.blowhard.core.domain/PromptTextResult.Accepted.component1|component1(){}[0]
+        final fun copy(io.github.artemidius.blowhard.core.domain/PromptText = ...): io.github.artemidius.blowhard.core.domain/PromptTextResult.Accepted // io.github.artemidius.blowhard.core.domain/PromptTextResult.Accepted.copy|copy(io.github.artemidius.blowhard.core.domain.PromptText){}[0]
+        final fun equals(kotlin/Any?): kotlin/Boolean // io.github.artemidius.blowhard.core.domain/PromptTextResult.Accepted.equals|equals(kotlin.Any?){}[0]
+        final fun hashCode(): kotlin/Int // io.github.artemidius.blowhard.core.domain/PromptTextResult.Accepted.hashCode|hashCode(){}[0]
+        final fun toString(): kotlin/String // io.github.artemidius.blowhard.core.domain/PromptTextResult.Accepted.toString|toString(){}[0]
+    }
+
+    final class Rejected : io.github.artemidius.blowhard.core.domain/PromptTextResult { // io.github.artemidius.blowhard.core.domain/PromptTextResult.Rejected|null[0]
+        constructor <init>(io.github.artemidius.blowhard.core.domain/PromptRejection) // io.github.artemidius.blowhard.core.domain/PromptTextResult.Rejected.<init>|<init>(io.github.artemidius.blowhard.core.domain.PromptRejection){}[0]
+
+        final val reason // io.github.artemidius.blowhard.core.domain/PromptTextResult.Rejected.reason|{}reason[0]
+            final fun <get-reason>(): io.github.artemidius.blowhard.core.domain/PromptRejection // io.github.artemidius.blowhard.core.domain/PromptTextResult.Rejected.reason.<get-reason>|<get-reason>(){}[0]
+
+        final fun component1(): io.github.artemidius.blowhard.core.domain/PromptRejection // io.github.artemidius.blowhard.core.domain/PromptTextResult.Rejected.component1|component1(){}[0]
+        final fun copy(io.github.artemidius.blowhard.core.domain/PromptRejection = ...): io.github.artemidius.blowhard.core.domain/PromptTextResult.Rejected // io.github.artemidius.blowhard.core.domain/PromptTextResult.Rejected.copy|copy(io.github.artemidius.blowhard.core.domain.PromptRejection){}[0]
+        final fun equals(kotlin/Any?): kotlin/Boolean // io.github.artemidius.blowhard.core.domain/PromptTextResult.Rejected.equals|equals(kotlin.Any?){}[0]
+        final fun hashCode(): kotlin/Int // io.github.artemidius.blowhard.core.domain/PromptTextResult.Rejected.hashCode|hashCode(){}[0]
+        final fun toString(): kotlin/String // io.github.artemidius.blowhard.core.domain/PromptTextResult.Rejected.toString|toString(){}[0]
+    }
+}
+
+final class io.github.artemidius.blowhard.core.domain/GenerationFailure { // io.github.artemidius.blowhard.core.domain/GenerationFailure|null[0]
+    constructor <init>(io.github.artemidius.blowhard.core.domain/GenerationFailureKind, kotlin/String? = ...) // io.github.artemidius.blowhard.core.domain/GenerationFailure.<init>|<init>(io.github.artemidius.blowhard.core.domain.GenerationFailureKind;kotlin.String?){}[0]
+
+    final val kind // io.github.artemidius.blowhard.core.domain/GenerationFailure.kind|{}kind[0]
+        final fun <get-kind>(): io.github.artemidius.blowhard.core.domain/GenerationFailureKind // io.github.artemidius.blowhard.core.domain/GenerationFailure.kind.<get-kind>|<get-kind>(){}[0]
+    final val reference // io.github.artemidius.blowhard.core.domain/GenerationFailure.reference|{}reference[0]
+        final fun <get-reference>(): kotlin/String? // io.github.artemidius.blowhard.core.domain/GenerationFailure.reference.<get-reference>|<get-reference>(){}[0]
+
+    final fun component1(): io.github.artemidius.blowhard.core.domain/GenerationFailureKind // io.github.artemidius.blowhard.core.domain/GenerationFailure.component1|component1(){}[0]
+    final fun component2(): kotlin/String? // io.github.artemidius.blowhard.core.domain/GenerationFailure.component2|component2(){}[0]
+    final fun copy(io.github.artemidius.blowhard.core.domain/GenerationFailureKind = ..., kotlin/String? = ...): io.github.artemidius.blowhard.core.domain/GenerationFailure // io.github.artemidius.blowhard.core.domain/GenerationFailure.copy|copy(io.github.artemidius.blowhard.core.domain.GenerationFailureKind;kotlin.String?){}[0]
+    final fun equals(kotlin/Any?): kotlin/Boolean // io.github.artemidius.blowhard.core.domain/GenerationFailure.equals|equals(kotlin.Any?){}[0]
+    final fun hashCode(): kotlin/Int // io.github.artemidius.blowhard.core.domain/GenerationFailure.hashCode|hashCode(){}[0]
+    final fun toString(): kotlin/String // io.github.artemidius.blowhard.core.domain/GenerationFailure.toString|toString(){}[0]
+}
+
+final class io.github.artemidius.blowhard.core.domain/GenerationRequest { // io.github.artemidius.blowhard.core.domain/GenerationRequest|null[0]
+    constructor <init>(io.github.artemidius.blowhard.core.api/RunId, io.github.artemidius.blowhard.core.api/ConversationId, io.github.artemidius.blowhard.core.domain/PromptText) // io.github.artemidius.blowhard.core.domain/GenerationRequest.<init>|<init>(io.github.artemidius.blowhard.core.api.RunId;io.github.artemidius.blowhard.core.api.ConversationId;io.github.artemidius.blowhard.core.domain.PromptText){}[0]
+
+    final val conversationId // io.github.artemidius.blowhard.core.domain/GenerationRequest.conversationId|{}conversationId[0]
+        final fun <get-conversationId>(): io.github.artemidius.blowhard.core.api/ConversationId // io.github.artemidius.blowhard.core.domain/GenerationRequest.conversationId.<get-conversationId>|<get-conversationId>(){}[0]
+    final val prompt // io.github.artemidius.blowhard.core.domain/GenerationRequest.prompt|{}prompt[0]
+        final fun <get-prompt>(): io.github.artemidius.blowhard.core.domain/PromptText // io.github.artemidius.blowhard.core.domain/GenerationRequest.prompt.<get-prompt>|<get-prompt>(){}[0]
+    final val runId // io.github.artemidius.blowhard.core.domain/GenerationRequest.runId|{}runId[0]
+        final fun <get-runId>(): io.github.artemidius.blowhard.core.api/RunId // io.github.artemidius.blowhard.core.domain/GenerationRequest.runId.<get-runId>|<get-runId>(){}[0]
+
+    final fun component1(): io.github.artemidius.blowhard.core.api/RunId // io.github.artemidius.blowhard.core.domain/GenerationRequest.component1|component1(){}[0]
+    final fun component2(): io.github.artemidius.blowhard.core.api/ConversationId // io.github.artemidius.blowhard.core.domain/GenerationRequest.component2|component2(){}[0]
+    final fun component3(): io.github.artemidius.blowhard.core.domain/PromptText // io.github.artemidius.blowhard.core.domain/GenerationRequest.component3|component3(){}[0]
+    final fun copy(io.github.artemidius.blowhard.core.api/RunId = ..., io.github.artemidius.blowhard.core.api/ConversationId = ..., io.github.artemidius.blowhard.core.domain/PromptText = ...): io.github.artemidius.blowhard.core.domain/GenerationRequest // io.github.artemidius.blowhard.core.domain/GenerationRequest.copy|copy(io.github.artemidius.blowhard.core.api.RunId;io.github.artemidius.blowhard.core.api.ConversationId;io.github.artemidius.blowhard.core.domain.PromptText){}[0]
+    final fun equals(kotlin/Any?): kotlin/Boolean // io.github.artemidius.blowhard.core.domain/GenerationRequest.equals|equals(kotlin.Any?){}[0]
+    final fun hashCode(): kotlin/Int // io.github.artemidius.blowhard.core.domain/GenerationRequest.hashCode|hashCode(){}[0]
+    final fun toString(): kotlin/String // io.github.artemidius.blowhard.core.domain/GenerationRequest.toString|toString(){}[0]
+}
+
+final value class io.github.artemidius.blowhard.core.domain/PromptText { // io.github.artemidius.blowhard.core.domain/PromptText|null[0]
+    final val value // io.github.artemidius.blowhard.core.domain/PromptText.value|{}value[0]
+        final fun <get-value>(): kotlin/String // io.github.artemidius.blowhard.core.domain/PromptText.value.<get-value>|<get-value>(){}[0]
+
+    final fun equals(kotlin/Any?): kotlin/Boolean // io.github.artemidius.blowhard.core.domain/PromptText.equals|equals(kotlin.Any?){}[0]
+    final fun hashCode(): kotlin/Int // io.github.artemidius.blowhard.core.domain/PromptText.hashCode|hashCode(){}[0]
+    final fun toString(): kotlin/String // io.github.artemidius.blowhard.core.domain/PromptText.toString|toString(){}[0]
+
+    final object Companion { // io.github.artemidius.blowhard.core.domain/PromptText.Companion|null[0]
+        final fun from(kotlin/String): io.github.artemidius.blowhard.core.domain/PromptTextResult // io.github.artemidius.blowhard.core.domain/PromptText.Companion.from|from(kotlin.String){}[0]
+    }
+}

@@ -24,12 +24,9 @@ class ConversationRunsConsumerTest {
         )
     }
 
-    private class StubConversationRuns(
-        private val conversationId: ConversationId,
-        private val runId: RunId,
-    ) : ConversationRuns {
-        override suspend fun start(request: StartRunRequest): StartRunResult =
-            StartRunResult.Started(runId)
+    private class StubConversationRuns(private val conversationId: ConversationId, private val runId: RunId) :
+        ConversationRuns {
+        override suspend fun start(request: StartRunRequest): StartRunResult = StartRunResult.Started(runId)
 
         override suspend fun observe(runId: RunId): ObserveRunResult =
             ObserveRunResult.Found(flowOf(RunSnapshot.Queued(runId, conversationId)))

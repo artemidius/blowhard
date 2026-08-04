@@ -1,10 +1,7 @@
 package io.github.artemidius.blowhard.core.api
 
 /** Untrusted client input used to request a new generation attempt. */
-public data class StartRunRequest(
-    public val conversationId: ConversationId,
-    public val prompt: String,
-)
+public data class StartRunRequest(public val conversationId: ConversationId, public val prompt: String)
 
 /** Result of asking the application to start a run. */
 public sealed interface StartRunResult {

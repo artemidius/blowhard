@@ -1,0 +1,16 @@
+title = "Blowhard secret detection"
+
+[extend]
+useDefault = true
+
+[[allowlists]]
+description = "Generated and local tool state"
+paths = [
+  '''(^|/)(\.git|\.gradle|\.kotlin|build)(/|$)''',
+]
+
+[[allowlists]]
+description = "Ignored root environment file used for local credentials"
+paths = [
+  '''^\.env$''',
+]

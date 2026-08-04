@@ -1,0 +1,126 @@
+public abstract interface class io/github/artemidius/blowhard/core/domain/GenerationEvent {
+}
+
+public final class io/github/artemidius/blowhard/core/domain/GenerationEvent$Completed : io/github/artemidius/blowhard/core/domain/GenerationEvent {
+	public static final field INSTANCE Lio/github/artemidius/blowhard/core/domain/GenerationEvent$Completed;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class io/github/artemidius/blowhard/core/domain/GenerationEvent$Failed : io/github/artemidius/blowhard/core/domain/GenerationEvent {
+	public fun <init> (Lio/github/artemidius/blowhard/core/domain/GenerationFailure;)V
+	public final fun component1 ()Lio/github/artemidius/blowhard/core/domain/GenerationFailure;
+	public final fun copy (Lio/github/artemidius/blowhard/core/domain/GenerationFailure;)Lio/github/artemidius/blowhard/core/domain/GenerationEvent$Failed;
+	public static synthetic fun copy$default (Lio/github/artemidius/blowhard/core/domain/GenerationEvent$Failed;Lio/github/artemidius/blowhard/core/domain/GenerationFailure;ILjava/lang/Object;)Lio/github/artemidius/blowhard/core/domain/GenerationEvent$Failed;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getFailure ()Lio/github/artemidius/blowhard/core/domain/GenerationFailure;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class io/github/artemidius/blowhard/core/domain/GenerationEvent$TextDelta : io/github/artemidius/blowhard/core/domain/GenerationEvent {
+	public fun <init> (Ljava/lang/String;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun copy (Ljava/lang/String;)Lio/github/artemidius/blowhard/core/domain/GenerationEvent$TextDelta;
+	public static synthetic fun copy$default (Lio/github/artemidius/blowhard/core/domain/GenerationEvent$TextDelta;Ljava/lang/String;ILjava/lang/Object;)Lio/github/artemidius/blowhard/core/domain/GenerationEvent$TextDelta;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getText ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class io/github/artemidius/blowhard/core/domain/GenerationFailure {
+	public fun <init> (Lio/github/artemidius/blowhard/core/domain/GenerationFailureKind;Ljava/lang/String;)V
+	public synthetic fun <init> (Lio/github/artemidius/blowhard/core/domain/GenerationFailureKind;Ljava/lang/String;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()Lio/github/artemidius/blowhard/core/domain/GenerationFailureKind;
+	public final fun component2 ()Ljava/lang/String;
+	public final fun copy (Lio/github/artemidius/blowhard/core/domain/GenerationFailureKind;Ljava/lang/String;)Lio/github/artemidius/blowhard/core/domain/GenerationFailure;
+	public static synthetic fun copy$default (Lio/github/artemidius/blowhard/core/domain/GenerationFailure;Lio/github/artemidius/blowhard/core/domain/GenerationFailureKind;Ljava/lang/String;ILjava/lang/Object;)Lio/github/artemidius/blowhard/core/domain/GenerationFailure;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getKind ()Lio/github/artemidius/blowhard/core/domain/GenerationFailureKind;
+	public final fun getReference ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class io/github/artemidius/blowhard/core/domain/GenerationFailureKind : java/lang/Enum {
+	public static final field INVALID_REQUEST Lio/github/artemidius/blowhard/core/domain/GenerationFailureKind;
+	public static final field RATE_LIMITED Lio/github/artemidius/blowhard/core/domain/GenerationFailureKind;
+	public static final field UNAUTHORIZED Lio/github/artemidius/blowhard/core/domain/GenerationFailureKind;
+	public static final field UNAVAILABLE Lio/github/artemidius/blowhard/core/domain/GenerationFailureKind;
+	public static final field UNEXPECTED Lio/github/artemidius/blowhard/core/domain/GenerationFailureKind;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public static fun valueOf (Ljava/lang/String;)Lio/github/artemidius/blowhard/core/domain/GenerationFailureKind;
+	public static fun values ()[Lio/github/artemidius/blowhard/core/domain/GenerationFailureKind;
+}
+
+public final class io/github/artemidius/blowhard/core/domain/GenerationRequest {
+	public synthetic fun <init> (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1-oS5FZMg ()Ljava/lang/String;
+	public final fun component2-j0uiRXY ()Ljava/lang/String;
+	public final fun component3-oK7e1FM ()Ljava/lang/String;
+	public final fun copy-DpELgK4 (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)Lio/github/artemidius/blowhard/core/domain/GenerationRequest;
+	public static synthetic fun copy-DpELgK4$default (Lio/github/artemidius/blowhard/core/domain/GenerationRequest;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;ILjava/lang/Object;)Lio/github/artemidius/blowhard/core/domain/GenerationRequest;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getConversationId-j0uiRXY ()Ljava/lang/String;
+	public final fun getPrompt-oK7e1FM ()Ljava/lang/String;
+	public final fun getRunId-oS5FZMg ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class io/github/artemidius/blowhard/core/domain/PromptRejection : java/lang/Enum {
+	public static final field BLANK Lio/github/artemidius/blowhard/core/domain/PromptRejection;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public static fun valueOf (Ljava/lang/String;)Lio/github/artemidius/blowhard/core/domain/PromptRejection;
+	public static fun values ()[Lio/github/artemidius/blowhard/core/domain/PromptRejection;
+}
+
+public final class io/github/artemidius/blowhard/core/domain/PromptText {
+	public static final field Companion Lio/github/artemidius/blowhard/core/domain/PromptText$Companion;
+	public static final synthetic fun box-impl (Ljava/lang/String;)Lio/github/artemidius/blowhard/core/domain/PromptText;
+	public fun equals (Ljava/lang/Object;)Z
+	public static fun equals-impl (Ljava/lang/String;Ljava/lang/Object;)Z
+	public static final fun equals-impl0 (Ljava/lang/String;Ljava/lang/String;)Z
+	public final fun getValue ()Ljava/lang/String;
+	public fun hashCode ()I
+	public static fun hashCode-impl (Ljava/lang/String;)I
+	public fun toString ()Ljava/lang/String;
+	public static fun toString-impl (Ljava/lang/String;)Ljava/lang/String;
+	public final synthetic fun unbox-impl ()Ljava/lang/String;
+}
+
+public final class io/github/artemidius/blowhard/core/domain/PromptText$Companion {
+	public final fun from (Ljava/lang/String;)Lio/github/artemidius/blowhard/core/domain/PromptTextResult;
+}
+
+public abstract interface class io/github/artemidius/blowhard/core/domain/PromptTextResult {
+}
+
+public final class io/github/artemidius/blowhard/core/domain/PromptTextResult$Accepted : io/github/artemidius/blowhard/core/domain/PromptTextResult {
+	public synthetic fun <init> (Ljava/lang/String;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1-oK7e1FM ()Ljava/lang/String;
+	public final fun copy-Z_lLFK0 (Ljava/lang/String;)Lio/github/artemidius/blowhard/core/domain/PromptTextResult$Accepted;
+	public static synthetic fun copy-Z_lLFK0$default (Lio/github/artemidius/blowhard/core/domain/PromptTextResult$Accepted;Ljava/lang/String;ILjava/lang/Object;)Lio/github/artemidius/blowhard/core/domain/PromptTextResult$Accepted;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getPrompt-oK7e1FM ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class io/github/artemidius/blowhard/core/domain/PromptTextResult$Rejected : io/github/artemidius/blowhard/core/domain/PromptTextResult {
+	public fun <init> (Lio/github/artemidius/blowhard/core/domain/PromptRejection;)V
+	public final fun component1 ()Lio/github/artemidius/blowhard/core/domain/PromptRejection;
+	public final fun copy (Lio/github/artemidius/blowhard/core/domain/PromptRejection;)Lio/github/artemidius/blowhard/core/domain/PromptTextResult$Rejected;
+	public static synthetic fun copy$default (Lio/github/artemidius/blowhard/core/domain/PromptTextResult$Rejected;Lio/github/artemidius/blowhard/core/domain/PromptRejection;ILjava/lang/Object;)Lio/github/artemidius/blowhard/core/domain/PromptTextResult$Rejected;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getReason ()Lio/github/artemidius/blowhard/core/domain/PromptRejection;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public abstract interface class io/github/artemidius/blowhard/core/domain/TextGenerationPort {
+	public abstract fun generate (Lio/github/artemidius/blowhard/core/domain/GenerationRequest;)Lkotlinx/coroutines/flow/Flow;
+}
+

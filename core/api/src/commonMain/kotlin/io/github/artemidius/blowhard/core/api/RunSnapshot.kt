@@ -9,10 +9,7 @@ public sealed interface RunSnapshot {
     public val conversationId: ConversationId
 
     /** The attempt exists but provider execution has not started. */
-    public data class Queued(
-        override val runId: RunId,
-        override val conversationId: ConversationId,
-    ) : RunSnapshot
+    public data class Queued(override val runId: RunId, override val conversationId: ConversationId) : RunSnapshot
 
     /** The attempt is active and [output] contains the text produced so far. */
     public data class Running(
@@ -45,10 +42,7 @@ public sealed interface RunSnapshot {
 }
 
 /** Client-safe failure details that contain no provider response body or sensitive request data. */
-public data class RunFailure(
-    public val kind: RunFailureKind,
-    public val reference: String? = null,
-)
+public data class RunFailure(public val kind: RunFailureKind, public val reference: String? = null)
 
 /** Stable failure categories exposed to clients. */
 public enum class RunFailureKind {

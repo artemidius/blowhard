@@ -35,10 +35,7 @@ public sealed interface GenerationEvent {
 }
 
 /** Failure information that is safe to pass from an adapter into application code. */
-public data class GenerationFailure(
-    public val kind: GenerationFailureKind,
-    public val reference: String? = null,
-)
+public data class GenerationFailure(public val kind: GenerationFailureKind, public val reference: String? = null)
 
 /** Provider-neutral generation failure categories. */
 public enum class GenerationFailureKind {
