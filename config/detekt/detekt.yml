@@ -1,0 +1,40 @@
+config:
+  validation: true
+  warningsAsErrors: true
+
+comments:
+  UndocumentedPublicClass:
+    active: true
+    excludes:
+      - '**/test/**'
+      - '**/commonTest/**'
+    searchInNestedClass: true
+    searchInInnerObject: true
+    searchInInnerInterface: true
+  UndocumentedPublicFunction:
+    active: true
+    excludes:
+      - '**/test/**'
+      - '**/commonTest/**'
+
+complexity:
+  LongMethod:
+    allowedLines: 40
+  LongParameterList:
+    allowedFunctionParameters: 5
+    allowedConstructorParameters: 6
+    ignoreDataClasses: true
+  TooManyFunctions:
+    allowedFunctionsPerFile: 10
+    allowedFunctionsPerClass: 10
+    allowedFunctionsPerInterface: 10
+    allowedFunctionsPerObject: 10
+    allowedFunctionsPerEnum: 10
+
+style:
+  MaxLineLength:
+    maxLineLength: 120
+    excludePackageStatements: true
+    excludeImportStatements: true
+    excludeCommentStatements: true
+    excludeRawStrings: true
