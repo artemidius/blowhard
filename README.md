@@ -1,5 +1,7 @@
 # Blowhard
 
+[![CI](https://github.com/artemidius/blowhard/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/artemidius/blowhard/actions/workflows/ci.yml)
+
 A desktop-first Kotlin Multiplatform client for Mistral AI.
 
 Blowhard is in early development. The current foundation provides a shared Compose presentation
@@ -32,6 +34,9 @@ The shared client contract and enforced module direction are documented in
 The local quality and security gate is documented in
 [`ADR 0003`](docs/decisions/0003-quality-gates.md).
 
+The cross-platform CI matrix and security model are documented in
+[`ADR 0004`](docs/decisions/0004-continuous-integration.md).
+
 ## Run the desktop application
 
 ```shell
@@ -50,6 +55,11 @@ tree. Apply safe formatting changes with `./gradlew spotlessApply`.
 
 Generated API documentation is written to `build/dokka/html`, and the XML coverage report is
 written to `build/reports/kover/report.xml`.
+
+GitHub Actions builds and tests the desktop JVM application on pinned Linux, Windows, and macOS
+runners. Separate jobs compile Android shared code with host tests and compile Apple device and
+simulator targets with simulator tests. The workflow uses read-only permissions and no provider
+credentials.
 
 On macOS, also verify the shared iOS target:
 
