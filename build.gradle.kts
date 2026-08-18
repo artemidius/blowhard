@@ -1,6 +1,11 @@
 import org.gradle.api.artifacts.ProjectDependency
 import org.gradle.api.tasks.Exec
 
+private fun String.isArchitectureDependencyConfiguration(): Boolean = this == "api" ||
+    this == "implementation" ||
+    endsWith("Api") ||
+    endsWith("Implementation")
+
 plugins {
     alias(libs.plugins.android.multiplatform.library) apply false
     alias(libs.plugins.compose.compiler) apply false
@@ -167,7 +172,7 @@ subprojects {
         val configurationName = name
 
         dependencies.whenObjectAdded {
-            if (this is ProjectDependency) {
+            if (configurationName.isArchitectureDependencyConfiguration() && this is ProjectDependency) {
                 val targetPath = path
                 val allowedTargets = allowedProjectDependencies[sourcePath].orEmpty()
 
