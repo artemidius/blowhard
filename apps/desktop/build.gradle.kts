@@ -10,6 +10,7 @@ plugins {
 dependencies {
     implementation(compose.desktop.currentOs)
     implementation(project(":shared-ui"))
+    testImplementation(kotlin("test"))
 }
 
 kotlin {
@@ -26,10 +27,29 @@ compose.desktop {
 
         nativeDistributions {
             targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb)
+            modules("java.instrument", "jdk.unsupported")
             packageName = "Blowhard"
-            packageVersion = "0.1.0"
+            packageVersion = "1.0.0"
             description = "A desktop-first Kotlin Multiplatform client for Mistral AI"
             vendor = "Blowhard contributors"
+
+            linux {
+                packageName = "blowhard"
+                debMaintainer = "artemidius@users.noreply.github.com"
+                menuGroup = "Utility"
+                appCategory = "utils"
+            }
+
+            macOS {
+                bundleID = "io.github.artemidius.blowhard"
+                dockName = "Blowhard"
+            }
+
+            windows {
+                menuGroup = "Blowhard"
+                perUserInstall = true
+                upgradeUuid = "61d3ae82-27db-4eb0-9ee8-2fb2b3b9cd56"
+            }
         }
     }
 }
