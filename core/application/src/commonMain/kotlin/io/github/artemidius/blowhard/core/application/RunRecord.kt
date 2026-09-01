@@ -1,0 +1,30 @@
+package io.github.artemidius.blowhard.core.application
+
+import io.github.artemidius.blowhard.core.api.ConversationId
+import io.github.artemidius.blowhard.core.api.RunId
+import io.github.artemidius.blowhard.core.api.RunSnapshot
+import io.github.artemidius.blowhard.core.domain.PromptText
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.flow.MutableStateFlow
+
+internal class RunRecord(
+    val runId: RunId,
+    val conversationId: ConversationId,
+    val prompt: PromptText,
+    initialSnapshot: RunSnapshot,
+) {
+    val snapshots = MutableStateFlow(initialSnapshot)
+    var job: Job? = null
+    var cancellationRequested: Boolean = false
+}
+
+internal fun RunSnapshot.isTerminal(): Boolean =
+    this is RunSnapshot.Succeeded || this is RunSnapshot.Failed || this is RunSnapshot.Cancelled
+
+internal fun RunSnapshot.output(): String = when (this) {
+    is RunSnapshot.Queued -> ""
+    is RunSnapshot.Running -> output
+    is RunSnapshot.Succeeded -> output
+    is RunSnapshot.Failed -> partialOutput
+    is RunSnapshot.Cancelled -> partialOutput
+}

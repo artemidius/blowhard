@@ -19,4 +19,7 @@ public enum class StartRunRejection {
 
     /** Another run already owns the conversation's active-generation slot. */
     CONVERSATION_BUSY,
+
+    /** The owning lifecycle has shut down and cannot accept more work. */
+    LIFECYCLE_CLOSED,
 }

@@ -35,12 +35,13 @@ kotlin {
 
     sourceSets {
         commonMain.dependencies {
-            implementation(project(":core:api"))
-            implementation(project(":core:domain"))
+            api(project(":core:api"))
+            api(project(":core:domain"))
         }
 
         commonTest.dependencies {
             implementation(kotlin("test"))
+            implementation(libs.kotlinx.coroutines.test)
         }
     }
 }
