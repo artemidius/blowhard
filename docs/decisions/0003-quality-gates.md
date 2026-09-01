@@ -16,8 +16,8 @@ Expose one Gradle entry point, `qualityCheck`, that runs the project checks requ
 - Spotless with ktlint for reproducible source and build-script formatting.
 - Detekt with strict KDoc and focused size limits for Kotlin static analysis.
 - desktop-hosted common tests and Kover verification for executable core rules.
-- Kotlin Gradle plugin ABI validation for public core contracts.
-- Dokka generation for aggregated core API documentation.
+- Kotlin Gradle plugin ABI validation for public core and adapter contracts.
+- Dokka generation for aggregated core and adapter API documentation.
 - the existing project-dependency allowlist for module direction.
 - Gitleaks against Git history and the working tree, with narrow generated-state and ignored local
   credential-file exclusions.
