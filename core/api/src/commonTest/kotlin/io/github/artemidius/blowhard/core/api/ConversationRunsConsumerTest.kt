@@ -19,7 +19,7 @@ class ConversationRunsConsumerTest {
         val found = assertIs<ObserveRunResult.Found>(observation)
 
         assertEquals(
-            RunSnapshot.Queued(runId, conversationId),
+            RunSnapshot.Queued(runId, conversationId, RunTimestamp(1_000)),
             assertIs<RunSnapshot.Queued>(found.snapshots.first()),
         )
     }
@@ -29,7 +29,7 @@ class ConversationRunsConsumerTest {
         override suspend fun start(request: StartRunRequest): StartRunResult = StartRunResult.Started(runId)
 
         override suspend fun observe(runId: RunId): ObserveRunResult =
-            ObserveRunResult.Found(flowOf(RunSnapshot.Queued(runId, conversationId)))
+            ObserveRunResult.Found(flowOf(RunSnapshot.Queued(runId, conversationId, RunTimestamp(1_000))))
 
         override suspend fun cancel(runId: RunId): CancelRunResult = CancelRunResult.ACCEPTED
     }

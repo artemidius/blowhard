@@ -20,6 +20,8 @@ clients ---------> core:api
 core:application ------+------> core:domain
                                    |
                                    +------> core:api
+
+adapters:fixture ----------------> core:domain
 ```
 
 - `core:api` owns client-facing identifiers, the start, observe, and cancel capability, and
@@ -30,6 +32,8 @@ core:application ------+------> core:domain
 - Presentation consumes only `core:api` when application behavior is introduced.
 - Provider, persistence, and operating-system adapters implement core-owned ports and remain outside
   all core modules.
+- `adapters:fixture` is the first provider adapter. It depends only on the domain-owned generation
+  port and contains no application policy.
 
 The public observation contract is passive: collecting state never starts or repeats generation.
 Cancelling one observer does not cancel the run; cancellation is an explicit capability operation.

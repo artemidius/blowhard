@@ -1,0 +1,73 @@
+public abstract interface class io/github/artemidius/blowhard/adapters/fixture/FixtureScenario {
+}
+
+public final class io/github/artemidius/blowhard/adapters/fixture/FixtureScenario$Failure : io/github/artemidius/blowhard/adapters/fixture/FixtureScenario {
+	public fun <init> ()V
+	public synthetic fun <init> (Ljava/util/List;Lio/github/artemidius/blowhard/core/domain/GenerationFailureKind;Ljava/lang/String;JILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public synthetic fun <init> (Ljava/util/List;Lio/github/artemidius/blowhard/core/domain/GenerationFailureKind;Ljava/lang/String;JLkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()Ljava/util/List;
+	public final fun component2 ()Lio/github/artemidius/blowhard/core/domain/GenerationFailureKind;
+	public final fun component3 ()Ljava/lang/String;
+	public final fun component4-UwyO8pc ()J
+	public final fun copy-Wn2Vu4Y (Ljava/util/List;Lio/github/artemidius/blowhard/core/domain/GenerationFailureKind;Ljava/lang/String;J)Lio/github/artemidius/blowhard/adapters/fixture/FixtureScenario$Failure;
+	public static synthetic fun copy-Wn2Vu4Y$default (Lio/github/artemidius/blowhard/adapters/fixture/FixtureScenario$Failure;Ljava/util/List;Lio/github/artemidius/blowhard/core/domain/GenerationFailureKind;Ljava/lang/String;JILjava/lang/Object;)Lio/github/artemidius/blowhard/adapters/fixture/FixtureScenario$Failure;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getChunks ()Ljava/util/List;
+	public final fun getDelayBetweenChunks-UwyO8pc ()J
+	public final fun getKind ()Lio/github/artemidius/blowhard/core/domain/GenerationFailureKind;
+	public final fun getReference ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class io/github/artemidius/blowhard/adapters/fixture/FixtureScenario$Interrupted : io/github/artemidius/blowhard/adapters/fixture/FixtureScenario {
+	public fun <init> ()V
+	public synthetic fun <init> (Ljava/util/List;JILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public synthetic fun <init> (Ljava/util/List;JLkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()Ljava/util/List;
+	public final fun component2-UwyO8pc ()J
+	public final fun copy-HG0u8IE (Ljava/util/List;J)Lio/github/artemidius/blowhard/adapters/fixture/FixtureScenario$Interrupted;
+	public static synthetic fun copy-HG0u8IE$default (Lio/github/artemidius/blowhard/adapters/fixture/FixtureScenario$Interrupted;Ljava/util/List;JILjava/lang/Object;)Lio/github/artemidius/blowhard/adapters/fixture/FixtureScenario$Interrupted;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getChunks ()Ljava/util/List;
+	public final fun getDelayBetweenChunks-UwyO8pc ()J
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class io/github/artemidius/blowhard/adapters/fixture/FixtureScenario$RateLimited : io/github/artemidius/blowhard/adapters/fixture/FixtureScenario {
+	public fun <init> ()V
+	public synthetic fun <init> (Ljava/util/List;Ljava/lang/String;JILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public synthetic fun <init> (Ljava/util/List;Ljava/lang/String;JLkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()Ljava/util/List;
+	public final fun component2 ()Ljava/lang/String;
+	public final fun component3-UwyO8pc ()J
+	public final fun copy-SxA4cEA (Ljava/util/List;Ljava/lang/String;J)Lio/github/artemidius/blowhard/adapters/fixture/FixtureScenario$RateLimited;
+	public static synthetic fun copy-SxA4cEA$default (Lio/github/artemidius/blowhard/adapters/fixture/FixtureScenario$RateLimited;Ljava/util/List;Ljava/lang/String;JILjava/lang/Object;)Lio/github/artemidius/blowhard/adapters/fixture/FixtureScenario$RateLimited;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getChunks ()Ljava/util/List;
+	public final fun getDelayBetweenChunks-UwyO8pc ()J
+	public final fun getReference ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class io/github/artemidius/blowhard/adapters/fixture/FixtureScenario$Success : io/github/artemidius/blowhard/adapters/fixture/FixtureScenario {
+	public synthetic fun <init> (Ljava/util/List;JILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public synthetic fun <init> (Ljava/util/List;JLkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()Ljava/util/List;
+	public final fun component2-UwyO8pc ()J
+	public final fun copy-HG0u8IE (Ljava/util/List;J)Lio/github/artemidius/blowhard/adapters/fixture/FixtureScenario$Success;
+	public static synthetic fun copy-HG0u8IE$default (Lio/github/artemidius/blowhard/adapters/fixture/FixtureScenario$Success;Ljava/util/List;JILjava/lang/Object;)Lio/github/artemidius/blowhard/adapters/fixture/FixtureScenario$Success;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getChunks ()Ljava/util/List;
+	public final fun getDelayBetweenChunks-UwyO8pc ()J
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class io/github/artemidius/blowhard/adapters/fixture/FixtureTextGenerationPort : io/github/artemidius/blowhard/core/domain/TextGenerationPort {
+	public fun <init> (Lkotlin/jvm/functions/Function1;)V
+	public fun generate (Lio/github/artemidius/blowhard/core/domain/GenerationRequest;)Lkotlinx/coroutines/flow/Flow;
+}
+
