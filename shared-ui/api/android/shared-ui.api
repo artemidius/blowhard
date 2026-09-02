@@ -1,0 +1,232 @@
+public final class io/github/artemidius/blowhard/ui/BlowhardAppKt {
+	public static final fun BlowhardApp (Lio/github/artemidius/blowhard/ui/presentation/ConversationPresenter;Landroidx/compose/runtime/Composer;I)V
+}
+
+public final class io/github/artemidius/blowhard/ui/ComposableSingletons$ComposerPanelKt {
+	public static final field INSTANCE Lio/github/artemidius/blowhard/ui/ComposableSingletons$ComposerPanelKt;
+	public fun <init> ()V
+	public final fun getLambda$-176302635$Blowhard_shared_ui ()Lkotlin/jvm/functions/Function3;
+	public final fun getLambda$-716526633$Blowhard_shared_ui ()Lkotlin/jvm/functions/Function3;
+	public final fun getLambda$1536691895$Blowhard_shared_ui ()Lkotlin/jvm/functions/Function2;
+}
+
+public final class io/github/artemidius/blowhard/ui/ComposableSingletons$ConversationPaneKt {
+	public static final field INSTANCE Lio/github/artemidius/blowhard/ui/ComposableSingletons$ConversationPaneKt;
+	public fun <init> ()V
+	public final fun getLambda$622176257$Blowhard_shared_ui ()Lkotlin/jvm/functions/Function3;
+}
+
+public final class io/github/artemidius/blowhard/ui/ComposableSingletons$ConversationSidebarKt {
+	public static final field INSTANCE Lio/github/artemidius/blowhard/ui/ComposableSingletons$ConversationSidebarKt;
+	public fun <init> ()V
+	public final fun getLambda$-2005357743$Blowhard_shared_ui ()Lkotlin/jvm/functions/Function3;
+}
+
+public final class io/github/artemidius/blowhard/ui/ComposableSingletons$NoticePanelKt {
+	public static final field INSTANCE Lio/github/artemidius/blowhard/ui/ComposableSingletons$NoticePanelKt;
+	public fun <init> ()V
+	public final fun getLambda$1645596550$Blowhard_shared_ui ()Lkotlin/jvm/functions/Function3;
+}
+
+public final class io/github/artemidius/blowhard/ui/presentation/ChatMessageUi {
+	public static final field $stable I
+	public fun <init> (Ljava/lang/String;Lio/github/artemidius/blowhard/ui/presentation/ChatRole;Ljava/lang/String;Lio/github/artemidius/blowhard/ui/presentation/MessageDelivery;)V
+	public synthetic fun <init> (Ljava/lang/String;Lio/github/artemidius/blowhard/ui/presentation/ChatRole;Ljava/lang/String;Lio/github/artemidius/blowhard/ui/presentation/MessageDelivery;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun component2 ()Lio/github/artemidius/blowhard/ui/presentation/ChatRole;
+	public final fun component3 ()Ljava/lang/String;
+	public final fun component4 ()Lio/github/artemidius/blowhard/ui/presentation/MessageDelivery;
+	public final fun copy (Ljava/lang/String;Lio/github/artemidius/blowhard/ui/presentation/ChatRole;Ljava/lang/String;Lio/github/artemidius/blowhard/ui/presentation/MessageDelivery;)Lio/github/artemidius/blowhard/ui/presentation/ChatMessageUi;
+	public static synthetic fun copy$default (Lio/github/artemidius/blowhard/ui/presentation/ChatMessageUi;Ljava/lang/String;Lio/github/artemidius/blowhard/ui/presentation/ChatRole;Ljava/lang/String;Lio/github/artemidius/blowhard/ui/presentation/MessageDelivery;ILjava/lang/Object;)Lio/github/artemidius/blowhard/ui/presentation/ChatMessageUi;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getDelivery ()Lio/github/artemidius/blowhard/ui/presentation/MessageDelivery;
+	public final fun getId ()Ljava/lang/String;
+	public final fun getRole ()Lio/github/artemidius/blowhard/ui/presentation/ChatRole;
+	public final fun getText ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class io/github/artemidius/blowhard/ui/presentation/ChatRole : java/lang/Enum {
+	public static final field ASSISTANT Lio/github/artemidius/blowhard/ui/presentation/ChatRole;
+	public static final field USER Lio/github/artemidius/blowhard/ui/presentation/ChatRole;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public static fun valueOf (Ljava/lang/String;)Lio/github/artemidius/blowhard/ui/presentation/ChatRole;
+	public static fun values ()[Lio/github/artemidius/blowhard/ui/presentation/ChatRole;
+}
+
+public abstract interface class io/github/artemidius/blowhard/ui/presentation/ConversationAction {
+}
+
+public final class io/github/artemidius/blowhard/ui/presentation/ConversationAction$ComposerChanged : io/github/artemidius/blowhard/ui/presentation/ConversationAction {
+	public static final field $stable I
+	public fun <init> (Ljava/lang/String;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun copy (Ljava/lang/String;)Lio/github/artemidius/blowhard/ui/presentation/ConversationAction$ComposerChanged;
+	public static synthetic fun copy$default (Lio/github/artemidius/blowhard/ui/presentation/ConversationAction$ComposerChanged;Ljava/lang/String;ILjava/lang/Object;)Lio/github/artemidius/blowhard/ui/presentation/ConversationAction$ComposerChanged;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getValue ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class io/github/artemidius/blowhard/ui/presentation/ConversationAction$ConversationSelected : io/github/artemidius/blowhard/ui/presentation/ConversationAction {
+	public static final field $stable I
+	public synthetic fun <init> (Ljava/lang/String;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1-j0uiRXY ()Ljava/lang/String;
+	public final fun copy-8Ha89eo (Ljava/lang/String;)Lio/github/artemidius/blowhard/ui/presentation/ConversationAction$ConversationSelected;
+	public static synthetic fun copy-8Ha89eo$default (Lio/github/artemidius/blowhard/ui/presentation/ConversationAction$ConversationSelected;Ljava/lang/String;ILjava/lang/Object;)Lio/github/artemidius/blowhard/ui/presentation/ConversationAction$ConversationSelected;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getId-j0uiRXY ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class io/github/artemidius/blowhard/ui/presentation/ConversationAction$NewConversation : io/github/artemidius/blowhard/ui/presentation/ConversationAction {
+	public static final field $stable I
+	public static final field INSTANCE Lio/github/artemidius/blowhard/ui/presentation/ConversationAction$NewConversation;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class io/github/artemidius/blowhard/ui/presentation/ConversationAction$NoticeDismissed : io/github/artemidius/blowhard/ui/presentation/ConversationAction {
+	public static final field $stable I
+	public static final field INSTANCE Lio/github/artemidius/blowhard/ui/presentation/ConversationAction$NoticeDismissed;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class io/github/artemidius/blowhard/ui/presentation/ConversationAction$ScenarioChanged : io/github/artemidius/blowhard/ui/presentation/ConversationAction {
+	public static final field $stable I
+	public fun <init> (Lio/github/artemidius/blowhard/ui/presentation/DemoScenario;)V
+	public final fun component1 ()Lio/github/artemidius/blowhard/ui/presentation/DemoScenario;
+	public final fun copy (Lio/github/artemidius/blowhard/ui/presentation/DemoScenario;)Lio/github/artemidius/blowhard/ui/presentation/ConversationAction$ScenarioChanged;
+	public static synthetic fun copy$default (Lio/github/artemidius/blowhard/ui/presentation/ConversationAction$ScenarioChanged;Lio/github/artemidius/blowhard/ui/presentation/DemoScenario;ILjava/lang/Object;)Lio/github/artemidius/blowhard/ui/presentation/ConversationAction$ScenarioChanged;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getScenario ()Lio/github/artemidius/blowhard/ui/presentation/DemoScenario;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class io/github/artemidius/blowhard/ui/presentation/ConversationAction$Send : io/github/artemidius/blowhard/ui/presentation/ConversationAction {
+	public static final field $stable I
+	public static final field INSTANCE Lio/github/artemidius/blowhard/ui/presentation/ConversationAction$Send;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class io/github/artemidius/blowhard/ui/presentation/ConversationAction$Stop : io/github/artemidius/blowhard/ui/presentation/ConversationAction {
+	public static final field $stable I
+	public static final field INSTANCE Lio/github/artemidius/blowhard/ui/presentation/ConversationAction$Stop;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class io/github/artemidius/blowhard/ui/presentation/ConversationPresenter {
+	public static final field $stable I
+	public fun <init> (Lio/github/artemidius/blowhard/core/api/ConversationRuns;Lio/github/artemidius/blowhard/ui/presentation/DemoScenarioSelection;Lkotlin/coroutines/CoroutineContext;)V
+	public final fun close ()V
+	public final fun dispatch (Lio/github/artemidius/blowhard/ui/presentation/ConversationAction;)V
+	public final fun getState ()Lkotlinx/coroutines/flow/StateFlow;
+}
+
+public final class io/github/artemidius/blowhard/ui/presentation/ConversationRunState : java/lang/Enum {
+	public static final field CANCELLED Lio/github/artemidius/blowhard/ui/presentation/ConversationRunState;
+	public static final field FAILED Lio/github/artemidius/blowhard/ui/presentation/ConversationRunState;
+	public static final field IDLE Lio/github/artemidius/blowhard/ui/presentation/ConversationRunState;
+	public static final field QUEUED Lio/github/artemidius/blowhard/ui/presentation/ConversationRunState;
+	public static final field STARTING Lio/github/artemidius/blowhard/ui/presentation/ConversationRunState;
+	public static final field STREAMING Lio/github/artemidius/blowhard/ui/presentation/ConversationRunState;
+	public static final field SUCCEEDED Lio/github/artemidius/blowhard/ui/presentation/ConversationRunState;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public final fun isActive ()Z
+	public static fun valueOf (Ljava/lang/String;)Lio/github/artemidius/blowhard/ui/presentation/ConversationRunState;
+	public static fun values ()[Lio/github/artemidius/blowhard/ui/presentation/ConversationRunState;
+}
+
+public final class io/github/artemidius/blowhard/ui/presentation/ConversationUiModel {
+	public static final field $stable I
+	public synthetic fun <init> (Ljava/lang/String;Ljava/lang/String;Ljava/util/List;Lio/github/artemidius/blowhard/ui/presentation/ConversationRunState;Lio/github/artemidius/blowhard/ui/presentation/UiNotice;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public synthetic fun <init> (Ljava/lang/String;Ljava/lang/String;Ljava/util/List;Lio/github/artemidius/blowhard/ui/presentation/ConversationRunState;Lio/github/artemidius/blowhard/ui/presentation/UiNotice;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1-j0uiRXY ()Ljava/lang/String;
+	public final fun component2 ()Ljava/lang/String;
+	public final fun component3 ()Ljava/util/List;
+	public final fun component4 ()Lio/github/artemidius/blowhard/ui/presentation/ConversationRunState;
+	public final fun component5 ()Lio/github/artemidius/blowhard/ui/presentation/UiNotice;
+	public final fun copy-9eTuy-Y (Ljava/lang/String;Ljava/lang/String;Ljava/util/List;Lio/github/artemidius/blowhard/ui/presentation/ConversationRunState;Lio/github/artemidius/blowhard/ui/presentation/UiNotice;)Lio/github/artemidius/blowhard/ui/presentation/ConversationUiModel;
+	public static synthetic fun copy-9eTuy-Y$default (Lio/github/artemidius/blowhard/ui/presentation/ConversationUiModel;Ljava/lang/String;Ljava/lang/String;Ljava/util/List;Lio/github/artemidius/blowhard/ui/presentation/ConversationRunState;Lio/github/artemidius/blowhard/ui/presentation/UiNotice;ILjava/lang/Object;)Lio/github/artemidius/blowhard/ui/presentation/ConversationUiModel;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getId-j0uiRXY ()Ljava/lang/String;
+	public final fun getMessages ()Ljava/util/List;
+	public final fun getNotice ()Lio/github/artemidius/blowhard/ui/presentation/UiNotice;
+	public final fun getRunState ()Lio/github/artemidius/blowhard/ui/presentation/ConversationRunState;
+	public final fun getTitle ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class io/github/artemidius/blowhard/ui/presentation/ConversationUiState {
+	public static final field $stable I
+	public synthetic fun <init> (Ljava/util/List;Ljava/lang/String;Ljava/lang/String;Lio/github/artemidius/blowhard/ui/presentation/DemoScenario;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public synthetic fun <init> (Ljava/util/List;Ljava/lang/String;Ljava/lang/String;Lio/github/artemidius/blowhard/ui/presentation/DemoScenario;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()Ljava/util/List;
+	public final fun component2-j0uiRXY ()Ljava/lang/String;
+	public final fun component3 ()Ljava/lang/String;
+	public final fun component4 ()Lio/github/artemidius/blowhard/ui/presentation/DemoScenario;
+	public final fun copy-_eDpDGM (Ljava/util/List;Ljava/lang/String;Ljava/lang/String;Lio/github/artemidius/blowhard/ui/presentation/DemoScenario;)Lio/github/artemidius/blowhard/ui/presentation/ConversationUiState;
+	public static synthetic fun copy-_eDpDGM$default (Lio/github/artemidius/blowhard/ui/presentation/ConversationUiState;Ljava/util/List;Ljava/lang/String;Ljava/lang/String;Lio/github/artemidius/blowhard/ui/presentation/DemoScenario;ILjava/lang/Object;)Lio/github/artemidius/blowhard/ui/presentation/ConversationUiState;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getCanSend ()Z
+	public final fun getCanStop ()Z
+	public final fun getComposer ()Ljava/lang/String;
+	public final fun getConversations ()Ljava/util/List;
+	public final fun getNotice ()Lio/github/artemidius/blowhard/ui/presentation/UiNotice;
+	public final fun getScenario ()Lio/github/artemidius/blowhard/ui/presentation/DemoScenario;
+	public final fun getSelectedConversation ()Lio/github/artemidius/blowhard/ui/presentation/ConversationUiModel;
+	public final fun getSelectedConversationId-j0uiRXY ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class io/github/artemidius/blowhard/ui/presentation/DemoScenario : java/lang/Enum {
+	public static final field FAILURE Lio/github/artemidius/blowhard/ui/presentation/DemoScenario;
+	public static final field INTERRUPTED Lio/github/artemidius/blowhard/ui/presentation/DemoScenario;
+	public static final field RATE_LIMITED Lio/github/artemidius/blowhard/ui/presentation/DemoScenario;
+	public static final field SUCCESS Lio/github/artemidius/blowhard/ui/presentation/DemoScenario;
+	public final fun getDescription ()Ljava/lang/String;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public final fun getLabel ()Ljava/lang/String;
+	public static fun valueOf (Ljava/lang/String;)Lio/github/artemidius/blowhard/ui/presentation/DemoScenario;
+	public static fun values ()[Lio/github/artemidius/blowhard/ui/presentation/DemoScenario;
+}
+
+public abstract interface class io/github/artemidius/blowhard/ui/presentation/DemoScenarioSelection {
+	public abstract fun prepare-TKNjWRg (Ljava/lang/String;Lio/github/artemidius/blowhard/ui/presentation/DemoScenario;)V
+}
+
+public final class io/github/artemidius/blowhard/ui/presentation/MessageDelivery : java/lang/Enum {
+	public static final field CANCELLED Lio/github/artemidius/blowhard/ui/presentation/MessageDelivery;
+	public static final field COMPLETE Lio/github/artemidius/blowhard/ui/presentation/MessageDelivery;
+	public static final field FAILED Lio/github/artemidius/blowhard/ui/presentation/MessageDelivery;
+	public static final field STREAMING Lio/github/artemidius/blowhard/ui/presentation/MessageDelivery;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public static fun valueOf (Ljava/lang/String;)Lio/github/artemidius/blowhard/ui/presentation/MessageDelivery;
+	public static fun values ()[Lio/github/artemidius/blowhard/ui/presentation/MessageDelivery;
+}
+
+public final class io/github/artemidius/blowhard/ui/presentation/UiNotice {
+	public static final field $stable I
+	public fun <init> (Ljava/lang/String;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun copy (Ljava/lang/String;)Lio/github/artemidius/blowhard/ui/presentation/UiNotice;
+	public static synthetic fun copy$default (Lio/github/artemidius/blowhard/ui/presentation/UiNotice;Ljava/lang/String;ILjava/lang/Object;)Lio/github/artemidius/blowhard/ui/presentation/UiNotice;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getMessage ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+

@@ -1,49 +1,31 @@
 package io.github.artemidius.blowhard.ui
 
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
+import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.unit.dp
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.ui.graphics.Color
+import io.github.artemidius.blowhard.ui.presentation.ConversationPresenter
 
-/**
- * Root presentation entry point shared by Blowhard clients.
- *
- * Platform applications own their lifecycle and call this composable from their composition
- * root. Application behavior will be supplied through a platform-neutral core API.
- */
+/** Root presentation entry point shared by Blowhard clients. */
 @Suppress("FunctionNaming", "ktlint:standard:function-naming")
 @Composable
-public fun BlowhardApp() {
-    MaterialTheme {
-        Surface(modifier = Modifier.fillMaxSize()) {
-            Column(
-                modifier = Modifier.padding(32.dp),
-                verticalArrangement = Arrangement.spacedBy(12.dp, Alignment.CenterVertically),
-            ) {
-                Text(
-                    text = "Blowhard",
-                    style = MaterialTheme.typography.displaySmall,
-                    fontWeight = FontWeight.SemiBold,
-                )
-                Text(
-                    text = "A Kotlin Multiplatform client for Mistral AI",
-                    style = MaterialTheme.typography.titleMedium,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                )
-                Text(
-                    text = "Engineering foundation ready",
-                    style = MaterialTheme.typography.labelLarge,
-                    color = MaterialTheme.colorScheme.primary,
-                )
-            }
-        }
+public fun BlowhardApp(presenter: ConversationPresenter) {
+    val state by presenter.state.collectAsState()
+    MaterialTheme(colorScheme = BlowhardColors) {
+        ConversationScreen(state = state, onAction = presenter::dispatch)
     }
 }
+
+private val BlowhardColors = lightColorScheme(
+    primary = Color(0xFF315C72),
+    onPrimary = Color.White,
+    primaryContainer = Color(0xFFD3ECF8),
+    onPrimaryContainer = Color(0xFF102F3E),
+    secondary = Color(0xFF7A4F01),
+    secondaryContainer = Color(0xFFFFDEA4),
+    surface = Color(0xFFFAFCFD),
+    surfaceVariant = Color(0xFFE7EEF1),
+    background = Color(0xFFF3F7F8),
+)
