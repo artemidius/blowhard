@@ -12,20 +12,27 @@ private const val PACKAGING_SMOKE_TEST_ENVIRONMENT_VARIABLE = "BLOWHARD_PACKAGIN
 private const val PACKAGING_SMOKE_TEST_ENABLED = "1"
 
 /** Starts the Blowhard desktop application. */
-public fun main(): Unit = application {
-    val packagingSmokeTest = isPackagingSmokeTest(System.getenv())
+public fun main() {
+    val runtime = DesktopDemoRuntime.create()
+    application {
+        val packagingSmokeTest = isPackagingSmokeTest(System.getenv())
+        val shutdown = {
+            runtime.close()
+            exitApplication()
+        }
 
-    Window(
-        onCloseRequest = ::exitApplication,
-        title = "Blowhard",
-    ) {
-        window.minimumSize = java.awt.Dimension(MINIMUM_WINDOW_WIDTH, MINIMUM_WINDOW_HEIGHT)
-        BlowhardApp()
+        Window(
+            onCloseRequest = shutdown,
+            title = "Blowhard — Offline Demo",
+        ) {
+            window.minimumSize = java.awt.Dimension(MINIMUM_WINDOW_WIDTH, MINIMUM_WINDOW_HEIGHT)
+            BlowhardApp(runtime.presenter)
 
-        if (packagingSmokeTest) {
-            LaunchedEffect(Unit) {
-                withFrameNanos { }
-                exitApplication()
+            if (packagingSmokeTest) {
+                LaunchedEffect(Unit) {
+                    withFrameNanos { }
+                    shutdown()
+                }
             }
         }
     }

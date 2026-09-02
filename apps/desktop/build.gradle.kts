@@ -9,8 +9,11 @@ plugins {
 
 dependencies {
     implementation(compose.desktop.currentOs)
+    implementation(project(":adapters:fixture"))
+    implementation(project(":core:application"))
     implementation(project(":shared-ui"))
     testImplementation(kotlin("test"))
+    testImplementation(libs.kotlinx.coroutines.test)
 }
 
 kotlin {
