@@ -22,6 +22,9 @@ public sealed interface ConversationAction {
     /** Requests cancellation of the selected conversation's active run. */
     public data object Stop : ConversationAction
 
+    /** Copies one visible message without exposing platform clipboard types. */
+    public data class CopyMessage(public val messageId: String) : ConversationAction
+
     /** Removes the current non-sensitive feedback notice. */
     public data object NoticeDismissed : ConversationAction
 }
