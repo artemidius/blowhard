@@ -37,5 +37,6 @@ tested with the real application lifecycle and fixture adapter. The presentation
 import provider DTOs, domain ports, or desktop APIs, and future live providers can replace the
 fixture without changing screen actions.
 
-Conversation history is in memory, the Markdown subset is intentionally small, and platform menus,
-shortcuts, clipboard behavior, persistence, and a live provider remain separate increments.
+Conversation history is in memory, the Markdown subset is intentionally small, and a live provider
+remains a separate increment. Desktop integration is isolated behind the boundaries accepted in
+[`ADR 0008`](0008-desktop-platform-integration.md).

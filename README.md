@@ -48,6 +48,11 @@ The unidirectional presentation model, safe Markdown subset, and desktop composi
 documented in [`ADR 0007`](docs/decisions/0007-shared-conversation-presentation.md) and the
 [conversation presentation guide](docs/architecture/conversation-presentation.md).
 
+Native menus, clipboard and window-state boundaries, application directories, accessibility, and
+the verified desktop support matrix are documented in
+[`ADR 0008`](docs/decisions/0008-desktop-platform-integration.md) and the
+[desktop platform support guide](docs/architecture/desktop-platform-support.md).
+
 ## Run the desktop application
 
 ```shell
@@ -57,6 +62,10 @@ documented in [`ADR 0007`](docs/decisions/0007-shared-conversation-presentation.
 The runnable application is an explicitly labeled offline demo. Choose a bundled success, failure,
 rate-limit, or interrupted-stream scenario, enter any non-blank prompt, then use **Send** or
 **Stop** to exercise the real shared lifecycle. No API key or network request is required.
+
+Use `Command+Enter` on macOS or `Ctrl+Enter` on Windows and Linux to send from the composer. Native
+menus expose New conversation, Send, Stop, Copy latest response, and Exit with platform-appropriate
+shortcuts. Every non-empty message also has a visible copy action.
 
 ## Verify the foundation
 
