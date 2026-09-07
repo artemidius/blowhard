@@ -14,18 +14,27 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.semantics.LiveRegionMode
+import androidx.compose.ui.semantics.liveRegion
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import io.github.artemidius.blowhard.ui.presentation.ChatMessageUi
 import io.github.artemidius.blowhard.ui.presentation.ChatRole
+import io.github.artemidius.blowhard.ui.presentation.ConversationAction
 import io.github.artemidius.blowhard.ui.presentation.MessageDelivery
 
 @Composable
-internal fun MessageList(messages: List<ChatMessageUi>, modifier: Modifier = Modifier) {
+internal fun MessageList(
+    messages: List<ChatMessageUi>,
+    onAction: (ConversationAction) -> Unit,
+    modifier: Modifier = Modifier,
+) {
     if (messages.isEmpty()) {
         EmptyConversation(modifier)
         return
@@ -41,12 +50,12 @@ internal fun MessageList(messages: List<ChatMessageUi>, modifier: Modifier = Mod
         verticalArrangement = Arrangement.spacedBy(16.dp),
         contentPadding = androidx.compose.foundation.layout.PaddingValues(vertical = 24.dp),
     ) {
-        items(messages, key = { it.id }) { message -> MessageBubble(message) }
+        items(messages, key = { it.id }) { message -> MessageBubble(message, onAction) }
     }
 }
 
 @Composable
-private fun MessageBubble(message: ChatMessageUi) {
+private fun MessageBubble(message: ChatMessageUi, onAction: (ConversationAction) -> Unit) {
     val isUser = message.role == ChatRole.USER
     Box(
         modifier = Modifier.fillMaxWidth(),
@@ -70,14 +79,25 @@ private fun MessageBubble(message: ChatMessageUi) {
                 } else {
                     SafeMarkdownText(message.text)
                 }
-                if (message.delivery != MessageDelivery.COMPLETE) {
-                    Text(
-                        message.delivery.name.lowercase().replaceFirstChar { it.uppercase() },
-                        style = MaterialTheme.typography.labelSmall,
-                        color = MaterialTheme.colorScheme.primary,
-                    )
-                }
+                MessageFooter(message, isUser, onAction)
             }
+        }
+    }
+}
+
+@Composable
+private fun MessageFooter(message: ChatMessageUi, isUser: Boolean, onAction: (ConversationAction) -> Unit) {
+    if (message.delivery != MessageDelivery.COMPLETE) {
+        Text(
+            message.delivery.name.lowercase().replaceFirstChar { it.uppercase() },
+            modifier = Modifier.semantics { liveRegion = LiveRegionMode.Polite },
+            style = MaterialTheme.typography.labelSmall,
+            color = MaterialTheme.colorScheme.primary,
+        )
+    }
+    if (message.text.isNotBlank()) {
+        TextButton(onClick = { onAction(ConversationAction.CopyMessage(message.id)) }) {
+            Text("Copy ${if (isUser) "your message" else "response"}")
         }
     }
 }

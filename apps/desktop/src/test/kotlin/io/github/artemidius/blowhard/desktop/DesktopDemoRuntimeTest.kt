@@ -1,5 +1,7 @@
 package io.github.artemidius.blowhard.desktop
 
+import io.github.artemidius.blowhard.ui.presentation.ClipboardWriteResult
+import io.github.artemidius.blowhard.ui.presentation.ClipboardWriter
 import io.github.artemidius.blowhard.ui.presentation.ConversationAction
 import io.github.artemidius.blowhard.ui.presentation.ConversationRunState
 import kotlinx.coroutines.flow.first
@@ -13,7 +15,7 @@ import kotlin.time.Duration.Companion.seconds
 class DesktopDemoRuntimeTest {
     @Test
     fun `real desktop runtime completes the bundled offline conversation`() = runBlocking {
-        val runtime = DesktopDemoRuntime.create()
+        val runtime = DesktopDemoRuntime.create(testClipboard)
         try {
             runtime.presenter.dispatch(ConversationAction.ComposerChanged("Show the demo"))
             runtime.presenter.dispatch(ConversationAction.Send)
@@ -30,7 +32,7 @@ class DesktopDemoRuntimeTest {
 
     @Test
     fun `real desktop runtime cancels streaming fixture output`() = runBlocking {
-        val runtime = DesktopDemoRuntime.create()
+        val runtime = DesktopDemoRuntime.create(testClipboard)
         try {
             runtime.presenter.dispatch(ConversationAction.ComposerChanged("Cancel the demo"))
             runtime.presenter.dispatch(ConversationAction.Send)
@@ -49,3 +51,5 @@ class DesktopDemoRuntimeTest {
         }
     }
 }
+
+private val testClipboard = ClipboardWriter { ClipboardWriteResult.COPIED }

@@ -208,6 +208,7 @@ class ConversationPresenterTest {
         val presenter = ConversationPresenter(
             runs = runs,
             scenarioSelection = DemoScenarioSelection { _, _ -> error("private setup failure") },
+            clipboardWriter = ClipboardWriter { ClipboardWriteResult.COPIED },
             coroutineContext = StandardTestDispatcher(testScheduler),
         )
         presenter.dispatch(ConversationAction.ComposerChanged("hello"))
@@ -323,6 +324,42 @@ class ConversationPresenterTest {
         }
     }
 
+    @Test
+    fun `copy action writes exact Unicode text and reports success`() = runTest {
+        val fixture = PresenterFixture(this)
+        fixture.start("copy")
+        val run = fixture.runs.startedRun()
+        val output = "Grüße aus Wien — こんにちは"
+        fixture.runs.emit(RunSnapshot.Succeeded(run, DEFAULT_CONVERSATION, NOW, output))
+        runCurrent()
+        val messageId = fixture.presenter.state.value.selectedConversation.messages.last().id
+
+        fixture.presenter.dispatch(ConversationAction.CopyMessage(messageId))
+        runCurrent()
+
+        assertEquals(listOf(output), fixture.copiedTexts)
+        assertEquals("Message copied to the clipboard.", fixture.presenter.state.value.notice?.message)
+        fixture.close()
+    }
+
+    @Test
+    fun `unavailable clipboard is safe and unknown message is ignored`() = runTest {
+        val fixture = PresenterFixture(this)
+        fixture.clipboardResult = ClipboardWriteResult.UNAVAILABLE
+        fixture.start("copy")
+        val userMessageId = fixture.presenter.state.value.selectedConversation.messages.first().id
+        fixture.presenter.dispatch(ConversationAction.CopyMessage("unknown"))
+        fixture.presenter.dispatch(ConversationAction.CopyMessage(userMessageId))
+        runCurrent()
+
+        assertEquals(listOf("copy"), fixture.copiedTexts)
+        assertEquals(
+            "The clipboard is unavailable in this desktop session.",
+            fixture.presenter.state.value.notice?.message,
+        )
+        fixture.close()
+    }
+
     private suspend fun PresenterFixture.start(prompt: String) {
         presenter.dispatch(ConversationAction.ComposerChanged(prompt))
         presenter.dispatch(ConversationAction.Send)
@@ -333,10 +370,16 @@ class ConversationPresenterTest {
 private class PresenterFixture(val testScope: kotlinx.coroutines.test.TestScope) {
     val runs = FakeConversationRuns()
     val scenarios = mutableListOf<Pair<ConversationId, DemoScenario>>()
+    val copiedTexts = mutableListOf<String>()
+    var clipboardResult = ClipboardWriteResult.COPIED
     val presenter = ConversationPresenter(
         runs = runs,
         scenarioSelection = DemoScenarioSelection { conversationId, scenario ->
             scenarios += conversationId to scenario
+        },
+        clipboardWriter = ClipboardWriter { text ->
+            copiedTexts += text
+            clipboardResult
         },
         coroutineContext = StandardTestDispatcher(testScope.testScheduler),
     )
