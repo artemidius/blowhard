@@ -6,6 +6,18 @@
 // - Show declarations: true
 
 // Library unique name: <Blowhard.core:domain>
+final enum class io.github.artemidius.blowhard.core.domain/CapabilitySupport : kotlin/Enum<io.github.artemidius.blowhard.core.domain/CapabilitySupport> { // io.github.artemidius.blowhard.core.domain/CapabilitySupport|null[0]
+    enum entry SUPPORTED // io.github.artemidius.blowhard.core.domain/CapabilitySupport.SUPPORTED|null[0]
+    enum entry UNKNOWN // io.github.artemidius.blowhard.core.domain/CapabilitySupport.UNKNOWN|null[0]
+    enum entry UNSUPPORTED // io.github.artemidius.blowhard.core.domain/CapabilitySupport.UNSUPPORTED|null[0]
+
+    final val entries // io.github.artemidius.blowhard.core.domain/CapabilitySupport.entries|#static{}entries[0]
+        final fun <get-entries>(): kotlin.enums/EnumEntries<io.github.artemidius.blowhard.core.domain/CapabilitySupport> // io.github.artemidius.blowhard.core.domain/CapabilitySupport.entries.<get-entries>|<get-entries>#static(){}[0]
+
+    final fun valueOf(kotlin/String): io.github.artemidius.blowhard.core.domain/CapabilitySupport // io.github.artemidius.blowhard.core.domain/CapabilitySupport.valueOf|valueOf#static(kotlin.String){}[0]
+    final fun values(): kotlin/Array<io.github.artemidius.blowhard.core.domain/CapabilitySupport> // io.github.artemidius.blowhard.core.domain/CapabilitySupport.values|values#static(){}[0]
+}
+
 final enum class io.github.artemidius.blowhard.core.domain/GenerationFailureKind : kotlin/Enum<io.github.artemidius.blowhard.core.domain/GenerationFailureKind> { // io.github.artemidius.blowhard.core.domain/GenerationFailureKind|null[0]
     enum entry INVALID_REQUEST // io.github.artemidius.blowhard.core.domain/GenerationFailureKind.INVALID_REQUEST|null[0]
     enum entry RATE_LIMITED // io.github.artemidius.blowhard.core.domain/GenerationFailureKind.RATE_LIMITED|null[0]
@@ -20,6 +32,38 @@ final enum class io.github.artemidius.blowhard.core.domain/GenerationFailureKind
     final fun values(): kotlin/Array<io.github.artemidius.blowhard.core.domain/GenerationFailureKind> // io.github.artemidius.blowhard.core.domain/GenerationFailureKind.values|values#static(){}[0]
 }
 
+final enum class io.github.artemidius.blowhard.core.domain/ModelAvailability : kotlin/Enum<io.github.artemidius.blowhard.core.domain/ModelAvailability> { // io.github.artemidius.blowhard.core.domain/ModelAvailability|null[0]
+    enum entry ARCHIVED // io.github.artemidius.blowhard.core.domain/ModelAvailability.ARCHIVED|null[0]
+    enum entry AVAILABLE // io.github.artemidius.blowhard.core.domain/ModelAvailability.AVAILABLE|null[0]
+    enum entry UNKNOWN // io.github.artemidius.blowhard.core.domain/ModelAvailability.UNKNOWN|null[0]
+
+    final val entries // io.github.artemidius.blowhard.core.domain/ModelAvailability.entries|#static{}entries[0]
+        final fun <get-entries>(): kotlin.enums/EnumEntries<io.github.artemidius.blowhard.core.domain/ModelAvailability> // io.github.artemidius.blowhard.core.domain/ModelAvailability.entries.<get-entries>|<get-entries>#static(){}[0]
+
+    final fun valueOf(kotlin/String): io.github.artemidius.blowhard.core.domain/ModelAvailability // io.github.artemidius.blowhard.core.domain/ModelAvailability.valueOf|valueOf#static(kotlin.String){}[0]
+    final fun values(): kotlin/Array<io.github.artemidius.blowhard.core.domain/ModelAvailability> // io.github.artemidius.blowhard.core.domain/ModelAvailability.values|values#static(){}[0]
+}
+
+final enum class io.github.artemidius.blowhard.core.domain/ModelCatalogFailureKind : kotlin/Enum<io.github.artemidius.blowhard.core.domain/ModelCatalogFailureKind> { // io.github.artemidius.blowhard.core.domain/ModelCatalogFailureKind|null[0]
+    enum entry CREDENTIAL_UNAVAILABLE // io.github.artemidius.blowhard.core.domain/ModelCatalogFailureKind.CREDENTIAL_UNAVAILABLE|null[0]
+    enum entry FORBIDDEN // io.github.artemidius.blowhard.core.domain/ModelCatalogFailureKind.FORBIDDEN|null[0]
+    enum entry INVALID_REQUEST // io.github.artemidius.blowhard.core.domain/ModelCatalogFailureKind.INVALID_REQUEST|null[0]
+    enum entry INVALID_RESPONSE // io.github.artemidius.blowhard.core.domain/ModelCatalogFailureKind.INVALID_RESPONSE|null[0]
+    enum entry NOT_FOUND // io.github.artemidius.blowhard.core.domain/ModelCatalogFailureKind.NOT_FOUND|null[0]
+    enum entry PAYMENT_REQUIRED // io.github.artemidius.blowhard.core.domain/ModelCatalogFailureKind.PAYMENT_REQUIRED|null[0]
+    enum entry RATE_LIMITED // io.github.artemidius.blowhard.core.domain/ModelCatalogFailureKind.RATE_LIMITED|null[0]
+    enum entry REDIRECT_REJECTED // io.github.artemidius.blowhard.core.domain/ModelCatalogFailureKind.REDIRECT_REJECTED|null[0]
+    enum entry UNAUTHORIZED // io.github.artemidius.blowhard.core.domain/ModelCatalogFailureKind.UNAUTHORIZED|null[0]
+    enum entry UNAVAILABLE // io.github.artemidius.blowhard.core.domain/ModelCatalogFailureKind.UNAVAILABLE|null[0]
+    enum entry UNEXPECTED // io.github.artemidius.blowhard.core.domain/ModelCatalogFailureKind.UNEXPECTED|null[0]
+
+    final val entries // io.github.artemidius.blowhard.core.domain/ModelCatalogFailureKind.entries|#static{}entries[0]
+        final fun <get-entries>(): kotlin.enums/EnumEntries<io.github.artemidius.blowhard.core.domain/ModelCatalogFailureKind> // io.github.artemidius.blowhard.core.domain/ModelCatalogFailureKind.entries.<get-entries>|<get-entries>#static(){}[0]
+
+    final fun valueOf(kotlin/String): io.github.artemidius.blowhard.core.domain/ModelCatalogFailureKind // io.github.artemidius.blowhard.core.domain/ModelCatalogFailureKind.valueOf|valueOf#static(kotlin.String){}[0]
+    final fun values(): kotlin/Array<io.github.artemidius.blowhard.core.domain/ModelCatalogFailureKind> // io.github.artemidius.blowhard.core.domain/ModelCatalogFailureKind.values|values#static(){}[0]
+}
+
 final enum class io.github.artemidius.blowhard.core.domain/PromptRejection : kotlin/Enum<io.github.artemidius.blowhard.core.domain/PromptRejection> { // io.github.artemidius.blowhard.core.domain/PromptRejection|null[0]
     enum entry BLANK // io.github.artemidius.blowhard.core.domain/PromptRejection.BLANK|null[0]
 
@@ -28,6 +72,10 @@ final enum class io.github.artemidius.blowhard.core.domain/PromptRejection : kot
 
     final fun valueOf(kotlin/String): io.github.artemidius.blowhard.core.domain/PromptRejection // io.github.artemidius.blowhard.core.domain/PromptRejection.valueOf|valueOf#static(kotlin.String){}[0]
     final fun values(): kotlin/Array<io.github.artemidius.blowhard.core.domain/PromptRejection> // io.github.artemidius.blowhard.core.domain/PromptRejection.values|values#static(){}[0]
+}
+
+abstract fun interface io.github.artemidius.blowhard.core.domain/ModelCatalogPort { // io.github.artemidius.blowhard.core.domain/ModelCatalogPort|null[0]
+    abstract suspend fun listModels(): io.github.artemidius.blowhard.core.domain/ModelCatalogResult // io.github.artemidius.blowhard.core.domain/ModelCatalogPort.listModels|listModels(){}[0]
 }
 
 abstract fun interface io.github.artemidius.blowhard.core.domain/TextGenerationPort { // io.github.artemidius.blowhard.core.domain/TextGenerationPort|null[0]
@@ -68,6 +116,34 @@ sealed interface io.github.artemidius.blowhard.core.domain/GenerationEvent { // 
     }
 }
 
+sealed interface io.github.artemidius.blowhard.core.domain/ModelCatalogResult { // io.github.artemidius.blowhard.core.domain/ModelCatalogResult|null[0]
+    final class Failure : io.github.artemidius.blowhard.core.domain/ModelCatalogResult { // io.github.artemidius.blowhard.core.domain/ModelCatalogResult.Failure|null[0]
+        constructor <init>(io.github.artemidius.blowhard.core.domain/ModelCatalogFailure) // io.github.artemidius.blowhard.core.domain/ModelCatalogResult.Failure.<init>|<init>(io.github.artemidius.blowhard.core.domain.ModelCatalogFailure){}[0]
+
+        final val failure // io.github.artemidius.blowhard.core.domain/ModelCatalogResult.Failure.failure|{}failure[0]
+            final fun <get-failure>(): io.github.artemidius.blowhard.core.domain/ModelCatalogFailure // io.github.artemidius.blowhard.core.domain/ModelCatalogResult.Failure.failure.<get-failure>|<get-failure>(){}[0]
+
+        final fun component1(): io.github.artemidius.blowhard.core.domain/ModelCatalogFailure // io.github.artemidius.blowhard.core.domain/ModelCatalogResult.Failure.component1|component1(){}[0]
+        final fun copy(io.github.artemidius.blowhard.core.domain/ModelCatalogFailure = ...): io.github.artemidius.blowhard.core.domain/ModelCatalogResult.Failure // io.github.artemidius.blowhard.core.domain/ModelCatalogResult.Failure.copy|copy(io.github.artemidius.blowhard.core.domain.ModelCatalogFailure){}[0]
+        final fun equals(kotlin/Any?): kotlin/Boolean // io.github.artemidius.blowhard.core.domain/ModelCatalogResult.Failure.equals|equals(kotlin.Any?){}[0]
+        final fun hashCode(): kotlin/Int // io.github.artemidius.blowhard.core.domain/ModelCatalogResult.Failure.hashCode|hashCode(){}[0]
+        final fun toString(): kotlin/String // io.github.artemidius.blowhard.core.domain/ModelCatalogResult.Failure.toString|toString(){}[0]
+    }
+
+    final class Success : io.github.artemidius.blowhard.core.domain/ModelCatalogResult { // io.github.artemidius.blowhard.core.domain/ModelCatalogResult.Success|null[0]
+        constructor <init>(kotlin.collections/List<io.github.artemidius.blowhard.core.domain/AvailableModel>) // io.github.artemidius.blowhard.core.domain/ModelCatalogResult.Success.<init>|<init>(kotlin.collections.List<io.github.artemidius.blowhard.core.domain.AvailableModel>){}[0]
+
+        final val models // io.github.artemidius.blowhard.core.domain/ModelCatalogResult.Success.models|{}models[0]
+            final fun <get-models>(): kotlin.collections/List<io.github.artemidius.blowhard.core.domain/AvailableModel> // io.github.artemidius.blowhard.core.domain/ModelCatalogResult.Success.models.<get-models>|<get-models>(){}[0]
+
+        final fun component1(): kotlin.collections/List<io.github.artemidius.blowhard.core.domain/AvailableModel> // io.github.artemidius.blowhard.core.domain/ModelCatalogResult.Success.component1|component1(){}[0]
+        final fun copy(kotlin.collections/List<io.github.artemidius.blowhard.core.domain/AvailableModel> = ...): io.github.artemidius.blowhard.core.domain/ModelCatalogResult.Success // io.github.artemidius.blowhard.core.domain/ModelCatalogResult.Success.copy|copy(kotlin.collections.List<io.github.artemidius.blowhard.core.domain.AvailableModel>){}[0]
+        final fun equals(kotlin/Any?): kotlin/Boolean // io.github.artemidius.blowhard.core.domain/ModelCatalogResult.Success.equals|equals(kotlin.Any?){}[0]
+        final fun hashCode(): kotlin/Int // io.github.artemidius.blowhard.core.domain/ModelCatalogResult.Success.hashCode|hashCode(){}[0]
+        final fun toString(): kotlin/String // io.github.artemidius.blowhard.core.domain/ModelCatalogResult.Success.toString|toString(){}[0]
+    }
+}
+
 sealed interface io.github.artemidius.blowhard.core.domain/PromptTextResult { // io.github.artemidius.blowhard.core.domain/PromptTextResult|null[0]
     final class Accepted : io.github.artemidius.blowhard.core.domain/PromptTextResult { // io.github.artemidius.blowhard.core.domain/PromptTextResult.Accepted|null[0]
         constructor <init>(io.github.artemidius.blowhard.core.domain/PromptText) // io.github.artemidius.blowhard.core.domain/PromptTextResult.Accepted.<init>|<init>(io.github.artemidius.blowhard.core.domain.PromptText){}[0]
@@ -94,6 +170,31 @@ sealed interface io.github.artemidius.blowhard.core.domain/PromptTextResult { //
         final fun hashCode(): kotlin/Int // io.github.artemidius.blowhard.core.domain/PromptTextResult.Rejected.hashCode|hashCode(){}[0]
         final fun toString(): kotlin/String // io.github.artemidius.blowhard.core.domain/PromptTextResult.Rejected.toString|toString(){}[0]
     }
+}
+
+final class io.github.artemidius.blowhard.core.domain/AvailableModel { // io.github.artemidius.blowhard.core.domain/AvailableModel|null[0]
+    constructor <init>(kotlin/String, kotlin.collections/List<kotlin/String>, kotlin/Long?, io.github.artemidius.blowhard.core.domain/ModelAvailability, io.github.artemidius.blowhard.core.domain/ModelCapabilities) // io.github.artemidius.blowhard.core.domain/AvailableModel.<init>|<init>(kotlin.String;kotlin.collections.List<kotlin.String>;kotlin.Long?;io.github.artemidius.blowhard.core.domain.ModelAvailability;io.github.artemidius.blowhard.core.domain.ModelCapabilities){}[0]
+
+    final val aliases // io.github.artemidius.blowhard.core.domain/AvailableModel.aliases|{}aliases[0]
+        final fun <get-aliases>(): kotlin.collections/List<kotlin/String> // io.github.artemidius.blowhard.core.domain/AvailableModel.aliases.<get-aliases>|<get-aliases>(){}[0]
+    final val availability // io.github.artemidius.blowhard.core.domain/AvailableModel.availability|{}availability[0]
+        final fun <get-availability>(): io.github.artemidius.blowhard.core.domain/ModelAvailability // io.github.artemidius.blowhard.core.domain/AvailableModel.availability.<get-availability>|<get-availability>(){}[0]
+    final val capabilities // io.github.artemidius.blowhard.core.domain/AvailableModel.capabilities|{}capabilities[0]
+        final fun <get-capabilities>(): io.github.artemidius.blowhard.core.domain/ModelCapabilities // io.github.artemidius.blowhard.core.domain/AvailableModel.capabilities.<get-capabilities>|<get-capabilities>(){}[0]
+    final val contextWindowTokens // io.github.artemidius.blowhard.core.domain/AvailableModel.contextWindowTokens|{}contextWindowTokens[0]
+        final fun <get-contextWindowTokens>(): kotlin/Long? // io.github.artemidius.blowhard.core.domain/AvailableModel.contextWindowTokens.<get-contextWindowTokens>|<get-contextWindowTokens>(){}[0]
+    final val id // io.github.artemidius.blowhard.core.domain/AvailableModel.id|{}id[0]
+        final fun <get-id>(): kotlin/String // io.github.artemidius.blowhard.core.domain/AvailableModel.id.<get-id>|<get-id>(){}[0]
+
+    final fun component1(): kotlin/String // io.github.artemidius.blowhard.core.domain/AvailableModel.component1|component1(){}[0]
+    final fun component2(): kotlin.collections/List<kotlin/String> // io.github.artemidius.blowhard.core.domain/AvailableModel.component2|component2(){}[0]
+    final fun component3(): kotlin/Long? // io.github.artemidius.blowhard.core.domain/AvailableModel.component3|component3(){}[0]
+    final fun component4(): io.github.artemidius.blowhard.core.domain/ModelAvailability // io.github.artemidius.blowhard.core.domain/AvailableModel.component4|component4(){}[0]
+    final fun component5(): io.github.artemidius.blowhard.core.domain/ModelCapabilities // io.github.artemidius.blowhard.core.domain/AvailableModel.component5|component5(){}[0]
+    final fun copy(kotlin/String = ..., kotlin.collections/List<kotlin/String> = ..., kotlin/Long? = ..., io.github.artemidius.blowhard.core.domain/ModelAvailability = ..., io.github.artemidius.blowhard.core.domain/ModelCapabilities = ...): io.github.artemidius.blowhard.core.domain/AvailableModel // io.github.artemidius.blowhard.core.domain/AvailableModel.copy|copy(kotlin.String;kotlin.collections.List<kotlin.String>;kotlin.Long?;io.github.artemidius.blowhard.core.domain.ModelAvailability;io.github.artemidius.blowhard.core.domain.ModelCapabilities){}[0]
+    final fun equals(kotlin/Any?): kotlin/Boolean // io.github.artemidius.blowhard.core.domain/AvailableModel.equals|equals(kotlin.Any?){}[0]
+    final fun hashCode(): kotlin/Int // io.github.artemidius.blowhard.core.domain/AvailableModel.hashCode|hashCode(){}[0]
+    final fun toString(): kotlin/String // io.github.artemidius.blowhard.core.domain/AvailableModel.toString|toString(){}[0]
 }
 
 final class io.github.artemidius.blowhard.core.domain/GenerationFailure { // io.github.artemidius.blowhard.core.domain/GenerationFailure|null[0]
@@ -129,6 +230,50 @@ final class io.github.artemidius.blowhard.core.domain/GenerationRequest { // io.
     final fun equals(kotlin/Any?): kotlin/Boolean // io.github.artemidius.blowhard.core.domain/GenerationRequest.equals|equals(kotlin.Any?){}[0]
     final fun hashCode(): kotlin/Int // io.github.artemidius.blowhard.core.domain/GenerationRequest.hashCode|hashCode(){}[0]
     final fun toString(): kotlin/String // io.github.artemidius.blowhard.core.domain/GenerationRequest.toString|toString(){}[0]
+}
+
+final class io.github.artemidius.blowhard.core.domain/ModelCapabilities { // io.github.artemidius.blowhard.core.domain/ModelCapabilities|null[0]
+    constructor <init>(io.github.artemidius.blowhard.core.domain/CapabilitySupport, io.github.artemidius.blowhard.core.domain/CapabilitySupport, io.github.artemidius.blowhard.core.domain/CapabilitySupport, io.github.artemidius.blowhard.core.domain/CapabilitySupport, io.github.artemidius.blowhard.core.domain/CapabilitySupport, io.github.artemidius.blowhard.core.domain/CapabilitySupport) // io.github.artemidius.blowhard.core.domain/ModelCapabilities.<init>|<init>(io.github.artemidius.blowhard.core.domain.CapabilitySupport;io.github.artemidius.blowhard.core.domain.CapabilitySupport;io.github.artemidius.blowhard.core.domain.CapabilitySupport;io.github.artemidius.blowhard.core.domain.CapabilitySupport;io.github.artemidius.blowhard.core.domain.CapabilitySupport;io.github.artemidius.blowhard.core.domain.CapabilitySupport){}[0]
+
+    final val chatCompletion // io.github.artemidius.blowhard.core.domain/ModelCapabilities.chatCompletion|{}chatCompletion[0]
+        final fun <get-chatCompletion>(): io.github.artemidius.blowhard.core.domain/CapabilitySupport // io.github.artemidius.blowhard.core.domain/ModelCapabilities.chatCompletion.<get-chatCompletion>|<get-chatCompletion>(){}[0]
+    final val classification // io.github.artemidius.blowhard.core.domain/ModelCapabilities.classification|{}classification[0]
+        final fun <get-classification>(): io.github.artemidius.blowhard.core.domain/CapabilitySupport // io.github.artemidius.blowhard.core.domain/ModelCapabilities.classification.<get-classification>|<get-classification>(){}[0]
+    final val fillInMiddle // io.github.artemidius.blowhard.core.domain/ModelCapabilities.fillInMiddle|{}fillInMiddle[0]
+        final fun <get-fillInMiddle>(): io.github.artemidius.blowhard.core.domain/CapabilitySupport // io.github.artemidius.blowhard.core.domain/ModelCapabilities.fillInMiddle.<get-fillInMiddle>|<get-fillInMiddle>(){}[0]
+    final val fineTuning // io.github.artemidius.blowhard.core.domain/ModelCapabilities.fineTuning|{}fineTuning[0]
+        final fun <get-fineTuning>(): io.github.artemidius.blowhard.core.domain/CapabilitySupport // io.github.artemidius.blowhard.core.domain/ModelCapabilities.fineTuning.<get-fineTuning>|<get-fineTuning>(){}[0]
+    final val functionCalling // io.github.artemidius.blowhard.core.domain/ModelCapabilities.functionCalling|{}functionCalling[0]
+        final fun <get-functionCalling>(): io.github.artemidius.blowhard.core.domain/CapabilitySupport // io.github.artemidius.blowhard.core.domain/ModelCapabilities.functionCalling.<get-functionCalling>|<get-functionCalling>(){}[0]
+    final val vision // io.github.artemidius.blowhard.core.domain/ModelCapabilities.vision|{}vision[0]
+        final fun <get-vision>(): io.github.artemidius.blowhard.core.domain/CapabilitySupport // io.github.artemidius.blowhard.core.domain/ModelCapabilities.vision.<get-vision>|<get-vision>(){}[0]
+
+    final fun component1(): io.github.artemidius.blowhard.core.domain/CapabilitySupport // io.github.artemidius.blowhard.core.domain/ModelCapabilities.component1|component1(){}[0]
+    final fun component2(): io.github.artemidius.blowhard.core.domain/CapabilitySupport // io.github.artemidius.blowhard.core.domain/ModelCapabilities.component2|component2(){}[0]
+    final fun component3(): io.github.artemidius.blowhard.core.domain/CapabilitySupport // io.github.artemidius.blowhard.core.domain/ModelCapabilities.component3|component3(){}[0]
+    final fun component4(): io.github.artemidius.blowhard.core.domain/CapabilitySupport // io.github.artemidius.blowhard.core.domain/ModelCapabilities.component4|component4(){}[0]
+    final fun component5(): io.github.artemidius.blowhard.core.domain/CapabilitySupport // io.github.artemidius.blowhard.core.domain/ModelCapabilities.component5|component5(){}[0]
+    final fun component6(): io.github.artemidius.blowhard.core.domain/CapabilitySupport // io.github.artemidius.blowhard.core.domain/ModelCapabilities.component6|component6(){}[0]
+    final fun copy(io.github.artemidius.blowhard.core.domain/CapabilitySupport = ..., io.github.artemidius.blowhard.core.domain/CapabilitySupport = ..., io.github.artemidius.blowhard.core.domain/CapabilitySupport = ..., io.github.artemidius.blowhard.core.domain/CapabilitySupport = ..., io.github.artemidius.blowhard.core.domain/CapabilitySupport = ..., io.github.artemidius.blowhard.core.domain/CapabilitySupport = ...): io.github.artemidius.blowhard.core.domain/ModelCapabilities // io.github.artemidius.blowhard.core.domain/ModelCapabilities.copy|copy(io.github.artemidius.blowhard.core.domain.CapabilitySupport;io.github.artemidius.blowhard.core.domain.CapabilitySupport;io.github.artemidius.blowhard.core.domain.CapabilitySupport;io.github.artemidius.blowhard.core.domain.CapabilitySupport;io.github.artemidius.blowhard.core.domain.CapabilitySupport;io.github.artemidius.blowhard.core.domain.CapabilitySupport){}[0]
+    final fun equals(kotlin/Any?): kotlin/Boolean // io.github.artemidius.blowhard.core.domain/ModelCapabilities.equals|equals(kotlin.Any?){}[0]
+    final fun hashCode(): kotlin/Int // io.github.artemidius.blowhard.core.domain/ModelCapabilities.hashCode|hashCode(){}[0]
+    final fun toString(): kotlin/String // io.github.artemidius.blowhard.core.domain/ModelCapabilities.toString|toString(){}[0]
+}
+
+final class io.github.artemidius.blowhard.core.domain/ModelCatalogFailure { // io.github.artemidius.blowhard.core.domain/ModelCatalogFailure|null[0]
+    constructor <init>(io.github.artemidius.blowhard.core.domain/ModelCatalogFailureKind, kotlin/Long? = ...) // io.github.artemidius.blowhard.core.domain/ModelCatalogFailure.<init>|<init>(io.github.artemidius.blowhard.core.domain.ModelCatalogFailureKind;kotlin.Long?){}[0]
+
+    final val kind // io.github.artemidius.blowhard.core.domain/ModelCatalogFailure.kind|{}kind[0]
+        final fun <get-kind>(): io.github.artemidius.blowhard.core.domain/ModelCatalogFailureKind // io.github.artemidius.blowhard.core.domain/ModelCatalogFailure.kind.<get-kind>|<get-kind>(){}[0]
+    final val retryAfterSeconds // io.github.artemidius.blowhard.core.domain/ModelCatalogFailure.retryAfterSeconds|{}retryAfterSeconds[0]
+        final fun <get-retryAfterSeconds>(): kotlin/Long? // io.github.artemidius.blowhard.core.domain/ModelCatalogFailure.retryAfterSeconds.<get-retryAfterSeconds>|<get-retryAfterSeconds>(){}[0]
+
+    final fun component1(): io.github.artemidius.blowhard.core.domain/ModelCatalogFailureKind // io.github.artemidius.blowhard.core.domain/ModelCatalogFailure.component1|component1(){}[0]
+    final fun component2(): kotlin/Long? // io.github.artemidius.blowhard.core.domain/ModelCatalogFailure.component2|component2(){}[0]
+    final fun copy(io.github.artemidius.blowhard.core.domain/ModelCatalogFailureKind = ..., kotlin/Long? = ...): io.github.artemidius.blowhard.core.domain/ModelCatalogFailure // io.github.artemidius.blowhard.core.domain/ModelCatalogFailure.copy|copy(io.github.artemidius.blowhard.core.domain.ModelCatalogFailureKind;kotlin.Long?){}[0]
+    final fun equals(kotlin/Any?): kotlin/Boolean // io.github.artemidius.blowhard.core.domain/ModelCatalogFailure.equals|equals(kotlin.Any?){}[0]
+    final fun hashCode(): kotlin/Int // io.github.artemidius.blowhard.core.domain/ModelCatalogFailure.hashCode|hashCode(){}[0]
+    final fun toString(): kotlin/String // io.github.artemidius.blowhard.core.domain/ModelCatalogFailure.toString|toString(){}[0]
 }
 
 final value class io.github.artemidius.blowhard.core.domain/PromptText { // io.github.artemidius.blowhard.core.domain/PromptText|null[0]
