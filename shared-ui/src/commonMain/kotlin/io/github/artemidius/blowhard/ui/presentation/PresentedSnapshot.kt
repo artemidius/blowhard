@@ -50,9 +50,11 @@ internal fun RunSnapshot.present(): PresentedSnapshot = when (this) {
 }
 
 private fun RunFailureKind.safeMessage(): String = when (this) {
+    RunFailureKind.CREDENTIAL_UNAVAILABLE -> "A provider credential is not available."
     RunFailureKind.UNAUTHORIZED -> "The provider rejected the configured credential."
     RunFailureKind.INVALID_REQUEST -> "The provider rejected this request."
     RunFailureKind.RATE_LIMITED -> "The provider is rate limiting requests. Try again later."
     RunFailureKind.UNAVAILABLE -> "The provider is temporarily unavailable."
+    RunFailureKind.INVALID_RESPONSE -> "The provider returned an invalid streaming response."
     RunFailureKind.UNEXPECTED -> "Generation stopped unexpectedly. No sensitive details were exposed."
 }
