@@ -1,9 +1,8 @@
 package io.github.artemidius.blowhard.adapters.mistral
 
 import io.github.artemidius.blowhard.core.domain.GenerationEvent
-import kotlinx.coroutines.flow.FlowCollector
 
-internal class TextDeltaBatcher(private val collector: FlowCollector<GenerationEvent>) {
+internal class TextDeltaBatcher(private val emit: suspend (GenerationEvent) -> Unit) {
     private val pending = StringBuilder()
     private var acceptedCharacters = 0
 
@@ -17,7 +16,7 @@ internal class TextDeltaBatcher(private val collector: FlowCollector<GenerationE
 
     suspend fun flush() {
         if (pending.isEmpty()) return
-        collector.emit(GenerationEvent.TextDelta(pending.toString()))
+        emit(GenerationEvent.TextDelta(pending.toString()))
         pending.clear()
     }
 }

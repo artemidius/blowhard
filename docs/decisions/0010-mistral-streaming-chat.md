@@ -34,6 +34,8 @@ terminal-state rules while remaining cancellable by the application-owned run co
   and total generated characters. Flush accepted text before reporting a non-cancellation failure.
 - Propagate coroutine cancellation without translating it to a failure event. Closing collection
   therefore cancels the in-flight HTTP operation through structured concurrency.
+- Use a bounded `channelFlow` so platform HTTP callbacks may resume on their native dispatcher while
+  generation events remain safe to consume from the collecting context.
 - Preserve retry advice as explicit domain and client data. A bounded numeric `Retry-After` on a
   definite `429` rejection permits a distinct delayed attempt. Network ambiguity, temporary
   unavailability, malformed streams, and partial output permit only an explicit new attempt. Other

@@ -3,7 +3,6 @@ package io.github.artemidius.blowhard.adapters.mistral
 import io.github.artemidius.blowhard.core.domain.GenerationEvent
 import io.ktor.utils.io.ByteChannel
 import io.ktor.utils.io.writeFully
-import kotlinx.coroutines.flow.FlowCollector
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
@@ -66,7 +65,7 @@ class MistralSseReaderTest {
     @Test
     fun `generated output is bounded before another delta is emitted`() = runTest {
         val events = mutableListOf<GenerationEvent>()
-        val batcher = TextDeltaBatcher(FlowCollector { events += it })
+        val batcher = TextDeltaBatcher { events += it }
         batcher.add("x".repeat(1_000_000))
 
         assertFailsWith<InvalidMistralStreamException> { batcher.add("x") }

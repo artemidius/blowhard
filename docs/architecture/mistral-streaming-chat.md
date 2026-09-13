@@ -23,7 +23,8 @@ sequenceDiagram
 ```
 
 Cancelling collection cancels the request. The adapter does not create a background scope, reconnect
-an SSE session, or replay the POST.
+an SSE session, or replay the POST. A bounded `channelFlow` bridges platform HTTP callback contexts
+without breaking structured concurrency.
 
 ## Wire scope
 
