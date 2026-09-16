@@ -26,6 +26,77 @@ public final class io/github/artemidius/blowhard/core/domain/CapabilitySupport :
 	public static fun values ()[Lio/github/artemidius/blowhard/core/domain/CapabilitySupport;
 }
 
+public final class io/github/artemidius/blowhard/core/domain/CredentialAccessFailure : java/lang/Enum {
+	public static final field ACCESS_DENIED Lio/github/artemidius/blowhard/core/domain/CredentialAccessFailure;
+	public static final field INTERACTION_REQUIRED Lio/github/artemidius/blowhard/core/domain/CredentialAccessFailure;
+	public static final field PLATFORM_UNAVAILABLE Lio/github/artemidius/blowhard/core/domain/CredentialAccessFailure;
+	public static final field UNEXPECTED Lio/github/artemidius/blowhard/core/domain/CredentialAccessFailure;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public static fun valueOf (Ljava/lang/String;)Lio/github/artemidius/blowhard/core/domain/CredentialAccessFailure;
+	public static fun values ()[Lio/github/artemidius/blowhard/core/domain/CredentialAccessFailure;
+}
+
+public abstract interface class io/github/artemidius/blowhard/core/domain/CredentialMutationResult {
+}
+
+public final class io/github/artemidius/blowhard/core/domain/CredentialMutationResult$Rejected : io/github/artemidius/blowhard/core/domain/CredentialMutationResult {
+	public static final field INSTANCE Lio/github/artemidius/blowhard/core/domain/CredentialMutationResult$Rejected;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class io/github/artemidius/blowhard/core/domain/CredentialMutationResult$Success : io/github/artemidius/blowhard/core/domain/CredentialMutationResult {
+	public static final field INSTANCE Lio/github/artemidius/blowhard/core/domain/CredentialMutationResult$Success;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class io/github/artemidius/blowhard/core/domain/CredentialMutationResult$Unavailable : io/github/artemidius/blowhard/core/domain/CredentialMutationResult {
+	public fun <init> (Lio/github/artemidius/blowhard/core/domain/CredentialAccessFailure;)V
+	public final fun component1 ()Lio/github/artemidius/blowhard/core/domain/CredentialAccessFailure;
+	public final fun copy (Lio/github/artemidius/blowhard/core/domain/CredentialAccessFailure;)Lio/github/artemidius/blowhard/core/domain/CredentialMutationResult$Unavailable;
+	public static synthetic fun copy$default (Lio/github/artemidius/blowhard/core/domain/CredentialMutationResult$Unavailable;Lio/github/artemidius/blowhard/core/domain/CredentialAccessFailure;ILjava/lang/Object;)Lio/github/artemidius/blowhard/core/domain/CredentialMutationResult$Unavailable;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getReason ()Lio/github/artemidius/blowhard/core/domain/CredentialAccessFailure;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public abstract interface class io/github/artemidius/blowhard/core/domain/CredentialReadResult {
+}
+
+public final class io/github/artemidius/blowhard/core/domain/CredentialReadResult$Available : io/github/artemidius/blowhard/core/domain/CredentialReadResult {
+	public fun <init> (Ljava/lang/String;)V
+	public final fun getSecret ()Ljava/lang/String;
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class io/github/artemidius/blowhard/core/domain/CredentialReadResult$Missing : io/github/artemidius/blowhard/core/domain/CredentialReadResult {
+	public static final field INSTANCE Lio/github/artemidius/blowhard/core/domain/CredentialReadResult$Missing;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class io/github/artemidius/blowhard/core/domain/CredentialReadResult$Unavailable : io/github/artemidius/blowhard/core/domain/CredentialReadResult {
+	public fun <init> (Lio/github/artemidius/blowhard/core/domain/CredentialAccessFailure;)V
+	public final fun component1 ()Lio/github/artemidius/blowhard/core/domain/CredentialAccessFailure;
+	public final fun copy (Lio/github/artemidius/blowhard/core/domain/CredentialAccessFailure;)Lio/github/artemidius/blowhard/core/domain/CredentialReadResult$Unavailable;
+	public static synthetic fun copy$default (Lio/github/artemidius/blowhard/core/domain/CredentialReadResult$Unavailable;Lio/github/artemidius/blowhard/core/domain/CredentialAccessFailure;ILjava/lang/Object;)Lio/github/artemidius/blowhard/core/domain/CredentialReadResult$Unavailable;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getReason ()Lio/github/artemidius/blowhard/core/domain/CredentialAccessFailure;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public abstract interface class io/github/artemidius/blowhard/core/domain/CredentialStore {
+	public abstract fun delete (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public abstract fun read (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public abstract fun replace (Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+}
+
 public abstract interface class io/github/artemidius/blowhard/core/domain/GenerationEvent {
 }
 
