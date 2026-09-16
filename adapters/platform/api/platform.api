@@ -1,0 +1,5 @@
+public final class io/github/artemidius/blowhard/adapters/platform/DesktopCredentialStores {
+	public static final field INSTANCE Lio/github/artemidius/blowhard/adapters/platform/DesktopCredentialStores;
+	public final fun mistralApiKey ()Lio/github/artemidius/blowhard/core/domain/CredentialStore;
+}
+
