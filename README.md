@@ -63,6 +63,12 @@ automatic POST replay. Its framing, terminal-state, and retry decisions are docu
 [`ADR 0010`](docs/decisions/0010-mistral-streaming-chat.md) and the
 [streaming chat guide](docs/architecture/mistral-streaming-chat.md).
 
+Secure credential lifecycle is isolated behind a provider-neutral store. The macOS implementation
+uses native Keychain generic-password items and other desktop hosts currently fail closed. The
+boundary and its limitations are documented in
+[`ADR 0011`](docs/decisions/0011-macos-keychain-credentials.md) and the
+[credential storage guide](docs/architecture/credential-storage.md).
+
 ## Run the desktop application
 
 ```shell
@@ -127,7 +133,7 @@ signing and release distribution are intentionally deferred.
 
 The runnable application still uses synthetic fixture output rather than live Mistral generation.
 The repository includes isolated, tested model-catalog and streaming-chat transport boundaries, but
-it does not yet store provider credentials or expose those boundaries in the UI. Public release
+the macOS credential store and provider boundaries are not yet exposed in the UI. Public release
 artifacts are not available yet.
 
 See [`CONTRIBUTING.md`](CONTRIBUTING.md) for the review and verification workflow.
