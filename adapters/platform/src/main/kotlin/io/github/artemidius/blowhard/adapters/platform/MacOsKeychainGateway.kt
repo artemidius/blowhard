@@ -125,11 +125,11 @@ private interface SecurityFramework : Library {
 
 private class OwnedDictionary : AutoCloseable {
     private val references = mutableListOf<CFTypeRef>()
-    val value: CFMutableDictionaryRef = CORE_FOUNDATION.CFDictionaryCreateMutable(
+    val value: CFMutableDictionaryRef = JnaLibraries.coreFoundation.CFDictionaryCreateMutable(
         null,
         CFIndex(0),
-        CORE_FOUNDATION_LIBRARY.getGlobalVariableAddress("kCFTypeDictionaryKeyCallBacks"),
-        CORE_FOUNDATION_LIBRARY.getGlobalVariableAddress("kCFTypeDictionaryValueCallBacks"),
+        JnaLibraries.coreFoundationLibrary.getGlobalVariableAddress("kCFTypeDictionaryKeyCallBacks"),
+        JnaLibraries.coreFoundationLibrary.getGlobalVariableAddress("kCFTypeDictionaryValueCallBacks"),
     )
 
     fun putConstant(key: String, constant: String, framework: Framework = Framework.SECURITY) {
@@ -146,7 +146,7 @@ private class OwnedDictionary : AutoCloseable {
         val memory = Memory(bytes.size.toLong())
         try {
             memory.write(0, bytes, 0, bytes.size)
-            val data = CORE_FOUNDATION.CFDataCreate(null, memory, CFIndex(bytes.size.toLong()))
+            val data = JnaLibraries.coreFoundation.CFDataCreate(null, memory, CFIndex(bytes.size.toLong()))
             references += data
             value.setValue(frameworkSymbol(Framework.SECURITY, key), data)
         } finally {
@@ -165,8 +165,8 @@ private enum class Framework { SECURITY, CORE_FOUNDATION }
 
 private fun frameworkSymbol(framework: Framework, name: String): PointerType {
     val library = when (framework) {
-        Framework.SECURITY -> SECURITY_LIBRARY
-        Framework.CORE_FOUNDATION -> CORE_FOUNDATION_LIBRARY
+        Framework.SECURITY -> JnaLibraries.securityLibrary
+        Framework.CORE_FOUNDATION -> JnaLibraries.coreFoundationLibrary
     }
     val pointer = library.getGlobalVariableAddress(name).getPointer(0)
     return CFTypeRef(pointer)
@@ -194,9 +194,11 @@ private fun Int.toAccessFailure(): CredentialAccessFailure = when (this) {
     else -> CredentialAccessFailure.UNEXPECTED
 }
 
-private val CORE_FOUNDATION: CoreFoundation = CoreFoundation.INSTANCE
-private val CORE_FOUNDATION_LIBRARY: NativeLibrary = NativeLibrary.getInstance("CoreFoundation")
-private val SECURITY_LIBRARY: NativeLibrary = NativeLibrary.getInstance("Security")
+private object JnaLibraries {
+    val coreFoundation: CoreFoundation = CoreFoundation.INSTANCE
+    val coreFoundationLibrary: NativeLibrary = NativeLibrary.getInstance("CoreFoundation")
+    val securityLibrary: NativeLibrary = NativeLibrary.getInstance("Security")
+}
 
 private const val ERR_SEC_SUCCESS = 0
 private const val ERR_SEC_USER_CANCELED = -128
