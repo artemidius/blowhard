@@ -14,6 +14,21 @@ abstract fun interface io.github.artemidius.blowhard.core.application/RunIdFacto
     abstract suspend fun next(): io.github.artemidius.blowhard.core.api/RunId // io.github.artemidius.blowhard.core.application/RunIdFactory.next|next(){}[0]
 }
 
+final class io.github.artemidius.blowhard.core.application/DefaultConnectionSettings : io.github.artemidius.blowhard.core.api/ConnectionSettings { // io.github.artemidius.blowhard.core.application/DefaultConnectionSettings|null[0]
+    constructor <init>(io.github.artemidius.blowhard.core.domain/CredentialStore, io.github.artemidius.blowhard.core.domain/ModelCatalogPort) // io.github.artemidius.blowhard.core.application/DefaultConnectionSettings.<init>|<init>(io.github.artemidius.blowhard.core.domain.CredentialStore;io.github.artemidius.blowhard.core.domain.ModelCatalogPort){}[0]
+
+    final val state // io.github.artemidius.blowhard.core.application/DefaultConnectionSettings.state|{}state[0]
+        final fun <get-state>(): kotlinx.coroutines.flow/StateFlow<io.github.artemidius.blowhard.core.api/ConnectionSettingsState> // io.github.artemidius.blowhard.core.application/DefaultConnectionSettings.state.<get-state>|<get-state>(){}[0]
+
+    final suspend fun acknowledgeLiveDataDisclosure() // io.github.artemidius.blowhard.core.application/DefaultConnectionSettings.acknowledgeLiveDataDisclosure|acknowledgeLiveDataDisclosure(){}[0]
+    final suspend fun deleteCredential(): io.github.artemidius.blowhard.core.api/CredentialUpdateResult // io.github.artemidius.blowhard.core.application/DefaultConnectionSettings.deleteCredential|deleteCredential(){}[0]
+    final suspend fun refreshCredentialStatus() // io.github.artemidius.blowhard.core.application/DefaultConnectionSettings.refreshCredentialStatus|refreshCredentialStatus(){}[0]
+    final suspend fun replaceCredential(kotlin/String): io.github.artemidius.blowhard.core.api/CredentialUpdateResult // io.github.artemidius.blowhard.core.application/DefaultConnectionSettings.replaceCredential|replaceCredential(kotlin.String){}[0]
+    final suspend fun selectMode(io.github.artemidius.blowhard.core.api/GenerationMode): io.github.artemidius.blowhard.core.api/ModeSelectionResult // io.github.artemidius.blowhard.core.application/DefaultConnectionSettings.selectMode|selectMode(io.github.artemidius.blowhard.core.api.GenerationMode){}[0]
+    final suspend fun selectModel(kotlin/String): io.github.artemidius.blowhard.core.api/ModelSelectionResult // io.github.artemidius.blowhard.core.application/DefaultConnectionSettings.selectModel|selectModel(kotlin.String){}[0]
+    final suspend fun testConnection(): io.github.artemidius.blowhard.core.api/ConnectionTestResult // io.github.artemidius.blowhard.core.application/DefaultConnectionSettings.testConnection|testConnection(){}[0]
+}
+
 final class io.github.artemidius.blowhard.core.application/DefaultConversationRuns : io.github.artemidius.blowhard.core.api/ConversationRuns { // io.github.artemidius.blowhard.core.application/DefaultConversationRuns|null[0]
     constructor <init>(io.github.artemidius.blowhard.core.domain/TextGenerationPort, io.github.artemidius.blowhard.core.application/RunIdFactory, io.github.artemidius.blowhard.core.application/RunClock, kotlin.coroutines/CoroutineContext, io.github.artemidius.blowhard.core.application/RunExecutionPolicy = ...) // io.github.artemidius.blowhard.core.application/DefaultConversationRuns.<init>|<init>(io.github.artemidius.blowhard.core.domain.TextGenerationPort;io.github.artemidius.blowhard.core.application.RunIdFactory;io.github.artemidius.blowhard.core.application.RunClock;kotlin.coroutines.CoroutineContext;io.github.artemidius.blowhard.core.application.RunExecutionPolicy){}[0]
 

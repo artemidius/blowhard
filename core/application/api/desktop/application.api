@@ -1,3 +1,15 @@
+public final class io/github/artemidius/blowhard/core/application/DefaultConnectionSettings : io/github/artemidius/blowhard/core/api/ConnectionSettings {
+	public fun <init> (Lio/github/artemidius/blowhard/core/domain/CredentialStore;Lio/github/artemidius/blowhard/core/domain/ModelCatalogPort;)V
+	public fun acknowledgeLiveDataDisclosure (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public fun deleteCredential (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public fun getState ()Lkotlinx/coroutines/flow/StateFlow;
+	public fun refreshCredentialStatus (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public fun replaceCredential (Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public fun selectMode (Lio/github/artemidius/blowhard/core/api/GenerationMode;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public fun selectModel (Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public fun testConnection (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+}
+
 public final class io/github/artemidius/blowhard/core/application/DefaultConversationRuns : io/github/artemidius/blowhard/core/api/ConversationRuns {
 	public fun <init> (Lio/github/artemidius/blowhard/core/domain/TextGenerationPort;Lio/github/artemidius/blowhard/core/application/RunIdFactory;Lio/github/artemidius/blowhard/core/application/RunClock;Lkotlin/coroutines/CoroutineContext;Lio/github/artemidius/blowhard/core/application/RunExecutionPolicy;)V
 	public synthetic fun <init> (Lio/github/artemidius/blowhard/core/domain/TextGenerationPort;Lio/github/artemidius/blowhard/core/application/RunIdFactory;Lio/github/artemidius/blowhard/core/application/RunClock;Lkotlin/coroutines/CoroutineContext;Lio/github/artemidius/blowhard/core/application/RunExecutionPolicy;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
