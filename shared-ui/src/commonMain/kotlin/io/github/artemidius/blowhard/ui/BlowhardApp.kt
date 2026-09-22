@@ -5,17 +5,43 @@ import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.graphics.Color
+import io.github.artemidius.blowhard.ui.presentation.ConnectionSettingsPresenter
 import io.github.artemidius.blowhard.ui.presentation.ConversationPresenter
 
 /** Root presentation entry point shared by Blowhard clients. */
 @Suppress("FunctionNaming", "ktlint:standard:function-naming")
 @Composable
-public fun BlowhardApp(presenter: ConversationPresenter) {
-    val state by presenter.state.collectAsState()
+public fun BlowhardApp(
+    conversationPresenter: ConversationPresenter,
+    connectionSettingsPresenter: ConnectionSettingsPresenter,
+) {
+    val conversationState by conversationPresenter.state.collectAsState()
+    val settingsState by connectionSettingsPresenter.state.collectAsState()
+    var destination by remember { mutableStateOf(WorkspaceDestination.CONVERSATION) }
     MaterialTheme(colorScheme = BlowhardColors) {
-        ConversationScreen(state = state, onAction = presenter::dispatch)
+        when (destination) {
+            WorkspaceDestination.CONVERSATION -> ConversationScreen(
+                state = conversationState,
+                onAction = conversationPresenter::dispatch,
+                onOpenSettings = { destination = WorkspaceDestination.SETTINGS },
+            )
+
+            WorkspaceDestination.SETTINGS -> ConnectionSettingsScreen(
+                state = settingsState,
+                onAction = connectionSettingsPresenter::dispatch,
+                onBack = { destination = WorkspaceDestination.CONVERSATION },
+            )
+        }
     }
+}
+
+private enum class WorkspaceDestination {
+    CONVERSATION,
+    SETTINGS,
 }
 
 private val BlowhardColors = lightColorScheme(
