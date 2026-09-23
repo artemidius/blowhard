@@ -1,3 +1,7 @@
+public final class io/github/artemidius/blowhard/adapters/mistral/CredentialStoreMistralProviderKt {
+	public static final fun asMistralCredentialProvider (Lio/github/artemidius/blowhard/core/domain/CredentialStore;)Lio/github/artemidius/blowhard/adapters/mistral/MistralCredentialProvider;
+}
+
 public final class io/github/artemidius/blowhard/adapters/mistral/MistralChatConfiguration {
 	public fun <init> (Ljava/lang/String;Ljava/lang/Integer;)V
 	public synthetic fun <init> (Ljava/lang/String;Ljava/lang/Integer;ILkotlin/jvm/internal/DefaultConstructorMarker;)V

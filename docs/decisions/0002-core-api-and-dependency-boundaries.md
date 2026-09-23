@@ -20,6 +20,8 @@ clients ---> shared-ui ---> core:api
    +------> core:application -+----> core:domain
    |                                    |
    +------> adapters:fixture ---------->+
+   +------> adapters:mistral ---------->+
+   +------> adapters:platform --------->+
 
 adapters:fixture ----------------> core:domain
 adapters:mistral ----------------> core:domain
