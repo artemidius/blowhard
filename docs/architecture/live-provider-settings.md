@@ -6,7 +6,8 @@ domain ports.
 
 ```mermaid
 flowchart LR
-    UI[Desktop or mobile UI] -->|ConnectionSettings| API[core:api]
+    UI[Shared settings screen] --> Presenter[ConnectionSettingsPresenter]
+    Presenter -->|ConnectionSettings| API[core:api]
     App[DefaultConnectionSettings] --> API
     App -->|CredentialStore| Vault[Platform credential adapter]
     App -->|ModelCatalogPort| Catalog[Provider catalog adapter]
@@ -23,6 +24,22 @@ flowchart LR
    `SUPPORTED` become selectable. `UNKNOWN` never enables a capability.
 4. Select a verified model and acknowledge that live prompts are processed externally.
 5. Select live mode. All prerequisites are checked atomically by the application service.
+
+The current desktop screen implements steps one through four. It reports when the configuration is
+ready for an explicit live selection but keeps the conversation workspace labeled and routed as an
+offline demo until live routing is introduced.
+
+## Presentation security
+
+The presenter observes the provider-neutral state and publishes only that snapshot plus fixed,
+sanitized feedback. API-key input uses ordinary Compose state rather than saveable state. Submission
+clears the visible field and passes a redacted internal action to the presenter; credential text is
+never copied into the presenter's `StateFlow`.
+
+The desktop composition root owns the macOS Keychain store and Mistral model catalog. The catalog
+reads the credential just in time through a small adapter and does not cache it. Windows and Linux
+surface `UNAVAILABLE` because their verified OS vault adapters are not implemented; no file or
+preferences fallback is present.
 
 Credential replacement and deletion clear the connection result, model list, selected model, and
 disclosure acknowledgement. A provider failure during a later check changes the connection status
@@ -41,5 +58,6 @@ messages remain inside the adapter boundary. The application additionally report
 `NO_COMPATIBLE_MODELS` when a valid catalog contains no model with explicit availability and chat
 support.
 
-See [`ADR 0012`](../decisions/0012-explicit-live-provider-settings.md) for the decision record and
-the [Mistral provider boundary](mistral-provider-boundary.md) for transport hardening.
+See [`ADR 0012`](../decisions/0012-explicit-live-provider-settings.md) for the application policy,
+[`ADR 0013`](../decisions/0013-provider-settings-presentation.md) for presentation and composition,
+and the [Mistral provider boundary](mistral-provider-boundary.md) for transport hardening.
