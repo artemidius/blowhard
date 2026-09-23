@@ -11,8 +11,8 @@ public final class io/github/artemidius/blowhard/core/application/DefaultConnect
 }
 
 public final class io/github/artemidius/blowhard/core/application/DefaultConversationRuns : io/github/artemidius/blowhard/core/api/ConversationRuns {
-	public fun <init> (Lio/github/artemidius/blowhard/core/domain/TextGenerationPort;Lio/github/artemidius/blowhard/core/application/RunIdFactory;Lio/github/artemidius/blowhard/core/application/RunClock;Lkotlin/coroutines/CoroutineContext;Lio/github/artemidius/blowhard/core/application/RunExecutionPolicy;)V
-	public synthetic fun <init> (Lio/github/artemidius/blowhard/core/domain/TextGenerationPort;Lio/github/artemidius/blowhard/core/application/RunIdFactory;Lio/github/artemidius/blowhard/core/application/RunClock;Lkotlin/coroutines/CoroutineContext;Lio/github/artemidius/blowhard/core/application/RunExecutionPolicy;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public fun <init> (Lio/github/artemidius/blowhard/core/domain/TextGenerationPort;Lio/github/artemidius/blowhard/core/application/RunIdFactory;Lio/github/artemidius/blowhard/core/application/RunClock;Lkotlin/coroutines/CoroutineContext;Lio/github/artemidius/blowhard/core/application/RunExecutionPolicy;Lio/github/artemidius/blowhard/core/api/ConnectionSettings;)V
+	public synthetic fun <init> (Lio/github/artemidius/blowhard/core/domain/TextGenerationPort;Lio/github/artemidius/blowhard/core/application/RunIdFactory;Lio/github/artemidius/blowhard/core/application/RunClock;Lkotlin/coroutines/CoroutineContext;Lio/github/artemidius/blowhard/core/application/RunExecutionPolicy;Lio/github/artemidius/blowhard/core/api/ConnectionSettings;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
 	public fun cancel-Mzzv5v0 (Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public final fun close (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public fun observe-Mzzv5v0 (Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;

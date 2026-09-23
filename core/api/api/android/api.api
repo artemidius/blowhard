@@ -139,6 +139,27 @@ public final class io/github/artemidius/blowhard/core/api/GenerationMode : java/
 	public static fun values ()[Lio/github/artemidius/blowhard/core/api/GenerationMode;
 }
 
+public abstract interface class io/github/artemidius/blowhard/core/api/GenerationTarget {
+}
+
+public final class io/github/artemidius/blowhard/core/api/GenerationTarget$Demo : io/github/artemidius/blowhard/core/api/GenerationTarget {
+	public static final field INSTANCE Lio/github/artemidius/blowhard/core/api/GenerationTarget$Demo;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class io/github/artemidius/blowhard/core/api/GenerationTarget$Live : io/github/artemidius/blowhard/core/api/GenerationTarget {
+	public fun <init> (Ljava/lang/String;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun copy (Ljava/lang/String;)Lio/github/artemidius/blowhard/core/api/GenerationTarget$Live;
+	public static synthetic fun copy$default (Lio/github/artemidius/blowhard/core/api/GenerationTarget$Live;Ljava/lang/String;ILjava/lang/Object;)Lio/github/artemidius/blowhard/core/api/GenerationTarget$Live;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getModelId ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
 public final class io/github/artemidius/blowhard/core/api/ModeSelectionResult : java/lang/Enum {
 	public static final field DISCLOSURE_REQUIRED Lio/github/artemidius/blowhard/core/api/ModeSelectionResult;
 	public static final field LIVE_NOT_READY Lio/github/artemidius/blowhard/core/api/ModeSelectionResult;
@@ -347,6 +368,7 @@ public final class io/github/artemidius/blowhard/core/api/StartRunRejection : ja
 	public static final field BLANK_PROMPT Lio/github/artemidius/blowhard/core/api/StartRunRejection;
 	public static final field CONVERSATION_BUSY Lio/github/artemidius/blowhard/core/api/StartRunRejection;
 	public static final field LIFECYCLE_CLOSED Lio/github/artemidius/blowhard/core/api/StartRunRejection;
+	public static final field LIVE_CONFIGURATION_NOT_READY Lio/github/artemidius/blowhard/core/api/StartRunRejection;
 	public static fun getEntries ()Lkotlin/enums/EnumEntries;
 	public static fun valueOf (Ljava/lang/String;)Lio/github/artemidius/blowhard/core/api/StartRunRejection;
 	public static fun values ()[Lio/github/artemidius/blowhard/core/api/StartRunRejection;
@@ -380,12 +402,15 @@ public final class io/github/artemidius/blowhard/core/api/StartRunResult$Rejecte
 }
 
 public final class io/github/artemidius/blowhard/core/api/StartRunResult$Started : io/github/artemidius/blowhard/core/api/StartRunResult {
-	public synthetic fun <init> (Ljava/lang/String;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public synthetic fun <init> (Ljava/lang/String;Lio/github/artemidius/blowhard/core/api/GenerationTarget;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public synthetic fun <init> (Ljava/lang/String;Lio/github/artemidius/blowhard/core/api/GenerationTarget;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
 	public final fun component1-oS5FZMg ()Ljava/lang/String;
-	public final fun copy-VwbcTx8 (Ljava/lang/String;)Lio/github/artemidius/blowhard/core/api/StartRunResult$Started;
-	public static synthetic fun copy-VwbcTx8$default (Lio/github/artemidius/blowhard/core/api/StartRunResult$Started;Ljava/lang/String;ILjava/lang/Object;)Lio/github/artemidius/blowhard/core/api/StartRunResult$Started;
+	public final fun component2 ()Lio/github/artemidius/blowhard/core/api/GenerationTarget;
+	public final fun copy-Mzzv5v0 (Ljava/lang/String;Lio/github/artemidius/blowhard/core/api/GenerationTarget;)Lio/github/artemidius/blowhard/core/api/StartRunResult$Started;
+	public static synthetic fun copy-Mzzv5v0$default (Lio/github/artemidius/blowhard/core/api/StartRunResult$Started;Ljava/lang/String;Lio/github/artemidius/blowhard/core/api/GenerationTarget;ILjava/lang/Object;)Lio/github/artemidius/blowhard/core/api/StartRunResult$Started;
 	public fun equals (Ljava/lang/Object;)Z
 	public final fun getRunId-oS5FZMg ()Ljava/lang/String;
+	public final fun getTarget ()Lio/github/artemidius/blowhard/core/api/GenerationTarget;
 	public fun hashCode ()I
 	public fun toString ()Ljava/lang/String;
 }
