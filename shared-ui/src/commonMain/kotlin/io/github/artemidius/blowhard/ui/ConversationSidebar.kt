@@ -30,6 +30,9 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import io.github.artemidius.blowhard.core.api.ConnectionSettingsState
+import io.github.artemidius.blowhard.core.api.GenerationMode
+import io.github.artemidius.blowhard.core.api.GenerationTarget
 import io.github.artemidius.blowhard.ui.presentation.ConversationAction
 import io.github.artemidius.blowhard.ui.presentation.ConversationRunState
 import io.github.artemidius.blowhard.ui.presentation.ConversationUiModel
@@ -38,6 +41,7 @@ import io.github.artemidius.blowhard.ui.presentation.ConversationUiState
 @Composable
 internal fun ConversationSidebar(
     state: ConversationUiState,
+    connection: ConnectionSettingsState,
     onAction: (ConversationAction) -> Unit,
     onOpenSettings: () -> Unit,
     modifier: Modifier = Modifier,
@@ -46,7 +50,7 @@ internal fun ConversationSidebar(
         modifier = modifier.fillMaxHeight().padding(20.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp),
     ) {
-        BrandHeader()
+        BrandHeader(connection.mode)
         Button(
             onClick = { onAction(ConversationAction.NewConversation) },
             modifier = Modifier.fillMaxWidth(),
@@ -70,7 +74,11 @@ internal fun ConversationSidebar(
             Text("Provider settings")
         }
         Text(
-            "Offline fixture • no API key • no network",
+            if (connection.mode == GenerationMode.DEMO) {
+                "Offline fixture • no API key • no network"
+            } else {
+                "Live Mistral • external processing • no fallback"
+            },
             style = MaterialTheme.typography.labelSmall,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
         )
@@ -78,13 +86,13 @@ internal fun ConversationSidebar(
 }
 
 @Composable
-private fun BrandHeader() {
+private fun BrandHeader(mode: GenerationMode) {
     Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
         Column {
             Text("BLOWHARD", style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Black)
             Text("Mistral client laboratory", style = MaterialTheme.typography.bodySmall)
         }
-        DemoBadge()
+        ModeBadge(mode)
     }
 }
 
@@ -117,14 +125,26 @@ private fun ConversationItem(conversation: ConversationUiModel, selected: Boolea
                 style = MaterialTheme.typography.bodyMedium,
                 fontWeight = FontWeight.Medium,
             )
-            if (conversation.runState != ConversationRunState.IDLE) {
-                Text(
-                    conversation.runState.displayLabel(),
-                    style = MaterialTheme.typography.labelSmall,
-                    color = MaterialTheme.colorScheme.primary,
-                )
-            }
+            ConversationMetadata(conversation)
         }
+    }
+}
+
+@Composable
+private fun ConversationMetadata(conversation: ConversationUiModel) {
+    if (conversation.runState != ConversationRunState.IDLE) {
+        Text(
+            conversation.runState.displayLabel(),
+            style = MaterialTheme.typography.labelSmall,
+            color = MaterialTheme.colorScheme.primary,
+        )
+    }
+    conversation.latestTarget?.let { target ->
+        Text(
+            if (target == GenerationTarget.Demo) "Demo" else "Live",
+            style = MaterialTheme.typography.labelSmall,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+        )
     }
 }
 

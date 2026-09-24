@@ -1,6 +1,7 @@
 package io.github.artemidius.blowhard.ui.presentation
 
 import io.github.artemidius.blowhard.core.api.ConversationId
+import io.github.artemidius.blowhard.core.api.GenerationTarget
 
 /** Immutable state rendered by the shared conversation screen. */
 public data class ConversationUiState(
@@ -39,6 +40,7 @@ public data class ConversationUiModel(
     public val messages: List<ChatMessageUi> = emptyList(),
     public val runState: ConversationRunState = ConversationRunState.IDLE,
     public val notice: UiNotice? = null,
+    public val latestTarget: GenerationTarget? = null,
 )
 
 /** One safely rendered message in a conversation. */
@@ -47,6 +49,7 @@ public data class ChatMessageUi(
     public val role: ChatRole,
     public val text: String,
     public val delivery: MessageDelivery = MessageDelivery.COMPLETE,
+    public val target: GenerationTarget? = null,
 )
 
 /** Author represented by a message bubble. */

@@ -26,6 +26,7 @@ public fun BlowhardApp(
         when (destination) {
             WorkspaceDestination.CONVERSATION -> ConversationScreen(
                 state = conversationState,
+                connection = settingsState.settings,
                 onAction = conversationPresenter::dispatch,
                 onOpenSettings = { destination = WorkspaceDestination.SETTINGS },
             )

@@ -1,5 +1,7 @@
 package io.github.artemidius.blowhard.ui.presentation
 
+import io.github.artemidius.blowhard.core.api.GenerationMode
+
 internal sealed interface ConnectionSettingsAction {
     class CredentialSubmitted(val secret: String) : ConnectionSettingsAction {
         override fun toString(): String = "CredentialSubmitted(secret=<redacted>)"
@@ -10,6 +12,8 @@ internal sealed interface ConnectionSettingsAction {
     data object ConnectionTested : ConnectionSettingsAction
 
     data class ModelSelected(val modelId: String) : ConnectionSettingsAction
+
+    data class ModeSelected(val mode: GenerationMode) : ConnectionSettingsAction
 
     data object LiveDataDisclosureAccepted : ConnectionSettingsAction
 

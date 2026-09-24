@@ -77,16 +77,47 @@ class ConnectionSettingsPresenterTest {
 
         presenter.dispatch(ConnectionSettingsAction.ModelSelected("chat"))
         presenter.dispatch(ConnectionSettingsAction.LiveDataDisclosureAccepted)
+        presenter.dispatch(ConnectionSettingsAction.ModeSelected(GenerationMode.DEMO))
         presenter.dispatch(ConnectionSettingsAction.CredentialDeleted)
         runCurrent()
 
         assertEquals(listOf("chat"), service.selectedModels)
         assertTrue(service.disclosureAccepted)
+        assertEquals(listOf(GenerationMode.DEMO), service.selectedModes)
         assertEquals(1, service.deleteCalls)
         assertEquals("Credential deleted.", presenter.state.value.notice)
         presenter.dispatch(ConnectionSettingsAction.NoticeDismissed)
         runCurrent()
         assertNull(presenter.state.value.notice)
+        presenter.close()
+    }
+
+    @Test
+    fun `mode selection renders readiness and disclosure outcomes`() = runTest {
+        val service = FakeConnectionSettings()
+        val presenter = presenter(service)
+        runCurrent()
+
+        service.modeSelectionResult = ModeSelectionResult.LIVE_NOT_READY
+        presenter.dispatch(ConnectionSettingsAction.ModeSelected(GenerationMode.LIVE))
+        runCurrent()
+        assertEquals(
+            "Verify a compatible model with the current credential before selecting live mode.",
+            presenter.state.value.notice,
+        )
+
+        service.modeSelectionResult = ModeSelectionResult.DISCLOSURE_REQUIRED
+        presenter.dispatch(ConnectionSettingsAction.ModeSelected(GenerationMode.LIVE))
+        runCurrent()
+        assertEquals(
+            "Acknowledge external prompt processing before selecting live mode.",
+            presenter.state.value.notice,
+        )
+
+        service.modeSelectionResult = ModeSelectionResult.UPDATED
+        presenter.dispatch(ConnectionSettingsAction.ModeSelected(GenerationMode.LIVE))
+        runCurrent()
+        assertEquals("Live Mistral mode selected for new attempts.", presenter.state.value.notice)
         presenter.close()
     }
 
@@ -169,12 +200,14 @@ private class FakeConnectionSettings(private val throwsOnRefresh: Boolean = fals
     var deleteCalls = 0
     var disclosureAccepted = false
     val selectedModels = mutableListOf<String>()
+    val selectedModes = mutableListOf<GenerationMode>()
     var connectionResult: ConnectionTestResult = ConnectionTestResult.Failure(
         ConnectionTestFailureKind.CREDENTIAL_UNAVAILABLE,
     )
     var credentialUpdateResult: CredentialUpdateResult = CredentialUpdateResult.SUCCESS
     var deleteResult: CredentialUpdateResult = CredentialUpdateResult.SUCCESS
     var modelSelectionResult: ModelSelectionResult = ModelSelectionResult.UPDATED
+    var modeSelectionResult: ModeSelectionResult = ModeSelectionResult.UPDATED
 
     override suspend fun refreshCredentialStatus() {
         refreshCalls += 1
@@ -203,5 +236,8 @@ private class FakeConnectionSettings(private val throwsOnRefresh: Boolean = fals
         disclosureAccepted = true
     }
 
-    override suspend fun selectMode(mode: GenerationMode): ModeSelectionResult = ModeSelectionResult.UPDATED
+    override suspend fun selectMode(mode: GenerationMode): ModeSelectionResult {
+        selectedModes += mode
+        return modeSelectionResult
+    }
 }
