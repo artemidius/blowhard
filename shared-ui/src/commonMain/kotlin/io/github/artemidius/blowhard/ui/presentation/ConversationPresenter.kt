@@ -3,6 +3,7 @@ package io.github.artemidius.blowhard.ui.presentation
 import io.github.artemidius.blowhard.core.api.CancelRunResult
 import io.github.artemidius.blowhard.core.api.ConversationId
 import io.github.artemidius.blowhard.core.api.ConversationRuns
+import io.github.artemidius.blowhard.core.api.GenerationTarget
 import io.github.artemidius.blowhard.core.api.ObserveRunResult
 import io.github.artemidius.blowhard.core.api.RunId
 import io.github.artemidius.blowhard.core.api.RunSnapshot
@@ -130,7 +131,7 @@ public class ConversationPresenter(
             mutableState.value = beforeStart.withSelectedNotice(UiNotice(START_FAILURE_MESSAGE))
         } else {
             when (result) {
-                is StartRunResult.Started -> observe(result.runId, conversationId, prompt)
+                is StartRunResult.Started -> observe(result.runId, conversationId, prompt, result.target)
 
                 is StartRunResult.Rejected -> {
                     mutableState.value = beforeStart.withSelectedNotice(UiNotice(result.reason.safeMessage()))
@@ -139,7 +140,12 @@ public class ConversationPresenter(
         }
     }
 
-    private suspend fun observe(runId: RunId, conversationId: ConversationId, prompt: String) {
+    private suspend fun observe(
+        runId: RunId,
+        conversationId: ConversationId,
+        prompt: String,
+        target: GenerationTarget,
+    ) {
         val userMessageId = messageIds.next()
         val assistantMessageId = messageIds.next()
         activeRuns[conversationId] = ActiveRun(runId, assistantMessageId)
@@ -148,6 +154,7 @@ public class ConversationPresenter(
             prompt = prompt,
             userMessageId = userMessageId,
             assistantMessageId = assistantMessageId,
+            target = target,
         )
         val observation = try {
             runs.observe(runId)
@@ -232,7 +239,12 @@ private sealed interface PresenterEvent {
 
 private fun StartRunRejection.safeMessage(): String = when (this) {
     StartRunRejection.BLANK_PROMPT -> "Enter a message before starting generation."
+
     StartRunRejection.CONVERSATION_BUSY -> "This conversation already has an active run."
+
+    StartRunRejection.LIVE_CONFIGURATION_NOT_READY ->
+        "Live configuration is not ready. Reverify the credential and selected model."
+
     StartRunRejection.LIFECYCLE_CLOSED -> "The application is shutting down and cannot start another run."
 }
 

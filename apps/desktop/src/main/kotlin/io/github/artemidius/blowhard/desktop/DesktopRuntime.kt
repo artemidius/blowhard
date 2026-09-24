@@ -1,18 +1,19 @@
 package io.github.artemidius.blowhard.desktop
 
-import io.github.artemidius.blowhard.adapters.fixture.FixtureTextGenerationPort
 import io.github.artemidius.blowhard.core.api.ConnectionSettings
 import io.github.artemidius.blowhard.core.application.DefaultConversationRuns
 import io.github.artemidius.blowhard.core.application.SequentialRunIdFactory
 import io.github.artemidius.blowhard.core.application.SystemRunClock
+import io.github.artemidius.blowhard.core.domain.TextGenerationPort
 import io.github.artemidius.blowhard.ui.presentation.ClipboardWriter
 import io.github.artemidius.blowhard.ui.presentation.ConnectionSettingsPresenter
 import io.github.artemidius.blowhard.ui.presentation.ConversationPresenter
+import io.github.artemidius.blowhard.ui.presentation.DemoScenarioSelection
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
 import java.util.concurrent.atomic.AtomicBoolean
 
-internal class DesktopDemoRuntime private constructor(
+internal class DesktopRuntime private constructor(
     val presenter: ConversationPresenter,
     val connectionSettingsPresenter: ConnectionSettingsPresenter,
     private val runs: DefaultConversationRuns,
@@ -32,18 +33,20 @@ internal class DesktopDemoRuntime private constructor(
         fun create(
             clipboardWriter: ClipboardWriter,
             connectionSettings: ConnectionSettings,
+            generation: TextGenerationPort,
+            scenarioSelection: DemoScenarioSelection,
             closeProviderResources: () -> Unit = {},
-        ): DesktopDemoRuntime {
-            val scenarios = FixtureScenarioRouter()
+        ): DesktopRuntime {
             val runs = DefaultConversationRuns(
-                generation = FixtureTextGenerationPort(scenarios::scenarioFor),
+                generation = generation,
                 idFactory = SequentialRunIdFactory("desktop-run"),
                 clock = SystemRunClock,
                 coroutineContext = Dispatchers.Default,
+                connectionSettings = connectionSettings,
             )
             val presenter = ConversationPresenter(
                 runs = runs,
-                scenarioSelection = scenarios,
+                scenarioSelection = scenarioSelection,
                 clipboardWriter = clipboardWriter,
                 coroutineContext = Dispatchers.Default,
             )
@@ -51,7 +54,7 @@ internal class DesktopDemoRuntime private constructor(
                 connectionSettings = connectionSettings,
                 coroutineContext = Dispatchers.Default,
             )
-            return DesktopDemoRuntime(presenter, connectionSettingsPresenter, runs, closeProviderResources)
+            return DesktopRuntime(presenter, connectionSettingsPresenter, runs, closeProviderResources)
         }
     }
 }

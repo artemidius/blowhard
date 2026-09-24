@@ -32,12 +32,18 @@ import androidx.compose.ui.semantics.LiveRegionMode
 import androidx.compose.ui.semantics.liveRegion
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
+import io.github.artemidius.blowhard.core.api.ConnectionSettingsState
+import io.github.artemidius.blowhard.core.api.GenerationMode
 import io.github.artemidius.blowhard.ui.presentation.ConversationAction
 import io.github.artemidius.blowhard.ui.presentation.ConversationUiState
 import io.github.artemidius.blowhard.ui.presentation.DemoScenario
 
 @Composable
-internal fun ComposerPanel(state: ConversationUiState, onAction: (ConversationAction) -> Unit) {
+internal fun ComposerPanel(
+    state: ConversationUiState,
+    connection: ConnectionSettingsState,
+    onAction: (ConversationAction) -> Unit,
+) {
     val composerFocus = remember { FocusRequester() }
     LaunchedEffect(state.selectedConversationId, state.selectedConversation.runState.isActive) {
         if (!state.selectedConversation.runState.isActive) composerFocus.requestFocus()
@@ -46,32 +52,48 @@ internal fun ComposerPanel(state: ConversationUiState, onAction: (ConversationAc
         modifier = Modifier.fillMaxWidth().padding(24.dp),
         verticalArrangement = Arrangement.spacedBy(10.dp),
     ) {
-        ScenarioSelector(state = state, onAction = onAction)
-        OutlinedTextField(
-            value = state.composer,
-            onValueChange = { onAction(ConversationAction.ComposerChanged(it)) },
-            modifier = Modifier
-                .fillMaxWidth()
-                .focusRequester(composerFocus)
-                .onPreviewKeyEvent { event ->
-                    val sendShortcut = event.type == KeyEventType.KeyDown &&
-                        event.key == Key.Enter &&
-                        (event.isCtrlPressed || event.isMetaPressed)
-                    if (sendShortcut && state.canSend) {
-                        onAction(ConversationAction.Send)
-                        true
-                    } else {
-                        false
-                    }
-                },
-            label = { Text("Message") },
-            placeholder = { Text("Ask the offline fixture anything…") },
-            minLines = 2,
-            maxLines = 6,
-            enabled = !state.selectedConversation.runState.isActive,
-        )
+        if (connection.mode == GenerationMode.DEMO) ScenarioSelector(state = state, onAction = onAction)
+        ComposerInput(state, connection, composerFocus, onAction)
         ComposerActions(state = state, onAction = onAction)
     }
+}
+
+@Composable
+private fun ComposerInput(
+    state: ConversationUiState,
+    connection: ConnectionSettingsState,
+    focusRequester: FocusRequester,
+    onAction: (ConversationAction) -> Unit,
+) {
+    OutlinedTextField(
+        value = state.composer,
+        onValueChange = { onAction(ConversationAction.ComposerChanged(it)) },
+        modifier = Modifier
+            .fillMaxWidth()
+            .focusRequester(focusRequester)
+            .onPreviewKeyEvent { event ->
+                val sendShortcut = event.type == KeyEventType.KeyDown &&
+                    event.key == Key.Enter &&
+                    (event.isCtrlPressed || event.isMetaPressed)
+                if (sendShortcut && state.canSend) {
+                    onAction(ConversationAction.Send)
+                    true
+                } else {
+                    false
+                }
+            },
+        label = { Text("Message") },
+        placeholder = { Text(connection.composerPlaceholder()) },
+        minLines = 2,
+        maxLines = 6,
+        enabled = !state.selectedConversation.runState.isActive,
+    )
+}
+
+private fun ConnectionSettingsState.composerPlaceholder(): String = if (mode == GenerationMode.DEMO) {
+    "Ask the offline fixture anything…"
+} else {
+    "Send a prompt to ${selectedModelId ?: "the live provider"}…"
 }
 
 @Composable

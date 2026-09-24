@@ -161,16 +161,19 @@ public final class io/github/artemidius/blowhard/core/domain/GenerationFailureKi
 }
 
 public final class io/github/artemidius/blowhard/core/domain/GenerationRequest {
-	public synthetic fun <init> (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public synthetic fun <init> (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Lio/github/artemidius/blowhard/core/api/GenerationTarget;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public synthetic fun <init> (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Lio/github/artemidius/blowhard/core/api/GenerationTarget;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
 	public final fun component1-oS5FZMg ()Ljava/lang/String;
 	public final fun component2-j0uiRXY ()Ljava/lang/String;
 	public final fun component3-oK7e1FM ()Ljava/lang/String;
-	public final fun copy-DpELgK4 (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)Lio/github/artemidius/blowhard/core/domain/GenerationRequest;
-	public static synthetic fun copy-DpELgK4$default (Lio/github/artemidius/blowhard/core/domain/GenerationRequest;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;ILjava/lang/Object;)Lio/github/artemidius/blowhard/core/domain/GenerationRequest;
+	public final fun component4 ()Lio/github/artemidius/blowhard/core/api/GenerationTarget;
+	public final fun copy-ARWhAdQ (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Lio/github/artemidius/blowhard/core/api/GenerationTarget;)Lio/github/artemidius/blowhard/core/domain/GenerationRequest;
+	public static synthetic fun copy-ARWhAdQ$default (Lio/github/artemidius/blowhard/core/domain/GenerationRequest;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Lio/github/artemidius/blowhard/core/api/GenerationTarget;ILjava/lang/Object;)Lio/github/artemidius/blowhard/core/domain/GenerationRequest;
 	public fun equals (Ljava/lang/Object;)Z
 	public final fun getConversationId-j0uiRXY ()Ljava/lang/String;
 	public final fun getPrompt-oK7e1FM ()Ljava/lang/String;
 	public final fun getRunId-oS5FZMg ()Ljava/lang/String;
+	public final fun getTarget ()Lio/github/artemidius/blowhard/core/api/GenerationTarget;
 	public fun hashCode ()I
 	public fun toString ()Ljava/lang/String;
 }

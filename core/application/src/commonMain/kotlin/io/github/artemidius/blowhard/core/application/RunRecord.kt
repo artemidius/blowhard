@@ -1,6 +1,7 @@
 package io.github.artemidius.blowhard.core.application
 
 import io.github.artemidius.blowhard.core.api.ConversationId
+import io.github.artemidius.blowhard.core.api.GenerationTarget
 import io.github.artemidius.blowhard.core.api.RunId
 import io.github.artemidius.blowhard.core.api.RunSnapshot
 import io.github.artemidius.blowhard.core.domain.PromptText
@@ -11,6 +12,7 @@ internal class RunRecord(
     val runId: RunId,
     val conversationId: ConversationId,
     val prompt: PromptText,
+    val target: GenerationTarget,
     initialSnapshot: RunSnapshot,
 ) {
     val snapshots = MutableStateFlow(initialSnapshot)

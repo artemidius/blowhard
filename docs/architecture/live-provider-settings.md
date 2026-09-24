@@ -25,9 +25,8 @@ flowchart LR
 4. Select a verified model and acknowledge that live prompts are processed externally.
 5. Select live mode. All prerequisites are checked atomically by the application service.
 
-The current desktop screen implements steps one through four. It reports when the configuration is
-ready for an explicit live selection but keeps the conversation workspace labeled and routed as an
-offline demo until live routing is introduced.
+The desktop screen implements all five steps. Selecting live mode affects new attempts only; an
+already accepted attempt keeps its captured source and model.
 
 ## Presentation security
 
@@ -45,6 +44,10 @@ Credential replacement and deletion clear the connection result, model list, sel
 disclosure acknowledgement. A provider failure during a later check changes the connection status
 to `FAILED` but preserves the explicit generation-mode choice; downstream routing must require a
 currently ready state rather than inferring an automatic fallback.
+
+Conversation routing performs that readiness check when accepting every live start. A stale live
+selection is rejected before provider execution and is never replaced with fixture generation. See
+the [live conversation routing guide](live-conversation-routing.md).
 
 ## Failure and concurrency policy
 

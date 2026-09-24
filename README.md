@@ -4,9 +4,9 @@
 
 A desktop-first Kotlin Multiplatform client for Mistral AI.
 
-Blowhard is in early development. The current application demonstrates a shared Compose
-conversation workflow on desktop, backed by a platform-neutral run lifecycle and a deterministic
-offline generation adapter. The shared presentation module also compiles for Android and iOS.
+Blowhard is in early development. The current application demonstrates one shared Compose
+conversation workflow backed by a platform-neutral run lifecycle and explicit deterministic or
+Mistral-backed generation. The shared presentation module also compiles for Android and iOS.
 
 ## Technical direction
 
@@ -75,13 +75,15 @@ mode can be selected. The policy is documented in
 [`ADR 0012`](docs/decisions/0012-explicit-live-provider-settings.md) and the
 [live-provider settings guide](docs/architecture/live-provider-settings.md).
 
-The shared settings presenter, transient credential-entry policy, and desktop adapter composition
-are documented in [`ADR 0013`](docs/decisions/0013-shared-provider-settings-presentation.md).
-
 The desktop client exposes that workflow through a shared settings screen and composes the macOS
 Keychain with the Mistral model catalog. Credential entry remains outside observable presentation
 state, while Windows and Linux continue to fail closed. See
 [`ADR 0013`](docs/decisions/0013-provider-settings-presentation.md).
+
+Explicit live routing snapshots the selected source and verified model into each accepted attempt,
+uses the same run lifecycle for fixture and Mistral streams, and never falls back between them.
+See [`ADR 0014`](docs/decisions/0014-immutable-live-generation-routing.md) and the
+[live conversation routing guide](docs/architecture/live-conversation-routing.md).
 
 ## Run the desktop application
 
@@ -89,13 +91,15 @@ state, while Windows and Linux continue to fail closed. See
 ./gradlew :apps:desktop:run
 ```
 
-The runnable application is an explicitly labeled offline demo. Choose a bundled success, failure,
+The application starts in an explicitly labeled offline demo. Choose a bundled success, failure,
 rate-limit, or interrupted-stream scenario, enter any non-blank prompt, then use **Send** or
-**Stop** to exercise the real shared lifecycle. No API key or network request is required.
+**Stop** to exercise the real shared lifecycle. No API key or network request is required for demo
+mode.
 
-Open **Settings** to inspect secure credential availability, configure a key on supported hosts,
-run a non-generative connection test, and select a verified model. This does not reroute the current
-offline conversation; live routing remains a separate, explicit increment.
+On macOS, open **Settings** to configure a Keychain-backed credential, run a non-generative
+connection test, select a verified model, acknowledge external processing, and explicitly select
+**Live Mistral** for new attempts. The title, composer, conversation, and assistant response show
+the active source. Live failures never switch to the fixture.
 
 Use `Command+Enter` on macOS or `Ctrl+Enter` on Windows and Linux to send from the composer. Native
 menus expose New conversation, Send, Stop, Copy latest response, and Exit with platform-appropriate
@@ -149,9 +153,10 @@ to the macOS app, but it is not Developer ID signed or notarized. The Windows pa
 publisher-signed. These packages are therefore intended only for build verification; trusted
 signing and release distribution are intentionally deferred.
 
-The runnable conversation still uses synthetic fixture output rather than live Mistral generation.
-The settings UI now composes the macOS credential store and model-catalog boundary, while live chat
-routing remains deliberately disconnected. Public release artifacts are not available yet.
+macOS is the current live reference host. Windows and Linux packages remain demo-only because a
+verified secure credential adapter is not implemented for those hosts. Automated tests use
+synthetic provider fixtures; no real-provider smoke result is claimed yet. Public release artifacts
+are not available yet.
 
 See [`CONTRIBUTING.md`](CONTRIBUTING.md) for the review and verification workflow.
 
