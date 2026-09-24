@@ -17,9 +17,13 @@ import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.WindowPlacement
 import androidx.compose.ui.window.application
 import androidx.compose.ui.window.rememberWindowState
+import io.github.artemidius.blowhard.adapters.fixture.FixtureTextGenerationPort
+import io.github.artemidius.blowhard.adapters.mistral.MistralChatConfiguration
 import io.github.artemidius.blowhard.adapters.mistral.MistralModelCatalog
+import io.github.artemidius.blowhard.adapters.mistral.MistralTextGenerationPort
 import io.github.artemidius.blowhard.adapters.mistral.asMistralCredentialProvider
 import io.github.artemidius.blowhard.adapters.platform.DesktopCredentialStores
+import io.github.artemidius.blowhard.core.api.GenerationMode
 import io.github.artemidius.blowhard.core.application.DefaultConnectionSettings
 import io.github.artemidius.blowhard.ui.BlowhardApp
 
@@ -40,6 +44,7 @@ private fun ApplicationScope.BlowhardDesktopApplication(bootstrap: DesktopBootst
         size = DpSize(bootstrap.preferences.width.dp, bootstrap.preferences.height.dp),
     )
     val uiState by bootstrap.runtime.presenter.state.collectAsState()
+    val connectionState by bootstrap.runtime.connectionSettingsPresenter.state.collectAsState()
     var shutdownStarted by remember { mutableStateOf(false) }
     val shutdown = {
         if (!shutdownStarted) {
@@ -50,7 +55,12 @@ private fun ApplicationScope.BlowhardDesktopApplication(bootstrap: DesktopBootst
         }
     }
 
-    Window(onCloseRequest = shutdown, state = windowState, title = "Blowhard — Offline Demo") {
+    val title = if (connectionState.settings.mode == GenerationMode.LIVE) {
+        "Blowhard — Live Mistral"
+    } else {
+        "Blowhard — Offline Demo"
+    }
+    Window(onCloseRequest = shutdown, state = windowState, title = title) {
         window.minimumSize = java.awt.Dimension(MINIMUM_WINDOW_WIDTH, MINIMUM_WINDOW_HEIGHT)
         DesktopMenuBar(uiState, bootstrap.environment.platform, bootstrap.runtime.presenter::dispatch, shutdown)
         BlowhardApp(
@@ -80,9 +90,30 @@ private fun createDesktopBootstrap(): DesktopBootstrap {
     val preferences = preferencesStore.load()
     val clipboard = AwtClipboardWriter(sessionAvailable = { environment.hasClipboardSession })
     val credentialStore = DesktopCredentialStores.mistralApiKey()
-    val modelCatalog = MistralModelCatalog.create(credentialStore.asMistralCredentialProvider())
+    val credentialProvider = credentialStore.asMistralCredentialProvider()
+    val modelCatalog = MistralModelCatalog.create(credentialProvider)
     val connectionSettings = DefaultConnectionSettings(credentialStore, modelCatalog)
-    val runtime = DesktopDemoRuntime.create(clipboard, connectionSettings, modelCatalog::close)
+    val scenarios = FixtureScenarioRouter()
+    val generation = DesktopGenerationRouter(
+        demo = FixtureTextGenerationPort(scenarios::scenarioFor),
+        liveFactory = { modelId ->
+            val port = MistralTextGenerationPort.create(
+                credentialProvider,
+                MistralChatConfiguration(modelId),
+            )
+            OwnedGenerationPort(port, port::close)
+        },
+    )
+    val runtime = DesktopRuntime.create(
+        clipboardWriter = clipboard,
+        connectionSettings = connectionSettings,
+        generation = generation,
+        scenarioSelection = scenarios,
+        closeProviderResources = {
+            generation.close()
+            modelCatalog.close()
+        },
+    )
     return DesktopBootstrap(environment, preferencesStore, preferences, runtime)
 }
 
@@ -90,7 +121,7 @@ private data class DesktopBootstrap(
     val environment: DesktopEnvironment,
     val preferencesStore: WindowPreferencesStore,
     val preferences: WindowPreferences,
-    val runtime: DesktopDemoRuntime,
+    val runtime: DesktopRuntime,
 )
 
 internal fun isPackagingSmokeTest(environment: Map<String, String>): Boolean =
