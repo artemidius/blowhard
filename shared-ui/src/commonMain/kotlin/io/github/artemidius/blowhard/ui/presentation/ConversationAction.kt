@@ -22,6 +22,9 @@ public sealed interface ConversationAction {
     /** Requests cancellation of the selected conversation's active run. */
     public data object Stop : ConversationAction
 
+    /** Starts a distinct attempt for the prompt associated with assistant [messageId]. */
+    public data class Regenerate(public val messageId: String) : ConversationAction
+
     /** Copies one visible message without exposing platform clipboard types. */
     public data class CopyMessage(public val messageId: String) : ConversationAction
 

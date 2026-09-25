@@ -23,6 +23,7 @@ import androidx.compose.ui.semantics.LiveRegionMode
 import androidx.compose.ui.semantics.liveRegion
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import io.github.artemidius.blowhard.core.api.GenerationTarget
 import io.github.artemidius.blowhard.ui.presentation.ChatMessageUi
@@ -33,6 +34,7 @@ import io.github.artemidius.blowhard.ui.presentation.MessageDelivery
 @Composable
 internal fun MessageList(
     messages: List<ChatMessageUi>,
+    regenerationEnabled: Boolean,
     onAction: (ConversationAction) -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -51,12 +53,18 @@ internal fun MessageList(
         verticalArrangement = Arrangement.spacedBy(16.dp),
         contentPadding = androidx.compose.foundation.layout.PaddingValues(vertical = 24.dp),
     ) {
-        items(messages, key = { it.id }) { message -> MessageBubble(message, onAction) }
+        items(messages, key = { it.id }) { message ->
+            MessageBubble(message, regenerationEnabled, onAction)
+        }
     }
 }
 
 @Composable
-private fun MessageBubble(message: ChatMessageUi, onAction: (ConversationAction) -> Unit) {
+private fun MessageBubble(
+    message: ChatMessageUi,
+    regenerationEnabled: Boolean,
+    onAction: (ConversationAction) -> Unit,
+) {
     val isUser = message.role == ChatRole.USER
     Box(
         modifier = Modifier.fillMaxWidth(),
@@ -80,14 +88,28 @@ private fun MessageBubble(message: ChatMessageUi, onAction: (ConversationAction)
                 } else {
                     SafeMarkdownText(message.text)
                 }
-                MessageFooter(message, isUser, onAction)
+                MessageFooter(message, isUser, regenerationEnabled, onAction)
             }
         }
     }
 }
 
 @Composable
-private fun MessageFooter(message: ChatMessageUi, isUser: Boolean, onAction: (ConversationAction) -> Unit) {
+private fun MessageFooter(
+    message: ChatMessageUi,
+    isUser: Boolean,
+    regenerationEnabled: Boolean,
+    onAction: (ConversationAction) -> Unit,
+) {
+    message.attemptId?.let { attemptId ->
+        Text(
+            "Attempt ${attemptId.value}",
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis,
+            style = MaterialTheme.typography.labelSmall,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+        )
+    }
     if (message.delivery != MessageDelivery.COMPLETE) {
         Text(
             message.delivery.name.lowercase().replaceFirstChar { it.uppercase() },
@@ -99,6 +121,14 @@ private fun MessageFooter(message: ChatMessageUi, isUser: Boolean, onAction: (Co
     if (message.text.isNotBlank()) {
         TextButton(onClick = { onAction(ConversationAction.CopyMessage(message.id)) }) {
             Text("Copy ${if (isUser) "your message" else "response"}")
+        }
+    }
+    if (!isUser && message.canRegenerate) {
+        TextButton(
+            onClick = { onAction(ConversationAction.Regenerate(message.id)) },
+            enabled = regenerationEnabled,
+        ) {
+            Text("Regenerate with current mode")
         }
     }
 }
