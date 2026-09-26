@@ -1,6 +1,7 @@
 package io.github.artemidius.blowhard.ui.presentation
 
 import io.github.artemidius.blowhard.core.api.RunFailureKind
+import io.github.artemidius.blowhard.core.api.RunRetryAdvice
 import io.github.artemidius.blowhard.core.api.RunSnapshot
 
 internal data class PresentedSnapshot(
@@ -9,6 +10,7 @@ internal data class PresentedSnapshot(
     val delivery: MessageDelivery,
     val notice: UiNotice? = null,
     val terminal: Boolean,
+    val canRegenerate: Boolean = false,
 )
 
 internal fun RunSnapshot.present(): PresentedSnapshot = when (this) {
@@ -31,6 +33,7 @@ internal fun RunSnapshot.present(): PresentedSnapshot = when (this) {
         runState = ConversationRunState.SUCCEEDED,
         delivery = MessageDelivery.COMPLETE,
         terminal = true,
+        canRegenerate = true,
     )
 
     is RunSnapshot.Failed -> PresentedSnapshot(
@@ -39,6 +42,7 @@ internal fun RunSnapshot.present(): PresentedSnapshot = when (this) {
         delivery = MessageDelivery.FAILED,
         notice = UiNotice(failure.kind.safeMessage()),
         terminal = true,
+        canRegenerate = failure.retryAdvice == RunRetryAdvice.EXPLICIT_NEW_ATTEMPT,
     )
 
     is RunSnapshot.Cancelled -> PresentedSnapshot(
@@ -46,6 +50,7 @@ internal fun RunSnapshot.present(): PresentedSnapshot = when (this) {
         runState = ConversationRunState.CANCELLED,
         delivery = MessageDelivery.CANCELLED,
         terminal = true,
+        canRegenerate = true,
     )
 }
 

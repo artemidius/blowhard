@@ -85,6 +85,10 @@ uses the same run lifecycle for fixture and Mistral streams, and never falls bac
 See [`ADR 0014`](docs/decisions/0014-immutable-live-generation-routing.md) and the
 [live conversation routing guide](docs/architecture/live-conversation-routing.md).
 
+User-initiated regeneration appends a distinct attempt while preserving the prior answer and its
+provenance. It never replays automatically and follows conservative retry advice. See
+[`ADR 0015`](docs/decisions/0015-explicit-regeneration-attempts.md).
+
 ## Run the desktop application
 
 ```shell
@@ -102,8 +106,10 @@ connection test, select a verified model, acknowledge external processing, and e
 the active source. Live failures never switch to the fixture.
 
 Use `Command+Enter` on macOS or `Ctrl+Enter` on Windows and Linux to send from the composer. Native
-menus expose New conversation, Send, Stop, Copy latest response, and Exit with platform-appropriate
-shortcuts. Every non-empty message also has a visible copy action.
+menus expose New conversation, Send, Stop, Regenerate latest response, Copy latest response, and
+Exit with platform-appropriate shortcuts. Every non-empty message has a visible copy action.
+Terminal responses that are safe to repeat expose **Regenerate with current mode** and retain both
+attempt identities and outputs.
 
 ## Verify the foundation
 
