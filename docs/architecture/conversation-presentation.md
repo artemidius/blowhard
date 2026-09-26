@@ -22,6 +22,21 @@ replace that assistant message's text; terminal snapshots make its delivery stat
 Duplicate Send actions are ignored while the selected conversation is starting, queued, or
 streaming.
 
+## Explicit regeneration
+
+Every accepted run labels its user and assistant messages with the same opaque attempt identity.
+Regenerate resolves the prompt paired with the selected terminal response and asks
+`ConversationRuns` to start a new run. It appends another pair with a new identity; the original
+prompt, output, delivery state, and demo/live target remain unchanged.
+
+The new attempt captures the mode and verified model selected when it is accepted. The control says
+"Regenerate with current mode" to make that boundary visible. A start rejection preserves both
+history and any unrelated composer draft.
+
+Regeneration is never automatic. Successful and cancelled attempts allow it. Failed attempts allow
+it only when the core reports `EXPLICIT_NEW_ATTEMPT`; delay-required and unsafe failures keep the
+control unavailable.
+
 Switching conversations never changes execution ownership. Several conversations may run within
 the application's concurrency policy, while each conversation still has at most one active run.
 
