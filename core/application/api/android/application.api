@@ -8,6 +8,7 @@ public final class io/github/artemidius/blowhard/core/application/DefaultConnect
 	public fun selectMode (Lio/github/artemidius/blowhard/core/api/GenerationMode;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public fun selectModel (Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public fun testConnection (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public fun updateGenerationParameters (Lio/github/artemidius/blowhard/core/api/GenerationParameters;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 }
 
 public final class io/github/artemidius/blowhard/core/application/DefaultConversationRuns : io/github/artemidius/blowhard/core/api/ConversationRuns {

@@ -22,6 +22,9 @@ public interface ConnectionSettings {
     /** Selects one model from the latest verified compatible catalog. */
     public suspend fun selectModel(modelId: String): ModelSelectionResult
 
+    /** Replaces the provider-neutral controls used by subsequently accepted attempts. */
+    public suspend fun updateGenerationParameters(parameters: GenerationParameters)
+
     /** Records acknowledgement that live prompts are sent to the external provider. */
     public suspend fun acknowledgeLiveDataDisclosure()
 
@@ -36,6 +39,7 @@ public data class ConnectionSettingsState(
     public val connectionStatus: ConnectionStatus = ConnectionStatus.NOT_TESTED,
     public val models: List<SelectableModel> = emptyList(),
     public val selectedModelId: String? = null,
+    public val generationParameters: GenerationParameters = GenerationParameters(),
     public val liveDataDisclosureAccepted: Boolean = false,
 ) {
     init {

@@ -5,6 +5,7 @@ import io.github.artemidius.blowhard.core.api.ConnectionTestFailureKind
 import io.github.artemidius.blowhard.core.api.ConnectionTestResult
 import io.github.artemidius.blowhard.core.api.CredentialUpdateResult
 import io.github.artemidius.blowhard.core.api.GenerationMode
+import io.github.artemidius.blowhard.core.api.GenerationParameters
 import io.github.artemidius.blowhard.core.api.ModeSelectionResult
 import io.github.artemidius.blowhard.core.api.ModelSelectionResult
 import kotlinx.coroutines.CancellationException
@@ -82,6 +83,14 @@ public class ConnectionSettingsPresenter(
 
             is ConnectionSettingsAction.ModelSelected -> selectModel(action.modelId)
 
+            is ConnectionSettingsAction.MaxOutputTokensSelected -> updateParameters {
+                copy(maxOutputTokens = action.value)
+            }
+
+            is ConnectionSettingsAction.TemperatureSelected -> updateParameters {
+                copy(temperature = action.value)
+            }
+
             is ConnectionSettingsAction.ModeSelected -> selectMode(action.mode)
 
             ConnectionSettingsAction.LiveDataDisclosureAccepted -> {
@@ -129,6 +138,12 @@ public class ConnectionSettingsPresenter(
             ModelSelectionResult.UPDATED -> null
             ModelSelectionResult.NOT_AVAILABLE -> "That model is not in the latest verified catalog."
         }
+    }
+
+    private suspend fun updateParameters(transform: GenerationParameters.() -> GenerationParameters) {
+        val updated = connectionSettings.state.value.generationParameters.transform()
+        connectionSettings.updateGenerationParameters(updated)
+        notice.value = null
     }
 
     private suspend fun selectMode(mode: GenerationMode) {

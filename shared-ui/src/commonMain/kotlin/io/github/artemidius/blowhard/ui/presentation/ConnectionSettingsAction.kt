@@ -13,6 +13,10 @@ internal sealed interface ConnectionSettingsAction {
 
     data class ModelSelected(val modelId: String) : ConnectionSettingsAction
 
+    data class MaxOutputTokensSelected(val value: Int?) : ConnectionSettingsAction
+
+    data class TemperatureSelected(val value: Double?) : ConnectionSettingsAction
+
     data class ModeSelected(val mode: GenerationMode) : ConnectionSettingsAction
 
     data object LiveDataDisclosureAccepted : ConnectionSettingsAction

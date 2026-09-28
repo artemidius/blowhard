@@ -4,6 +4,7 @@ import io.github.artemidius.blowhard.core.api.CancelRunResult
 import io.github.artemidius.blowhard.core.api.ConnectionSettings
 import io.github.artemidius.blowhard.core.api.ConversationRuns
 import io.github.artemidius.blowhard.core.api.GenerationMode
+import io.github.artemidius.blowhard.core.api.GenerationParameters
 import io.github.artemidius.blowhard.core.api.GenerationTarget
 import io.github.artemidius.blowhard.core.api.ObserveRunResult
 import io.github.artemidius.blowhard.core.api.RunId
@@ -61,14 +62,15 @@ public class DefaultConversationRuns(
         request: StartRunRequest,
         validation: StartRunValidation.Accepted,
     ): StartRunResult {
-        val target = resolveGenerationTarget()
+        val runConfiguration = resolveRunConfiguration()
             ?: return StartRunResult.Rejected(StartRunRejection.LIVE_CONFIGURATION_NOT_READY)
         val runId = idFactory.next()
         val record = RunRecord(
             runId = runId,
             conversationId = request.conversationId,
             prompt = validation.prompt,
-            target = target,
+            target = runConfiguration.target,
+            parameters = runConfiguration.parameters,
             initialSnapshot = RunSnapshot.Queued(runId, request.conversationId, clock.now()),
         )
         return when (repository.add(record)) {
@@ -80,7 +82,7 @@ public class DefaultConversationRuns(
             AddRunResult.Added -> {
                 record.job = scope.launch(start = CoroutineStart.LAZY) { execute(record) }
                 checkNotNull(record.job).start()
-                StartRunResult.Started(runId, target)
+                StartRunResult.Started(runId, runConfiguration.target)
             }
         }
     }
@@ -137,7 +139,13 @@ public class DefaultConversationRuns(
     }
 
     private suspend fun collectGeneration(record: RunRecord) {
-        val request = GenerationRequest(record.runId, record.conversationId, record.prompt, record.target)
+        val request = GenerationRequest(
+            record.runId,
+            record.conversationId,
+            record.prompt,
+            record.target,
+            record.parameters,
+        )
         generation.generate(request).takeWhile { event ->
             when (event) {
                 is GenerationEvent.TextDelta -> repository.append(record, event.text)
@@ -160,9 +168,10 @@ public class DefaultConversationRuns(
         }
     }
 
-    private fun resolveGenerationTarget(): GenerationTarget? {
-        val settings = connectionSettings?.state?.value ?: return GenerationTarget.Demo
-        return when (settings.mode) {
+    private fun resolveRunConfiguration(): RunConfiguration? {
+        val settings = connectionSettings?.state?.value
+            ?: return RunConfiguration(GenerationTarget.Demo, GenerationParameters())
+        val target = when (settings.mode) {
             GenerationMode.DEMO -> GenerationTarget.Demo
 
             GenerationMode.LIVE ->
@@ -170,5 +179,8 @@ public class DefaultConversationRuns(
                     ?.takeIf { settings.canUseLiveMode }
                     ?.let(GenerationTarget::Live)
         }
+        return target?.let { RunConfiguration(it, settings.generationParameters) }
     }
 }
+
+private data class RunConfiguration(val target: GenerationTarget, val parameters: GenerationParameters)
