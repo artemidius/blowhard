@@ -7,6 +7,7 @@ import io.github.artemidius.blowhard.core.api.ConnectionTestResult
 import io.github.artemidius.blowhard.core.api.CredentialStatus
 import io.github.artemidius.blowhard.core.api.CredentialUpdateResult
 import io.github.artemidius.blowhard.core.api.GenerationMode
+import io.github.artemidius.blowhard.core.api.GenerationParameters
 import io.github.artemidius.blowhard.core.api.ModeSelectionResult
 import io.github.artemidius.blowhard.core.api.ModelSelectionResult
 import io.github.artemidius.blowhard.core.api.SelectableModel
@@ -89,6 +90,27 @@ class ConnectionSettingsPresenterTest {
         presenter.dispatch(ConnectionSettingsAction.NoticeDismissed)
         runCurrent()
         assertNull(presenter.state.value.notice)
+        presenter.close()
+    }
+
+    @Test
+    fun `generation controls update typed settings for future attempts`() = runTest {
+        val service = FakeConnectionSettings()
+        val presenter = presenter(service)
+        runCurrent()
+
+        presenter.dispatch(ConnectionSettingsAction.MaxOutputTokensSelected(1_024))
+        presenter.dispatch(ConnectionSettingsAction.TemperatureSelected(0.5))
+        runCurrent()
+
+        assertEquals(
+            listOf(
+                GenerationParameters(maxOutputTokens = 1_024),
+                GenerationParameters(maxOutputTokens = 1_024, temperature = 0.5),
+            ),
+            service.updatedParameters,
+        )
+        assertEquals(service.updatedParameters.last(), presenter.state.value.settings.generationParameters)
         presenter.close()
     }
 
@@ -201,6 +223,7 @@ private class FakeConnectionSettings(private val throwsOnRefresh: Boolean = fals
     var disclosureAccepted = false
     val selectedModels = mutableListOf<String>()
     val selectedModes = mutableListOf<GenerationMode>()
+    val updatedParameters = mutableListOf<GenerationParameters>()
     var connectionResult: ConnectionTestResult = ConnectionTestResult.Failure(
         ConnectionTestFailureKind.CREDENTIAL_UNAVAILABLE,
     )
@@ -230,6 +253,11 @@ private class FakeConnectionSettings(private val throwsOnRefresh: Boolean = fals
     override suspend fun selectModel(modelId: String): ModelSelectionResult {
         selectedModels += modelId
         return modelSelectionResult
+    }
+
+    override suspend fun updateGenerationParameters(parameters: GenerationParameters) {
+        updatedParameters += parameters
+        mutableState.value = mutableState.value.copy(generationParameters = parameters)
     }
 
     override suspend fun acknowledgeLiveDataDisclosure() {

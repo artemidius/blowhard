@@ -7,7 +7,7 @@ captured when a run is accepted, before it can wait for an execution permit.
 flowchart LR
     UI[Shared conversation UI] --> Runs[DefaultConversationRuns]
     Settings[Secret-free connection state] -->|snapshot at acceptance| Runs
-    Runs -->|GenerationTarget| Router[DesktopGenerationRouter]
+    Runs -->|Target + parameter snapshot| Router[DesktopGenerationRouter]
     Router -->|Demo| Fixture[Deterministic fixture]
     Router -->|Live model| Mistral[Mistral streaming adapter]
     Vault[OS credential store] -->|read just in time| Mistral
@@ -19,7 +19,9 @@ flowchart LR
 - `Live(modelId)` is accepted only when credential status, connection verification, compatible
   model selection, and external-processing acknowledgement are all current.
 - The model identifier is validated and stored without credential material.
-- A mode or model change after acceptance affects only later attempts.
+- A mode, model, or generation-control change after acceptance affects only later attempts.
+- Maximum output tokens and temperature are immutable typed values on the internal generation
+  request. Null values preserve model defaults rather than inventing client-side defaults.
 - A live construction, authentication, rate-limit, transport, or stream failure remains on the
   live path. There is no fixture fallback and no automatic POST replay.
 
@@ -41,7 +43,8 @@ and remain in explicit demo mode; no preferences or file fallback is used.
 
 Automated tests use synthetic ports and HTTP fixtures. They verify immutable target capture, stale
 configuration rejection, exact routing, no fallback, sanitized construction failure, adapter reuse,
-and lifecycle closure without requiring a real credential or network request.
+parameter snapshotting, and lifecycle closure without requiring a real credential or network
+request.
 
 A real-provider smoke check is deliberately manual and bounded: select one verified chat model,
 send one short non-sensitive prompt, cancel if no first event arrives within 30 seconds, and record

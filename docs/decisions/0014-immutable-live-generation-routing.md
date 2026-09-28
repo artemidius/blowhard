@@ -44,5 +44,5 @@ Changing settings affects only future attempts. If a live connection becomes sta
 the explicit live selection visible and new starts fail closed until verification is restored.
 Windows and Linux remain demo-only because their secure credential adapters are unavailable.
 
-Regeneration, supported generation parameters, durable history, and a bounded real-provider smoke
-record remain separate increments. This decision adds no automatic retry or replay behavior.
+Durable history and a bounded real-provider smoke record remain separate increments. This decision
+adds no automatic retry or replay behavior.
