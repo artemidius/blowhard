@@ -33,7 +33,11 @@ The request contains only:
 - the validated model identifier;
 - one `user` message containing the validated core prompt;
 - explicit streaming mode; and
-- an optional maximum-output-token value.
+- optional maximum-output-token and temperature values snapshotted by the application.
+
+Optional generation controls are omitted when the user selects model defaults. Temperature is
+limited to the provider's documented recommended 0.0–0.7 range; `top_p` is intentionally not
+exposed alongside it.
 
 Run and conversation identifiers are local lifecycle data and are deliberately absent. The adapter
 accepts response content as a string or as an array containing only `{ "type": "text" }` chunks.
@@ -89,6 +93,6 @@ one network request per collection and never performs an automatic retry.
 
 Offline tests use Ktor's mock engine and synthetic credentials. They cover the exact request body and
 headers, split UTF-8 input, CRLF and multi-line SSE data, optional usage, string and text-array
-content, coalescing, all terminal paths, partial-output preservation, bounds, status classification,
-redirect rejection, redaction, single-request behavior, and cancellation of an in-flight request.
-No live provider request is part of CI.
+content, generation-control mapping and omission, coalescing, all terminal paths, partial-output
+preservation, bounds, status classification, redirect rejection, redaction, single-request
+behavior, and cancellation of an in-flight request. No live provider request is part of CI.

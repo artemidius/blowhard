@@ -23,10 +23,12 @@ flowchart LR
 3. Filter conservatively. Only models reported as `AVAILABLE` with chat completion reported as
    `SUPPORTED` become selectable. `UNKNOWN` never enables a capability.
 4. Select a verified model and acknowledge that live prompts are processed externally.
-5. Select live mode. All prerequisites are checked atomically by the application service.
+5. Choose bounded maximum-output and temperature presets, or retain explicit model defaults.
+6. Select live mode. All prerequisites are checked atomically by the application service.
 
-The desktop screen implements all five steps. Selecting live mode affects new attempts only; an
-already accepted attempt keeps its captured source and model.
+The desktop screen implements all six steps. Selecting live mode or changing generation controls
+affects new attempts only; an already accepted attempt keeps its captured source, model, and
+parameter snapshot.
 
 ## Presentation security
 
@@ -41,9 +43,10 @@ surface `UNAVAILABLE` because their verified OS vault adapters are not implement
 preferences fallback is present.
 
 Credential replacement and deletion clear the connection result, model list, selected model, and
-disclosure acknowledgement. A provider failure during a later check changes the connection status
-to `FAILED` but preserves the explicit generation-mode choice; downstream routing must require a
-currently ready state rather than inferring an automatic fallback.
+disclosure acknowledgement. Non-sensitive generation controls remain available. A provider failure
+during a later check changes the connection status to `FAILED` but preserves the explicit
+generation-mode choice; downstream routing must require a currently ready state rather than
+inferring an automatic fallback.
 
 Conversation routing performs that readiness check when accepting every live start. A stale live
 selection is rejected before provider execution and is never replaced with fixture generation. See
@@ -63,4 +66,5 @@ support.
 
 See [`ADR 0012`](../decisions/0012-explicit-live-provider-settings.md) for the application policy,
 [`ADR 0013`](../decisions/0013-provider-settings-presentation.md) for presentation and composition,
+[`ADR 0016`](../decisions/0016-generation-parameter-snapshots.md) for parameter snapshots,
 and the [Mistral provider boundary](mistral-provider-boundary.md) for transport hardening.
