@@ -16,22 +16,43 @@ flowchart LR
 
 ## Current contract
 
-The first storage increment persists conversation identity, title, creation time, and most recent
-update time. Saves are serialized and transactional. Updating a conversation preserves its
-original creation time. Lists are ordered by update time and then identity, so equal timestamps do
-not produce unstable presentation order. Closing the store is idempotent; later operations fail
+The store persists conversation identity, title, creation time, and most recent update time.
+Metadata saves are serialized and transactional. Updating a conversation preserves its original
+creation time. Lists are ordered by update time and then identity, so equal timestamps do not
+produce unstable presentation order.
+
+A `StoredTranscript` is one validated aggregate containing ordered messages and generation
+attempts. Attempts reference distinct user and assistant messages and preserve:
+
+- run identity;
+- demo or live source and the exact live model identifier;
+- maximum-output and temperature snapshots;
+- queued, running, succeeded, failed, cancelled, or interrupted state;
+- safely classified failure and retry metadata;
+- creation and latest-update timestamps.
+
+Replacing a transcript deletes and reinserts its child rows inside one SQLite transaction. A
+constraint failure restores the previous transcript. Conversation deletion removes attempts,
+messages, and metadata explicitly inside one transaction, in dependency order. Foreign keys encode
+the same ownership in the schema as a defensive layer, but deletion correctness does not depend on
+driver-specific foreign-key defaults. Closing the store is idempotent, and later operations fail
 instead of using a released driver.
 
-The desktop contract tests create a real temporary database, close it, reopen it through the public
-factory, and verify Unicode content, ordering, updates, and deletion. Android device and iOS runtime
+The desktop contract tests create real temporary databases and verify close/reopen behavior,
+Unicode content, deterministic ordering, immutable routing/configuration snapshots, classified
+failures, transaction rollback, and complete owned-row deletion. Android device and iOS runtime
 storage tests still require their platform hosts, but both driver paths compile in CI.
 
 ## Schema evolution
 
-The current schema is version 1. Its generated SQLite baseline is committed next to the SQL source.
-SQLDelight compares that baseline with the latest create statements in `verifySqlDelightMigration`.
-Future changes must include numbered migration files and tests that open representative old schema
-fixtures before the baseline is regenerated.
+The current schema is version 2. The committed version-1 SQLite baseline remains unchanged, and
+`1.sqm` adds message and attempt tables plus their indexes and constraints. SQLDelight applies the
+migration to that baseline and compares the result with the latest create statements in
+`verifySqlDelightMigration`. A separate runtime test copies the same fixture, inserts legacy
+metadata, opens it through the public desktop factory, and verifies the metadata survives.
+
+Future schema changes must include the next numbered migration and a runtime test that opens the
+representative old fixture. Existing baselines must not be silently regenerated to match new SQL.
 
 The schema deliberately targets SQLite 3.18. Android API 26 guarantees an older SQLite engine than
 the modern UPSERT syntax requires, so save uses `INSERT OR IGNORE` plus `UPDATE` inside one
@@ -47,11 +68,11 @@ history is enabled in the application.
 
 ## Deliberate limitations
 
-- Messages, attempts, configuration snapshots, and terminal outcomes are not persisted yet.
 - The desktop composition root does not open this store yet, so visible conversations remain
   process-local.
-- In-flight recovery and retention behavior are not implemented.
+- Streaming checkpoints, startup loading, and in-flight recovery are not implemented.
+- Full retention and user-facing deletion behavior are not wired to presentation actions.
 - No claim is made that closing SQLite securely erases previously stored bytes.
 
-These limits keep schema compatibility independently reviewable before lifecycle code begins to
-depend on it.
+These limits keep durable representation and migration behavior independently reviewable before
+the application lifecycle begins to depend on them.
