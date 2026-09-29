@@ -26,10 +26,11 @@ public data class StoredConversation(
 }
 
 /**
- * Port for durable local conversation metadata.
+ * Port for durable local conversations and their transcript snapshots.
  *
  * Implementations serialize operations, preserve an existing creation timestamp on update, and
- * reject operations after [close]. Credentials and provider secrets are outside this boundary.
+ * replace each transcript atomically. Credentials and provider secrets are outside this boundary.
+ * Operations after [close] are rejected.
  */
 public interface ConversationStore {
     /** Inserts [conversation] or updates its mutable metadata. */
@@ -41,9 +42,24 @@ public interface ConversationStore {
     /** Lists conversations by most recent update, then stable identity. */
     public suspend fun list(): List<StoredConversation>
 
+    /** Atomically replaces the messages and attempts owned by an existing conversation. */
+    public suspend fun saveTranscript(transcript: StoredTranscript): TranscriptSaveResult
+
+    /** Returns the transcript owned by [id], or `null` when the conversation is absent. */
+    public suspend fun loadTranscript(id: ConversationId): StoredTranscript?
+
     /** Deletes [id] and reports whether a row existed. */
     public suspend fun delete(id: ConversationId): Boolean
 
     /** Releases database resources. Repeated calls have no effect. */
     public suspend fun close()
+}
+
+/** Result of atomically replacing one durable transcript. */
+public enum class TranscriptSaveResult {
+    /** The complete transcript replaced its previous durable value. */
+    SAVED,
+
+    /** No transcript was written because its conversation metadata was absent. */
+    CONVERSATION_NOT_FOUND,
 }

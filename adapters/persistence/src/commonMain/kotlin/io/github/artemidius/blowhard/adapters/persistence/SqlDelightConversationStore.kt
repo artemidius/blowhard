@@ -6,11 +6,14 @@ import io.github.artemidius.blowhard.adapters.persistence.db.Conversation
 import io.github.artemidius.blowhard.core.api.ConversationId
 import io.github.artemidius.blowhard.core.domain.ConversationStore
 import io.github.artemidius.blowhard.core.domain.StoredConversation
+import io.github.artemidius.blowhard.core.domain.StoredTranscript
+import io.github.artemidius.blowhard.core.domain.TranscriptSaveResult
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 
 internal class SqlDelightConversationStore(private val driver: SqlDriver) : ConversationStore {
-    private val queries = BlowhardDatabase(driver).conversationQueries
+    private val database = BlowhardDatabase(driver)
+    private val queries = database.conversationQueries
     private val access = Mutex()
     private var closed = false
 
@@ -41,9 +44,33 @@ internal class SqlDelightConversationStore(private val driver: SqlDriver) : Conv
         queries.listConversations().executeAsList().map(Conversation::toStoredConversation)
     }
 
+    override suspend fun saveTranscript(transcript: StoredTranscript): TranscriptSaveResult = access.withLock {
+        requireOpen()
+        if (queries.findConversation(transcript.conversationId.value).executeAsOneOrNull() == null) {
+            return@withLock TranscriptSaveResult.CONVERSATION_NOT_FOUND
+        }
+        database.transcriptQueries.transaction {
+            database.transcriptQueries.replace(transcript)
+        }
+        TranscriptSaveResult.SAVED
+    }
+
+    override suspend fun loadTranscript(id: ConversationId): StoredTranscript? = access.withLock {
+        requireOpen()
+        if (queries.findConversation(id.value).executeAsOneOrNull() == null) {
+            return@withLock null
+        }
+        database.transcriptQueries.load(id)
+    }
+
     override suspend fun delete(id: ConversationId): Boolean = access.withLock {
         requireOpen()
-        queries.deleteConversation(id.value).value > 0
+        var deleted = false
+        database.transcriptQueries.transaction {
+            database.transcriptQueries.deleteOwnedRows(id)
+            deleted = queries.deleteConversation(id.value).value > 0
+        }
+        deleted
     }
 
     override suspend fun close(): Unit = access.withLock {

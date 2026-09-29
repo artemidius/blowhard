@@ -1,11 +1,8 @@
 package io.github.artemidius.blowhard.adapters.persistence
 
 import io.github.artemidius.blowhard.core.api.ConversationId
-import io.github.artemidius.blowhard.core.domain.ConversationStore
 import io.github.artemidius.blowhard.core.domain.StoredConversation
 import kotlinx.coroutines.test.runTest
-import java.nio.file.Files
-import kotlin.io.path.deleteIfExists
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
@@ -55,27 +52,6 @@ internal class DesktopConversationStoresTest {
         }
     }
 
-    private fun withTemporaryDatabase(block: suspend (String) -> Unit) {
-        val path = Files.createTempFile("blowhard-conversation-", ".db")
-        path.deleteIfExists()
-        try {
-            runTest { block(path.toString()) }
-        } finally {
-            path.deleteIfExists()
-        }
-    }
-
-    private suspend fun <T> ConversationStore.useStore(block: suspend (ConversationStore) -> T): T = try {
-        block(this)
-    } finally {
-        close()
-    }
-
     private fun conversation(id: String, title: String, createdAt: Long, updatedAt: Long): StoredConversation =
-        StoredConversation(
-            id = ConversationId(id),
-            title = title,
-            createdAtEpochMilliseconds = createdAt,
-            updatedAtEpochMilliseconds = updatedAt,
-        )
+        StoredFixtures.conversation(id, title, createdAt, updatedAt)
 }
