@@ -94,6 +94,13 @@ attempt is accepted, then mapped to documented Mistral request fields. Model def
 explicitly selectable. See
 [`ADR 0016`](docs/decisions/0016-generation-parameter-snapshots.md).
 
+Durable conversation metadata now has a provider-independent core port and a SQLDelight/SQLite
+adapter compiled for desktop, Android, and iOS. The checked-in schema baseline is verified during
+the quality gate, while desktop tests prove close/reopen persistence against real temporary
+databases. Transcript persistence and application startup recovery are not wired yet. See
+[`ADR 0017`](docs/decisions/0017-sqldelight-conversation-storage.md) and the
+[conversation persistence guide](docs/architecture/conversation-persistence.md).
+
 ## Run the desktop application
 
 ```shell

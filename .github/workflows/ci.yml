@@ -124,6 +124,7 @@ jobs:
           :core:domain:desktopTest
           :adapters:fixture:desktopTest
           :adapters:mistral:desktopTest
+          :adapters:persistence:desktopTest
           :shared-ui:desktopTest
 
       - name: Build native package
@@ -192,6 +193,7 @@ jobs:
           :core:domain:testAndroidHostTest
           :adapters:fixture:testAndroidHostTest
           :adapters:mistral:testAndroidHostTest
+          :adapters:persistence:testAndroidHostTest
           :shared-ui:testAndroidHostTest
 
       - name: Upload Android evidence
@@ -247,6 +249,9 @@ jobs:
           :adapters:mistral:compileKotlinIosArm64
           :adapters:mistral:compileKotlinIosSimulatorArm64
           :adapters:mistral:iosSimulatorArm64Test
+          :adapters:persistence:compileKotlinIosArm64
+          :adapters:persistence:compileKotlinIosSimulatorArm64
+          :adapters:persistence:iosSimulatorArm64Test
           :shared-ui:iosSimulatorArm64Test
 
       - name: Upload Apple evidence
