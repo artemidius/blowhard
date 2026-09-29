@@ -1,0 +1,5 @@
+public final class io/github/artemidius/blowhard/adapters/persistence/AndroidConversationStores {
+	public static final field INSTANCE Lio/github/artemidius/blowhard/adapters/persistence/AndroidConversationStores;
+	public final fun open (Landroid/content/Context;Ljava/lang/String;)Lio/github/artemidius/blowhard/core/domain/ConversationStore;
+}
+

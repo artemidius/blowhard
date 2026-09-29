@@ -17,12 +17,14 @@ plugins {
     alias(libs.plugins.kotlin.serialization) apply false
     alias(libs.plugins.kover)
     alias(libs.plugins.spotless)
+    alias(libs.plugins.sqldelight) apply false
 }
 
 val documentedModules = listOf(
     project(":adapters:fixture"),
     project(":adapters:mistral"),
     project(":adapters:platform"),
+    project(":adapters:persistence"),
     project(":core:api"),
     project(":core:application"),
     project(":core:domain"),
@@ -173,6 +175,7 @@ private val allowedProjectDependencies = mapOf(
     ":adapters:fixture" to setOf(":core:domain"),
     ":adapters:mistral" to setOf(":core:domain"),
     ":adapters:platform" to setOf(":core:domain"),
+    ":adapters:persistence" to setOf(":core:domain"),
     ":apps:desktop" to setOf(
         ":adapters:fixture",
         ":adapters:mistral",
@@ -238,6 +241,9 @@ tasks.register("qualityCheck") {
         ":adapters:mistral:desktopTest",
         ":adapters:platform:checkKotlinAbi",
         ":adapters:platform:test",
+        ":adapters:persistence:checkKotlinAbi",
+        ":adapters:persistence:desktopTest",
+        ":adapters:persistence:verifySqlDelightMigration",
         ":shared-ui:checkKotlinAbi",
         ":shared-ui:desktopTest",
     )
