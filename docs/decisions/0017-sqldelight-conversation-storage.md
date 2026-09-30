@@ -26,9 +26,10 @@ Commit the generated version-1 schema baseline and run SQLDelight migration veri
 aggregate quality gate. Target the conservative SQLite 3.18 dialect. Perform compatible saves as
 an atomic insert-or-update transaction rather than requiring newer UPSERT syntax.
 
-Keep the adapter inactive in the desktop composition root until messages, attempts, recovery, and
+Keep the adapter inactive in the desktop composition root until transcript, recovery, and
 retention behavior have explicit contracts. Credentials remain exclusively in the credential
-adapter.
+adapter. Transcript representation and migration behavior are added by
+[`ADR 0018`](0018-atomic-transcript-snapshots.md).
 
 ## Alternatives considered
 
@@ -61,8 +62,8 @@ semantics unchanged and makes the storage boundary reviewable.
 - The dependency graph and verification metadata grow with SQLDelight and its platform drivers.
 - Local conversation content will rely on OS file protections unless a separately verified
   encryption design is introduced.
-- Durable user-visible history remains unavailable until transcript and recovery increments adopt
-  this port.
+- Durable user-visible history remains unavailable until recovery and presentation increments
+  adopt this port.
 
 ## References
 

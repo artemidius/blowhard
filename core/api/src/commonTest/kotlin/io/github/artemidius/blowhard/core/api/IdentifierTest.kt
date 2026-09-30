@@ -20,6 +20,13 @@ class IdentifierTest {
     }
 
     @Test
+    fun `message ID rejects blank values`() {
+        assertFailsWith<IllegalArgumentException> {
+            MessageId("\n")
+        }
+    }
+
+    @Test
     fun `run timestamp rejects negative epoch values`() {
         assertFailsWith<IllegalArgumentException> {
             RunTimestamp(-1)

@@ -101,6 +101,43 @@ final enum class io.github.artemidius.blowhard.core.domain/PromptRejection : kot
     final fun values(): kotlin/Array<io.github.artemidius.blowhard.core.domain/PromptRejection> // io.github.artemidius.blowhard.core.domain/PromptRejection.values|values#static(){}[0]
 }
 
+final enum class io.github.artemidius.blowhard.core.domain/StoredAttemptStatus : kotlin/Enum<io.github.artemidius.blowhard.core.domain/StoredAttemptStatus> { // io.github.artemidius.blowhard.core.domain/StoredAttemptStatus|null[0]
+    enum entry CANCELLED // io.github.artemidius.blowhard.core.domain/StoredAttemptStatus.CANCELLED|null[0]
+    enum entry FAILED // io.github.artemidius.blowhard.core.domain/StoredAttemptStatus.FAILED|null[0]
+    enum entry INTERRUPTED // io.github.artemidius.blowhard.core.domain/StoredAttemptStatus.INTERRUPTED|null[0]
+    enum entry QUEUED // io.github.artemidius.blowhard.core.domain/StoredAttemptStatus.QUEUED|null[0]
+    enum entry RUNNING // io.github.artemidius.blowhard.core.domain/StoredAttemptStatus.RUNNING|null[0]
+    enum entry SUCCEEDED // io.github.artemidius.blowhard.core.domain/StoredAttemptStatus.SUCCEEDED|null[0]
+
+    final val entries // io.github.artemidius.blowhard.core.domain/StoredAttemptStatus.entries|#static{}entries[0]
+        final fun <get-entries>(): kotlin.enums/EnumEntries<io.github.artemidius.blowhard.core.domain/StoredAttemptStatus> // io.github.artemidius.blowhard.core.domain/StoredAttemptStatus.entries.<get-entries>|<get-entries>#static(){}[0]
+
+    final fun valueOf(kotlin/String): io.github.artemidius.blowhard.core.domain/StoredAttemptStatus // io.github.artemidius.blowhard.core.domain/StoredAttemptStatus.valueOf|valueOf#static(kotlin.String){}[0]
+    final fun values(): kotlin/Array<io.github.artemidius.blowhard.core.domain/StoredAttemptStatus> // io.github.artemidius.blowhard.core.domain/StoredAttemptStatus.values|values#static(){}[0]
+}
+
+final enum class io.github.artemidius.blowhard.core.domain/StoredMessageRole : kotlin/Enum<io.github.artemidius.blowhard.core.domain/StoredMessageRole> { // io.github.artemidius.blowhard.core.domain/StoredMessageRole|null[0]
+    enum entry ASSISTANT // io.github.artemidius.blowhard.core.domain/StoredMessageRole.ASSISTANT|null[0]
+    enum entry USER // io.github.artemidius.blowhard.core.domain/StoredMessageRole.USER|null[0]
+
+    final val entries // io.github.artemidius.blowhard.core.domain/StoredMessageRole.entries|#static{}entries[0]
+        final fun <get-entries>(): kotlin.enums/EnumEntries<io.github.artemidius.blowhard.core.domain/StoredMessageRole> // io.github.artemidius.blowhard.core.domain/StoredMessageRole.entries.<get-entries>|<get-entries>#static(){}[0]
+
+    final fun valueOf(kotlin/String): io.github.artemidius.blowhard.core.domain/StoredMessageRole // io.github.artemidius.blowhard.core.domain/StoredMessageRole.valueOf|valueOf#static(kotlin.String){}[0]
+    final fun values(): kotlin/Array<io.github.artemidius.blowhard.core.domain/StoredMessageRole> // io.github.artemidius.blowhard.core.domain/StoredMessageRole.values|values#static(){}[0]
+}
+
+final enum class io.github.artemidius.blowhard.core.domain/TranscriptSaveResult : kotlin/Enum<io.github.artemidius.blowhard.core.domain/TranscriptSaveResult> { // io.github.artemidius.blowhard.core.domain/TranscriptSaveResult|null[0]
+    enum entry CONVERSATION_NOT_FOUND // io.github.artemidius.blowhard.core.domain/TranscriptSaveResult.CONVERSATION_NOT_FOUND|null[0]
+    enum entry SAVED // io.github.artemidius.blowhard.core.domain/TranscriptSaveResult.SAVED|null[0]
+
+    final val entries // io.github.artemidius.blowhard.core.domain/TranscriptSaveResult.entries|#static{}entries[0]
+        final fun <get-entries>(): kotlin.enums/EnumEntries<io.github.artemidius.blowhard.core.domain/TranscriptSaveResult> // io.github.artemidius.blowhard.core.domain/TranscriptSaveResult.entries.<get-entries>|<get-entries>#static(){}[0]
+
+    final fun valueOf(kotlin/String): io.github.artemidius.blowhard.core.domain/TranscriptSaveResult // io.github.artemidius.blowhard.core.domain/TranscriptSaveResult.valueOf|valueOf#static(kotlin.String){}[0]
+    final fun values(): kotlin/Array<io.github.artemidius.blowhard.core.domain/TranscriptSaveResult> // io.github.artemidius.blowhard.core.domain/TranscriptSaveResult.values|values#static(){}[0]
+}
+
 abstract fun interface io.github.artemidius.blowhard.core.domain/ModelCatalogPort { // io.github.artemidius.blowhard.core.domain/ModelCatalogPort|null[0]
     abstract suspend fun listModels(): io.github.artemidius.blowhard.core.domain/ModelCatalogResult // io.github.artemidius.blowhard.core.domain/ModelCatalogPort.listModels|listModels(){}[0]
 }
@@ -114,7 +151,9 @@ abstract interface io.github.artemidius.blowhard.core.domain/ConversationStore {
     abstract suspend fun delete(io.github.artemidius.blowhard.core.api/ConversationId): kotlin/Boolean // io.github.artemidius.blowhard.core.domain/ConversationStore.delete|delete(io.github.artemidius.blowhard.core.api.ConversationId){}[0]
     abstract suspend fun find(io.github.artemidius.blowhard.core.api/ConversationId): io.github.artemidius.blowhard.core.domain/StoredConversation? // io.github.artemidius.blowhard.core.domain/ConversationStore.find|find(io.github.artemidius.blowhard.core.api.ConversationId){}[0]
     abstract suspend fun list(): kotlin.collections/List<io.github.artemidius.blowhard.core.domain/StoredConversation> // io.github.artemidius.blowhard.core.domain/ConversationStore.list|list(){}[0]
+    abstract suspend fun loadTranscript(io.github.artemidius.blowhard.core.api/ConversationId): io.github.artemidius.blowhard.core.domain/StoredTranscript? // io.github.artemidius.blowhard.core.domain/ConversationStore.loadTranscript|loadTranscript(io.github.artemidius.blowhard.core.api.ConversationId){}[0]
     abstract suspend fun save(io.github.artemidius.blowhard.core.domain/StoredConversation) // io.github.artemidius.blowhard.core.domain/ConversationStore.save|save(io.github.artemidius.blowhard.core.domain.StoredConversation){}[0]
+    abstract suspend fun saveTranscript(io.github.artemidius.blowhard.core.domain/StoredTranscript): io.github.artemidius.blowhard.core.domain/TranscriptSaveResult // io.github.artemidius.blowhard.core.domain/ConversationStore.saveTranscript|saveTranscript(io.github.artemidius.blowhard.core.domain.StoredTranscript){}[0]
 }
 
 abstract interface io.github.artemidius.blowhard.core.domain/CredentialStore { // io.github.artemidius.blowhard.core.domain/CredentialStore|null[0]
@@ -411,6 +450,87 @@ final class io.github.artemidius.blowhard.core.domain/StoredConversation { // io
         final const val MAX_TITLE_LENGTH // io.github.artemidius.blowhard.core.domain/StoredConversation.Companion.MAX_TITLE_LENGTH|{}MAX_TITLE_LENGTH[0]
             final fun <get-MAX_TITLE_LENGTH>(): kotlin/Int // io.github.artemidius.blowhard.core.domain/StoredConversation.Companion.MAX_TITLE_LENGTH.<get-MAX_TITLE_LENGTH>|<get-MAX_TITLE_LENGTH>(){}[0]
     }
+}
+
+final class io.github.artemidius.blowhard.core.domain/StoredGenerationAttempt { // io.github.artemidius.blowhard.core.domain/StoredGenerationAttempt|null[0]
+    constructor <init>(io.github.artemidius.blowhard.core.api/RunId, io.github.artemidius.blowhard.core.api/MessageId, io.github.artemidius.blowhard.core.api/MessageId, io.github.artemidius.blowhard.core.api/GenerationTarget, io.github.artemidius.blowhard.core.api/GenerationParameters, io.github.artemidius.blowhard.core.domain/StoredAttemptStatus, io.github.artemidius.blowhard.core.api/RunFailure? = ..., kotlin/Long, kotlin/Long) // io.github.artemidius.blowhard.core.domain/StoredGenerationAttempt.<init>|<init>(io.github.artemidius.blowhard.core.api.RunId;io.github.artemidius.blowhard.core.api.MessageId;io.github.artemidius.blowhard.core.api.MessageId;io.github.artemidius.blowhard.core.api.GenerationTarget;io.github.artemidius.blowhard.core.api.GenerationParameters;io.github.artemidius.blowhard.core.domain.StoredAttemptStatus;io.github.artemidius.blowhard.core.api.RunFailure?;kotlin.Long;kotlin.Long){}[0]
+
+    final val assistantMessageId // io.github.artemidius.blowhard.core.domain/StoredGenerationAttempt.assistantMessageId|{}assistantMessageId[0]
+        final fun <get-assistantMessageId>(): io.github.artemidius.blowhard.core.api/MessageId // io.github.artemidius.blowhard.core.domain/StoredGenerationAttempt.assistantMessageId.<get-assistantMessageId>|<get-assistantMessageId>(){}[0]
+    final val createdAtEpochMilliseconds // io.github.artemidius.blowhard.core.domain/StoredGenerationAttempt.createdAtEpochMilliseconds|{}createdAtEpochMilliseconds[0]
+        final fun <get-createdAtEpochMilliseconds>(): kotlin/Long // io.github.artemidius.blowhard.core.domain/StoredGenerationAttempt.createdAtEpochMilliseconds.<get-createdAtEpochMilliseconds>|<get-createdAtEpochMilliseconds>(){}[0]
+    final val failure // io.github.artemidius.blowhard.core.domain/StoredGenerationAttempt.failure|{}failure[0]
+        final fun <get-failure>(): io.github.artemidius.blowhard.core.api/RunFailure? // io.github.artemidius.blowhard.core.domain/StoredGenerationAttempt.failure.<get-failure>|<get-failure>(){}[0]
+    final val parameters // io.github.artemidius.blowhard.core.domain/StoredGenerationAttempt.parameters|{}parameters[0]
+        final fun <get-parameters>(): io.github.artemidius.blowhard.core.api/GenerationParameters // io.github.artemidius.blowhard.core.domain/StoredGenerationAttempt.parameters.<get-parameters>|<get-parameters>(){}[0]
+    final val runId // io.github.artemidius.blowhard.core.domain/StoredGenerationAttempt.runId|{}runId[0]
+        final fun <get-runId>(): io.github.artemidius.blowhard.core.api/RunId // io.github.artemidius.blowhard.core.domain/StoredGenerationAttempt.runId.<get-runId>|<get-runId>(){}[0]
+    final val status // io.github.artemidius.blowhard.core.domain/StoredGenerationAttempt.status|{}status[0]
+        final fun <get-status>(): io.github.artemidius.blowhard.core.domain/StoredAttemptStatus // io.github.artemidius.blowhard.core.domain/StoredGenerationAttempt.status.<get-status>|<get-status>(){}[0]
+    final val target // io.github.artemidius.blowhard.core.domain/StoredGenerationAttempt.target|{}target[0]
+        final fun <get-target>(): io.github.artemidius.blowhard.core.api/GenerationTarget // io.github.artemidius.blowhard.core.domain/StoredGenerationAttempt.target.<get-target>|<get-target>(){}[0]
+    final val updatedAtEpochMilliseconds // io.github.artemidius.blowhard.core.domain/StoredGenerationAttempt.updatedAtEpochMilliseconds|{}updatedAtEpochMilliseconds[0]
+        final fun <get-updatedAtEpochMilliseconds>(): kotlin/Long // io.github.artemidius.blowhard.core.domain/StoredGenerationAttempt.updatedAtEpochMilliseconds.<get-updatedAtEpochMilliseconds>|<get-updatedAtEpochMilliseconds>(){}[0]
+    final val userMessageId // io.github.artemidius.blowhard.core.domain/StoredGenerationAttempt.userMessageId|{}userMessageId[0]
+        final fun <get-userMessageId>(): io.github.artemidius.blowhard.core.api/MessageId // io.github.artemidius.blowhard.core.domain/StoredGenerationAttempt.userMessageId.<get-userMessageId>|<get-userMessageId>(){}[0]
+
+    final fun component1(): io.github.artemidius.blowhard.core.api/RunId // io.github.artemidius.blowhard.core.domain/StoredGenerationAttempt.component1|component1(){}[0]
+    final fun component2(): io.github.artemidius.blowhard.core.api/MessageId // io.github.artemidius.blowhard.core.domain/StoredGenerationAttempt.component2|component2(){}[0]
+    final fun component3(): io.github.artemidius.blowhard.core.api/MessageId // io.github.artemidius.blowhard.core.domain/StoredGenerationAttempt.component3|component3(){}[0]
+    final fun component4(): io.github.artemidius.blowhard.core.api/GenerationTarget // io.github.artemidius.blowhard.core.domain/StoredGenerationAttempt.component4|component4(){}[0]
+    final fun component5(): io.github.artemidius.blowhard.core.api/GenerationParameters // io.github.artemidius.blowhard.core.domain/StoredGenerationAttempt.component5|component5(){}[0]
+    final fun component6(): io.github.artemidius.blowhard.core.domain/StoredAttemptStatus // io.github.artemidius.blowhard.core.domain/StoredGenerationAttempt.component6|component6(){}[0]
+    final fun component7(): io.github.artemidius.blowhard.core.api/RunFailure? // io.github.artemidius.blowhard.core.domain/StoredGenerationAttempt.component7|component7(){}[0]
+    final fun component8(): kotlin/Long // io.github.artemidius.blowhard.core.domain/StoredGenerationAttempt.component8|component8(){}[0]
+    final fun component9(): kotlin/Long // io.github.artemidius.blowhard.core.domain/StoredGenerationAttempt.component9|component9(){}[0]
+    final fun copy(io.github.artemidius.blowhard.core.api/RunId = ..., io.github.artemidius.blowhard.core.api/MessageId = ..., io.github.artemidius.blowhard.core.api/MessageId = ..., io.github.artemidius.blowhard.core.api/GenerationTarget = ..., io.github.artemidius.blowhard.core.api/GenerationParameters = ..., io.github.artemidius.blowhard.core.domain/StoredAttemptStatus = ..., io.github.artemidius.blowhard.core.api/RunFailure? = ..., kotlin/Long = ..., kotlin/Long = ...): io.github.artemidius.blowhard.core.domain/StoredGenerationAttempt // io.github.artemidius.blowhard.core.domain/StoredGenerationAttempt.copy|copy(io.github.artemidius.blowhard.core.api.RunId;io.github.artemidius.blowhard.core.api.MessageId;io.github.artemidius.blowhard.core.api.MessageId;io.github.artemidius.blowhard.core.api.GenerationTarget;io.github.artemidius.blowhard.core.api.GenerationParameters;io.github.artemidius.blowhard.core.domain.StoredAttemptStatus;io.github.artemidius.blowhard.core.api.RunFailure?;kotlin.Long;kotlin.Long){}[0]
+    final fun equals(kotlin/Any?): kotlin/Boolean // io.github.artemidius.blowhard.core.domain/StoredGenerationAttempt.equals|equals(kotlin.Any?){}[0]
+    final fun hashCode(): kotlin/Int // io.github.artemidius.blowhard.core.domain/StoredGenerationAttempt.hashCode|hashCode(){}[0]
+    final fun toString(): kotlin/String // io.github.artemidius.blowhard.core.domain/StoredGenerationAttempt.toString|toString(){}[0]
+}
+
+final class io.github.artemidius.blowhard.core.domain/StoredMessage { // io.github.artemidius.blowhard.core.domain/StoredMessage|null[0]
+    constructor <init>(io.github.artemidius.blowhard.core.api/MessageId, kotlin/Long, io.github.artemidius.blowhard.core.domain/StoredMessageRole, kotlin/String, kotlin/Long) // io.github.artemidius.blowhard.core.domain/StoredMessage.<init>|<init>(io.github.artemidius.blowhard.core.api.MessageId;kotlin.Long;io.github.artemidius.blowhard.core.domain.StoredMessageRole;kotlin.String;kotlin.Long){}[0]
+
+    final val createdAtEpochMilliseconds // io.github.artemidius.blowhard.core.domain/StoredMessage.createdAtEpochMilliseconds|{}createdAtEpochMilliseconds[0]
+        final fun <get-createdAtEpochMilliseconds>(): kotlin/Long // io.github.artemidius.blowhard.core.domain/StoredMessage.createdAtEpochMilliseconds.<get-createdAtEpochMilliseconds>|<get-createdAtEpochMilliseconds>(){}[0]
+    final val id // io.github.artemidius.blowhard.core.domain/StoredMessage.id|{}id[0]
+        final fun <get-id>(): io.github.artemidius.blowhard.core.api/MessageId // io.github.artemidius.blowhard.core.domain/StoredMessage.id.<get-id>|<get-id>(){}[0]
+    final val role // io.github.artemidius.blowhard.core.domain/StoredMessage.role|{}role[0]
+        final fun <get-role>(): io.github.artemidius.blowhard.core.domain/StoredMessageRole // io.github.artemidius.blowhard.core.domain/StoredMessage.role.<get-role>|<get-role>(){}[0]
+    final val sequence // io.github.artemidius.blowhard.core.domain/StoredMessage.sequence|{}sequence[0]
+        final fun <get-sequence>(): kotlin/Long // io.github.artemidius.blowhard.core.domain/StoredMessage.sequence.<get-sequence>|<get-sequence>(){}[0]
+    final val text // io.github.artemidius.blowhard.core.domain/StoredMessage.text|{}text[0]
+        final fun <get-text>(): kotlin/String // io.github.artemidius.blowhard.core.domain/StoredMessage.text.<get-text>|<get-text>(){}[0]
+
+    final fun component1(): io.github.artemidius.blowhard.core.api/MessageId // io.github.artemidius.blowhard.core.domain/StoredMessage.component1|component1(){}[0]
+    final fun component2(): kotlin/Long // io.github.artemidius.blowhard.core.domain/StoredMessage.component2|component2(){}[0]
+    final fun component3(): io.github.artemidius.blowhard.core.domain/StoredMessageRole // io.github.artemidius.blowhard.core.domain/StoredMessage.component3|component3(){}[0]
+    final fun component4(): kotlin/String // io.github.artemidius.blowhard.core.domain/StoredMessage.component4|component4(){}[0]
+    final fun component5(): kotlin/Long // io.github.artemidius.blowhard.core.domain/StoredMessage.component5|component5(){}[0]
+    final fun copy(io.github.artemidius.blowhard.core.api/MessageId = ..., kotlin/Long = ..., io.github.artemidius.blowhard.core.domain/StoredMessageRole = ..., kotlin/String = ..., kotlin/Long = ...): io.github.artemidius.blowhard.core.domain/StoredMessage // io.github.artemidius.blowhard.core.domain/StoredMessage.copy|copy(io.github.artemidius.blowhard.core.api.MessageId;kotlin.Long;io.github.artemidius.blowhard.core.domain.StoredMessageRole;kotlin.String;kotlin.Long){}[0]
+    final fun equals(kotlin/Any?): kotlin/Boolean // io.github.artemidius.blowhard.core.domain/StoredMessage.equals|equals(kotlin.Any?){}[0]
+    final fun hashCode(): kotlin/Int // io.github.artemidius.blowhard.core.domain/StoredMessage.hashCode|hashCode(){}[0]
+    final fun toString(): kotlin/String // io.github.artemidius.blowhard.core.domain/StoredMessage.toString|toString(){}[0]
+}
+
+final class io.github.artemidius.blowhard.core.domain/StoredTranscript { // io.github.artemidius.blowhard.core.domain/StoredTranscript|null[0]
+    constructor <init>(io.github.artemidius.blowhard.core.api/ConversationId, kotlin.collections/List<io.github.artemidius.blowhard.core.domain/StoredMessage>, kotlin.collections/List<io.github.artemidius.blowhard.core.domain/StoredGenerationAttempt>) // io.github.artemidius.blowhard.core.domain/StoredTranscript.<init>|<init>(io.github.artemidius.blowhard.core.api.ConversationId;kotlin.collections.List<io.github.artemidius.blowhard.core.domain.StoredMessage>;kotlin.collections.List<io.github.artemidius.blowhard.core.domain.StoredGenerationAttempt>){}[0]
+
+    final val attempts // io.github.artemidius.blowhard.core.domain/StoredTranscript.attempts|{}attempts[0]
+        final fun <get-attempts>(): kotlin.collections/List<io.github.artemidius.blowhard.core.domain/StoredGenerationAttempt> // io.github.artemidius.blowhard.core.domain/StoredTranscript.attempts.<get-attempts>|<get-attempts>(){}[0]
+    final val conversationId // io.github.artemidius.blowhard.core.domain/StoredTranscript.conversationId|{}conversationId[0]
+        final fun <get-conversationId>(): io.github.artemidius.blowhard.core.api/ConversationId // io.github.artemidius.blowhard.core.domain/StoredTranscript.conversationId.<get-conversationId>|<get-conversationId>(){}[0]
+    final val messages // io.github.artemidius.blowhard.core.domain/StoredTranscript.messages|{}messages[0]
+        final fun <get-messages>(): kotlin.collections/List<io.github.artemidius.blowhard.core.domain/StoredMessage> // io.github.artemidius.blowhard.core.domain/StoredTranscript.messages.<get-messages>|<get-messages>(){}[0]
+
+    final fun component1(): io.github.artemidius.blowhard.core.api/ConversationId // io.github.artemidius.blowhard.core.domain/StoredTranscript.component1|component1(){}[0]
+    final fun component2(): kotlin.collections/List<io.github.artemidius.blowhard.core.domain/StoredMessage> // io.github.artemidius.blowhard.core.domain/StoredTranscript.component2|component2(){}[0]
+    final fun component3(): kotlin.collections/List<io.github.artemidius.blowhard.core.domain/StoredGenerationAttempt> // io.github.artemidius.blowhard.core.domain/StoredTranscript.component3|component3(){}[0]
+    final fun copy(io.github.artemidius.blowhard.core.api/ConversationId = ..., kotlin.collections/List<io.github.artemidius.blowhard.core.domain/StoredMessage> = ..., kotlin.collections/List<io.github.artemidius.blowhard.core.domain/StoredGenerationAttempt> = ...): io.github.artemidius.blowhard.core.domain/StoredTranscript // io.github.artemidius.blowhard.core.domain/StoredTranscript.copy|copy(io.github.artemidius.blowhard.core.api.ConversationId;kotlin.collections.List<io.github.artemidius.blowhard.core.domain.StoredMessage>;kotlin.collections.List<io.github.artemidius.blowhard.core.domain.StoredGenerationAttempt>){}[0]
+    final fun equals(kotlin/Any?): kotlin/Boolean // io.github.artemidius.blowhard.core.domain/StoredTranscript.equals|equals(kotlin.Any?){}[0]
+    final fun hashCode(): kotlin/Int // io.github.artemidius.blowhard.core.domain/StoredTranscript.hashCode|hashCode(){}[0]
+    final fun toString(): kotlin/String // io.github.artemidius.blowhard.core.domain/StoredTranscript.toString|toString(){}[0]
 }
 
 final value class io.github.artemidius.blowhard.core.domain/PromptText { // io.github.artemidius.blowhard.core.domain/PromptText|null[0]

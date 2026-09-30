@@ -31,7 +31,9 @@ public abstract interface class io/github/artemidius/blowhard/core/domain/Conver
 	public abstract fun delete-TKNjWRg (Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public abstract fun find-TKNjWRg (Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public abstract fun list (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public abstract fun loadTranscript-TKNjWRg (Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public abstract fun save (Lio/github/artemidius/blowhard/core/domain/StoredConversation;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public abstract fun saveTranscript (Lio/github/artemidius/blowhard/core/domain/StoredTranscript;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 }
 
 public final class io/github/artemidius/blowhard/core/domain/CredentialAccessFailure : java/lang/Enum {
@@ -337,6 +339,18 @@ public final class io/github/artemidius/blowhard/core/domain/PromptTextResult$Re
 	public fun toString ()Ljava/lang/String;
 }
 
+public final class io/github/artemidius/blowhard/core/domain/StoredAttemptStatus : java/lang/Enum {
+	public static final field CANCELLED Lio/github/artemidius/blowhard/core/domain/StoredAttemptStatus;
+	public static final field FAILED Lio/github/artemidius/blowhard/core/domain/StoredAttemptStatus;
+	public static final field INTERRUPTED Lio/github/artemidius/blowhard/core/domain/StoredAttemptStatus;
+	public static final field QUEUED Lio/github/artemidius/blowhard/core/domain/StoredAttemptStatus;
+	public static final field RUNNING Lio/github/artemidius/blowhard/core/domain/StoredAttemptStatus;
+	public static final field SUCCEEDED Lio/github/artemidius/blowhard/core/domain/StoredAttemptStatus;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public static fun valueOf (Ljava/lang/String;)Lio/github/artemidius/blowhard/core/domain/StoredAttemptStatus;
+	public static fun values ()[Lio/github/artemidius/blowhard/core/domain/StoredAttemptStatus;
+}
+
 public final class io/github/artemidius/blowhard/core/domain/StoredConversation {
 	public static final field Companion Lio/github/artemidius/blowhard/core/domain/StoredConversation$Companion;
 	public static final field MAX_TITLE_LENGTH I
@@ -359,7 +373,85 @@ public final class io/github/artemidius/blowhard/core/domain/StoredConversation 
 public final class io/github/artemidius/blowhard/core/domain/StoredConversation$Companion {
 }
 
+public final class io/github/artemidius/blowhard/core/domain/StoredGenerationAttempt {
+	public synthetic fun <init> (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Lio/github/artemidius/blowhard/core/api/GenerationTarget;Lio/github/artemidius/blowhard/core/api/GenerationParameters;Lio/github/artemidius/blowhard/core/domain/StoredAttemptStatus;Lio/github/artemidius/blowhard/core/api/RunFailure;JJILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public synthetic fun <init> (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Lio/github/artemidius/blowhard/core/api/GenerationTarget;Lio/github/artemidius/blowhard/core/api/GenerationParameters;Lio/github/artemidius/blowhard/core/domain/StoredAttemptStatus;Lio/github/artemidius/blowhard/core/api/RunFailure;JJLkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1-oS5FZMg ()Ljava/lang/String;
+	public final fun component2-itj3-Sc ()Ljava/lang/String;
+	public final fun component3-itj3-Sc ()Ljava/lang/String;
+	public final fun component4 ()Lio/github/artemidius/blowhard/core/api/GenerationTarget;
+	public final fun component5 ()Lio/github/artemidius/blowhard/core/api/GenerationParameters;
+	public final fun component6 ()Lio/github/artemidius/blowhard/core/domain/StoredAttemptStatus;
+	public final fun component7 ()Lio/github/artemidius/blowhard/core/api/RunFailure;
+	public final fun component8 ()J
+	public final fun component9 ()J
+	public final fun copy-GylDTOM (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Lio/github/artemidius/blowhard/core/api/GenerationTarget;Lio/github/artemidius/blowhard/core/api/GenerationParameters;Lio/github/artemidius/blowhard/core/domain/StoredAttemptStatus;Lio/github/artemidius/blowhard/core/api/RunFailure;JJ)Lio/github/artemidius/blowhard/core/domain/StoredGenerationAttempt;
+	public static synthetic fun copy-GylDTOM$default (Lio/github/artemidius/blowhard/core/domain/StoredGenerationAttempt;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Lio/github/artemidius/blowhard/core/api/GenerationTarget;Lio/github/artemidius/blowhard/core/api/GenerationParameters;Lio/github/artemidius/blowhard/core/domain/StoredAttemptStatus;Lio/github/artemidius/blowhard/core/api/RunFailure;JJILjava/lang/Object;)Lio/github/artemidius/blowhard/core/domain/StoredGenerationAttempt;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getAssistantMessageId-itj3-Sc ()Ljava/lang/String;
+	public final fun getCreatedAtEpochMilliseconds ()J
+	public final fun getFailure ()Lio/github/artemidius/blowhard/core/api/RunFailure;
+	public final fun getParameters ()Lio/github/artemidius/blowhard/core/api/GenerationParameters;
+	public final fun getRunId-oS5FZMg ()Ljava/lang/String;
+	public final fun getStatus ()Lio/github/artemidius/blowhard/core/domain/StoredAttemptStatus;
+	public final fun getTarget ()Lio/github/artemidius/blowhard/core/api/GenerationTarget;
+	public final fun getUpdatedAtEpochMilliseconds ()J
+	public final fun getUserMessageId-itj3-Sc ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class io/github/artemidius/blowhard/core/domain/StoredMessage {
+	public synthetic fun <init> (Ljava/lang/String;JLio/github/artemidius/blowhard/core/domain/StoredMessageRole;Ljava/lang/String;JLkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1-itj3-Sc ()Ljava/lang/String;
+	public final fun component2 ()J
+	public final fun component3 ()Lio/github/artemidius/blowhard/core/domain/StoredMessageRole;
+	public final fun component4 ()Ljava/lang/String;
+	public final fun component5 ()J
+	public final fun copy-HGk2Ti8 (Ljava/lang/String;JLio/github/artemidius/blowhard/core/domain/StoredMessageRole;Ljava/lang/String;J)Lio/github/artemidius/blowhard/core/domain/StoredMessage;
+	public static synthetic fun copy-HGk2Ti8$default (Lio/github/artemidius/blowhard/core/domain/StoredMessage;Ljava/lang/String;JLio/github/artemidius/blowhard/core/domain/StoredMessageRole;Ljava/lang/String;JILjava/lang/Object;)Lio/github/artemidius/blowhard/core/domain/StoredMessage;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getCreatedAtEpochMilliseconds ()J
+	public final fun getId-itj3-Sc ()Ljava/lang/String;
+	public final fun getRole ()Lio/github/artemidius/blowhard/core/domain/StoredMessageRole;
+	public final fun getSequence ()J
+	public final fun getText ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class io/github/artemidius/blowhard/core/domain/StoredMessageRole : java/lang/Enum {
+	public static final field ASSISTANT Lio/github/artemidius/blowhard/core/domain/StoredMessageRole;
+	public static final field USER Lio/github/artemidius/blowhard/core/domain/StoredMessageRole;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public static fun valueOf (Ljava/lang/String;)Lio/github/artemidius/blowhard/core/domain/StoredMessageRole;
+	public static fun values ()[Lio/github/artemidius/blowhard/core/domain/StoredMessageRole;
+}
+
+public final class io/github/artemidius/blowhard/core/domain/StoredTranscript {
+	public synthetic fun <init> (Ljava/lang/String;Ljava/util/List;Ljava/util/List;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1-j0uiRXY ()Ljava/lang/String;
+	public final fun component2 ()Ljava/util/List;
+	public final fun component3 ()Ljava/util/List;
+	public final fun copy-5cztZUo (Ljava/lang/String;Ljava/util/List;Ljava/util/List;)Lio/github/artemidius/blowhard/core/domain/StoredTranscript;
+	public static synthetic fun copy-5cztZUo$default (Lio/github/artemidius/blowhard/core/domain/StoredTranscript;Ljava/lang/String;Ljava/util/List;Ljava/util/List;ILjava/lang/Object;)Lio/github/artemidius/blowhard/core/domain/StoredTranscript;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getAttempts ()Ljava/util/List;
+	public final fun getConversationId-j0uiRXY ()Ljava/lang/String;
+	public final fun getMessages ()Ljava/util/List;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
 public abstract interface class io/github/artemidius/blowhard/core/domain/TextGenerationPort {
 	public abstract fun generate (Lio/github/artemidius/blowhard/core/domain/GenerationRequest;)Lkotlinx/coroutines/flow/Flow;
+}
+
+public final class io/github/artemidius/blowhard/core/domain/TranscriptSaveResult : java/lang/Enum {
+	public static final field CONVERSATION_NOT_FOUND Lio/github/artemidius/blowhard/core/domain/TranscriptSaveResult;
+	public static final field SAVED Lio/github/artemidius/blowhard/core/domain/TranscriptSaveResult;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public static fun valueOf (Ljava/lang/String;)Lio/github/artemidius/blowhard/core/domain/TranscriptSaveResult;
+	public static fun values ()[Lio/github/artemidius/blowhard/core/domain/TranscriptSaveResult;
 }
 

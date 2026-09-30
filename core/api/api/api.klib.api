@@ -497,6 +497,17 @@ final value class io.github.artemidius.blowhard.core.api/ConversationId { // io.
     final fun toString(): kotlin/String // io.github.artemidius.blowhard.core.api/ConversationId.toString|toString(){}[0]
 }
 
+final value class io.github.artemidius.blowhard.core.api/MessageId { // io.github.artemidius.blowhard.core.api/MessageId|null[0]
+    constructor <init>(kotlin/String) // io.github.artemidius.blowhard.core.api/MessageId.<init>|<init>(kotlin.String){}[0]
+
+    final val value // io.github.artemidius.blowhard.core.api/MessageId.value|{}value[0]
+        final fun <get-value>(): kotlin/String // io.github.artemidius.blowhard.core.api/MessageId.value.<get-value>|<get-value>(){}[0]
+
+    final fun equals(kotlin/Any?): kotlin/Boolean // io.github.artemidius.blowhard.core.api/MessageId.equals|equals(kotlin.Any?){}[0]
+    final fun hashCode(): kotlin/Int // io.github.artemidius.blowhard.core.api/MessageId.hashCode|hashCode(){}[0]
+    final fun toString(): kotlin/String // io.github.artemidius.blowhard.core.api/MessageId.toString|toString(){}[0]
+}
+
 final value class io.github.artemidius.blowhard.core.api/RunId { // io.github.artemidius.blowhard.core.api/RunId|null[0]
     constructor <init>(kotlin/String) // io.github.artemidius.blowhard.core.api/RunId.<init>|<init>(kotlin.String){}[0]
 
