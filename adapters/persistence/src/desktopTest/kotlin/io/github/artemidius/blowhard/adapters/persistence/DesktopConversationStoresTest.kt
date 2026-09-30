@@ -1,6 +1,7 @@
 package io.github.artemidius.blowhard.adapters.persistence
 
 import io.github.artemidius.blowhard.core.api.ConversationId
+import io.github.artemidius.blowhard.core.api.RunTimestamp
 import io.github.artemidius.blowhard.core.domain.StoredConversation
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
@@ -49,6 +50,9 @@ internal class DesktopConversationStoresTest {
             store.close()
             store.close()
             assertFailsWith<IllegalStateException> { store.list() }
+            assertFailsWith<IllegalStateException> {
+                store.recoverInFlightAttempts(RunTimestamp(2))
+            }
         }
     }
 
