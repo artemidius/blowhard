@@ -88,6 +88,7 @@ private fun createDesktopBootstrap(): DesktopBootstrap {
     val directories = AppDirectoryResolver.resolve(environment)
     val preferencesStore = WindowPreferencesStore(directories.configuration)
     val preferences = preferencesStore.load()
+    val history = DesktopHistorySession.open(directories.configuration)
     val clipboard = AwtClipboardWriter(sessionAvailable = { environment.hasClipboardSession })
     val credentialStore = DesktopCredentialStores.mistralApiKey()
     val credentialProvider = credentialStore.asMistralCredentialProvider()
@@ -109,6 +110,8 @@ private fun createDesktopBootstrap(): DesktopBootstrap {
         connectionSettings = connectionSettings,
         generation = generation,
         scenarioSelection = scenarios,
+        initialState = history.initialState,
+        closeHistoryResources = history::close,
         closeProviderResources = {
             generation.close()
             modelCatalog.close()

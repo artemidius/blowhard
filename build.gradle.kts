@@ -179,6 +179,7 @@ private val allowedProjectDependencies = mapOf(
     ":apps:desktop" to setOf(
         ":adapters:fixture",
         ":adapters:mistral",
+        ":adapters:persistence",
         ":adapters:platform",
         ":core:application",
         ":shared-ui",
