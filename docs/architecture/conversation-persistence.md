@@ -43,6 +43,18 @@ Unicode content, deterministic ordering, immutable routing/configuration snapsho
 failures, transaction rollback, and complete owned-row deletion. Android device and iOS runtime
 storage tests still require their platform hosts, but both driver paths compile in CI.
 
+## Restart recovery
+
+`recoverInFlightAttempts` is an explicit fail-closed recovery operation. In one database update it
+changes every queued or running attempt to interrupted and returns the number of changed rows.
+Messages, partial assistant output, provider/model selection, generation controls, and terminal
+attempts remain unchanged. The transition timestamp is the later of the stored update time and the
+recovery time, so a backward system-clock adjustment cannot violate chronology.
+
+The operation is idempotent and has no generation-port dependency, so it cannot replay provider
+work. A startup coordinator must call it after opening storage and before exposing recovered
+history. That coordinator is deliberately not part of the persistence adapter.
+
 ## Schema evolution
 
 The current schema is version 2. The committed version-1 SQLite baseline remains unchanged, and
@@ -70,7 +82,8 @@ history is enabled in the application.
 
 - The desktop composition root does not open this store yet, so visible conversations remain
   process-local.
-- Streaming checkpoints, startup loading, and in-flight recovery are not implemented.
+- Streaming checkpoints and desktop startup loading are not implemented; the recovery operation is
+  available but not yet invoked by the application lifecycle.
 - Full retention and user-facing deletion behavior are not wired to presentation actions.
 - No claim is made that closing SQLite securely erases previously stored bytes.
 

@@ -152,6 +152,7 @@ abstract interface io.github.artemidius.blowhard.core.domain/ConversationStore {
     abstract suspend fun find(io.github.artemidius.blowhard.core.api/ConversationId): io.github.artemidius.blowhard.core.domain/StoredConversation? // io.github.artemidius.blowhard.core.domain/ConversationStore.find|find(io.github.artemidius.blowhard.core.api.ConversationId){}[0]
     abstract suspend fun list(): kotlin.collections/List<io.github.artemidius.blowhard.core.domain/StoredConversation> // io.github.artemidius.blowhard.core.domain/ConversationStore.list|list(){}[0]
     abstract suspend fun loadTranscript(io.github.artemidius.blowhard.core.api/ConversationId): io.github.artemidius.blowhard.core.domain/StoredTranscript? // io.github.artemidius.blowhard.core.domain/ConversationStore.loadTranscript|loadTranscript(io.github.artemidius.blowhard.core.api.ConversationId){}[0]
+    abstract suspend fun recoverInFlightAttempts(io.github.artemidius.blowhard.core.api/RunTimestamp): io.github.artemidius.blowhard.core.domain/ConversationRecoveryResult // io.github.artemidius.blowhard.core.domain/ConversationStore.recoverInFlightAttempts|recoverInFlightAttempts(io.github.artemidius.blowhard.core.api.RunTimestamp){}[0]
     abstract suspend fun save(io.github.artemidius.blowhard.core.domain/StoredConversation) // io.github.artemidius.blowhard.core.domain/ConversationStore.save|save(io.github.artemidius.blowhard.core.domain.StoredConversation){}[0]
     abstract suspend fun saveTranscript(io.github.artemidius.blowhard.core.domain/StoredTranscript): io.github.artemidius.blowhard.core.domain/TranscriptSaveResult // io.github.artemidius.blowhard.core.domain/ConversationStore.saveTranscript|saveTranscript(io.github.artemidius.blowhard.core.domain.StoredTranscript){}[0]
 }
@@ -332,6 +333,19 @@ final class io.github.artemidius.blowhard.core.domain/AvailableModel { // io.git
     final fun equals(kotlin/Any?): kotlin/Boolean // io.github.artemidius.blowhard.core.domain/AvailableModel.equals|equals(kotlin.Any?){}[0]
     final fun hashCode(): kotlin/Int // io.github.artemidius.blowhard.core.domain/AvailableModel.hashCode|hashCode(){}[0]
     final fun toString(): kotlin/String // io.github.artemidius.blowhard.core.domain/AvailableModel.toString|toString(){}[0]
+}
+
+final class io.github.artemidius.blowhard.core.domain/ConversationRecoveryResult { // io.github.artemidius.blowhard.core.domain/ConversationRecoveryResult|null[0]
+    constructor <init>(kotlin/Long) // io.github.artemidius.blowhard.core.domain/ConversationRecoveryResult.<init>|<init>(kotlin.Long){}[0]
+
+    final val interruptedAttemptCount // io.github.artemidius.blowhard.core.domain/ConversationRecoveryResult.interruptedAttemptCount|{}interruptedAttemptCount[0]
+        final fun <get-interruptedAttemptCount>(): kotlin/Long // io.github.artemidius.blowhard.core.domain/ConversationRecoveryResult.interruptedAttemptCount.<get-interruptedAttemptCount>|<get-interruptedAttemptCount>(){}[0]
+
+    final fun component1(): kotlin/Long // io.github.artemidius.blowhard.core.domain/ConversationRecoveryResult.component1|component1(){}[0]
+    final fun copy(kotlin/Long = ...): io.github.artemidius.blowhard.core.domain/ConversationRecoveryResult // io.github.artemidius.blowhard.core.domain/ConversationRecoveryResult.copy|copy(kotlin.Long){}[0]
+    final fun equals(kotlin/Any?): kotlin/Boolean // io.github.artemidius.blowhard.core.domain/ConversationRecoveryResult.equals|equals(kotlin.Any?){}[0]
+    final fun hashCode(): kotlin/Int // io.github.artemidius.blowhard.core.domain/ConversationRecoveryResult.hashCode|hashCode(){}[0]
+    final fun toString(): kotlin/String // io.github.artemidius.blowhard.core.domain/ConversationRecoveryResult.toString|toString(){}[0]
 }
 
 final class io.github.artemidius.blowhard.core.domain/GenerationFailure { // io.github.artemidius.blowhard.core.domain/GenerationFailure|null[0]
