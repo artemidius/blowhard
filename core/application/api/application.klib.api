@@ -14,6 +14,44 @@ abstract fun interface io.github.artemidius.blowhard.core.application/RunIdFacto
     abstract suspend fun next(): io.github.artemidius.blowhard.core.api/RunId // io.github.artemidius.blowhard.core.application/RunIdFactory.next|next(){}[0]
 }
 
+final class io.github.artemidius.blowhard.core.application/ConversationHistoryEntry { // io.github.artemidius.blowhard.core.application/ConversationHistoryEntry|null[0]
+    constructor <init>(io.github.artemidius.blowhard.core.domain/StoredConversation, io.github.artemidius.blowhard.core.domain/StoredTranscript) // io.github.artemidius.blowhard.core.application/ConversationHistoryEntry.<init>|<init>(io.github.artemidius.blowhard.core.domain.StoredConversation;io.github.artemidius.blowhard.core.domain.StoredTranscript){}[0]
+
+    final val conversation // io.github.artemidius.blowhard.core.application/ConversationHistoryEntry.conversation|{}conversation[0]
+        final fun <get-conversation>(): io.github.artemidius.blowhard.core.domain/StoredConversation // io.github.artemidius.blowhard.core.application/ConversationHistoryEntry.conversation.<get-conversation>|<get-conversation>(){}[0]
+    final val transcript // io.github.artemidius.blowhard.core.application/ConversationHistoryEntry.transcript|{}transcript[0]
+        final fun <get-transcript>(): io.github.artemidius.blowhard.core.domain/StoredTranscript // io.github.artemidius.blowhard.core.application/ConversationHistoryEntry.transcript.<get-transcript>|<get-transcript>(){}[0]
+
+    final fun component1(): io.github.artemidius.blowhard.core.domain/StoredConversation // io.github.artemidius.blowhard.core.application/ConversationHistoryEntry.component1|component1(){}[0]
+    final fun component2(): io.github.artemidius.blowhard.core.domain/StoredTranscript // io.github.artemidius.blowhard.core.application/ConversationHistoryEntry.component2|component2(){}[0]
+    final fun copy(io.github.artemidius.blowhard.core.domain/StoredConversation = ..., io.github.artemidius.blowhard.core.domain/StoredTranscript = ...): io.github.artemidius.blowhard.core.application/ConversationHistoryEntry // io.github.artemidius.blowhard.core.application/ConversationHistoryEntry.copy|copy(io.github.artemidius.blowhard.core.domain.StoredConversation;io.github.artemidius.blowhard.core.domain.StoredTranscript){}[0]
+    final fun equals(kotlin/Any?): kotlin/Boolean // io.github.artemidius.blowhard.core.application/ConversationHistoryEntry.equals|equals(kotlin.Any?){}[0]
+    final fun hashCode(): kotlin/Int // io.github.artemidius.blowhard.core.application/ConversationHistoryEntry.hashCode|hashCode(){}[0]
+    final fun toString(): kotlin/String // io.github.artemidius.blowhard.core.application/ConversationHistoryEntry.toString|toString(){}[0]
+}
+
+final class io.github.artemidius.blowhard.core.application/ConversationHistoryLoader { // io.github.artemidius.blowhard.core.application/ConversationHistoryLoader|null[0]
+    constructor <init>(io.github.artemidius.blowhard.core.domain/ConversationStore, io.github.artemidius.blowhard.core.application/RunClock) // io.github.artemidius.blowhard.core.application/ConversationHistoryLoader.<init>|<init>(io.github.artemidius.blowhard.core.domain.ConversationStore;io.github.artemidius.blowhard.core.application.RunClock){}[0]
+
+    final suspend fun load(): io.github.artemidius.blowhard.core.application/ConversationHistorySnapshot // io.github.artemidius.blowhard.core.application/ConversationHistoryLoader.load|load(){}[0]
+}
+
+final class io.github.artemidius.blowhard.core.application/ConversationHistorySnapshot { // io.github.artemidius.blowhard.core.application/ConversationHistorySnapshot|null[0]
+    constructor <init>(kotlin.collections/List<io.github.artemidius.blowhard.core.application/ConversationHistoryEntry>, kotlin/Long) // io.github.artemidius.blowhard.core.application/ConversationHistorySnapshot.<init>|<init>(kotlin.collections.List<io.github.artemidius.blowhard.core.application.ConversationHistoryEntry>;kotlin.Long){}[0]
+
+    final val entries // io.github.artemidius.blowhard.core.application/ConversationHistorySnapshot.entries|{}entries[0]
+        final fun <get-entries>(): kotlin.collections/List<io.github.artemidius.blowhard.core.application/ConversationHistoryEntry> // io.github.artemidius.blowhard.core.application/ConversationHistorySnapshot.entries.<get-entries>|<get-entries>(){}[0]
+    final val recoveredAttemptCount // io.github.artemidius.blowhard.core.application/ConversationHistorySnapshot.recoveredAttemptCount|{}recoveredAttemptCount[0]
+        final fun <get-recoveredAttemptCount>(): kotlin/Long // io.github.artemidius.blowhard.core.application/ConversationHistorySnapshot.recoveredAttemptCount.<get-recoveredAttemptCount>|<get-recoveredAttemptCount>(){}[0]
+
+    final fun component1(): kotlin.collections/List<io.github.artemidius.blowhard.core.application/ConversationHistoryEntry> // io.github.artemidius.blowhard.core.application/ConversationHistorySnapshot.component1|component1(){}[0]
+    final fun component2(): kotlin/Long // io.github.artemidius.blowhard.core.application/ConversationHistorySnapshot.component2|component2(){}[0]
+    final fun copy(kotlin.collections/List<io.github.artemidius.blowhard.core.application/ConversationHistoryEntry> = ..., kotlin/Long = ...): io.github.artemidius.blowhard.core.application/ConversationHistorySnapshot // io.github.artemidius.blowhard.core.application/ConversationHistorySnapshot.copy|copy(kotlin.collections.List<io.github.artemidius.blowhard.core.application.ConversationHistoryEntry>;kotlin.Long){}[0]
+    final fun equals(kotlin/Any?): kotlin/Boolean // io.github.artemidius.blowhard.core.application/ConversationHistorySnapshot.equals|equals(kotlin.Any?){}[0]
+    final fun hashCode(): kotlin/Int // io.github.artemidius.blowhard.core.application/ConversationHistorySnapshot.hashCode|hashCode(){}[0]
+    final fun toString(): kotlin/String // io.github.artemidius.blowhard.core.application/ConversationHistorySnapshot.toString|toString(){}[0]
+}
+
 final class io.github.artemidius.blowhard.core.application/DefaultConnectionSettings : io.github.artemidius.blowhard.core.api/ConnectionSettings { // io.github.artemidius.blowhard.core.application/DefaultConnectionSettings|null[0]
     constructor <init>(io.github.artemidius.blowhard.core.domain/CredentialStore, io.github.artemidius.blowhard.core.domain/ModelCatalogPort) // io.github.artemidius.blowhard.core.application/DefaultConnectionSettings.<init>|<init>(io.github.artemidius.blowhard.core.domain.CredentialStore;io.github.artemidius.blowhard.core.domain.ModelCatalogPort){}[0]
 
