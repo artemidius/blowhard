@@ -11,6 +11,8 @@ flowchart LR
     Presenter -->|ConversationUiState| UI
 
     Desktop[Desktop composition root] --> Presenter
+    Desktop --> History[ConversationHistoryLoader]
+    History -->|Recovered initial state| Presenter
     Desktop --> Lifecycle[DefaultConversationRuns]
     Desktop --> Fixture[FixtureTextGenerationPort]
     Lifecycle --> Fixture
@@ -21,6 +23,12 @@ creates one pending assistant message, and passively observes the accepted run. 
 replace that assistant message's text; terminal snapshots make its delivery state immutable.
 Duplicate Send actions are ignored while the selected conversation is starting, queued, or
 streaming.
+
+The presenter accepts a validated initial state without depending on persistence types. Desktop
+startup maps stored messages and attempts into that state after fail-closed recovery. Restored
+identities are reserved by the presenter so newly created in-memory conversations and messages
+cannot collide with displayed history. Interrupted responses retain partial text and are never
+treated as active local runs.
 
 ## Explicit regeneration
 
