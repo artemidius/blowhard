@@ -32,8 +32,9 @@ Add schema migration `1.sqm` instead of regenerating the committed version-1 bas
 two ways: SQLDelight schema comparison and a runtime test that opens the populated version-1
 fixture through the production desktop factory.
 
-Persist queued and running states without replay semantics. A distinct interrupted state is
-available for the later startup-recovery policy; this increment does not perform that transition.
+Persist queued and running states without replay semantics. A distinct interrupted state supports
+the fail-closed startup policy adopted in
+[`ADR 0019`](0019-fail-closed-restart-recovery.md).
 
 ## Alternatives considered
 
@@ -67,6 +68,6 @@ The old fixture remains immutable and the numbered migration advances it.
 - A complete transcript replacement is simple and atomic, but can write unchanged rows; checkpoint
   scheduling must remain bounded.
 - Correct deletion does not depend on platform-specific foreign-key initialization behavior.
-- The schema can represent interrupted attempts, but startup recovery and automatic loading remain
-  deliberately absent.
+- The schema can represent interrupted attempts; recovery policy is separate from transcript
+  replacement and automatic presentation loading.
 - Credentials, raw provider bodies, and transient presentation notices remain outside SQLite.

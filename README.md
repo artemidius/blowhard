@@ -107,6 +107,11 @@ run identity, message links, source/model target, generation controls, timestamp
 recoverable state, and sanitized failure details. See
 [`ADR 0018`](docs/decisions/0018-atomic-transcript-snapshots.md).
 
+Restart recovery is explicit and fail-closed: one atomic, idempotent pass marks queued and running
+attempts interrupted while preserving partial output and immutable request snapshots. It never
+replays provider work. Desktop startup wiring remains a separate increment. See
+[`ADR 0019`](docs/decisions/0019-fail-closed-restart-recovery.md).
+
 ## Run the desktop application
 
 ```shell
