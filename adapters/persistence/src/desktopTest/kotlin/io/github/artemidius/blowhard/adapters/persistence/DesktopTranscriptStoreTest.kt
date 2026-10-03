@@ -11,6 +11,7 @@ import io.github.artemidius.blowhard.core.domain.StoredMessageRole
 import io.github.artemidius.blowhard.core.domain.TranscriptSaveResult
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertFailsWith
 import kotlin.test.assertNotNull
 import kotlin.test.assertNull
 
@@ -55,6 +56,55 @@ internal class DesktopTranscriptStoreTest {
 
             assertNotNull(failure)
             assertEquals(originalSecond, store.loadTranscript(ConversationId("second")))
+        }
+    }
+
+    @Test
+    internal fun checkpointAtomicallyCreatesConversationAndTranscript() = withTemporaryDatabase { path ->
+        DesktopConversationStores.open(path).useStore { store ->
+            val conversation = StoredFixtures.conversation(CONVERSATION_ID, "Checkpoint", 1, UPDATED_AT)
+            val transcript = completeTranscript()
+
+            store.saveCheckpoint(conversation, transcript)
+
+            assertEquals(conversation, store.find(ConversationId(CONVERSATION_ID)))
+            assertEquals(transcript.messages.sortedBy { it.sequence }, store.loadTranscript(conversation.id)?.messages)
+        }
+    }
+
+    @Test
+    internal fun failedCheckpointRollsBackMetadataAndTranscriptTogether() = withTemporaryDatabase { path ->
+        DesktopConversationStores.open(path).useStore { store ->
+            store.saveCheckpoint(
+                StoredFixtures.conversation("first", "First", 1, 2),
+                singleAttemptTranscript("first", "shared-run"),
+            )
+            val originalConversation = StoredFixtures.conversation("second", "Original", 3, 4)
+            val originalTranscript = singleAttemptTranscript("second", "second-run")
+            store.saveCheckpoint(originalConversation, originalTranscript)
+
+            assertFailsWith<Exception> {
+                store.saveCheckpoint(
+                    originalConversation.copy(title = "Must roll back", updatedAtEpochMilliseconds = 5),
+                    singleAttemptTranscript("second", "shared-run"),
+                )
+            }
+
+            assertEquals(originalConversation, store.find(originalConversation.id))
+            assertEquals(originalTranscript, store.loadTranscript(originalConversation.id))
+        }
+    }
+
+    @Test
+    internal fun checkpointRejectsMismatchedAggregateIdentity() = withTemporaryDatabase { path ->
+        DesktopConversationStores.open(path).useStore { store ->
+            val conversation = StoredFixtures.conversation("metadata", "Metadata", 1, 2)
+
+            assertFailsWith<IllegalArgumentException> {
+                store.saveCheckpoint(conversation, singleAttemptTranscript("transcript", "run"))
+            }
+
+            assertNull(store.find(conversation.id))
         }
     }
 

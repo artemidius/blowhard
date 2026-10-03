@@ -45,6 +45,7 @@ public abstract interface class io/github/artemidius/blowhard/core/domain/Conver
 	public abstract fun loadTranscript-TKNjWRg (Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public abstract fun recoverInFlightAttempts-IwC4_GI (JLkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public abstract fun save (Lio/github/artemidius/blowhard/core/domain/StoredConversation;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public abstract fun saveCheckpoint (Lio/github/artemidius/blowhard/core/domain/StoredConversation;Lio/github/artemidius/blowhard/core/domain/StoredTranscript;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public abstract fun saveTranscript (Lio/github/artemidius/blowhard/core/domain/StoredTranscript;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 }
 
