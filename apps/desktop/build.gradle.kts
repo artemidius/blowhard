@@ -11,6 +11,7 @@ dependencies {
     implementation(compose.desktop.currentOs)
     implementation(project(":adapters:fixture"))
     implementation(project(":adapters:mistral"))
+    implementation(project(":adapters:persistence"))
     implementation(project(":adapters:platform"))
     implementation(project(":core:application"))
     implementation(project(":shared-ui"))
@@ -32,7 +33,7 @@ compose.desktop {
 
         nativeDistributions {
             targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb)
-            modules("java.instrument", "jdk.unsupported")
+            modules("java.instrument", "java.sql", "jdk.unsupported")
             packageName = "Blowhard"
             packageVersion = "1.0.0"
             description = "A desktop-first Kotlin Multiplatform client for Mistral AI"

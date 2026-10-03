@@ -97,8 +97,9 @@ explicitly selectable. See
 Durable conversation metadata and transcript snapshots now have a provider-independent core port
 and a SQLDelight/SQLite adapter compiled for desktop, Android, and iOS. The checked-in schema
 baseline and versioned migration are verified during the quality gate, while desktop tests prove
-close/reopen persistence, rollback, owned-row deletion, and a real version-1 upgrade. Application
-startup recovery is not wired yet. See
+close/reopen persistence, rollback, owned-row deletion, and a real version-1 upgrade. Desktop
+startup now opens the app-owned database, recovers uncertain attempts, and displays stored history
+without contacting a provider. See
 [`ADR 0017`](docs/decisions/0017-sqldelight-conversation-storage.md) and the
 [conversation persistence guide](docs/architecture/conversation-persistence.md).
 
@@ -109,8 +110,13 @@ recoverable state, and sanitized failure details. See
 
 Restart recovery is explicit and fail-closed: one atomic, idempotent pass marks queued and running
 attempts interrupted while preserving partial output and immutable request snapshots. It never
-replays provider work. Desktop startup wiring remains a separate increment. See
+replays provider work. Storage failures produce an explicit content-safe unavailable state rather
+than silently substituting a disposable database. See
 [`ADR 0019`](docs/decisions/0019-fail-closed-restart-recovery.md).
+
+New conversation activity is still process-local: checkpoint writes and retention actions remain
+the next persistence increment. See
+[`ADR 0020`](docs/decisions/0020-desktop-history-startup.md).
 
 ## Run the desktop application
 
