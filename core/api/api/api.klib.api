@@ -49,6 +49,20 @@ final enum class io.github.artemidius.blowhard.core.api/ConnectionTestFailureKin
     final fun values(): kotlin/Array<io.github.artemidius.blowhard.core.api/ConnectionTestFailureKind> // io.github.artemidius.blowhard.core.api/ConnectionTestFailureKind.values|values#static(){}[0]
 }
 
+final enum class io.github.artemidius.blowhard.core.api/ConversationDeletionResult : kotlin/Enum<io.github.artemidius.blowhard.core.api/ConversationDeletionResult> { // io.github.artemidius.blowhard.core.api/ConversationDeletionResult|null[0]
+    enum entry CONVERSATION_BUSY // io.github.artemidius.blowhard.core.api/ConversationDeletionResult.CONVERSATION_BUSY|null[0]
+    enum entry DELETED // io.github.artemidius.blowhard.core.api/ConversationDeletionResult.DELETED|null[0]
+    enum entry LIFECYCLE_CLOSED // io.github.artemidius.blowhard.core.api/ConversationDeletionResult.LIFECYCLE_CLOSED|null[0]
+    enum entry NOT_FOUND // io.github.artemidius.blowhard.core.api/ConversationDeletionResult.NOT_FOUND|null[0]
+    enum entry STORAGE_UNAVAILABLE // io.github.artemidius.blowhard.core.api/ConversationDeletionResult.STORAGE_UNAVAILABLE|null[0]
+
+    final val entries // io.github.artemidius.blowhard.core.api/ConversationDeletionResult.entries|#static{}entries[0]
+        final fun <get-entries>(): kotlin.enums/EnumEntries<io.github.artemidius.blowhard.core.api/ConversationDeletionResult> // io.github.artemidius.blowhard.core.api/ConversationDeletionResult.entries.<get-entries>|<get-entries>#static(){}[0]
+
+    final fun valueOf(kotlin/String): io.github.artemidius.blowhard.core.api/ConversationDeletionResult // io.github.artemidius.blowhard.core.api/ConversationDeletionResult.valueOf|valueOf#static(kotlin.String){}[0]
+    final fun values(): kotlin/Array<io.github.artemidius.blowhard.core.api/ConversationDeletionResult> // io.github.artemidius.blowhard.core.api/ConversationDeletionResult.values|values#static(){}[0]
+}
+
 final enum class io.github.artemidius.blowhard.core.api/CredentialStatus : kotlin/Enum<io.github.artemidius.blowhard.core.api/CredentialStatus> { // io.github.artemidius.blowhard.core.api/CredentialStatus|null[0]
     enum entry CONFIGURED // io.github.artemidius.blowhard.core.api/CredentialStatus.CONFIGURED|null[0]
     enum entry MISSING // io.github.artemidius.blowhard.core.api/CredentialStatus.MISSING|null[0]
@@ -163,6 +177,10 @@ abstract interface io.github.artemidius.blowhard.core.api/ConnectionSettings { /
     abstract suspend fun selectModel(kotlin/String): io.github.artemidius.blowhard.core.api/ModelSelectionResult // io.github.artemidius.blowhard.core.api/ConnectionSettings.selectModel|selectModel(kotlin.String){}[0]
     abstract suspend fun testConnection(): io.github.artemidius.blowhard.core.api/ConnectionTestResult // io.github.artemidius.blowhard.core.api/ConnectionSettings.testConnection|testConnection(){}[0]
     abstract suspend fun updateGenerationParameters(io.github.artemidius.blowhard.core.api/GenerationParameters) // io.github.artemidius.blowhard.core.api/ConnectionSettings.updateGenerationParameters|updateGenerationParameters(io.github.artemidius.blowhard.core.api.GenerationParameters){}[0]
+}
+
+abstract interface io.github.artemidius.blowhard.core.api/ConversationLibrary { // io.github.artemidius.blowhard.core.api/ConversationLibrary|null[0]
+    abstract suspend fun delete(io.github.artemidius.blowhard.core.api/ConversationId): io.github.artemidius.blowhard.core.api/ConversationDeletionResult // io.github.artemidius.blowhard.core.api/ConversationLibrary.delete|delete(io.github.artemidius.blowhard.core.api.ConversationId){}[0]
 }
 
 abstract interface io.github.artemidius.blowhard.core.api/ConversationRuns { // io.github.artemidius.blowhard.core.api/ConversationRuns|null[0]

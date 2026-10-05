@@ -13,13 +13,15 @@ internal class InMemoryRunRepository(private val clock: RunClock) {
     private val mutex = Mutex()
     private val runs = mutableMapOf<RunId, RunRecord>()
     private val activeConversations = mutableSetOf<ConversationId>()
+    private val deletingConversations = mutableSetOf<ConversationId>()
     private var closed = false
 
     suspend fun add(record: RunRecord): AddRunResult = mutex.withLock {
         when {
             closed -> AddRunResult.Closed
 
-            record.conversationId in activeConversations -> AddRunResult.ConversationBusy
+            record.conversationId in activeConversations || record.conversationId in deletingConversations ->
+                AddRunResult.ConversationBusy
 
             else -> {
                 runs[record.runId] = record
@@ -80,6 +82,31 @@ internal class InMemoryRunRepository(private val clock: RunClock) {
             }
         }
     }
+
+    suspend fun updateDeletion(conversationId: ConversationId, operation: DeletionOperation): DeletionDecision =
+        mutex.withLock {
+            when (operation) {
+                DeletionOperation.Reserve -> when {
+                    closed -> DeletionDecision.Closed
+
+                    conversationId in activeConversations || conversationId in deletingConversations ->
+                        DeletionDecision.ConversationBusy
+
+                    else -> {
+                        deletingConversations += conversationId
+                        DeletionDecision.Reserved
+                    }
+                }
+
+                is DeletionOperation.Release -> {
+                    check(deletingConversations.remove(conversationId)) { "Conversation deletion was not reserved" }
+                    if (operation.discardRuns) {
+                        runs.entries.removeAll { (_, record) -> record.conversationId == conversationId }
+                    }
+                    DeletionDecision.Released
+                }
+            }
+        }
 
     suspend fun close(): List<RunRecord> = mutex.withLock {
         closed = true
@@ -147,4 +174,20 @@ internal sealed interface CancellationDecision {
     data class AlreadyFinished(val job: Job?) : CancellationDecision
 
     data object NotFound : CancellationDecision
+}
+
+internal sealed interface DeletionDecision {
+    data object Reserved : DeletionDecision
+
+    data object ConversationBusy : DeletionDecision
+
+    data object Closed : DeletionDecision
+
+    data object Released : DeletionDecision
+}
+
+internal sealed interface DeletionOperation {
+    data object Reserve : DeletionOperation
+
+    data class Release(val discardRuns: Boolean) : DeletionOperation
 }

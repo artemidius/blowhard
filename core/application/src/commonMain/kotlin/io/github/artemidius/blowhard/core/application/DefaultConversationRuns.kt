@@ -2,6 +2,9 @@ package io.github.artemidius.blowhard.core.application
 
 import io.github.artemidius.blowhard.core.api.CancelRunResult
 import io.github.artemidius.blowhard.core.api.ConnectionSettings
+import io.github.artemidius.blowhard.core.api.ConversationDeletionResult
+import io.github.artemidius.blowhard.core.api.ConversationId
+import io.github.artemidius.blowhard.core.api.ConversationLibrary
 import io.github.artemidius.blowhard.core.api.ConversationRuns
 import io.github.artemidius.blowhard.core.api.GenerationMode
 import io.github.artemidius.blowhard.core.api.GenerationParameters
@@ -48,7 +51,8 @@ public class DefaultConversationRuns(
     private val connectionSettings: ConnectionSettings? = null,
     conversationStore: ConversationStore? = null,
     checkpointPolicy: RunCheckpointPolicy = RunCheckpointPolicy(),
-) : ConversationRuns {
+) : ConversationRuns,
+    ConversationLibrary {
     private val validator = StartRunRequestValidator()
     private val repository = InMemoryRunRepository(clock)
     private val permits = Semaphore(policy.maxConcurrentRuns)
@@ -58,6 +62,7 @@ public class DefaultConversationRuns(
         repository,
         clock,
     )
+    private val deletion = ConversationDeletionCoordinator(conversationStore, repository)
 
     override suspend fun start(request: StartRunRequest): StartRunResult = when (
         val validation = validator.validate(request)
@@ -127,6 +132,9 @@ public class DefaultConversationRuns(
 
         CancellationDecision.NotFound -> CancelRunResult.NOT_FOUND
     }
+
+    override suspend fun delete(conversationId: ConversationId): ConversationDeletionResult =
+        deletion.delete(conversationId)
 
     /** Cancels owned work, records terminal cancellation, and rejects future starts. */
     public suspend fun close() {
