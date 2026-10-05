@@ -16,6 +16,15 @@ public sealed interface ConversationAction {
     /** Creates and selects a local in-memory conversation. */
     public data object NewConversation : ConversationAction
 
+    /** Requests confirmation before deleting the local conversation identified by [id]. */
+    public data class DeleteConversationRequested(public val id: ConversationId) : ConversationAction
+
+    /** Confirms deletion of the conversation currently named by the confirmation state. */
+    public data object DeleteConversationConfirmed : ConversationAction
+
+    /** Closes the local-deletion confirmation without changing conversation history. */
+    public data object DeleteConversationDismissed : ConversationAction
+
     /** Starts generation from the current composer contents. */
     public data object Send : ConversationAction
 

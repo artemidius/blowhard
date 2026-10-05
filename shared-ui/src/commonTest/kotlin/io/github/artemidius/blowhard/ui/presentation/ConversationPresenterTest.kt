@@ -1,7 +1,9 @@
 package io.github.artemidius.blowhard.ui.presentation
 
 import io.github.artemidius.blowhard.core.api.CancelRunResult
+import io.github.artemidius.blowhard.core.api.ConversationDeletionResult
 import io.github.artemidius.blowhard.core.api.ConversationId
+import io.github.artemidius.blowhard.core.api.ConversationLibrary
 import io.github.artemidius.blowhard.core.api.ConversationRuns
 import io.github.artemidius.blowhard.core.api.GenerationTarget
 import io.github.artemidius.blowhard.core.api.ObserveRunResult
@@ -58,8 +60,10 @@ class ConversationPresenterTest {
             ),
             selectedConversationId = ConversationId("conversation-1"),
         )
+        val runs = FakeConversationRuns()
         val presenter = ConversationPresenter(
-            runs = FakeConversationRuns(),
+            runs = runs,
+            library = runs,
             scenarioSelection = { _, _ -> },
             clipboardWriter = ClipboardWriter { ClipboardWriteResult.COPIED },
             coroutineContext = StandardTestDispatcher(testScheduler),
@@ -366,6 +370,82 @@ class ConversationPresenterTest {
     }
 
     @Test
+    fun `deletion requires confirmation and dismissal preserves local history`() = runTest {
+        val fixture = PresenterFixture(this)
+
+        fixture.presenter.dispatch(ConversationAction.DeleteConversationRequested(DEFAULT_CONVERSATION))
+        runCurrent()
+        assertEquals(DEFAULT_CONVERSATION, fixture.presenter.state.value.pendingDeletionConversationId)
+
+        fixture.presenter.dispatch(ConversationAction.DeleteConversationDismissed)
+        runCurrent()
+        assertEquals(null, fixture.presenter.state.value.pendingDeletionConversationId)
+        assertEquals(listOf(DEFAULT_CONVERSATION), fixture.presenter.state.value.conversations.map { it.id })
+        assertEquals(emptyList(), fixture.runs.deletedConversations)
+        fixture.close()
+    }
+
+    @Test
+    fun `confirmed deletion selects the next conversation and clears selected draft`() = runTest {
+        val fixture = PresenterFixture(this)
+        fixture.presenter.dispatch(ConversationAction.NewConversation)
+        fixture.presenter.dispatch(ConversationAction.ComposerChanged("private draft"))
+        fixture.presenter.dispatch(ConversationAction.DeleteConversationRequested(ConversationId("conversation-2")))
+        fixture.presenter.dispatch(ConversationAction.DeleteConversationConfirmed)
+        runCurrent()
+
+        val state = fixture.presenter.state.value
+        assertEquals(listOf(ConversationId("conversation-2")), fixture.runs.deletedConversations)
+        assertEquals(listOf(DEFAULT_CONVERSATION), state.conversations.map { it.id })
+        assertEquals(DEFAULT_CONVERSATION, state.selectedConversationId)
+        assertEquals("", state.composer)
+        assertEquals("The conversation was removed from local history.", state.notice?.message)
+        fixture.close()
+    }
+
+    @Test
+    fun `deleting the last conversation creates a fresh collision-free workspace`() = runTest {
+        val fixture = PresenterFixture(this)
+
+        fixture.presenter.dispatch(ConversationAction.DeleteConversationRequested(DEFAULT_CONVERSATION))
+        fixture.presenter.dispatch(ConversationAction.DeleteConversationConfirmed)
+        runCurrent()
+
+        val state = fixture.presenter.state.value
+        assertEquals(1, state.conversations.size)
+        assertEquals(ConversationId("conversation-2"), state.selectedConversationId)
+        assertEquals("New conversation", state.selectedConversation.title)
+        fixture.close()
+    }
+
+    @Test
+    fun `active and failed deletions retain the conversation with safe feedback`() = runTest {
+        val active = PresenterFixture(this)
+        active.start("still running")
+        active.presenter.dispatch(ConversationAction.DeleteConversationRequested(DEFAULT_CONVERSATION))
+        runCurrent()
+        assertEquals(null, active.presenter.state.value.pendingDeletionConversationId)
+        assertEquals(
+            "Stop the active run before deleting this conversation.",
+            active.presenter.state.value.notice?.message,
+        )
+        assertEquals(emptyList(), active.runs.deletedConversations)
+        active.close()
+
+        val unavailable = PresenterFixture(this)
+        unavailable.runs.deleteResult = ConversationDeletionResult.STORAGE_UNAVAILABLE
+        unavailable.presenter.dispatch(ConversationAction.DeleteConversationRequested(DEFAULT_CONVERSATION))
+        unavailable.presenter.dispatch(ConversationAction.DeleteConversationConfirmed)
+        runCurrent()
+        assertEquals(listOf(DEFAULT_CONVERSATION), unavailable.presenter.state.value.conversations.map { it.id })
+        assertEquals(
+            "Local history deletion could not be confirmed. The conversation remains visible.",
+            unavailable.presenter.state.value.notice?.message,
+        )
+        unavailable.close()
+    }
+
+    @Test
     fun `background failure feedback stays with its conversation`() = runTest {
         val fixture = PresenterFixture(this)
         fixture.start("First")
@@ -397,6 +477,7 @@ class ConversationPresenterTest {
         val runs = FakeConversationRuns()
         val presenter = ConversationPresenter(
             runs = runs,
+            library = runs,
             scenarioSelection = DemoScenarioSelection { _, _ -> error("private setup failure") },
             clipboardWriter = ClipboardWriter { ClipboardWriteResult.COPIED },
             coroutineContext = StandardTestDispatcher(testScheduler),
@@ -566,6 +647,7 @@ private class PresenterFixture(val testScope: kotlinx.coroutines.test.TestScope)
     var clipboardResult = ClipboardWriteResult.COPIED
     val presenter = ConversationPresenter(
         runs = runs,
+        library = runs,
         scenarioSelection = DemoScenarioSelection { conversationId, scenario ->
             scenarios += conversationId to scenario
         },
@@ -579,7 +661,9 @@ private class PresenterFixture(val testScope: kotlinx.coroutines.test.TestScope)
     fun close() = presenter.close()
 }
 
-private class FakeConversationRuns : ConversationRuns {
+private class FakeConversationRuns :
+    ConversationRuns,
+    ConversationLibrary {
     val startRequests = mutableListOf<StartRunRequest>()
     val cancelledRuns = mutableListOf<RunId>()
     var startResult: StartRunResult? = null
@@ -588,8 +672,11 @@ private class FakeConversationRuns : ConversationRuns {
     var observeThrows = false
     var cancelThrows = false
     var cancelResult: CancelRunResult? = null
+    var deleteResult: ConversationDeletionResult = ConversationDeletionResult.DELETED
+    var deleteThrows = false
     var startTarget: GenerationTarget = GenerationTarget.Demo
     var observeCalls = 0
+    val deletedConversations = mutableListOf<ConversationId>()
     private val snapshots = mutableMapOf<RunId, MutableStateFlow<RunSnapshot>>()
 
     override suspend fun start(request: StartRunRequest): StartRunResult {
@@ -624,6 +711,12 @@ private class FakeConversationRuns : ConversationRuns {
                 CancelRunResult.ACCEPTED
             }
         }
+    }
+
+    override suspend fun delete(conversationId: ConversationId): ConversationDeletionResult {
+        if (deleteThrows) error("private deletion failure")
+        deletedConversations += conversationId
+        return deleteResult
     }
 
     fun startedRun(): RunId = RunId("fake-run-${startRequests.size}")
