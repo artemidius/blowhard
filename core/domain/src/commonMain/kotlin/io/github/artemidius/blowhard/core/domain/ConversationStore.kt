@@ -66,7 +66,7 @@ public interface ConversationStore {
      */
     public suspend fun recoverInFlightAttempts(recoveredAt: RunTimestamp): ConversationRecoveryResult
 
-    /** Deletes [id] and reports whether a row existed. */
+    /** Atomically deletes [id] and every locally owned message and attempt, then reports existence. */
     public suspend fun delete(id: ConversationId): Boolean
 
     /** Releases database resources. Repeated calls have no effect. */

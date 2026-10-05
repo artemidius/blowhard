@@ -42,11 +42,12 @@ public final class io/github/artemidius/blowhard/core/application/DefaultConnect
 	public fun updateGenerationParameters (Lio/github/artemidius/blowhard/core/api/GenerationParameters;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 }
 
-public final class io/github/artemidius/blowhard/core/application/DefaultConversationRuns : io/github/artemidius/blowhard/core/api/ConversationRuns {
+public final class io/github/artemidius/blowhard/core/application/DefaultConversationRuns : io/github/artemidius/blowhard/core/api/ConversationLibrary, io/github/artemidius/blowhard/core/api/ConversationRuns {
 	public fun <init> (Lio/github/artemidius/blowhard/core/domain/TextGenerationPort;Lio/github/artemidius/blowhard/core/application/RunIdFactory;Lio/github/artemidius/blowhard/core/application/RunClock;Lkotlin/coroutines/CoroutineContext;Lio/github/artemidius/blowhard/core/application/RunExecutionPolicy;Lio/github/artemidius/blowhard/core/api/ConnectionSettings;Lio/github/artemidius/blowhard/core/domain/ConversationStore;Lio/github/artemidius/blowhard/core/application/RunCheckpointPolicy;)V
 	public synthetic fun <init> (Lio/github/artemidius/blowhard/core/domain/TextGenerationPort;Lio/github/artemidius/blowhard/core/application/RunIdFactory;Lio/github/artemidius/blowhard/core/application/RunClock;Lkotlin/coroutines/CoroutineContext;Lio/github/artemidius/blowhard/core/application/RunExecutionPolicy;Lio/github/artemidius/blowhard/core/api/ConnectionSettings;Lio/github/artemidius/blowhard/core/domain/ConversationStore;Lio/github/artemidius/blowhard/core/application/RunCheckpointPolicy;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
 	public fun cancel-Mzzv5v0 (Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public final fun close (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public fun delete-TKNjWRg (Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public fun observe-Mzzv5v0 (Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public fun start (Lio/github/artemidius/blowhard/core/api/StartRunRequest;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 }

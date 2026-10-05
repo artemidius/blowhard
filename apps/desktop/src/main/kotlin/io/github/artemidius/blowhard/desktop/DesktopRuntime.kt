@@ -61,6 +61,7 @@ internal class DesktopRuntime private constructor(
             )
             val presenter = ConversationPresenter(
                 runs = runs,
+                library = runs,
                 scenarioSelection = scenarioSelection,
                 clipboardWriter = clipboardWriter,
                 coroutineContext = Dispatchers.Default,

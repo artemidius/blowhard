@@ -121,6 +121,12 @@ atomically, while storage failures stop safely without provider replay. See
 [`ADR 0020`](docs/decisions/0020-desktop-history-startup.md) and
 [`ADR 0021`](docs/decisions/0021-bounded-run-checkpoints.md).
 
+Local deletion is an explicit, confirmed application operation. Active runs are fenced, the
+conversation aggregate is removed atomically, and storage failures leave the conversation visible
+without claiming success. Deletion affects Blowhard's local copy only: it does not modify the API
+credential or provider-side retention. See
+[`ADR 0022`](docs/decisions/0022-confirmed-local-conversation-deletion.md).
+
 ## Run the desktop application
 
 ```shell
@@ -137,6 +143,10 @@ connection test, select a verified model, acknowledge external processing, and e
 **Live Mistral** for new attempts. Generation controls offer bounded maximum-output and temperature
 presets for subsequently accepted attempts. The title, composer, conversation, and assistant
 response show the active source. Live failures never switch to the fixture.
+
+Use **Delete** in the conversation header to remove local history after reviewing the confirmation
+boundary. Stop an active run first. When the last conversation is deleted, the shared client
+creates a fresh empty workspace without recreating the deleted database record.
 
 Use `Command+Enter` on macOS or `Ctrl+Enter` on Windows and Linux to send from the composer. Native
 menus expose New conversation, Send, Stop, Regenerate latest response, Copy latest response, and

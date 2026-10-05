@@ -40,6 +40,13 @@ internal fun ConversationScreen(
             ConversationPane(state, connection, onAction, onOpenSettings, compact = true)
         }
     }
+    state.pendingDeletionConversation?.let { conversation ->
+        ConversationDeletionDialog(
+            title = conversation.title,
+            onConfirm = { onAction(ConversationAction.DeleteConversationConfirmed) },
+            onDismiss = { onAction(ConversationAction.DeleteConversationDismissed) },
+        )
+    }
 }
 
 private val SIDEBAR_WIDTH = 264.dp

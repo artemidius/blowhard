@@ -35,7 +35,7 @@ internal fun ConversationPane(
 ) {
     Column(Modifier.fillMaxSize()) {
         if (compact) CompactConversationNavigation(state, onAction, onOpenSettings)
-        ConversationHeader(state, connection)
+        ConversationHeader(state, connection, onAction)
         HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
         MessageList(
             messages = state.selectedConversation.messages,
@@ -55,7 +55,11 @@ internal fun ConversationPane(
 }
 
 @Composable
-private fun ConversationHeader(state: ConversationUiState, connection: ConnectionSettingsState) {
+private fun ConversationHeader(
+    state: ConversationUiState,
+    connection: ConnectionSettingsState,
+    onAction: (ConversationAction) -> Unit,
+) {
     Row(
         modifier = Modifier.fillMaxWidth().padding(horizontal = 24.dp, vertical = 18.dp),
         horizontalArrangement = Arrangement.spacedBy(12.dp),
@@ -74,6 +78,14 @@ private fun ConversationHeader(state: ConversationUiState, connection: Connectio
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
             )
+        }
+        TextButton(
+            onClick = {
+                onAction(ConversationAction.DeleteConversationRequested(state.selectedConversationId))
+            },
+            enabled = !state.selectedConversation.runState.isActive,
+        ) {
+            Text("Delete")
         }
         ModeBadge(connection.mode)
     }

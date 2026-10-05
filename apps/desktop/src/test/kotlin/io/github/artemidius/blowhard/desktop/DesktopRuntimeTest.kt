@@ -6,6 +6,7 @@ import io.github.artemidius.blowhard.core.api.ConnectionSettingsState
 import io.github.artemidius.blowhard.core.api.ConnectionStatus
 import io.github.artemidius.blowhard.core.api.ConnectionTestFailureKind
 import io.github.artemidius.blowhard.core.api.ConnectionTestResult
+import io.github.artemidius.blowhard.core.api.ConversationId
 import io.github.artemidius.blowhard.core.api.CredentialStatus
 import io.github.artemidius.blowhard.core.api.CredentialUpdateResult
 import io.github.artemidius.blowhard.core.api.GenerationMode
@@ -89,6 +90,53 @@ class DesktopRuntimeTest {
             }
         } finally {
             directory.toFile().deleteRecursively()
+        }
+    }
+
+    @Test
+    fun `confirmed desktop deletion removes durable history across restart`() = runBlocking {
+        val directory = Files.createTempDirectory("blowhard-runtime-deletion-")
+        try {
+            val history = DesktopHistorySession.open(directory)
+            val runtime = createDesktopRuntime(
+                initialState = history.initialState,
+                conversationStore = history.conversationStore,
+                closeHistoryResources = history::close,
+            )
+            try {
+                runtime.completeAndDeleteConversation()
+            } finally {
+                runtime.close()
+            }
+
+            val restored = DesktopHistorySession.open(directory)
+            try {
+                assertTrue(checkNotNull(restored.conversationStore).list().isEmpty())
+                assertEquals("Demo conversation", restored.initialState.selectedConversation.title)
+                assertTrue(restored.initialState.selectedConversation.messages.isEmpty())
+            } finally {
+                restored.close()
+            }
+        } finally {
+            directory.toFile().deleteRecursively()
+        }
+    }
+
+    private suspend fun DesktopRuntime.completeAndDeleteConversation() {
+        presenter.dispatch(ConversationAction.ComposerChanged("Delete this conversation"))
+        presenter.dispatch(ConversationAction.Send)
+        val completed = withTimeout(5.seconds) {
+            presenter.state.first { it.selectedConversation.runState == ConversationRunState.SUCCEEDED }
+        }
+        val conversationId = completed.selectedConversationId
+
+        presenter.dispatch(ConversationAction.DeleteConversationRequested(conversationId))
+        presenter.dispatch(ConversationAction.DeleteConversationConfirmed)
+        withTimeout(5.seconds) {
+            presenter.state.first { state ->
+                state.selectedConversationId != conversationId &&
+                    state.notice?.message == "The conversation was removed from local history."
+            }
         }
     }
 
@@ -195,11 +243,11 @@ class DesktopRuntimeTest {
         val initialState = emptyDesktopConversationState().copy(
             conversations = listOf(
                 io.github.artemidius.blowhard.ui.presentation.ConversationUiModel(
-                    id = io.github.artemidius.blowhard.core.api.ConversationId("stored"),
+                    id = ConversationId("stored"),
                     title = "Stored history",
                 ),
             ),
-            selectedConversationId = io.github.artemidius.blowhard.core.api.ConversationId("stored"),
+            selectedConversationId = ConversationId("stored"),
         )
         val runtime = DesktopRuntime.create(
             clipboardWriter = testClipboard,

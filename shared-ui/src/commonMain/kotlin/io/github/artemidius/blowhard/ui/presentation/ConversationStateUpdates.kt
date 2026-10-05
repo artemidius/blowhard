@@ -21,6 +21,41 @@ internal fun ConversationUiState.updateConversation(
     },
 )
 
+internal fun ConversationUiState.removeConversation(
+    id: ConversationId,
+    replacement: () -> ConversationUiModel,
+): ConversationUiState {
+    val removedIndex = conversations.indexOfFirst { it.id == id }
+    val remaining = conversations.filterNot { it.id == id }
+    return when {
+        removedIndex < 0 -> copy(pendingDeletionConversationId = null)
+
+        remaining.isEmpty() -> {
+            val fresh = replacement()
+            copy(
+                conversations = listOf(fresh),
+                selectedConversationId = fresh.id,
+                composer = "",
+                pendingDeletionConversationId = null,
+            )
+        }
+
+        else -> copy(
+            conversations = remaining,
+            selectedConversationId = if (selectedConversationId == id) {
+                remaining[minOf(removedIndex, remaining.lastIndex)].id
+            } else {
+                selectedConversationId
+            },
+            composer = if (selectedConversationId == id) "" else composer,
+            pendingDeletionConversationId = null,
+        )
+    }
+}
+
+internal fun ConversationUiState.deletionFailed(message: String): ConversationUiState =
+    copy(pendingDeletionConversationId = null).withSelectedNotice(UiNotice(message))
+
 internal fun ConversationUiState.prepareRunStart(
     conversationId: ConversationId,
     clearComposer: Boolean,
