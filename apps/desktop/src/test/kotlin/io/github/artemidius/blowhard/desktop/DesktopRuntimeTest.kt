@@ -15,18 +15,21 @@ import io.github.artemidius.blowhard.core.api.ModeSelectionResult
 import io.github.artemidius.blowhard.core.api.ModelSelectionResult
 import io.github.artemidius.blowhard.core.api.RunId
 import io.github.artemidius.blowhard.core.api.SelectableModel
+import io.github.artemidius.blowhard.core.domain.ConversationStore
 import io.github.artemidius.blowhard.core.domain.GenerationEvent
 import io.github.artemidius.blowhard.core.domain.TextGenerationPort
 import io.github.artemidius.blowhard.ui.presentation.ClipboardWriteResult
 import io.github.artemidius.blowhard.ui.presentation.ClipboardWriter
 import io.github.artemidius.blowhard.ui.presentation.ConversationAction
 import io.github.artemidius.blowhard.ui.presentation.ConversationRunState
+import io.github.artemidius.blowhard.ui.presentation.ConversationUiState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withTimeout
+import java.nio.file.Files
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
@@ -48,6 +51,44 @@ class DesktopRuntimeTest {
             assertEquals(2, state.selectedConversation.messages.size)
         } finally {
             runtime.close()
+        }
+    }
+
+    @Test
+    fun `completed desktop conversation survives a real database restart`() = runBlocking {
+        val directory = Files.createTempDirectory("blowhard-runtime-checkpoint-")
+        try {
+            val history = DesktopHistorySession.open(directory)
+            val runtime = createDesktopRuntime(
+                initialState = history.initialState,
+                conversationStore = history.conversationStore,
+                closeHistoryResources = history::close,
+            )
+            val completed = try {
+                runtime.presenter.dispatch(ConversationAction.ComposerChanged("Persist this conversation"))
+                runtime.presenter.dispatch(ConversationAction.Send)
+                withTimeout(5.seconds) {
+                    runtime.presenter.state.first {
+                        it.selectedConversation.runState == ConversationRunState.SUCCEEDED
+                    }
+                }
+            } finally {
+                runtime.close()
+            }
+
+            val restored = DesktopHistorySession.open(directory)
+            try {
+                assertEquals(ConversationRunState.SUCCEEDED, restored.initialState.selectedConversation.runState)
+                assertEquals(
+                    completed.selectedConversation.messages.map { it.text },
+                    restored.initialState.selectedConversation.messages.map { it.text },
+                )
+                assertEquals("Persist this conversation", restored.initialState.selectedConversation.title)
+            } finally {
+                restored.close()
+            }
+        } finally {
+            directory.toFile().deleteRecursively()
         }
     }
 
@@ -214,6 +255,8 @@ private suspend fun DesktopRuntime.completeAttempt(prompt: String): RunId? {
 }
 
 private fun createDesktopRuntime(
+    initialState: ConversationUiState = emptyDesktopConversationState(),
+    conversationStore: ConversationStore? = null,
     closeHistoryResources: () -> Unit = {},
     closeProviderResources: () -> Unit = {},
 ): DesktopRuntime {
@@ -223,6 +266,8 @@ private fun createDesktopRuntime(
         connectionSettings = FakeDesktopConnectionSettings(),
         generation = FixtureTextGenerationPort(scenarios::scenarioFor),
         scenarioSelection = scenarios,
+        initialState = initialState,
+        conversationStore = conversationStore,
         closeHistoryResources = closeHistoryResources,
         closeProviderResources = closeProviderResources,
     )
