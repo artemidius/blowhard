@@ -43,6 +43,15 @@ public interface ConversationStore {
     /** Lists conversations by most recent update, then stable identity. */
     public suspend fun list(): List<StoredConversation>
 
+    /**
+     * Atomically saves [conversation] and replaces its complete [transcript].
+     *
+     * The identities must match. Implementations preserve an existing conversation creation
+     * timestamp and leave both metadata and transcript unchanged when any part of the checkpoint
+     * fails.
+     */
+    public suspend fun saveCheckpoint(conversation: StoredConversation, transcript: StoredTranscript)
+
     /** Atomically replaces the messages and attempts owned by an existing conversation. */
     public suspend fun saveTranscript(transcript: StoredTranscript): TranscriptSaveResult
 

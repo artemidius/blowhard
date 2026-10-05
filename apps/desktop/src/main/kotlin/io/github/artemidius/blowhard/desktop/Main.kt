@@ -111,6 +111,7 @@ private fun createDesktopBootstrap(): DesktopBootstrap {
         generation = generation,
         scenarioSelection = scenarios,
         initialState = history.initialState,
+        conversationStore = history.conversationStore,
         closeHistoryResources = history::close,
         closeProviderResources = {
             generation.close()

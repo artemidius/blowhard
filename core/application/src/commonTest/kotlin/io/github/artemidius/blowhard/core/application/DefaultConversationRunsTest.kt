@@ -12,9 +12,11 @@ import io.github.artemidius.blowhard.core.api.CredentialUpdateResult
 import io.github.artemidius.blowhard.core.api.GenerationMode
 import io.github.artemidius.blowhard.core.api.GenerationParameters
 import io.github.artemidius.blowhard.core.api.GenerationTarget
+import io.github.artemidius.blowhard.core.api.MessageId
 import io.github.artemidius.blowhard.core.api.ModeSelectionResult
 import io.github.artemidius.blowhard.core.api.ModelSelectionResult
 import io.github.artemidius.blowhard.core.api.ObserveRunResult
+import io.github.artemidius.blowhard.core.api.RunFailureKind
 import io.github.artemidius.blowhard.core.api.RunId
 import io.github.artemidius.blowhard.core.api.RunSnapshot
 import io.github.artemidius.blowhard.core.api.RunTimestamp
@@ -22,8 +24,17 @@ import io.github.artemidius.blowhard.core.api.SelectableModel
 import io.github.artemidius.blowhard.core.api.StartRunRejection
 import io.github.artemidius.blowhard.core.api.StartRunRequest
 import io.github.artemidius.blowhard.core.api.StartRunResult
+import io.github.artemidius.blowhard.core.domain.ConversationRecoveryResult
+import io.github.artemidius.blowhard.core.domain.ConversationStore
 import io.github.artemidius.blowhard.core.domain.GenerationEvent
+import io.github.artemidius.blowhard.core.domain.StoredAttemptStatus
+import io.github.artemidius.blowhard.core.domain.StoredConversation
+import io.github.artemidius.blowhard.core.domain.StoredGenerationAttempt
+import io.github.artemidius.blowhard.core.domain.StoredMessage
+import io.github.artemidius.blowhard.core.domain.StoredMessageRole
+import io.github.artemidius.blowhard.core.domain.StoredTranscript
 import io.github.artemidius.blowhard.core.domain.TextGenerationPort
+import io.github.artemidius.blowhard.core.domain.TranscriptSaveResult
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitCancellation
@@ -245,10 +256,130 @@ class DefaultConversationRunsTest {
         assertEquals(CancelRunResult.NOT_FOUND, runs.cancel(RunId("missing")))
     }
 
+    @Test
+    fun `durable run writes bounded checkpoints and terminal output`() = runTest {
+        val store = CheckpointRecordingStore()
+        val runs = controller(
+            generation = TextGenerationPort {
+                flowOf(
+                    GenerationEvent.TextDelta("small "),
+                    GenerationEvent.TextDelta("chunks"),
+                    GenerationEvent.Completed,
+                )
+            },
+            conversationStore = store,
+            checkpointPolicy = RunCheckpointPolicy(
+                minimumOutputCharacters = 100,
+                maximumIntervalMilliseconds = 100,
+            ),
+        )
+
+        val runId = runs.startRun("durable")
+        advanceUntilIdle()
+
+        assertEquals(
+            listOf(StoredAttemptStatus.QUEUED, StoredAttemptStatus.RUNNING, StoredAttemptStatus.SUCCEEDED),
+            store.checkpoints.map { it.transcript.attempts.last().status },
+        )
+        val checkpoint = store.checkpoints.last()
+        assertEquals("Hello", checkpoint.transcript.messages.first().text)
+        assertEquals("small chunks", checkpoint.transcript.messages.last().text)
+        assertEquals(runId, checkpoint.transcript.attempts.last().runId)
+    }
+
+    @Test
+    fun `initial checkpoint failure rejects before provider execution`() = runTest {
+        var executions = 0
+        val store = CheckpointRecordingStore(failAtCheckpoint = 1)
+        val runs = controller(
+            generation = TextGenerationPort {
+                executions += 1
+                flowOf(GenerationEvent.Completed)
+            },
+            conversationStore = store,
+        )
+
+        val result = runs.start(StartRunRequest(ConversationId("durable"), "Hello"))
+        advanceUntilIdle()
+
+        assertEquals(StartRunRejection.STORAGE_UNAVAILABLE, assertIs<StartRunResult.Rejected>(result).reason)
+        assertEquals(0, executions)
+    }
+
+    @Test
+    fun `stream checkpoint failure stops generation with safe storage failure`() = runTest {
+        val store = CheckpointRecordingStore(failAtCheckpoint = 3)
+        val runs = controller(
+            generation = TextGenerationPort {
+                flowOf(GenerationEvent.TextDelta("checkpoint me"), GenerationEvent.Completed)
+            },
+            conversationStore = store,
+            checkpointPolicy = RunCheckpointPolicy(
+                minimumOutputCharacters = 1,
+                maximumIntervalMilliseconds = 100,
+            ),
+        )
+
+        val runId = runs.startRun("durable")
+        advanceUntilIdle()
+
+        val failure = assertIs<RunSnapshot.Failed>(runs.snapshots(runId).first())
+        assertEquals(RunFailureKind.STORAGE_UNAVAILABLE, failure.failure.kind)
+        assertEquals("checkpoint me", failure.partialOutput)
+        assertEquals(StoredAttemptStatus.RUNNING, store.checkpoints.last().transcript.attempts.last().status)
+    }
+
+    @Test
+    fun `cancellation checkpoints partial output as terminal`() = runTest {
+        val store = CheckpointRecordingStore()
+        val runs = controller(
+            generation = TextGenerationPort {
+                flow {
+                    emit(GenerationEvent.TextDelta("partial"))
+                    awaitCancellation()
+                }
+            },
+            conversationStore = store,
+        )
+        val runId = runs.startRun("durable")
+        runCurrent()
+
+        assertEquals(CancelRunResult.ACCEPTED, runs.cancel(runId))
+
+        val checkpoint = store.checkpoints.last()
+        assertEquals(StoredAttemptStatus.CANCELLED, checkpoint.transcript.attempts.last().status)
+        assertEquals("partial", checkpoint.transcript.messages.last().text)
+    }
+
+    @Test
+    fun `new durable attempt preserves existing transcript`() = runTest {
+        val existing = existingCheckpoint()
+        val store = CheckpointRecordingStore(existing.conversation, existing.transcript)
+        val runs = controller(
+            generation = TextGenerationPort { flowOf(GenerationEvent.TextDelta("new"), GenerationEvent.Completed) },
+            conversationStore = store,
+        )
+
+        runs.startRun("durable")
+        advanceUntilIdle()
+
+        val checkpoint = store.checkpoints.last()
+        assertEquals("Existing title", checkpoint.conversation.title)
+        assertEquals(
+            listOf("old question", "old answer", "Hello", "new"),
+            checkpoint.transcript.messages.map {
+                it.text
+            },
+        )
+        assertEquals(2, checkpoint.transcript.attempts.size)
+    }
+
     private fun kotlinx.coroutines.test.TestScope.controller(
         generation: TextGenerationPort,
         maxConcurrentRuns: Int = 2,
         connectionSettings: ConnectionSettings? = null,
+        conversationStore: ConversationStore? = null,
+        checkpointPolicy: RunCheckpointPolicy = RunCheckpointPolicy(),
     ): DefaultConversationRuns = DefaultConversationRuns(
         generation = generation,
         idFactory = SequentialRunIdFactory(),
@@ -256,6 +387,81 @@ class DefaultConversationRunsTest {
         coroutineContext = StandardTestDispatcher(testScheduler),
         policy = RunExecutionPolicy(maxConcurrentRuns),
         connectionSettings = connectionSettings,
+        conversationStore = conversationStore,
+        checkpointPolicy = checkpointPolicy,
+    )
+}
+
+private data class RecordedCheckpoint(val conversation: StoredConversation, val transcript: StoredTranscript)
+
+private class CheckpointRecordingStore(
+    initialConversation: StoredConversation? = null,
+    initialTranscript: StoredTranscript? = null,
+    private val failAtCheckpoint: Int? = null,
+) : ConversationStore {
+    private var conversation = initialConversation
+    private var transcript = initialTranscript
+    private var checkpointCalls = 0
+    val checkpoints = mutableListOf<RecordedCheckpoint>()
+
+    override suspend fun find(id: ConversationId): StoredConversation? = conversation?.takeIf { it.id == id }
+
+    override suspend fun loadTranscript(id: ConversationId): StoredTranscript? = transcript?.takeIf {
+        it.conversationId ==
+            id
+    }
+
+    override suspend fun saveCheckpoint(conversation: StoredConversation, transcript: StoredTranscript) {
+        checkpointCalls += 1
+        if (checkpointCalls == failAtCheckpoint) error("synthetic storage failure")
+        val storedConversation = this.conversation?.takeIf { it.id == conversation.id }?.let {
+            conversation.copy(createdAtEpochMilliseconds = it.createdAtEpochMilliseconds)
+        } ?: conversation
+        this.conversation = storedConversation
+        this.transcript = transcript
+        checkpoints += RecordedCheckpoint(storedConversation, transcript)
+    }
+
+    override suspend fun save(conversation: StoredConversation): Unit = unsupported()
+
+    override suspend fun list(): List<StoredConversation> = unsupported()
+
+    override suspend fun saveTranscript(transcript: StoredTranscript): TranscriptSaveResult = unsupported()
+
+    override suspend fun recoverInFlightAttempts(recoveredAt: RunTimestamp): ConversationRecoveryResult = unsupported()
+
+    override suspend fun delete(id: ConversationId): Boolean = unsupported()
+
+    override suspend fun close(): Unit = Unit
+
+    private fun unsupported(): Nothing = error("Not used by run checkpoint tests")
+}
+
+private fun existingCheckpoint(): RecordedCheckpoint {
+    val conversationId = ConversationId("durable")
+    val userId = MessageId("old-user")
+    val assistantId = MessageId("old-assistant")
+    return RecordedCheckpoint(
+        conversation = StoredConversation(conversationId, "Existing title", 1, 2),
+        transcript = StoredTranscript(
+            conversationId = conversationId,
+            messages = listOf(
+                StoredMessage(userId, 0, StoredMessageRole.USER, "old question", 1),
+                StoredMessage(assistantId, 1, StoredMessageRole.ASSISTANT, "old answer", 2),
+            ),
+            attempts = listOf(
+                StoredGenerationAttempt(
+                    runId = RunId("old-run"),
+                    userMessageId = userId,
+                    assistantMessageId = assistantId,
+                    target = GenerationTarget.Demo,
+                    parameters = GenerationParameters(),
+                    status = StoredAttemptStatus.SUCCEEDED,
+                    createdAtEpochMilliseconds = 1,
+                    updatedAtEpochMilliseconds = 2,
+                ),
+            ),
+        ),
     )
 }
 

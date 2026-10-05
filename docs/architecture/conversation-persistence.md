@@ -7,7 +7,9 @@ Presentation code has no database dependency.
 ```mermaid
 flowchart LR
     Desktop[Desktop startup session] --> Loader[core:application history loader]
+    Runs[core:application run lifecycle] --> Checkpoints[bounded checkpoint coordinator]
     Loader --> Port[core:domain ConversationStore]
+    Checkpoints --> Port
     SQLite[adapters:persistence] --> Port
     SQLite --> Schema[Versioned SQLDelight schema]
     Schema --> Desktop[JDBC SQLite]
@@ -65,6 +67,23 @@ clean demo workspace. A storage open or load failure creates an explicit, conten
 state; it does not expose paths/driver details or silently replace durable storage with an
 in-memory repository.
 
+## Runtime checkpoints
+
+When storage is connected, `DefaultConversationRuns` commits a queued attempt before starting its
+provider coroutine. The checkpoint includes stable message and attempt identities, the validated
+prompt, exact demo/live target, generation parameters, timestamps, and current output. Existing
+transcript history is extended rather than reconstructed from lossy presentation state.
+
+The first running state is durable. Later streaming output is checkpointed after either 512 new
+Kotlin characters or two seconds according to the injected run clock, whichever comes first.
+Terminal success, classified failure, and cancellation always request a checkpoint. This cadence
+preserves useful partial output without issuing a transaction for each provider chunk.
+
+Conversation metadata and its complete transcript are saved in one SQLite transaction. An initial
+write failure rejects the start before provider invocation. A later failure stops collection and
+produces a safe `STORAGE_UNAVAILABLE` run failure; the last durable nonterminal state is marked
+interrupted during the next startup rather than replayed.
+
 ## Schema evolution
 
 The current schema is version 2. The committed version-1 SQLite baseline remains unchanged, and
@@ -98,9 +117,9 @@ The database is opened during desktop startup and closed exactly once during run
 
 ## Deliberate limitations
 
-- New messages and attempts remain process-local because checkpoint writes are not wired yet.
 - Full retention and user-facing deletion behavior are not wired to presentation actions.
+- Transcript checkpoints replace all owned rows; more granular write optimization is deferred
+  until evidence shows it is needed.
 - No claim is made that closing SQLite securely erases previously stored bytes.
 
-These limits keep startup recovery independently reviewable before live checkpoint scheduling and
-write-failure behavior are introduced.
+These limits keep retention and deletion independently reviewable from runtime checkpoint policy.

@@ -12,6 +12,7 @@ import io.github.artemidius.blowhard.core.api.RunSnapshot
 import io.github.artemidius.blowhard.core.api.StartRunRejection
 import io.github.artemidius.blowhard.core.api.StartRunRequest
 import io.github.artemidius.blowhard.core.api.StartRunResult
+import io.github.artemidius.blowhard.core.domain.ConversationStore
 import io.github.artemidius.blowhard.core.domain.GenerationEvent
 import io.github.artemidius.blowhard.core.domain.GenerationRequest
 import io.github.artemidius.blowhard.core.domain.TextGenerationPort
@@ -45,11 +46,18 @@ public class DefaultConversationRuns(
     coroutineContext: CoroutineContext,
     policy: RunExecutionPolicy = RunExecutionPolicy(),
     private val connectionSettings: ConnectionSettings? = null,
+    conversationStore: ConversationStore? = null,
+    checkpointPolicy: RunCheckpointPolicy = RunCheckpointPolicy(),
 ) : ConversationRuns {
     private val validator = StartRunRequestValidator()
     private val repository = InMemoryRunRepository(clock)
     private val permits = Semaphore(policy.maxConcurrentRuns)
     private val scope = CoroutineScope(coroutineContext + SupervisorJob())
+    private val durableRuns = DurableRunCoordinator(
+        conversationStore?.let { ConversationRunCheckpoints(it, checkpointPolicy) },
+        repository,
+        clock,
+    )
 
     override suspend fun start(request: StartRunRequest): StartRunResult = when (
         val validation = validator.validate(request)
@@ -63,26 +71,32 @@ public class DefaultConversationRuns(
         validation: StartRunValidation.Accepted,
     ): StartRunResult {
         val runConfiguration = resolveRunConfiguration()
-            ?: return StartRunResult.Rejected(StartRunRejection.LIVE_CONFIGURATION_NOT_READY)
-        val runId = idFactory.next()
-        val record = RunRecord(
-            runId = runId,
-            conversationId = request.conversationId,
-            prompt = validation.prompt,
-            target = runConfiguration.target,
-            parameters = runConfiguration.parameters,
-            initialSnapshot = RunSnapshot.Queued(runId, request.conversationId, clock.now()),
-        )
-        return when (repository.add(record)) {
-            AddRunResult.ConversationBusy ->
-                StartRunResult.Rejected(StartRunRejection.CONVERSATION_BUSY)
+        return if (runConfiguration == null) {
+            StartRunResult.Rejected(StartRunRejection.LIVE_CONFIGURATION_NOT_READY)
+        } else {
+            val runId = idFactory.next()
+            val record = RunRecord(
+                runId = runId,
+                conversationId = request.conversationId,
+                prompt = validation.prompt,
+                target = runConfiguration.target,
+                parameters = runConfiguration.parameters,
+                initialSnapshot = RunSnapshot.Queued(runId, request.conversationId, clock.now()),
+            )
+            when (repository.add(record)) {
+                AddRunResult.ConversationBusy ->
+                    StartRunResult.Rejected(StartRunRejection.CONVERSATION_BUSY)
 
-            AddRunResult.Closed -> StartRunResult.Rejected(StartRunRejection.LIFECYCLE_CLOSED)
+                AddRunResult.Closed -> StartRunResult.Rejected(StartRunRejection.LIFECYCLE_CLOSED)
 
-            AddRunResult.Added -> {
-                record.job = scope.launch(start = CoroutineStart.LAZY) { execute(record) }
-                checkNotNull(record.job).start()
-                StartRunResult.Started(runId, runConfiguration.target)
+                AddRunResult.Added -> if (durableRuns.begin(record)) {
+                    record.job = scope.launch(start = CoroutineStart.LAZY) { execute(record) }
+                    checkNotNull(record.job).start()
+                    StartRunResult.Started(runId, runConfiguration.target)
+                } else {
+                    check(repository.discard(record)) { "Unstarted run could not be discarded" }
+                    StartRunResult.Rejected(StartRunRejection.STORAGE_UNAVAILABLE)
+                }
             }
         }
     }
@@ -99,13 +113,13 @@ public class DefaultConversationRuns(
         is CancellationDecision.Accepted -> {
             decision.job.cancel()
             decision.job.join()
-            repository.finish(decision.record, RunTerminal.Cancelled)
+            durableRuns.finish(decision.record, RunTerminal.Cancelled)
             CancelRunResult.ACCEPTED
         }
 
         is CancellationDecision.AlreadyRequested -> {
             decision.job?.join()
-            repository.finish(decision.record, RunTerminal.Cancelled)
+            durableRuns.finish(decision.record, RunTerminal.Cancelled)
             CancelRunResult.ALREADY_FINISHED
         }
 
@@ -120,7 +134,7 @@ public class DefaultConversationRuns(
         val jobs = activeRecords.mapNotNull(RunRecord::job)
         jobs.forEach(Job::cancel)
         jobs.joinAll()
-        activeRecords.forEach { repository.finish(it, RunTerminal.Cancelled) }
+        activeRecords.forEach { durableRuns.finish(it, RunTerminal.Cancelled) }
         scope.cancel()
     }
 
@@ -128,13 +142,16 @@ public class DefaultConversationRuns(
         try {
             permits.withPermit {
                 if (!repository.markRunning(record)) return@withPermit
+                durableRuns.checkpoint(record, record.snapshots.value)
                 collectGeneration(record)
             }
         } catch (cancellation: CancellationException) {
-            withContext(NonCancellable) { repository.finish(record, RunTerminal.Cancelled) }
+            withContext(NonCancellable) { durableRuns.finish(record, RunTerminal.Cancelled) }
             throw cancellation
+        } catch (_: ConversationCheckpointException) {
+            durableRuns.fail(record)
         } catch (_: Throwable) {
-            repository.finish(record, RunTerminal.Unexpected)
+            durableRuns.finish(record, RunTerminal.Unexpected)
         }
     }
 
@@ -149,14 +166,15 @@ public class DefaultConversationRuns(
         generation.generate(request).takeWhile { event ->
             when (event) {
                 is GenerationEvent.TextDelta -> repository.append(record, event.text)
+                    .also { updated -> if (updated) durableRuns.checkpoint(record, record.snapshots.value) }
 
                 GenerationEvent.Completed -> {
-                    repository.finish(record, RunTerminal.Succeeded)
+                    durableRuns.finish(record, RunTerminal.Succeeded)
                     false
                 }
 
                 is GenerationEvent.Failed -> {
-                    repository.finish(record, RunTerminal.Failed(event.failure.toRunFailure()))
+                    durableRuns.finish(record, RunTerminal.Failed(event.failure.toRunFailure()))
                     false
                 }
             }
@@ -164,7 +182,7 @@ public class DefaultConversationRuns(
 
         val snapshot = record.snapshots.value
         if (!snapshot.isTerminal()) {
-            repository.finish(record, RunTerminal.Unexpected)
+            durableRuns.finish(record, RunTerminal.Unexpected)
         }
     }
 

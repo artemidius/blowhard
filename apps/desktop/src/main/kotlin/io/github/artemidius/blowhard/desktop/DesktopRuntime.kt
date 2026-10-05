@@ -4,6 +4,7 @@ import io.github.artemidius.blowhard.core.api.ConnectionSettings
 import io.github.artemidius.blowhard.core.application.DefaultConversationRuns
 import io.github.artemidius.blowhard.core.application.SequentialRunIdFactory
 import io.github.artemidius.blowhard.core.application.SystemRunClock
+import io.github.artemidius.blowhard.core.domain.ConversationStore
 import io.github.artemidius.blowhard.core.domain.TextGenerationPort
 import io.github.artemidius.blowhard.ui.presentation.ClipboardWriter
 import io.github.artemidius.blowhard.ui.presentation.ConnectionSettingsPresenter
@@ -46,6 +47,7 @@ internal class DesktopRuntime private constructor(
             generation: TextGenerationPort,
             scenarioSelection: DemoScenarioSelection,
             initialState: ConversationUiState = emptyDesktopConversationState(),
+            conversationStore: ConversationStore? = null,
             closeHistoryResources: () -> Unit = {},
             closeProviderResources: () -> Unit = {},
         ): DesktopRuntime {
@@ -55,6 +57,7 @@ internal class DesktopRuntime private constructor(
                 clock = SystemRunClock,
                 coroutineContext = Dispatchers.Default,
                 connectionSettings = connectionSettings,
+                conversationStore = conversationStore,
             )
             val presenter = ConversationPresenter(
                 runs = runs,

@@ -99,6 +99,9 @@ public enum class RunFailureKind {
     /** A successful provider response violated the expected streaming contract. */
     INVALID_RESPONSE,
 
+    /** Local durable storage could not checkpoint the attempt safely. */
+    STORAGE_UNAVAILABLE,
+
     /** An unexpected, safely redacted failure occurred. */
     UNEXPECTED,
 }
