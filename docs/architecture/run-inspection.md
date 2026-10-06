@@ -1,15 +1,15 @@
 # Run inspection
 
 Blowhard exposes operational run metadata through the provider-neutral `RunInspector` contract.
-This first increment is intentionally process-local and headless: it establishes the safe data
-model and collection policy before a shared inspector screen or file export can consume it.
+The shared inspector screen consumes that contract directly while the collection remains
+intentionally process-local. A later explicit export boundary can reuse the same safe model.
 
 ```mermaid
 flowchart LR
     Provider[Fixture or Mistral adapter] --> Events[Generation events]
     Events --> Runs[Application run lifecycle]
     Runs --> Ledger[Bounded inspection ledger]
-    Client[Future UI or headless client] --> Inspector[core:api RunInspector]
+    Client[Shared UI or headless client] --> Inspector[core:api RunInspector]
     Inspector --> Ledger
 ```
 
@@ -46,11 +46,23 @@ Inspection is passive. Looking up a run cannot start, repeat, cancel, or contact
 unknown or locally deleted run returns `NotFound`. Terminal inspection is updated alongside the
 same immutable terminal transition observed by run clients.
 
+## Shared presentation
+
+Assistant attempts expose an **Inspect run** action. The shared presenter owns lookup loading,
+not-found, and generic-failure states and cancels a superseded request. It never receives prompt or
+response text because those fields do not exist in `RunInspection`.
+
+The screen separates execution identity, generation controls, optional usage, terminal outcome,
+and the chronological lifecycle. Missing usage is shown as `Unknown`; a run without a terminal
+event is shown as `In progress`. Refresh repeats only the passive lookup. Restored attempts return a
+clear process-local-unavailable state instead of reconstructing incomplete telemetry from message
+history.
+
 ## Current limitations
 
 - Inspections exist only for runs owned by the current process and are not yet restored from
   SQLite.
-- No shared inspector screen or diagnostic file export is included in this increment.
+- No diagnostic file export is included yet.
 - Provider-reported counts are not independently recalculated and are not billing evidence.
 - Tool, document, and approval events will extend the bounded model in later milestones.
 
