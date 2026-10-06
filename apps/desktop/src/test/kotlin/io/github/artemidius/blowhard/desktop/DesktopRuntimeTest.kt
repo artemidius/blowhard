@@ -24,6 +24,8 @@ import io.github.artemidius.blowhard.ui.presentation.ClipboardWriter
 import io.github.artemidius.blowhard.ui.presentation.ConversationAction
 import io.github.artemidius.blowhard.ui.presentation.ConversationRunState
 import io.github.artemidius.blowhard.ui.presentation.ConversationUiState
+import io.github.artemidius.blowhard.ui.presentation.RunInspectorAction
+import io.github.artemidius.blowhard.ui.presentation.RunInspectorUiState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.first
@@ -34,10 +36,31 @@ import java.nio.file.Files
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
+import kotlin.test.assertIs
 import kotlin.test.assertTrue
 import kotlin.time.Duration.Companion.seconds
 
 class DesktopRuntimeTest {
+    @Test
+    fun `completed desktop attempt is available through the shared inspector`() = runBlocking {
+        val runtime = createDesktopRuntime()
+        try {
+            val runId = checkNotNull(runtime.completeAttempt("Inspect the demo"))
+
+            runtime.runInspectorPresenter.dispatch(RunInspectorAction.Open(runId))
+            val state = withTimeout(5.seconds) {
+                runtime.runInspectorPresenter.state.first { it is RunInspectorUiState.Ready }
+            }
+            val inspection = assertIs<RunInspectorUiState.Ready>(state).inspection
+
+            assertEquals(runId, inspection.runId)
+            assertEquals(GenerationTarget.Demo, inspection.target)
+            assertTrue(inspection.events.isNotEmpty())
+        } finally {
+            runtime.close()
+        }
+    }
+
     @Test
     fun `real desktop runtime completes the bundled offline conversation`() = runBlocking {
         val runtime = createDesktopRuntime()

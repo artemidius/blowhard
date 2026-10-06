@@ -11,6 +11,8 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.graphics.Color
 import io.github.artemidius.blowhard.ui.presentation.ConnectionSettingsPresenter
 import io.github.artemidius.blowhard.ui.presentation.ConversationPresenter
+import io.github.artemidius.blowhard.ui.presentation.RunInspectorAction
+import io.github.artemidius.blowhard.ui.presentation.RunInspectorPresenter
 
 /** Root presentation entry point shared by Blowhard clients. */
 @Suppress("FunctionNaming", "ktlint:standard:function-naming")
@@ -18,9 +20,11 @@ import io.github.artemidius.blowhard.ui.presentation.ConversationPresenter
 public fun BlowhardApp(
     conversationPresenter: ConversationPresenter,
     connectionSettingsPresenter: ConnectionSettingsPresenter,
+    runInspectorPresenter: RunInspectorPresenter,
 ) {
     val conversationState by conversationPresenter.state.collectAsState()
     val settingsState by connectionSettingsPresenter.state.collectAsState()
+    val inspectorState by runInspectorPresenter.state.collectAsState()
     var destination by remember { mutableStateOf(WorkspaceDestination.CONVERSATION) }
     MaterialTheme(colorScheme = BlowhardColors) {
         when (destination) {
@@ -29,11 +33,21 @@ public fun BlowhardApp(
                 connection = settingsState.settings,
                 onAction = conversationPresenter::dispatch,
                 onOpenSettings = { destination = WorkspaceDestination.SETTINGS },
+                onInspectRun = { runId ->
+                    runInspectorPresenter.dispatch(RunInspectorAction.Open(runId))
+                    destination = WorkspaceDestination.INSPECTOR
+                },
             )
 
             WorkspaceDestination.SETTINGS -> ConnectionSettingsScreen(
                 state = settingsState,
                 onAction = connectionSettingsPresenter::dispatch,
+                onBack = { destination = WorkspaceDestination.CONVERSATION },
+            )
+
+            WorkspaceDestination.INSPECTOR -> RunInspectorScreen(
+                state = inspectorState,
+                onAction = runInspectorPresenter::dispatch,
                 onBack = { destination = WorkspaceDestination.CONVERSATION },
             )
         }
@@ -43,6 +57,7 @@ public fun BlowhardApp(
 private enum class WorkspaceDestination {
     CONVERSATION,
     SETTINGS,
+    INSPECTOR,
 }
 
 private val BlowhardColors = lightColorScheme(
