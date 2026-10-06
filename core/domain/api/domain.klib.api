@@ -248,6 +248,19 @@ sealed interface io.github.artemidius.blowhard.core.domain/GenerationEvent { // 
         final fun toString(): kotlin/String // io.github.artemidius.blowhard.core.domain/GenerationEvent.TextDelta.toString|toString(){}[0]
     }
 
+    final class Usage : io.github.artemidius.blowhard.core.domain/GenerationEvent { // io.github.artemidius.blowhard.core.domain/GenerationEvent.Usage|null[0]
+        constructor <init>(io.github.artemidius.blowhard.core.api/TokenUsage) // io.github.artemidius.blowhard.core.domain/GenerationEvent.Usage.<init>|<init>(io.github.artemidius.blowhard.core.api.TokenUsage){}[0]
+
+        final val value // io.github.artemidius.blowhard.core.domain/GenerationEvent.Usage.value|{}value[0]
+            final fun <get-value>(): io.github.artemidius.blowhard.core.api/TokenUsage // io.github.artemidius.blowhard.core.domain/GenerationEvent.Usage.value.<get-value>|<get-value>(){}[0]
+
+        final fun component1(): io.github.artemidius.blowhard.core.api/TokenUsage // io.github.artemidius.blowhard.core.domain/GenerationEvent.Usage.component1|component1(){}[0]
+        final fun copy(io.github.artemidius.blowhard.core.api/TokenUsage = ...): io.github.artemidius.blowhard.core.domain/GenerationEvent.Usage // io.github.artemidius.blowhard.core.domain/GenerationEvent.Usage.copy|copy(io.github.artemidius.blowhard.core.api.TokenUsage){}[0]
+        final fun equals(kotlin/Any?): kotlin/Boolean // io.github.artemidius.blowhard.core.domain/GenerationEvent.Usage.equals|equals(kotlin.Any?){}[0]
+        final fun hashCode(): kotlin/Int // io.github.artemidius.blowhard.core.domain/GenerationEvent.Usage.hashCode|hashCode(){}[0]
+        final fun toString(): kotlin/String // io.github.artemidius.blowhard.core.domain/GenerationEvent.Usage.toString|toString(){}[0]
+    }
+
     final object Completed : io.github.artemidius.blowhard.core.domain/GenerationEvent { // io.github.artemidius.blowhard.core.domain/GenerationEvent.Completed|null[0]
         final fun equals(kotlin/Any?): kotlin/Boolean // io.github.artemidius.blowhard.core.domain/GenerationEvent.Completed.equals|equals(kotlin.Any?){}[0]
         final fun hashCode(): kotlin/Int // io.github.artemidius.blowhard.core.domain/GenerationEvent.Completed.hashCode|hashCode(){}[0]

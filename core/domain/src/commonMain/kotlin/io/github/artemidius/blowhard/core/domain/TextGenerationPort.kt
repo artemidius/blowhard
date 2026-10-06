@@ -4,6 +4,7 @@ import io.github.artemidius.blowhard.core.api.ConversationId
 import io.github.artemidius.blowhard.core.api.GenerationParameters
 import io.github.artemidius.blowhard.core.api.GenerationTarget
 import io.github.artemidius.blowhard.core.api.RunId
+import io.github.artemidius.blowhard.core.api.TokenUsage
 import kotlinx.coroutines.flow.Flow
 
 /**
@@ -30,6 +31,9 @@ public data class GenerationRequest(
 public sealed interface GenerationEvent {
     /** Adds [text] to the generated response. */
     public data class TextDelta(public val text: String) : GenerationEvent
+
+    /** Reports optional provider token counts without completing the attempt. */
+    public data class Usage(public val value: TokenUsage) : GenerationEvent
 
     /** Marks successful completion of the provider stream. */
     public data object Completed : GenerationEvent

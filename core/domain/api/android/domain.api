@@ -152,6 +152,17 @@ public final class io/github/artemidius/blowhard/core/domain/GenerationEvent$Tex
 	public fun toString ()Ljava/lang/String;
 }
 
+public final class io/github/artemidius/blowhard/core/domain/GenerationEvent$Usage : io/github/artemidius/blowhard/core/domain/GenerationEvent {
+	public fun <init> (Lio/github/artemidius/blowhard/core/api/TokenUsage;)V
+	public final fun component1 ()Lio/github/artemidius/blowhard/core/api/TokenUsage;
+	public final fun copy (Lio/github/artemidius/blowhard/core/api/TokenUsage;)Lio/github/artemidius/blowhard/core/domain/GenerationEvent$Usage;
+	public static synthetic fun copy$default (Lio/github/artemidius/blowhard/core/domain/GenerationEvent$Usage;Lio/github/artemidius/blowhard/core/api/TokenUsage;ILjava/lang/Object;)Lio/github/artemidius/blowhard/core/domain/GenerationEvent$Usage;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getValue ()Lio/github/artemidius/blowhard/core/api/TokenUsage;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
 public final class io/github/artemidius/blowhard/core/domain/GenerationFailure {
 	public fun <init> (Lio/github/artemidius/blowhard/core/domain/GenerationFailureKind;Ljava/lang/String;Lio/github/artemidius/blowhard/core/domain/GenerationRetryAdvice;Ljava/lang/Long;)V
 	public synthetic fun <init> (Lio/github/artemidius/blowhard/core/domain/GenerationFailureKind;Ljava/lang/String;Lio/github/artemidius/blowhard/core/domain/GenerationRetryAdvice;Ljava/lang/Long;ILkotlin/jvm/internal/DefaultConstructorMarker;)V

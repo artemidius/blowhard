@@ -18,8 +18,8 @@ sequenceDiagram
         API-->>Port: data: completion chunk
         Port-->>Runs: coalesced TextDelta
     end
-    API-->>Port: data: [DONE]
-    Port-->>Runs: Completed
+    API-->>Port: optional usage frame, then data: [DONE]
+    Port-->>Runs: optional Usage, then Completed
 ```
 
 Cancelling collection cancels the request. The adapter does not create a background scope, reconnect
@@ -89,10 +89,24 @@ with the model-catalog client and the socket inactivity timeout remains finite.
 An explicit new attempt always receives a new run identity from the application. The adapter makes
 one network request per collection and never performs an automatic retry.
 
+## Usage boundary
+
+Streaming requests set `stream_options.include_usage` explicitly. The adapter maps only
+non-negative `prompt_tokens`, `completion_tokens`, and `total_tokens` counts into the
+provider-neutral `TokenUsage` model. The fields remain individually optional because a provider
+frame may report only part of the aggregate. An absent usage frame stays `null`; it is never
+represented as zero.
+
+Usage-only frames do not complete a run. The adapter validates and merges compatible usage frames,
+then emits one typed `GenerationEvent.Usage` immediately before successful completion. Conflicting
+counts make the successful stream invalid. Raw usage JSON and unknown provider fields never enter
+the core inspection contract.
+
 ## Verification
 
 Offline tests use Ktor's mock engine and synthetic credentials. They cover the exact request body and
-headers, split UTF-8 input, CRLF and multi-line SSE data, optional usage, string and text-array
-content, generation-control mapping and omission, coalescing, all terminal paths, partial-output
-preservation, bounds, status classification, redirect rejection, redaction, single-request
-behavior, and cancellation of an in-flight request. No live provider request is part of CI.
+headers, split UTF-8 input, CRLF and multi-line SSE data, requested/partial/missing usage, string and
+text-array content, generation-control mapping and omission, coalescing, all terminal paths,
+partial-output preservation, bounds, status classification, redirect rejection, redaction,
+single-request behavior, and cancellation of an in-flight request. No live provider request is
+part of CI.
