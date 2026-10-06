@@ -4,6 +4,8 @@ import io.github.artemidius.blowhard.core.api.ConversationId
 import io.github.artemidius.blowhard.core.api.GenerationParameters
 import io.github.artemidius.blowhard.core.api.GenerationTarget
 import io.github.artemidius.blowhard.core.api.RunId
+import io.github.artemidius.blowhard.core.api.RunInspection
+import io.github.artemidius.blowhard.core.api.RunInspectionEvent
 import io.github.artemidius.blowhard.core.api.RunSnapshot
 import io.github.artemidius.blowhard.core.domain.PromptText
 import kotlinx.coroutines.Job
@@ -18,6 +20,15 @@ internal class RunRecord(
     initialSnapshot: RunSnapshot,
 ) {
     val snapshots = MutableStateFlow(initialSnapshot)
+    val inspection = MutableStateFlow(
+        RunInspection(
+            runId = runId,
+            conversationId = conversationId,
+            target = target,
+            parameters = parameters,
+            events = listOf(RunInspectionEvent.Accepted(initialSnapshot.updatedAt)),
+        ),
+    )
     var job: Job? = null
     var cancellationRequested: Boolean = false
     var durableCheckpoint: DurableRunCheckpoint? = null
