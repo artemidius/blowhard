@@ -66,6 +66,7 @@ private fun ApplicationScope.BlowhardDesktopApplication(bootstrap: DesktopBootst
         BlowhardApp(
             conversationPresenter = bootstrap.runtime.presenter,
             connectionSettingsPresenter = bootstrap.runtime.connectionSettingsPresenter,
+            runInspectorPresenter = bootstrap.runtime.runInspectorPresenter,
         )
         if (packagingSmokeTest) {
             LaunchedEffect(Unit) {
