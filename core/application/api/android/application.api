@@ -53,6 +53,11 @@ public final class io/github/artemidius/blowhard/core/application/DefaultConvers
 	public fun start (Lio/github/artemidius/blowhard/core/api/StartRunRequest;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 }
 
+public final class io/github/artemidius/blowhard/core/application/DefaultRunDiagnosticReportGenerator : io/github/artemidius/blowhard/core/api/RunDiagnosticReportGenerator {
+	public fun <init> (Lio/github/artemidius/blowhard/core/api/RunInspector;)V
+	public fun generate-Mzzv5v0 (Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+}
+
 public final class io/github/artemidius/blowhard/core/application/RunCheckpointPolicy {
 	public fun <init> ()V
 	public fun <init> (IJ)V
