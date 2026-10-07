@@ -24,6 +24,9 @@ import io.github.artemidius.blowhard.ui.presentation.ClipboardWriter
 import io.github.artemidius.blowhard.ui.presentation.ConversationAction
 import io.github.artemidius.blowhard.ui.presentation.ConversationRunState
 import io.github.artemidius.blowhard.ui.presentation.ConversationUiState
+import io.github.artemidius.blowhard.ui.presentation.RunDiagnosticExportStatus
+import io.github.artemidius.blowhard.ui.presentation.RunDiagnosticReportSaveResult
+import io.github.artemidius.blowhard.ui.presentation.RunDiagnosticReportSaver
 import io.github.artemidius.blowhard.ui.presentation.RunInspectorAction
 import io.github.artemidius.blowhard.ui.presentation.RunInspectorUiState
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -56,6 +59,38 @@ class DesktopRuntimeTest {
             assertEquals(runId, inspection.runId)
             assertEquals(GenerationTarget.Demo, inspection.target)
             assertTrue(inspection.events.isNotEmpty())
+        } finally {
+            runtime.close()
+        }
+    }
+
+    @Test
+    fun `desktop export saves sanitized report through injected platform boundary`() = runBlocking {
+        var exported = ""
+        val runtime = createDesktopRuntime(
+            reportSaver = RunDiagnosticReportSaver { report ->
+                exported = report.content
+                RunDiagnosticReportSaveResult.SAVED
+            },
+        )
+        try {
+            val runId = checkNotNull(runtime.completeAttempt("Sensitive prompt must stay private"))
+            runtime.runInspectorPresenter.dispatch(RunInspectorAction.Open(runId))
+            withTimeout(5.seconds) {
+                runtime.runInspectorPresenter.state.first { it is RunInspectorUiState.Ready }
+            }
+
+            runtime.runInspectorPresenter.dispatch(RunInspectorAction.Export)
+            withTimeout(5.seconds) {
+                runtime.runInspectorPresenter.state.first {
+                    it is RunInspectorUiState.Ready && it.exportStatus == RunDiagnosticExportStatus.SAVED
+                }
+            }
+
+            assertTrue(exported.contains("\"schemaVersion\": 1"))
+            assertTrue(exported.contains("\"mode\": \"demo\""))
+            assertTrue(!exported.contains("Sensitive prompt must stay private"))
+            assertTrue(!exported.contains("Offline demonstration"))
         } finally {
             runtime.close()
         }
@@ -330,6 +365,9 @@ private fun createDesktopRuntime(
     conversationStore: ConversationStore? = null,
     closeHistoryResources: () -> Unit = {},
     closeProviderResources: () -> Unit = {},
+    reportSaver: RunDiagnosticReportSaver = RunDiagnosticReportSaver {
+        RunDiagnosticReportSaveResult.UNAVAILABLE
+    },
 ): DesktopRuntime {
     val scenarios = FixtureScenarioRouter()
     return DesktopRuntime.create(
@@ -337,6 +375,7 @@ private fun createDesktopRuntime(
         connectionSettings = FakeDesktopConnectionSettings(),
         generation = FixtureTextGenerationPort(scenarios::scenarioFor),
         scenarioSelection = scenarios,
+        reportSaver = reportSaver,
         initialState = initialState,
         conversationStore = conversationStore,
         closeHistoryResources = closeHistoryResources,

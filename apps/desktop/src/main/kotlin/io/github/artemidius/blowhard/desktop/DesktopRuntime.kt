@@ -2,6 +2,7 @@ package io.github.artemidius.blowhard.desktop
 
 import io.github.artemidius.blowhard.core.api.ConnectionSettings
 import io.github.artemidius.blowhard.core.application.DefaultConversationRuns
+import io.github.artemidius.blowhard.core.application.DefaultRunDiagnosticReportGenerator
 import io.github.artemidius.blowhard.core.application.SequentialRunIdFactory
 import io.github.artemidius.blowhard.core.application.SystemRunClock
 import io.github.artemidius.blowhard.core.domain.ConversationStore
@@ -11,6 +12,8 @@ import io.github.artemidius.blowhard.ui.presentation.ConnectionSettingsPresenter
 import io.github.artemidius.blowhard.ui.presentation.ConversationPresenter
 import io.github.artemidius.blowhard.ui.presentation.ConversationUiState
 import io.github.artemidius.blowhard.ui.presentation.DemoScenarioSelection
+import io.github.artemidius.blowhard.ui.presentation.RunDiagnosticReportSaveResult
+import io.github.artemidius.blowhard.ui.presentation.RunDiagnosticReportSaver
 import io.github.artemidius.blowhard.ui.presentation.RunInspectorPresenter
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
@@ -49,6 +52,9 @@ internal class DesktopRuntime private constructor(
             connectionSettings: ConnectionSettings,
             generation: TextGenerationPort,
             scenarioSelection: DemoScenarioSelection,
+            reportSaver: RunDiagnosticReportSaver = RunDiagnosticReportSaver {
+                RunDiagnosticReportSaveResult.UNAVAILABLE
+            },
             initialState: ConversationUiState = emptyDesktopConversationState(),
             conversationStore: ConversationStore? = null,
             closeHistoryResources: () -> Unit = {},
@@ -76,6 +82,8 @@ internal class DesktopRuntime private constructor(
             )
             val runInspectorPresenter = RunInspectorPresenter(
                 inspector = runs,
+                reportGenerator = DefaultRunDiagnosticReportGenerator(runs),
+                reportSaver = reportSaver,
                 coroutineContext = Dispatchers.Default,
             )
             return DesktopRuntime(
