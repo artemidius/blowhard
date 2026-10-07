@@ -140,6 +140,13 @@ screen performs a passive lookup through the same provider-neutral core contract
 allowlisted inspection model, and offers an explicit refresh without starting or replaying provider
 work. Restored attempts honestly report that process-local inspection data is unavailable.
 
+The inspector also offers **Export JSON**. The application builds a deterministic, bounded report
+from the content-free inspection model, then desktop asks the user for a destination with a native
+save dialog and commits the exact UTF-8 file atomically. Cancellation writes nothing, and shared UI
+state never contains a path or native error. A clearly synthetic
+[schema example](docs/examples/sanitized-run-diagnostic.json) and
+[`ADR 0024`](docs/decisions/0024-explicit-sanitized-diagnostic-export.md) document the boundary.
+
 ## Run the desktop application
 
 ```shell
