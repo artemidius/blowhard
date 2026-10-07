@@ -1,0 +1,34 @@
+{
+  "schemaVersion": 1,
+  "application": "Blowhard",
+  "run": {
+    "id": "synthetic-run-1",
+    "conversationId": "synthetic-conversation-1",
+    "target": {
+      "mode": "demo"
+    },
+    "parameters": {
+      "maxOutputTokens": null,
+      "temperature": null
+    },
+    "usage": null,
+    "events": [
+      {
+        "type": "accepted",
+        "atEpochMilliseconds": 1000
+      },
+      {
+        "type": "started",
+        "atEpochMilliseconds": 1010
+      },
+      {
+        "type": "finished",
+        "status": "succeeded",
+        "failureKind": null,
+        "retryAdvice": null,
+        "retryAfterSeconds": null,
+        "atEpochMilliseconds": 1100
+      }
+    ]
+  }
+}

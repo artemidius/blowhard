@@ -2,7 +2,7 @@
 
 Blowhard exposes operational run metadata through the provider-neutral `RunInspector` contract.
 The shared inspector screen consumes that contract directly while the collection remains
-intentionally process-local. A later explicit export boundary can reuse the same safe model.
+intentionally process-local. The diagnostic export generator reuses only this safe model.
 
 ```mermaid
 flowchart LR
@@ -11,6 +11,8 @@ flowchart LR
     Runs --> Ledger[Bounded inspection ledger]
     Client[Shared UI or headless client] --> Inspector[core:api RunInspector]
     Inspector --> Ledger
+    Inspector --> Generator[Deterministic JSON generator]
+    Generator --> Saver[Platform user-selected saver]
 ```
 
 ## Allowlisted metadata
@@ -58,13 +60,28 @@ event is shown as `In progress`. Refresh repeats only the passive lookup. Restor
 clear process-local-unavailable state instead of reconstructing incomplete telemetry from message
 history.
 
+## Explicit diagnostic export
+
+**Export JSON** performs a fresh passive lookup and creates a schema-versioned report from
+`RunInspection` alone. The generator cannot access prompts, response snapshots, credentials,
+provider bodies, provider references, authorization headers, native errors, or filesystem paths.
+It uses a fixed filename and rejects reports above the documented 65,536-character boundary.
+
+The shared presenter depends on `RunDiagnosticReportSaver`, not on a filesystem API. Desktop
+implements that capability with a native save dialog and an atomic UTF-8 replacement in the chosen
+directory. Cancellation writes nothing. Successful, cancelled, and unavailable outcomes remain
+typed, while the shared UI exposes no destination path or native exception detail.
+
+The checked-in [synthetic report](../examples/sanitized-run-diagnostic.json) documents schema
+version 1 without publishing a real run identity. See
+[`ADR 0024`](../decisions/0024-explicit-sanitized-diagnostic-export.md) for the trust boundary.
+
 ## Current limitations
 
 - Inspections exist only for runs owned by the current process and are not yet restored from
   SQLite.
-- No diagnostic file export is included yet.
 - Provider-reported counts are not independently recalculated and are not billing evidence.
 - Tool, document, and approval events will extend the bounded model in later milestones.
 
-These limitations keep the safe diagnostic contract independently reviewable before persistence,
-presentation, and explicit user-selected export are added.
+These limitations keep restored telemetry and future lifecycle expansion separate from the safe
+inspection and explicit export boundaries.

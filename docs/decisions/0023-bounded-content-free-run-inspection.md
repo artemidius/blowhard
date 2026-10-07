@@ -61,5 +61,5 @@ Rejected because zero tokens is a factual value. Missing provider telemetry rema
 - Long streams have constant inspection-event cost.
 - Demo versus live model routing and retry policy are explicit and testable.
 - Optional token usage is requested and retained without inventing absent counts.
-- The shared inspector UI is delivered as a separate consumer of this contract; restored history
-  and sanitized file export still require later increments.
+- The shared inspector UI and explicit sanitized file export are separate consumers of this
+  contract; restored history still requires a later increment.

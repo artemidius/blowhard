@@ -177,6 +177,10 @@ final enum class io.github.artemidius.blowhard.core.api/StartRunRejection : kotl
     final fun values(): kotlin/Array<io.github.artemidius.blowhard.core.api/StartRunRejection> // io.github.artemidius.blowhard.core.api/StartRunRejection.values|values#static(){}[0]
 }
 
+abstract fun interface io.github.artemidius.blowhard.core.api/RunDiagnosticReportGenerator { // io.github.artemidius.blowhard.core.api/RunDiagnosticReportGenerator|null[0]
+    abstract suspend fun generate(io.github.artemidius.blowhard.core.api/RunId): io.github.artemidius.blowhard.core.api/RunDiagnosticReportResult // io.github.artemidius.blowhard.core.api/RunDiagnosticReportGenerator.generate|generate(io.github.artemidius.blowhard.core.api.RunId){}[0]
+}
+
 abstract fun interface io.github.artemidius.blowhard.core.api/RunInspector { // io.github.artemidius.blowhard.core.api/RunInspector|null[0]
     abstract suspend fun inspect(io.github.artemidius.blowhard.core.api/RunId): io.github.artemidius.blowhard.core.api/RunInspectionResult // io.github.artemidius.blowhard.core.api/RunInspector.inspect|inspect(io.github.artemidius.blowhard.core.api.RunId){}[0]
 }
@@ -266,6 +270,33 @@ sealed interface io.github.artemidius.blowhard.core.api/ObserveRunResult { // io
         final fun equals(kotlin/Any?): kotlin/Boolean // io.github.artemidius.blowhard.core.api/ObserveRunResult.NotFound.equals|equals(kotlin.Any?){}[0]
         final fun hashCode(): kotlin/Int // io.github.artemidius.blowhard.core.api/ObserveRunResult.NotFound.hashCode|hashCode(){}[0]
         final fun toString(): kotlin/String // io.github.artemidius.blowhard.core.api/ObserveRunResult.NotFound.toString|toString(){}[0]
+    }
+}
+
+sealed interface io.github.artemidius.blowhard.core.api/RunDiagnosticReportResult { // io.github.artemidius.blowhard.core.api/RunDiagnosticReportResult|null[0]
+    final class Generated : io.github.artemidius.blowhard.core.api/RunDiagnosticReportResult { // io.github.artemidius.blowhard.core.api/RunDiagnosticReportResult.Generated|null[0]
+        constructor <init>(io.github.artemidius.blowhard.core.api/RunDiagnosticReport) // io.github.artemidius.blowhard.core.api/RunDiagnosticReportResult.Generated.<init>|<init>(io.github.artemidius.blowhard.core.api.RunDiagnosticReport){}[0]
+
+        final val report // io.github.artemidius.blowhard.core.api/RunDiagnosticReportResult.Generated.report|{}report[0]
+            final fun <get-report>(): io.github.artemidius.blowhard.core.api/RunDiagnosticReport // io.github.artemidius.blowhard.core.api/RunDiagnosticReportResult.Generated.report.<get-report>|<get-report>(){}[0]
+
+        final fun component1(): io.github.artemidius.blowhard.core.api/RunDiagnosticReport // io.github.artemidius.blowhard.core.api/RunDiagnosticReportResult.Generated.component1|component1(){}[0]
+        final fun copy(io.github.artemidius.blowhard.core.api/RunDiagnosticReport = ...): io.github.artemidius.blowhard.core.api/RunDiagnosticReportResult.Generated // io.github.artemidius.blowhard.core.api/RunDiagnosticReportResult.Generated.copy|copy(io.github.artemidius.blowhard.core.api.RunDiagnosticReport){}[0]
+        final fun equals(kotlin/Any?): kotlin/Boolean // io.github.artemidius.blowhard.core.api/RunDiagnosticReportResult.Generated.equals|equals(kotlin.Any?){}[0]
+        final fun hashCode(): kotlin/Int // io.github.artemidius.blowhard.core.api/RunDiagnosticReportResult.Generated.hashCode|hashCode(){}[0]
+        final fun toString(): kotlin/String // io.github.artemidius.blowhard.core.api/RunDiagnosticReportResult.Generated.toString|toString(){}[0]
+    }
+
+    final object NotFound : io.github.artemidius.blowhard.core.api/RunDiagnosticReportResult { // io.github.artemidius.blowhard.core.api/RunDiagnosticReportResult.NotFound|null[0]
+        final fun equals(kotlin/Any?): kotlin/Boolean // io.github.artemidius.blowhard.core.api/RunDiagnosticReportResult.NotFound.equals|equals(kotlin.Any?){}[0]
+        final fun hashCode(): kotlin/Int // io.github.artemidius.blowhard.core.api/RunDiagnosticReportResult.NotFound.hashCode|hashCode(){}[0]
+        final fun toString(): kotlin/String // io.github.artemidius.blowhard.core.api/RunDiagnosticReportResult.NotFound.toString|toString(){}[0]
+    }
+
+    final object Unavailable : io.github.artemidius.blowhard.core.api/RunDiagnosticReportResult { // io.github.artemidius.blowhard.core.api/RunDiagnosticReportResult.Unavailable|null[0]
+        final fun equals(kotlin/Any?): kotlin/Boolean // io.github.artemidius.blowhard.core.api/RunDiagnosticReportResult.Unavailable.equals|equals(kotlin.Any?){}[0]
+        final fun hashCode(): kotlin/Int // io.github.artemidius.blowhard.core.api/RunDiagnosticReportResult.Unavailable.hashCode|hashCode(){}[0]
+        final fun toString(): kotlin/String // io.github.artemidius.blowhard.core.api/RunDiagnosticReportResult.Unavailable.toString|toString(){}[0]
     }
 }
 
@@ -543,6 +574,29 @@ final class io.github.artemidius.blowhard.core.api/GenerationParameters { // io.
     final fun equals(kotlin/Any?): kotlin/Boolean // io.github.artemidius.blowhard.core.api/GenerationParameters.equals|equals(kotlin.Any?){}[0]
     final fun hashCode(): kotlin/Int // io.github.artemidius.blowhard.core.api/GenerationParameters.hashCode|hashCode(){}[0]
     final fun toString(): kotlin/String // io.github.artemidius.blowhard.core.api/GenerationParameters.toString|toString(){}[0]
+}
+
+final class io.github.artemidius.blowhard.core.api/RunDiagnosticReport { // io.github.artemidius.blowhard.core.api/RunDiagnosticReport|null[0]
+    constructor <init>(kotlin/String, kotlin/String) // io.github.artemidius.blowhard.core.api/RunDiagnosticReport.<init>|<init>(kotlin.String;kotlin.String){}[0]
+
+    final val content // io.github.artemidius.blowhard.core.api/RunDiagnosticReport.content|{}content[0]
+        final fun <get-content>(): kotlin/String // io.github.artemidius.blowhard.core.api/RunDiagnosticReport.content.<get-content>|<get-content>(){}[0]
+    final val suggestedFileName // io.github.artemidius.blowhard.core.api/RunDiagnosticReport.suggestedFileName|{}suggestedFileName[0]
+        final fun <get-suggestedFileName>(): kotlin/String // io.github.artemidius.blowhard.core.api/RunDiagnosticReport.suggestedFileName.<get-suggestedFileName>|<get-suggestedFileName>(){}[0]
+
+    final fun component1(): kotlin/String // io.github.artemidius.blowhard.core.api/RunDiagnosticReport.component1|component1(){}[0]
+    final fun component2(): kotlin/String // io.github.artemidius.blowhard.core.api/RunDiagnosticReport.component2|component2(){}[0]
+    final fun copy(kotlin/String = ..., kotlin/String = ...): io.github.artemidius.blowhard.core.api/RunDiagnosticReport // io.github.artemidius.blowhard.core.api/RunDiagnosticReport.copy|copy(kotlin.String;kotlin.String){}[0]
+    final fun equals(kotlin/Any?): kotlin/Boolean // io.github.artemidius.blowhard.core.api/RunDiagnosticReport.equals|equals(kotlin.Any?){}[0]
+    final fun hashCode(): kotlin/Int // io.github.artemidius.blowhard.core.api/RunDiagnosticReport.hashCode|hashCode(){}[0]
+    final fun toString(): kotlin/String // io.github.artemidius.blowhard.core.api/RunDiagnosticReport.toString|toString(){}[0]
+
+    final object Companion { // io.github.artemidius.blowhard.core.api/RunDiagnosticReport.Companion|null[0]
+        final const val FILE_NAME // io.github.artemidius.blowhard.core.api/RunDiagnosticReport.Companion.FILE_NAME|{}FILE_NAME[0]
+            final fun <get-FILE_NAME>(): kotlin/String // io.github.artemidius.blowhard.core.api/RunDiagnosticReport.Companion.FILE_NAME.<get-FILE_NAME>|<get-FILE_NAME>(){}[0]
+        final const val MAX_CONTENT_LENGTH // io.github.artemidius.blowhard.core.api/RunDiagnosticReport.Companion.MAX_CONTENT_LENGTH|{}MAX_CONTENT_LENGTH[0]
+            final fun <get-MAX_CONTENT_LENGTH>(): kotlin/Int // io.github.artemidius.blowhard.core.api/RunDiagnosticReport.Companion.MAX_CONTENT_LENGTH.<get-MAX_CONTENT_LENGTH>|<get-MAX_CONTENT_LENGTH>(){}[0]
+    }
 }
 
 final class io.github.artemidius.blowhard.core.api/RunFailure { // io.github.artemidius.blowhard.core.api/RunFailure|null[0]

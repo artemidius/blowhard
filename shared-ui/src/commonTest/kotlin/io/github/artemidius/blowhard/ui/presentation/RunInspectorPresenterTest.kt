@@ -3,6 +3,9 @@ package io.github.artemidius.blowhard.ui.presentation
 import io.github.artemidius.blowhard.core.api.ConversationId
 import io.github.artemidius.blowhard.core.api.GenerationParameters
 import io.github.artemidius.blowhard.core.api.GenerationTarget
+import io.github.artemidius.blowhard.core.api.RunDiagnosticReport
+import io.github.artemidius.blowhard.core.api.RunDiagnosticReportGenerator
+import io.github.artemidius.blowhard.core.api.RunDiagnosticReportResult
 import io.github.artemidius.blowhard.core.api.RunId
 import io.github.artemidius.blowhard.core.api.RunInspection
 import io.github.artemidius.blowhard.core.api.RunInspectionEvent
@@ -89,9 +92,134 @@ class RunInspectorPresenterTest {
         presenter.close()
     }
 
-    private fun kotlinx.coroutines.test.TestScope.presenter(inspector: RunInspector): RunInspectorPresenter =
-        RunInspectorPresenter(inspector, StandardTestDispatcher(testScheduler))
+    @Test
+    fun `export saves only generated report and publishes success`() = runTest {
+        val expected = inspection(RunId("exported"))
+        val report = report()
+        var saved: RunDiagnosticReport? = null
+        val presenter = presenter(
+            inspector = RunInspector { RunInspectionResult.Found(expected) },
+            generator = RunDiagnosticReportGenerator { RunDiagnosticReportResult.Generated(report) },
+            saver = RunDiagnosticReportSaver {
+                saved = it
+                RunDiagnosticReportSaveResult.SAVED
+            },
+        )
+
+        presenter.dispatch(RunInspectorAction.Open(expected.runId))
+        runCurrent()
+        presenter.dispatch(RunInspectorAction.Export)
+        runCurrent()
+
+        assertEquals(report, saved)
+        assertEquals(
+            RunDiagnosticExportStatus.SAVED,
+            assertIs<RunInspectorUiState.Ready>(presenter.state.value).exportStatus,
+        )
+        presenter.close()
+    }
+
+    @Test
+    fun `cancelled and unavailable exports remain typed and content safe`() = runTest {
+        val expected = inspection(RunId("cancelled"))
+        var saveResult = RunDiagnosticReportSaveResult.CANCELLED
+        val presenter = presenter(
+            inspector = RunInspector { RunInspectionResult.Found(expected) },
+            saver = RunDiagnosticReportSaver { saveResult },
+        )
+        presenter.dispatch(RunInspectorAction.Open(expected.runId))
+        runCurrent()
+
+        presenter.dispatch(RunInspectorAction.Export)
+        runCurrent()
+        assertEquals(
+            RunDiagnosticExportStatus.CANCELLED,
+            assertIs<RunInspectorUiState.Ready>(presenter.state.value).exportStatus,
+        )
+
+        saveResult = RunDiagnosticReportSaveResult.UNAVAILABLE
+        presenter.dispatch(RunInspectorAction.Export)
+        runCurrent()
+        assertEquals(
+            RunDiagnosticExportStatus.FAILED,
+            assertIs<RunInspectorUiState.Ready>(presenter.state.value).exportStatus,
+        )
+        presenter.close()
+    }
+
+    @Test
+    fun `export is ignored without a ready inspection and while generation is active`() = runTest {
+        val expected = inspection(RunId("single-export"))
+        val releaseGeneration = CompletableDeferred<Unit>()
+        var generationCalls = 0
+        val presenter = presenter(
+            inspector = RunInspector { RunInspectionResult.Found(expected) },
+            generator = RunDiagnosticReportGenerator {
+                generationCalls += 1
+                releaseGeneration.await()
+                RunDiagnosticReportResult.Generated(report())
+            },
+        )
+
+        presenter.dispatch(RunInspectorAction.Export)
+        runCurrent()
+        assertEquals(0, generationCalls)
+
+        presenter.dispatch(RunInspectorAction.Open(expected.runId))
+        runCurrent()
+        presenter.dispatch(RunInspectorAction.Export)
+        runCurrent()
+        assertEquals(RunDiagnosticExportStatus.SAVING, readyStatus(presenter))
+
+        presenter.dispatch(RunInspectorAction.Export)
+        runCurrent()
+        assertEquals(1, generationCalls)
+
+        releaseGeneration.complete(Unit)
+        runCurrent()
+        assertEquals(RunDiagnosticExportStatus.SAVED, readyStatus(presenter))
+        presenter.close()
+    }
+
+    @Test
+    fun `unavailable generated report does not invoke platform saver`() = runTest {
+        val expected = inspection(RunId("unavailable"))
+        var saves = 0
+        val presenter = presenter(
+            inspector = RunInspector { RunInspectionResult.Found(expected) },
+            generator = RunDiagnosticReportGenerator { RunDiagnosticReportResult.Unavailable },
+            saver = RunDiagnosticReportSaver {
+                saves += 1
+                RunDiagnosticReportSaveResult.SAVED
+            },
+        )
+
+        presenter.dispatch(RunInspectorAction.Open(expected.runId))
+        runCurrent()
+        presenter.dispatch(RunInspectorAction.Export)
+        runCurrent()
+
+        assertEquals(0, saves)
+        assertEquals(RunDiagnosticExportStatus.FAILED, readyStatus(presenter))
+        presenter.close()
+    }
+
+    private fun kotlinx.coroutines.test.TestScope.presenter(
+        inspector: RunInspector,
+        generator: RunDiagnosticReportGenerator = RunDiagnosticReportGenerator {
+            RunDiagnosticReportResult.Generated(report())
+        },
+        saver: RunDiagnosticReportSaver = RunDiagnosticReportSaver { RunDiagnosticReportSaveResult.SAVED },
+    ): RunInspectorPresenter = RunInspectorPresenter(
+        inspector,
+        generator,
+        saver,
+        StandardTestDispatcher(testScheduler),
+    )
 }
+
+private fun readyStatus(presenter: RunInspectorPresenter): RunDiagnosticExportStatus =
+    assertIs<RunInspectorUiState.Ready>(presenter.state.value).exportStatus
 
 private fun inspection(runId: RunId): RunInspection = RunInspection(
     runId = runId,
@@ -99,4 +227,9 @@ private fun inspection(runId: RunId): RunInspection = RunInspection(
     target = GenerationTarget.Demo,
     parameters = GenerationParameters(),
     events = listOf(RunInspectionEvent.Accepted(RunTimestamp(1))),
+)
+
+private fun report(): RunDiagnosticReport = RunDiagnosticReport(
+    suggestedFileName = RunDiagnosticReport.FILE_NAME,
+    content = "{\"schemaVersion\":1}\n",
 )
