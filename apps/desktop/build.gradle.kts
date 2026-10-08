@@ -35,7 +35,7 @@ compose.desktop {
             targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb)
             modules("java.instrument", "java.sql", "jdk.unsupported")
             packageName = "Blowhard"
-            packageVersion = "1.0.0"
+            packageVersion = providers.gradleProperty("blowhardInstallerVersion").get()
             description = "A desktop-first Kotlin Multiplatform client for Mistral AI"
             vendor = "Blowhard contributors"
 
