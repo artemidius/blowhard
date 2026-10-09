@@ -177,12 +177,14 @@ attempt identities and outputs.
 ## Verify the foundation
 
 ```shell
-./gradlew qualityCheck
+./gradlew --no-configuration-cache qualityCheck
 ```
 
 The aggregate gate checks formatting, static analysis, tests, coverage thresholds, module
-boundaries, API compatibility, KDoc generation, and secrets in both Git history and the working
-tree. Apply safe formatting changes with `./gradlew spotlessApply`.
+boundaries, API compatibility, KDoc generation, desktop runtime licenses, and secrets in both Git
+history and the working tree. Apply safe formatting changes with `./gradlew spotlessApply`.
+The explicit cache flag reflects the license-report plugin's documented configuration-cache
+limitation; ordinary compilation and test tasks continue to use the repository cache settings.
 
 Generated API documentation is written to `build/dokka/html`, and the XML coverage report is
 written to `build/reports/kover/report.xml`.
@@ -221,6 +223,11 @@ source revision, target architecture, and disclosed signing status. See the
 [release-evidence guide](docs/release-evidence.md) and
 [`ADR 0025`](docs/decisions/0025-deterministic-release-evidence.md).
 
+Each host also resolves the packaged desktop runtime graph, normalizes declared licenses to SPDX
+identifiers, enforces the reviewed allowlist, and uploads deterministic JSON and Markdown
+inventories. See the [dependency and license inventory guide](docs/dependency-license-inventory.md)
+and [`ADR 0026`](docs/decisions/0026-runtime-license-inventory.md).
+
 The current packages have no trusted publisher signature. `jpackage` applies an ad hoc signature
 to the macOS app, but it is not Developer ID signed or notarized. The Windows package is not
 publisher-signed. These packages are therefore intended only for build verification; trusted
@@ -230,6 +237,10 @@ macOS is the current live reference host. Windows and Linux packages remain demo
 verified secure credential adapter is not implemented for those hosts. Automated tests use
 synthetic provider fixtures; no real-provider smoke result is claimed yet. Public release artifacts
 are not available yet.
+
+The [installation guide](docs/installation.md) documents candidate verification, native install
+steps, signing limitations, capability boundaries, and local data locations without presenting CI
+artifacts as a public release.
 
 See [`CONTRIBUTING.md`](CONTRIBUTING.md) for the review and verification workflow.
 
