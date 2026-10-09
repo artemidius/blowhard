@@ -16,6 +16,7 @@ plugins {
     alias(libs.plugins.kotlin.multiplatform) apply false
     alias(libs.plugins.kotlin.serialization) apply false
     alias(libs.plugins.kover)
+    alias(libs.plugins.license.report) apply false
     alias(libs.plugins.spotless)
     alias(libs.plugins.sqldelight) apply false
 }
@@ -251,6 +252,8 @@ tasks.register("qualityCheck") {
         ":adapters:persistence:checkKotlinAbi",
         ":adapters:persistence:desktopTest",
         ":adapters:persistence:verifySqlDelightMigration",
+        ":apps:desktop:checkLicense",
+        ":apps:desktop:verifyLicenseInventory",
         ":shared-ui:checkKotlinAbi",
         ":shared-ui:desktopTest",
     )

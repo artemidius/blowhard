@@ -56,7 +56,7 @@ jobs:
           echo "$install_dir" >> "$GITHUB_PATH"
 
       - name: Run quality and security gate
-        run: ./gradlew --no-daemon qualityCheck
+        run: ./gradlew --no-daemon --no-configuration-cache qualityCheck
 
       - name: Test distribution inspection
         run: python3 -m unittest discover -s tools/packaging -p 'test_*.py' -v
@@ -67,6 +67,7 @@ jobs:
         with:
           name: quality-evidence
           path: |
+            apps/desktop/build/reports/dependency-license/
             build/reports/detekt/
             build/reports/kover/
             build/dokka/html/
@@ -138,6 +139,12 @@ jobs:
           ${{ matrix.gradle }} --no-daemon --no-configuration-cache
           ${{ matrix.package_task }}
 
+      - name: Audit desktop runtime licenses
+        run: >-
+          ${{ matrix.gradle }} --no-daemon --no-parallel --no-configuration-cache
+          :apps:desktop:checkLicense
+          :apps:desktop:verifyLicenseInventory
+
       - name: Install and launch Linux package
         if: ${{ runner.os == 'Linux' }}
         run: ./tools/packaging/verify_linux_package.sh .
@@ -174,6 +181,7 @@ jobs:
             apps/desktop/build/compose/binaries/main/dmg/*.dmg
             apps/desktop/build/compose/binaries/main/msi/*.msi
             apps/desktop/build/release-evidence/
+            apps/desktop/build/reports/dependency-license/
             apps/desktop/build/test-results/test/
             adapters/**/build/test-results/desktopTest/
             core/**/build/test-results/desktopTest/
