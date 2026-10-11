@@ -1,8 +1,9 @@
 # Install a desktop candidate
 
 Blowhard does not publish a general-availability release yet. Native packages attached to CI runs
-are short-lived verification candidates built from a specific commit. Use them only when you trust
-the workflow and source revision that produced them.
+are short-lived verification candidates built from a specific commit. A manually approved release
+workflow can also assemble the same evidence into a draft prerelease. Use a package only when you
+trust the workflow and source revision that produced it.
 
 Each candidate evidence archive contains the installer, `manifest.json`, `SHA256SUMS`, and a
 host-specific dependency/license report. The public product version is `0.1.0`; native filenames
