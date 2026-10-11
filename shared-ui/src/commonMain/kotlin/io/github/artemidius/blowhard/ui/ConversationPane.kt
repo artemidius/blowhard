@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.HorizontalDivider
@@ -15,6 +16,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
@@ -35,7 +37,7 @@ internal fun ConversationPane(
     onInspectRun: (RunId) -> Unit,
     compact: Boolean,
 ) {
-    Column(Modifier.fillMaxSize()) {
+    Column(Modifier.fillMaxSize(), horizontalAlignment = Alignment.CenterHorizontally) {
         if (compact) CompactConversationNavigation(state, onAction, onOpenSettings)
         ConversationHeader(state, connection, onAction)
         HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
@@ -44,7 +46,7 @@ internal fun ConversationPane(
             regenerationEnabled = !state.selectedConversation.runState.isActive,
             onAction = onAction,
             onInspectRun = onInspectRun,
-            modifier = Modifier.weight(1f).fillMaxWidth(),
+            modifier = Modifier.weight(1f).widthIn(max = 920.dp).fillMaxWidth(),
         )
         state.notice?.let { notice ->
             NoticePanel(
@@ -70,7 +72,7 @@ private fun ConversationHeader(
         Column(Modifier.weight(1f)) {
             Text(
                 state.selectedConversation.title,
-                style = MaterialTheme.typography.titleLarge,
+                style = MaterialTheme.typography.titleMedium,
                 fontWeight = FontWeight.SemiBold,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
@@ -95,12 +97,12 @@ private fun ConversationHeader(
 }
 
 private fun GenerationTarget.description(): String = when (this) {
-    GenerationTarget.Demo -> "Offline deterministic provider"
+    GenerationTarget.Demo -> "Local demo · no API key needed"
     is GenerationTarget.Live -> "Live Mistral • $modelId"
 }
 
 private fun ConnectionSettingsState.currentTargetDescription(): String = when (mode) {
-    GenerationMode.DEMO -> "Offline deterministic provider"
+    GenerationMode.DEMO -> "Local demo · no API key needed"
     GenerationMode.LIVE -> selectedModelId?.let { "Live Mistral • $it" } ?: "Live configuration unavailable"
 }
 

@@ -5,6 +5,7 @@ package io.github.artemidius.blowhard.ui
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -41,7 +42,7 @@ internal fun MessageList(
     modifier: Modifier = Modifier,
 ) {
     if (messages.isEmpty()) {
-        EmptyConversation(modifier)
+        WelcomeConversation(modifier, onAction)
         return
     }
     val listState = rememberLazyListState()
@@ -75,9 +76,9 @@ private fun MessageBubble(
     ) {
         Surface(
             modifier = Modifier.fillMaxWidth(MESSAGE_WIDTH_FRACTION),
-            color = if (isUser) MaterialTheme.colorScheme.primaryContainer else MaterialTheme.colorScheme.surface,
+            color = if (isUser) MaterialTheme.colorScheme.surfaceVariant else MaterialTheme.colorScheme.background,
             shape = MaterialTheme.shapes.large,
-            tonalElevation = if (isUser) 0.dp else 1.dp,
+            tonalElevation = 0.dp,
         ) {
             Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
                 Text(
@@ -105,15 +106,6 @@ private fun MessageFooter(
     onAction: (ConversationAction) -> Unit,
     onInspectRun: (RunId) -> Unit,
 ) {
-    message.attemptId?.let { attemptId ->
-        Text(
-            "Attempt ${attemptId.value}",
-            maxLines = 1,
-            overflow = TextOverflow.Ellipsis,
-            style = MaterialTheme.typography.labelSmall,
-            color = MaterialTheme.colorScheme.onSurfaceVariant,
-        )
-    }
     if (message.delivery != MessageDelivery.COMPLETE) {
         Text(
             message.delivery.name.lowercase().replaceFirstChar { it.uppercase() },
@@ -122,24 +114,26 @@ private fun MessageFooter(
             color = MaterialTheme.colorScheme.primary,
         )
     }
-    if (message.text.isNotBlank()) {
-        TextButton(onClick = { onAction(ConversationAction.CopyMessage(message.id)) }) {
-            Text("Copy ${if (isUser) "your message" else "response"}")
-        }
-    }
-    if (!isUser) {
-        message.attemptId?.let { runId ->
-            TextButton(onClick = { onInspectRun(runId) }) {
-                Text("Inspect run")
+    FlowRow(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
+        if (message.text.isNotBlank()) {
+            TextButton(onClick = { onAction(ConversationAction.CopyMessage(message.id)) }) {
+                Text("Copy")
             }
         }
-    }
-    if (!isUser && message.canRegenerate) {
-        TextButton(
-            onClick = { onAction(ConversationAction.Regenerate(message.id)) },
-            enabled = regenerationEnabled,
-        ) {
-            Text("Regenerate with current mode")
+        if (!isUser) {
+            message.attemptId?.let { runId ->
+                TextButton(onClick = { onInspectRun(runId) }) {
+                    Text("Inspect run")
+                }
+            }
+        }
+        if (!isUser && message.canRegenerate) {
+            TextButton(
+                onClick = { onAction(ConversationAction.Regenerate(message.id)) },
+                enabled = regenerationEnabled,
+            ) {
+                Text("Regenerate")
+            }
         }
     }
 }
@@ -147,20 +141,6 @@ private fun MessageFooter(
 private fun GenerationTarget?.providerLabel(): String = when (this) {
     null, GenerationTarget.Demo -> "FIXTURE"
     is GenerationTarget.Live -> "MISTRAL • $modelId"
-}
-
-@Composable
-private fun EmptyConversation(modifier: Modifier) {
-    Box(modifier = modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-        Column(horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.spacedBy(8.dp)) {
-            Text("Start a conversation", style = MaterialTheme.typography.headlineSmall)
-            Text(
-                "Choose an explicit generation mode, send a message, and inspect the shared lifecycle.",
-                style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
-            )
-        }
-    }
 }
 
 private const val MESSAGE_WIDTH_FRACTION = 0.82f
