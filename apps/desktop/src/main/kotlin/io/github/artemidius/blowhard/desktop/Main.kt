@@ -26,6 +26,7 @@ import io.github.artemidius.blowhard.adapters.mistral.asMistralCredentialProvide
 import io.github.artemidius.blowhard.adapters.platform.DesktopCredentialStores
 import io.github.artemidius.blowhard.core.application.DefaultConnectionSettings
 import io.github.artemidius.blowhard.ui.BlowhardApp
+import io.github.artemidius.blowhard.ui.presentation.ConversationAction
 
 private const val PACKAGING_SMOKE_TEST_ENVIRONMENT_VARIABLE = "BLOWHARD_PACKAGING_SMOKE_TEST"
 private const val PACKAGING_SMOKE_TEST_ENABLED = "1"
@@ -130,6 +131,9 @@ private fun createDesktopBootstrap(): DesktopBootstrap {
             modelCatalog.close()
         },
     )
+    if (!packagingSmokeTest && history.initialState.selectedConversation.messages.isNotEmpty()) {
+        runtime.presenter.dispatch(ConversationAction.NewConversation)
+    }
     return DesktopBootstrap(environment, preferencesStore, preferences, runtime)
 }
 

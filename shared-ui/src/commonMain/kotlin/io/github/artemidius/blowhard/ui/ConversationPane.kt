@@ -23,7 +23,6 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import io.github.artemidius.blowhard.core.api.ConnectionSettingsState
 import io.github.artemidius.blowhard.core.api.GenerationMode
-import io.github.artemidius.blowhard.core.api.GenerationTarget
 import io.github.artemidius.blowhard.core.api.RunId
 import io.github.artemidius.blowhard.ui.presentation.ConversationAction
 import io.github.artemidius.blowhard.ui.presentation.ConversationUiState
@@ -79,8 +78,7 @@ private fun ConversationHeader(
                 overflow = TextOverflow.Ellipsis,
             )
             Text(
-                state.selectedConversation.latestTarget?.description()
-                    ?: connection.currentTargetDescription(),
+                "Next message • ${connection.currentTargetDescription()}",
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
             )
@@ -101,11 +99,6 @@ private fun ConversationHeader(
             )
         }
     }
-}
-
-private fun GenerationTarget.description(): String = when (this) {
-    GenerationTarget.Demo -> "Local demo · no API key needed"
-    is GenerationTarget.Live -> "Live Mistral • $modelId"
 }
 
 private fun ConnectionSettingsState.currentTargetDescription(): String = when (mode) {
