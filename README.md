@@ -70,8 +70,8 @@ boundary and its limitations are documented in
 [credential storage guide](docs/architecture/credential-storage.md).
 
 Live-provider configuration is coordinated through a shared, secret-free settings contract. It
-requires a verified compatible model and explicit external-processing acknowledgement before live
-mode can be selected. The policy is documented in
+requires a verified compatible model. The desktop client discloses external processing before
+credential entry and in the conversation. The policy is documented in
 [`ADR 0012`](docs/decisions/0012-explicit-live-provider-settings.md) and the
 [live-provider settings guide](docs/architecture/live-provider-settings.md).
 
@@ -153,16 +153,12 @@ state never contains a path or native error. A clearly synthetic
 ./gradlew :apps:desktop:run
 ```
 
-The application starts in an explicitly labeled offline demo. Choose a bundled success, failure,
-rate-limit, or interrupted-stream scenario, enter any non-blank prompt, then use **Send** or
-**Stop** to exercise the real shared lifecycle. No API key or network request is required for demo
-mode.
-
-On macOS, open **Settings** to configure a Keychain-backed credential, run a non-generative
-connection test, select a verified model, acknowledge external processing, and explicitly select
-**Live Mistral** for new attempts. Generation controls offer bounded maximum-output and temperature
-presets for subsequently accepted attempts. The title, composer, conversation, and assistant
-response show the active source. Live failures never switch to the fixture.
+On macOS, Blowhard asks for a Mistral API key before opening the conversation. The key is stored
+in Keychain. The application checks the model catalog at startup and after a key is saved; a failed
+check keeps the conversation inactive and displays a safe error. Choose a verified model in
+**Provider settings**, reachable from the conversation header. Generation controls offer bounded
+maximum-output and temperature presets for subsequently accepted attempts. Messages you send are
+processed by Mistral.
 
 Use **Delete** in the conversation header to remove local history after reviewing the confirmation
 boundary. Stop an active run first. When the last conversation is deleted, the shared client
@@ -234,8 +230,8 @@ to the macOS app, but it is not Developer ID signed or notarized. The Windows pa
 publisher-signed. These packages are therefore intended only for build verification; trusted
 signing and release distribution are intentionally deferred.
 
-macOS is the current live reference host. Windows and Linux packages remain demo-only because a
-verified secure credential adapter is not implemented for those hosts. Automated tests use
+macOS is the current live reference host. Windows and Linux packages currently cannot start a
+conversation because a verified secure credential adapter is not implemented for those hosts. Automated tests use
 synthetic provider fixtures; no real-provider smoke result is claimed yet. Public release artifacts
 are not available yet.
 

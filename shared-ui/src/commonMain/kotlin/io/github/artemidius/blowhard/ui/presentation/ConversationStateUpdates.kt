@@ -7,7 +7,7 @@ import io.github.artemidius.blowhard.core.api.RunId
 internal fun initialConversationState(): ConversationUiState {
     val id = ConversationId("conversation-1")
     return ConversationUiState(
-        conversations = listOf(ConversationUiModel(id = id, title = "Demo conversation")),
+        conversations = listOf(ConversationUiModel(id = id, title = "New conversation")),
         selectedConversationId = id,
     )
 }

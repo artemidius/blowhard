@@ -18,11 +18,8 @@ private fun MistralModelDto.toDomainModel(): AvailableModel? {
         id = id,
         aliases = aliases.filter(String::isNotBlank).distinct(),
         contextWindowTokens = maxContextLength,
-        availability = when (archived) {
-            false -> ModelAvailability.AVAILABLE
-            true -> ModelAvailability.ARCHIVED
-            null -> ModelAvailability.UNKNOWN
-        },
+        // Base model cards omit `archived`; this catalog lists models available to the account.
+        availability = if (archived == true) ModelAvailability.ARCHIVED else ModelAvailability.AVAILABLE,
         capabilities = ModelCapabilities(
             chatCompletion = providerCapabilities?.chatCompletion.toSupport(),
             fillInMiddle = providerCapabilities?.fillInMiddle.toSupport(),

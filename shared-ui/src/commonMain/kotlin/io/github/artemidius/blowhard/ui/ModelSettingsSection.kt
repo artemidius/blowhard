@@ -6,13 +6,17 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Card
-import androidx.compose.material3.FilterChip
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -21,6 +25,7 @@ import io.github.artemidius.blowhard.ui.presentation.ConnectionSettingsAction
 
 @Composable
 internal fun ModelSettingsSection(settings: ConnectionSettingsState, onAction: (ConnectionSettingsAction) -> Unit) {
+    var expanded by remember { mutableStateOf(false) }
     Card(Modifier.fillMaxWidth()) {
         Column(Modifier.padding(20.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
             Text("Verified model", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold)
@@ -31,12 +36,17 @@ internal fun ModelSettingsSection(settings: ConnectionSettingsState, onAction: (
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
             } else {
-                LazyRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                    items(settings.models, key = { it.id }) { model ->
-                        FilterChip(
-                            selected = settings.selectedModelId == model.id,
-                            onClick = { onAction(ConnectionSettingsAction.ModelSelected(model.id)) },
-                            label = { Text(model.id) },
+                OutlinedButton(onClick = { expanded = true }) {
+                    Text("Model: ${settings.selectedModelId ?: "Choose a model"}  ▾")
+                }
+                DropdownMenu(expanded = expanded, onDismissRequest = { expanded = false }) {
+                    settings.models.forEach { model ->
+                        DropdownMenuItem(
+                            text = { Text(model.id) },
+                            onClick = {
+                                expanded = false
+                                onAction(ConnectionSettingsAction.ModelSelected(model.id))
+                            },
                         )
                     }
                 }

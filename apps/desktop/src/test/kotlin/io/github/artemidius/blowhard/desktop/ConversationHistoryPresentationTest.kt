@@ -57,7 +57,7 @@ class ConversationHistoryPresentationTest {
         val unavailable = unavailableHistoryState()
 
         assertEquals(ConversationId("conversation-1"), empty.selectedConversationId)
-        assertEquals("Demo conversation", empty.selectedConversation.title)
+        assertEquals("New conversation", empty.selectedConversation.title)
         assertEquals(null, empty.notice)
         assertTrue(unavailable.notice!!.message.contains("not connected to durable storage"))
     }
