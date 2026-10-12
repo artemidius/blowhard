@@ -19,11 +19,11 @@ import androidx.compose.ui.window.application
 import androidx.compose.ui.window.rememberWindowState
 import io.github.artemidius.blowhard.adapters.fixture.FixtureTextGenerationPort
 import io.github.artemidius.blowhard.adapters.mistral.MistralChatConfiguration
+import io.github.artemidius.blowhard.adapters.mistral.MistralCredentialProvider
 import io.github.artemidius.blowhard.adapters.mistral.MistralModelCatalog
 import io.github.artemidius.blowhard.adapters.mistral.MistralTextGenerationPort
 import io.github.artemidius.blowhard.adapters.mistral.asMistralCredentialProvider
 import io.github.artemidius.blowhard.adapters.platform.DesktopCredentialStores
-import io.github.artemidius.blowhard.core.api.GenerationMode
 import io.github.artemidius.blowhard.core.application.DefaultConnectionSettings
 import io.github.artemidius.blowhard.ui.BlowhardApp
 
@@ -55,25 +55,37 @@ private fun ApplicationScope.BlowhardDesktopApplication(bootstrap: DesktopBootst
         }
     }
 
-    val title = if (connectionState.settings.mode == GenerationMode.LIVE) {
-        "Blowhard — Live Mistral"
-    } else {
-        "Blowhard — Offline Demo"
-    }
+    val title = if (packagingSmokeTest) "Blowhard — Package verification" else "Blowhard — Mistral"
     Window(onCloseRequest = shutdown, state = windowState, title = title) {
         window.minimumSize = java.awt.Dimension(MINIMUM_WINDOW_WIDTH, MINIMUM_WINDOW_HEIGHT)
-        DesktopMenuBar(uiState, bootstrap.environment.platform, bootstrap.runtime.presenter::dispatch, shutdown)
+        DesktopMenuBar(
+            uiState,
+            bootstrap.environment.platform,
+            bootstrap.runtime.presenter::dispatch,
+            shutdown,
+            conversationEnabled = packagingSmokeTest || connectionState.settings.canUseLiveMode,
+        )
         BlowhardApp(
             conversationPresenter = bootstrap.runtime.presenter,
             connectionSettingsPresenter = bootstrap.runtime.connectionSettingsPresenter,
             runInspectorPresenter = bootstrap.runtime.runInspectorPresenter,
+            requiresConnection = !packagingSmokeTest,
         )
-        if (packagingSmokeTest) {
-            LaunchedEffect(Unit) {
-                withFrameNanos { }
-                runPackagingSmokeScenario(bootstrap.runtime.presenter)
-                shutdown()
-            }
+        PackagingSmokeEffect(packagingSmokeTest, bootstrap.runtime.presenter, shutdown)
+    }
+}
+
+@Composable
+private fun PackagingSmokeEffect(
+    enabled: Boolean,
+    presenter: io.github.artemidius.blowhard.ui.presentation.ConversationPresenter,
+    shutdown: () -> Unit,
+) {
+    if (enabled) {
+        LaunchedEffect(Unit) {
+            withFrameNanos { }
+            runPackagingSmokeScenario(presenter)
+            shutdown()
         }
     }
 }
@@ -95,23 +107,20 @@ private fun createDesktopBootstrap(): DesktopBootstrap {
     val credentialStore = DesktopCredentialStores.mistralApiKey()
     val credentialProvider = credentialStore.asMistralCredentialProvider()
     val modelCatalog = MistralModelCatalog.create(credentialProvider)
-    val connectionSettings = DefaultConnectionSettings(credentialStore, modelCatalog)
-    val scenarios = FixtureScenarioRouter()
-    val generation = DesktopGenerationRouter(
-        demo = FixtureTextGenerationPort(scenarios::scenarioFor),
-        liveFactory = { modelId ->
-            val port = MistralTextGenerationPort.create(
-                credentialProvider,
-                MistralChatConfiguration(modelId),
-            )
-            OwnedGenerationPort(port, port::close)
-        },
+    val packagingSmokeTest = isPackagingSmokeTest(System.getenv())
+    val connectionSettings = DefaultConnectionSettings(
+        credentialStore,
+        modelCatalog,
+        startInLiveMode = !packagingSmokeTest,
     )
+    val scenarios = FixtureScenarioRouter()
+    val generation = createGenerationRouter(scenarios, credentialProvider)
     val runtime = DesktopRuntime.create(
         clipboardWriter = clipboard,
         connectionSettings = connectionSettings,
         generation = generation,
         scenarioSelection = scenarios,
+        autoVerifyCredential = !packagingSmokeTest,
         reportSaver = diagnosticReportSaver,
         initialState = history.initialState,
         conversationStore = history.conversationStore,
@@ -123,6 +132,17 @@ private fun createDesktopBootstrap(): DesktopBootstrap {
     )
     return DesktopBootstrap(environment, preferencesStore, preferences, runtime)
 }
+
+private fun createGenerationRouter(
+    scenarios: FixtureScenarioRouter,
+    credentialProvider: MistralCredentialProvider,
+): DesktopGenerationRouter = DesktopGenerationRouter(
+    demo = FixtureTextGenerationPort(scenarios::scenarioFor),
+    liveFactory = { modelId ->
+        val port = MistralTextGenerationPort.create(credentialProvider, MistralChatConfiguration(modelId))
+        OwnedGenerationPort(port, port::close)
+    },
+)
 
 private data class DesktopBootstrap(
     val environment: DesktopEnvironment,

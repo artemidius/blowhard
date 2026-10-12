@@ -18,16 +18,19 @@ flowchart LR
 
 1. Refresh credential status. The shared state reports only `MISSING`, `CONFIGURED`, or
    `UNAVAILABLE`; it never contains the secret.
-2. Run an explicit connection test. This uses model discovery rather than a generative request, so
-   verifying configuration does not consume a prompt or create model output.
+2. On desktop, automatically run a connection test when a configured credential is found at startup
+   or a new credential is saved. The user can retry the check in settings. Verification uses model
+   discovery rather than a generative request, so it does not consume a prompt or create model output.
 3. Filter conservatively. Only models reported as `AVAILABLE` with chat completion reported as
    `SUPPORTED` become selectable. `UNKNOWN` never enables a capability.
-4. Select a verified model and acknowledge that live prompts are processed externally.
+4. Select a verified model. The desktop entry screen discloses that messages are processed by
+   Mistral before the user saves a key or sends a message.
 5. Choose bounded maximum-output and temperature presets, or retain explicit model defaults.
-6. Select live mode. All prerequisites are checked atomically by the application service.
+6. Open the conversation when the credential, connection, and model are ready. Normal desktop
+   launches remain on the connection screen until these prerequisites are satisfied.
 
-The desktop screen implements all six steps. Selecting live mode or changing generation controls
-affects new attempts only; an already accepted attempt keeps its captured source, model, and
+The desktop screen implements all six steps. Changing the model or generation controls affects new
+attempts only; an already accepted attempt keeps its captured source, model, and
 parameter snapshot.
 
 ## Presentation security
@@ -42,11 +45,10 @@ reads the credential just in time through a small adapter and does not cache it.
 surface `UNAVAILABLE` because their verified OS vault adapters are not implemented; no file or
 preferences fallback is present.
 
-Credential replacement and deletion clear the connection result, model list, selected model, and
-disclosure acknowledgement. Non-sensitive generation controls remain available. A provider failure
-during a later check changes the connection status to `FAILED` but preserves the explicit
-generation-mode choice; downstream routing must require a currently ready state rather than
-inferring an automatic fallback.
+Credential replacement and deletion clear the connection result, model list, and selected model.
+Non-sensitive generation controls remain available. A provider failure during a later check changes
+the connection status to `FAILED` and clears the stale model list. The conversation stays inactive
+until verification succeeds again.
 
 Conversation routing performs that readiness check when accepting every live start. A stale live
 selection is rejected before provider execution and is never replaced with fixture generation. See

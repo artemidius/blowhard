@@ -148,7 +148,7 @@ class DefaultConnectionSettingsTest {
     }
 
     @Test
-    fun `credential replacement invalidates connection evidence and live consent`() = runTest {
+    fun `credential replacement invalidates connection evidence while preserving disclosure`() = runTest {
         val credentials = FakeCredentialStore(CredentialReadResult.Available("old"))
         val settings = settings(credentials = credentials)
         settings.refreshCredentialStatus()
@@ -162,11 +162,11 @@ class DefaultConnectionSettingsTest {
         assertEquals(ConnectionStatus.NOT_TESTED, settings.state.value.connectionStatus)
         assertTrue(settings.state.value.models.isEmpty())
         assertNull(settings.state.value.selectedModelId)
-        assertFalse(settings.state.value.liveDataDisclosureAccepted)
+        assertTrue(settings.state.value.liveDataDisclosureAccepted)
     }
 
     @Test
-    fun `credential deletion returns to an unconfigured demo state`() = runTest {
+    fun `credential deletion leaves live mode inactive without fallback`() = runTest {
         val settings = settings()
         settings.refreshCredentialStatus()
         settings.testConnection()
@@ -177,8 +177,29 @@ class DefaultConnectionSettingsTest {
 
         assertEquals(CredentialUpdateResult.SUCCESS, result)
         assertEquals(CredentialStatus.MISSING, settings.state.value.credentialStatus)
-        assertEquals(GenerationMode.DEMO, settings.state.value.mode)
+        assertEquals(GenerationMode.LIVE, settings.state.value.mode)
         assertEquals(ConnectionStatus.NOT_TESTED, settings.state.value.connectionStatus)
+        assertFalse(settings.state.value.canUseLiveMode)
+    }
+
+    @Test
+    fun `desktop live startup stays inactive until a verified model is available`() = runTest {
+        val credentials = FakeCredentialStore(CredentialReadResult.Missing)
+        val settings =
+            DefaultConnectionSettings(credentials, FakeModelCatalog(successfulCatalog()), startInLiveMode = true)
+
+        settings.refreshCredentialStatus()
+        assertEquals(GenerationMode.LIVE, settings.state.value.mode)
+        assertFalse(settings.state.value.canUseLiveMode)
+
+        settings.replaceCredential("secret")
+        assertFalse(settings.state.value.canUseLiveMode)
+        settings.testConnection()
+        assertTrue(settings.state.value.canUseLiveMode)
+
+        settings.deleteCredential()
+        assertEquals(GenerationMode.LIVE, settings.state.value.mode)
+        assertFalse(settings.state.value.canUseLiveMode)
     }
 
     @Test

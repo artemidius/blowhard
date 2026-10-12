@@ -53,8 +53,7 @@ internal fun GenerationParametersSection(
                 }
             }
             Text(
-                "Temperature is limited to Mistral's documented 0.0–0.7 recommended range. " +
-                    "The offline fixture remains deterministic.",
+                "Temperature is limited to Mistral's documented 0.0–0.7 recommended range.",
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
             )

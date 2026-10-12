@@ -53,7 +53,7 @@ final class io.github.artemidius.blowhard.core.application/ConversationHistorySn
 }
 
 final class io.github.artemidius.blowhard.core.application/DefaultConnectionSettings : io.github.artemidius.blowhard.core.api/ConnectionSettings { // io.github.artemidius.blowhard.core.application/DefaultConnectionSettings|null[0]
-    constructor <init>(io.github.artemidius.blowhard.core.domain/CredentialStore, io.github.artemidius.blowhard.core.domain/ModelCatalogPort) // io.github.artemidius.blowhard.core.application/DefaultConnectionSettings.<init>|<init>(io.github.artemidius.blowhard.core.domain.CredentialStore;io.github.artemidius.blowhard.core.domain.ModelCatalogPort){}[0]
+    constructor <init>(io.github.artemidius.blowhard.core.domain/CredentialStore, io.github.artemidius.blowhard.core.domain/ModelCatalogPort, kotlin/Boolean = ...) // io.github.artemidius.blowhard.core.application/DefaultConnectionSettings.<init>|<init>(io.github.artemidius.blowhard.core.domain.CredentialStore;io.github.artemidius.blowhard.core.domain.ModelCatalogPort;kotlin.Boolean){}[0]
 
     final val state // io.github.artemidius.blowhard.core.application/DefaultConnectionSettings.state|{}state[0]
         final fun <get-state>(): kotlinx.coroutines.flow/StateFlow<io.github.artemidius.blowhard.core.api/ConnectionSettingsState> // io.github.artemidius.blowhard.core.application/DefaultConnectionSettings.state.<get-state>|<get-state>(){}[0]

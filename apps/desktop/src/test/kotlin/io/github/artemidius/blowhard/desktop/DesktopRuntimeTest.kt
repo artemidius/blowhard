@@ -170,7 +170,7 @@ class DesktopRuntimeTest {
             val restored = DesktopHistorySession.open(directory)
             try {
                 assertTrue(checkNotNull(restored.conversationStore).list().isEmpty())
-                assertEquals("Demo conversation", restored.initialState.selectedConversation.title)
+                assertEquals("New conversation", restored.initialState.selectedConversation.title)
                 assertTrue(restored.initialState.selectedConversation.messages.isEmpty())
             } finally {
                 restored.close()

@@ -13,7 +13,7 @@ public interface ConnectionSettings {
     /** Replaces the securely stored credential and invalidates prior connection evidence. */
     public suspend fun replaceCredential(secret: String): CredentialUpdateResult
 
-    /** Deletes the securely stored credential and returns to demo mode. */
+    /** Deletes the securely stored credential and invalidates connection evidence. */
     public suspend fun deleteCredential(): CredentialUpdateResult
 
     /** Tests the credential with a non-generative model-catalog request. */

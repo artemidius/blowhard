@@ -21,6 +21,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import io.github.artemidius.blowhard.core.api.ConnectionStatus
+import io.github.artemidius.blowhard.core.api.CredentialStatus
 import io.github.artemidius.blowhard.ui.presentation.ConnectionSettingsAction
 import io.github.artemidius.blowhard.ui.presentation.ConnectionSettingsUiState
 
@@ -28,7 +30,7 @@ import io.github.artemidius.blowhard.ui.presentation.ConnectionSettingsUiState
 internal fun ConnectionSettingsScreen(
     state: ConnectionSettingsUiState,
     onAction: (ConnectionSettingsAction) -> Unit,
-    onBack: () -> Unit,
+    onBack: (() -> Unit)?,
 ) {
     Box(
         modifier = Modifier.fillMaxSize().background(MaterialTheme.colorScheme.background),
@@ -42,28 +44,44 @@ internal fun ConnectionSettingsScreen(
                 .padding(24.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp),
         ) {
-            SettingsHeader(onBack)
+            SettingsHeader(state, onBack)
             state.notice?.let { SettingsNotice(it, onAction) }
             CredentialSettingsSection(state.settings, onAction)
             ModelSettingsSection(state.settings, onAction)
             GenerationParametersSection(state.settings, onAction)
-            LiveReadinessSection(state.settings, onAction)
+            LiveReadinessSection(state.settings)
         }
     }
 }
 
 @Composable
-private fun SettingsHeader(onBack: () -> Unit) {
+private fun SettingsHeader(state: ConnectionSettingsUiState, onBack: (() -> Unit)?) {
     Row(
         modifier = Modifier.fillMaxWidth(),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(12.dp),
     ) {
-        TextButton(onClick = onBack) { Text("Back") }
+        if (onBack != null) TextButton(onClick = onBack) { Text("Back") }
         Column {
-            Text("Provider settings", style = MaterialTheme.typography.headlineSmall, fontWeight = FontWeight.Bold)
+            val title = when {
+                onBack != null -> "Provider settings"
+                state.settings.credentialStatus == CredentialStatus.UNKNOWN -> "Checking your connection"
+                state.settings.credentialStatus == CredentialStatus.MISSING -> "Connect to Mistral"
+                state.settings.credentialStatus == CredentialStatus.UNAVAILABLE -> "Secure storage unavailable"
+                state.settings.connectionStatus == ConnectionStatus.TESTING -> "Verifying your connection"
+                else -> "Connection needs attention"
+            }
+            Text(title, style = MaterialTheme.typography.headlineSmall, fontWeight = FontWeight.Bold)
             Text(
-                "Your models, your key. Make this space yours.",
+                when (state.settings.credentialStatus) {
+                    CredentialStatus.CONFIGURED ->
+                        "Your saved key must pass verification before chat opens. Messages you send are processed by Mistral."
+
+                    CredentialStatus.UNAVAILABLE ->
+                        "This platform does not yet provide secure API key storage."
+
+                    else -> "Add a Mistral API key to start. Messages you send are processed by Mistral."
+                },
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
             )
