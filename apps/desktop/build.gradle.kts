@@ -38,6 +38,14 @@ tasks.named("checkLicense") {
     mustRunAfter("generateLicenseReport")
 }
 
+tasks.register<JavaExec>("referenceLiveSmoke") {
+    group = "verification"
+    description = "Runs one bounded Mistral conversation using the macOS Keychain credential."
+    dependsOn("testClasses")
+    classpath = sourceSets.test.get().runtimeClasspath
+    mainClass = "io.github.artemidius.blowhard.desktop.ReferenceLiveSmoke"
+}
+
 val verifyLicenseInventory = tasks.register<Exec>("verifyLicenseInventory") {
     group = "verification"
     description = "Verifies the generated desktop runtime dependency and license inventory."
