@@ -50,8 +50,8 @@ files.
 
 ## Review and publish
 
-Successful automation creates tag `v0.1.0` and a draft marked as a prerelease. Before publishing it
-in GitHub Releases:
+Successful automation creates a draft targeting the reviewed source commit. Publishing the draft
+materializes tag `v0.1.0` and makes the prerelease public. Before publishing it in GitHub Releases:
 
 - compare the displayed tag commit with the workflow source revision;
 - review `docs/releases/v0.1.0.md` and every disclosed limitation;

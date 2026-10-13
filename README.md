@@ -213,8 +213,9 @@ support Gradle's configuration cache for these tasks. Each package contains a mi
 runtime and does not require a separately installed JDK.
 
 CI builds each native format, inspects its contents, installs it, and launches the installed
-Compose application in a deterministic smoke mode. The package archives are retained with the CI
-run for seven days; they are not published releases. Each archive is accompanied by a deterministic
+Compose application in a deterministic smoke mode. Pull-request archives are retained with the CI
+run for seven days; reviewed milestone packages are available from
+[GitHub Releases](https://github.com/artemidius/blowhard/releases). Each package is accompanied by a deterministic
 manifest and `SHA256SUMS` that bind its bytes to release `0.1.0`, installer schema `1.0.0`, the exact
 source revision, target architecture, and disclosed signing status. See the
 [release-evidence guide](docs/release-evidence.md) and
@@ -227,18 +228,18 @@ and [`ADR 0026`](docs/decisions/0026-runtime-license-inventory.md).
 
 The current packages have no trusted publisher signature. `jpackage` applies an ad hoc signature
 to the macOS app, but it is not Developer ID signed or notarized. The Windows package is not
-publisher-signed. These packages are therefore intended only for build verification; trusted
-signing and release distribution are intentionally deferred.
+publisher-signed. The `v0.1.0` prerelease is intended for source-bound portfolio evaluation on the
+documented targets; trusted distribution requires publisher signing and notarization.
 
 macOS is the current live reference host. Windows and Linux packages currently cannot start a
 conversation because a verified secure credential adapter is not implemented for those hosts.
 Automated tests use synthetic provider fixtures; a bounded macOS
 [live reference check](docs/live-reference-check.md) has also passed through a locally installed
-DMG candidate. Public release artifacts are not available yet.
+DMG candidate. The reviewed [`v0.1.0` prerelease](https://github.com/artemidius/blowhard/releases/tag/v0.1.0)
+contains the three native packages and their verification evidence.
 
-The [installation guide](docs/installation.md) documents candidate verification, native install
-steps, signing limitations, capability boundaries, and local data locations without presenting CI
-artifacts as a public release.
+The [installation guide](docs/installation.md) documents package verification, native install
+steps, signing limitations, capability boundaries, and local data locations.
 
 Release candidates are assembled only by the manually approved, least-privilege
 [protected release process](docs/release-process.md). The workflow rebuilds immutable `main` source
