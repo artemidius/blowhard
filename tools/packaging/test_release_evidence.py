@@ -34,6 +34,8 @@ class ReleaseEvidenceTest(unittest.TestCase):
         self.assertEqual("ad-hoc", manifest["target"]["signing"])
         self.assertEqual("Blowhard-1.0.0.dmg", manifest["artifact"]["fileName"])
         self.assertNotIn(str(self.root), first_content)
+        self.assertNotIn(b"\r", manifest_file.read_bytes())
+        self.assertNotIn(b"\r", manifest_file.with_name("SHA256SUMS").read_bytes())
         verify(self.root, manifest_file)
 
     def test_verification_detects_package_tampering(self) -> None:
@@ -49,6 +51,14 @@ class ReleaseEvidenceTest(unittest.TestCase):
             f"{'0' * 64}  {self.package.name}\n",
             encoding="utf-8",
         )
+
+        with self.assertRaisesRegex(ReleaseEvidenceError, "checksum file"):
+            verify(self.root, manifest_file)
+
+    def test_verification_rejects_nonportable_checksum_line_endings(self) -> None:
+        manifest_file = create(self.root, "macos", "arm64", "b" * 40)
+        checksum_file = manifest_file.with_name("SHA256SUMS")
+        checksum_file.write_bytes(checksum_file.read_bytes().replace(b"\n", b"\r\n"))
 
         with self.assertRaisesRegex(ReleaseEvidenceError, "checksum file"):
             verify(self.root, manifest_file)

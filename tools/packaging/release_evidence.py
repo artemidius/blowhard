@@ -114,8 +114,8 @@ def create(
     )
     output.mkdir(parents=True, exist_ok=True)
     manifest_file = output / "manifest.json"
-    manifest_file.write_text(json.dumps(manifest, indent=2) + "\n", encoding="utf-8")
-    (output / "SHA256SUMS").write_text(f"{checksum}  {package.name}\n", encoding="utf-8")
+    manifest_file.write_bytes((json.dumps(manifest, indent=2) + "\n").encode("utf-8"))
+    (output / "SHA256SUMS").write_bytes(f"{checksum}  {package.name}\n".encode("utf-8"))
     return manifest_file
 
 
@@ -149,8 +149,8 @@ def verify(repository_root: Path, manifest_file: Path) -> None:
     if manifest != expected:
         raise ReleaseEvidenceError("manifest does not match the packaged artifact")
     checksum_file = manifest_file.parent / "SHA256SUMS"
-    expected_checksum = f"{expected['artifact']['sha256']}  {package.name}\n"
-    if checksum_file.read_text(encoding="utf-8") != expected_checksum:
+    expected_checksum = f"{expected['artifact']['sha256']}  {package.name}\n".encode("utf-8")
+    if checksum_file.read_bytes() != expected_checksum:
         raise ReleaseEvidenceError("checksum file does not match the packaged artifact")
 
 

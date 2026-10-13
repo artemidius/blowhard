@@ -159,9 +159,9 @@ jobs:
           python tools/packaging/release_evidence.py verify .
           apps/desktop/build/release-evidence/${{ matrix.platform }}-${{ matrix.architecture }}/manifest.json
 
-      - name: Verify portable release archive ordering
+      - name: Verify portable release tooling
         if: ${{ runner.os == 'Windows' }}
-        run: python -m unittest discover -s tools/packaging -p 'test_release_gate.py' -v
+        run: python -m unittest discover -s tools/packaging -p 'test_*.py' -v
 
       - name: Upload desktop evidence
         if: ${{ always() }}
