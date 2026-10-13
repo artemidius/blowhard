@@ -41,8 +41,8 @@ tasks.named("checkLicense") {
 tasks.register<JavaExec>("referenceLiveSmoke") {
     group = "verification"
     description = "Runs one bounded Mistral conversation using the macOS Keychain credential."
-    dependsOn("testClasses")
-    classpath = sourceSets.test.get().runtimeClasspath
+    dependsOn("classes")
+    classpath = sourceSets.main.get().runtimeClasspath
     mainClass = "io.github.artemidius.blowhard.desktop.ReferenceLiveSmoke"
 }
 
