@@ -222,6 +222,8 @@ private class RecordingDocumentStore(
         error?.let { throw it }
         return deletionResult
     }
+
+    override suspend fun close() = Unit
 }
 
 private fun source(result: DocumentReadResult? = null, error: Exception? = null): DocumentImportSource =
