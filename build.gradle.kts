@@ -28,6 +28,7 @@ subprojects {
 }
 
 val documentedModules = listOf(
+    project(":adapters:documents"),
     project(":adapters:fixture"),
     project(":adapters:mistral"),
     project(":adapters:platform"),
@@ -116,6 +117,7 @@ kover {
                     classes(
                         "io.github.artemidius.blowhard.core.application.*",
                         "io.github.artemidius.blowhard.core.domain.PromptText*",
+                        "io.github.artemidius.blowhard.adapters.documents.*",
                         "io.github.artemidius.blowhard.adapters.mistral.*",
                         "io.github.artemidius.blowhard.ui.presentation.*",
                     )
@@ -179,12 +181,14 @@ tasks.matching { it.name == "koverXmlReport" || it.name == "koverVerify" }.confi
 }
 
 private val allowedProjectDependencies = mapOf(
+    ":adapters:documents" to setOf(":core:domain"),
     ":adapters:fixture" to setOf(":core:domain"),
     ":adapters:mistral" to setOf(":core:domain"),
     ":adapters:platform" to setOf(":core:domain"),
     ":adapters:persistence" to setOf(":core:domain"),
     ":apps:desktop" to setOf(
         ":adapters:fixture",
+        ":adapters:documents",
         ":adapters:mistral",
         ":adapters:persistence",
         ":adapters:platform",
@@ -245,6 +249,8 @@ tasks.register("qualityCheck") {
         ":core:domain:desktopTest",
         ":adapters:fixture:checkKotlinAbi",
         ":adapters:fixture:desktopTest",
+        ":adapters:documents:checkKotlinAbi",
+        ":adapters:documents:desktopTest",
         ":adapters:mistral:checkKotlinAbi",
         ":adapters:mistral:desktopTest",
         ":adapters:platform:checkKotlinAbi",

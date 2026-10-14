@@ -118,6 +118,7 @@ jobs:
           :core:api:desktopTest
           :core:application:desktopTest
           :core:domain:desktopTest
+          :adapters:documents:desktopTest
           :adapters:fixture:desktopTest
           :adapters:mistral:desktopTest
           :adapters:persistence:desktopTest
@@ -211,6 +212,7 @@ jobs:
           :core:api:testAndroidHostTest
           :core:application:testAndroidHostTest
           :core:domain:testAndroidHostTest
+          :adapters:documents:testAndroidHostTest
           :adapters:fixture:testAndroidHostTest
           :adapters:mistral:testAndroidHostTest
           :adapters:persistence:testAndroidHostTest
@@ -263,6 +265,9 @@ jobs:
           :core:api:iosSimulatorArm64Test
           :core:application:iosSimulatorArm64Test
           :core:domain:iosSimulatorArm64Test
+          :adapters:documents:compileKotlinIosArm64
+          :adapters:documents:compileKotlinIosSimulatorArm64
+          :adapters:documents:iosSimulatorArm64Test
           :adapters:fixture:compileKotlinIosArm64
           :adapters:fixture:compileKotlinIosSimulatorArm64
           :adapters:fixture:iosSimulatorArm64Test

@@ -17,6 +17,7 @@ dependencyResolutionManagement {
 rootProject.name = "Blowhard"
 
 include(":apps:desktop")
+include(":adapters:documents")
 include(":adapters:fixture")
 include(":adapters:mistral")
 include(":adapters:platform")

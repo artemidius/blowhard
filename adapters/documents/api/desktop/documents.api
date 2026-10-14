@@ -1,0 +1,5 @@
+public final class io/github/artemidius/blowhard/adapters/documents/PortableDocumentInspector : io/github/artemidius/blowhard/core/domain/DocumentInspector {
+	public static final field INSTANCE Lio/github/artemidius/blowhard/adapters/documents/PortableDocumentInspector;
+	public fun inspect ([BLkotlin/coroutines/Continuation;)Ljava/lang/Object;
+}
+
