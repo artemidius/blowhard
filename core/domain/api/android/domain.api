@@ -162,6 +162,7 @@ public final class io/github/artemidius/blowhard/core/domain/DocumentSaveResult 
 }
 
 public abstract interface class io/github/artemidius/blowhard/core/domain/DocumentStore {
+	public abstract fun close (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public abstract fun delete-SXksg0M (Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public abstract fun find-SXksg0M (Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public abstract fun list (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;

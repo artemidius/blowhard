@@ -1,0 +1,18 @@
+CREATE TABLE document (
+    id TEXT NOT NULL PRIMARY KEY,
+    display_name TEXT NOT NULL CHECK(length(trim(display_name)) > 0 AND length(display_name) <= 255),
+    size_bytes INTEGER NOT NULL CHECK(size_bytes > 0),
+    imported_at_epoch_ms INTEGER NOT NULL CHECK(imported_at_epoch_ms >= 0),
+    format TEXT NOT NULL CHECK(format IN ('PDF', 'PNG', 'JPEG')),
+    page_count INTEGER CHECK(page_count BETWEEN 1 AND 2147483647),
+    width_pixels INTEGER CHECK(width_pixels BETWEEN 1 AND 2147483647),
+    height_pixels INTEGER CHECK(height_pixels BETWEEN 1 AND 2147483647),
+    content BLOB NOT NULL CHECK(length(content) = size_bytes),
+    CHECK(
+        (format = 'PDF' AND page_count IS NOT NULL AND width_pixels IS NULL AND height_pixels IS NULL) OR
+        (format IN ('PNG', 'JPEG') AND page_count IS NULL AND width_pixels IS NOT NULL AND height_pixels IS NOT NULL)
+    )
+);
+
+CREATE INDEX document_by_recent_import
+ON document(imported_at_epoch_ms DESC, id ASC);

@@ -16,6 +16,9 @@ public interface DocumentStore {
 
     /** Deletes metadata and content as one logical operation. */
     public suspend fun delete(id: DocumentId): DocumentStoreDeletionResult
+
+    /** Releases local storage resources. Repeated calls have no effect. */
+    public suspend fun close()
 }
 
 /** Atomic document save outcome. */
