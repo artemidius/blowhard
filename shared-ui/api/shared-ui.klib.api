@@ -112,6 +112,10 @@ abstract fun interface io.github.artemidius.blowhard.ui.presentation/DemoScenari
     abstract fun prepare(io.github.artemidius.blowhard.core.api/ConversationId, io.github.artemidius.blowhard.ui.presentation/DemoScenario) // io.github.artemidius.blowhard.ui.presentation/DemoScenarioSelection.prepare|prepare(io.github.artemidius.blowhard.core.api.ConversationId;io.github.artemidius.blowhard.ui.presentation.DemoScenario){}[0]
 }
 
+abstract fun interface io.github.artemidius.blowhard.ui.presentation/DocumentPicker { // io.github.artemidius.blowhard.ui.presentation/DocumentPicker|null[0]
+    abstract suspend fun select(): io.github.artemidius.blowhard.core.api/DocumentImportSource? // io.github.artemidius.blowhard.ui.presentation/DocumentPicker.select|select(){}[0]
+}
+
 abstract fun interface io.github.artemidius.blowhard.ui.presentation/RunDiagnosticReportSaver { // io.github.artemidius.blowhard.ui.presentation/RunDiagnosticReportSaver|null[0]
     abstract suspend fun save(io.github.artemidius.blowhard.core.api/RunDiagnosticReport): io.github.artemidius.blowhard.ui.presentation/RunDiagnosticReportSaveResult // io.github.artemidius.blowhard.ui.presentation/RunDiagnosticReportSaver.save|save(io.github.artemidius.blowhard.core.api.RunDiagnosticReport){}[0]
 }
@@ -229,6 +233,98 @@ sealed interface io.github.artemidius.blowhard.ui.presentation/ConversationActio
         final fun equals(kotlin/Any?): kotlin/Boolean // io.github.artemidius.blowhard.ui.presentation/ConversationAction.Stop.equals|equals(kotlin.Any?){}[0]
         final fun hashCode(): kotlin/Int // io.github.artemidius.blowhard.ui.presentation/ConversationAction.Stop.hashCode|hashCode(){}[0]
         final fun toString(): kotlin/String // io.github.artemidius.blowhard.ui.presentation/ConversationAction.Stop.toString|toString(){}[0]
+    }
+}
+
+sealed interface io.github.artemidius.blowhard.ui.presentation/DocumentLibraryAction { // io.github.artemidius.blowhard.ui.presentation/DocumentLibraryAction|null[0]
+    final class DeleteRequested : io.github.artemidius.blowhard.ui.presentation/DocumentLibraryAction { // io.github.artemidius.blowhard.ui.presentation/DocumentLibraryAction.DeleteRequested|null[0]
+        constructor <init>(io.github.artemidius.blowhard.core.api/DocumentId) // io.github.artemidius.blowhard.ui.presentation/DocumentLibraryAction.DeleteRequested.<init>|<init>(io.github.artemidius.blowhard.core.api.DocumentId){}[0]
+
+        final val id // io.github.artemidius.blowhard.ui.presentation/DocumentLibraryAction.DeleteRequested.id|{}id[0]
+            final fun <get-id>(): io.github.artemidius.blowhard.core.api/DocumentId // io.github.artemidius.blowhard.ui.presentation/DocumentLibraryAction.DeleteRequested.id.<get-id>|<get-id>(){}[0]
+
+        final fun component1(): io.github.artemidius.blowhard.core.api/DocumentId // io.github.artemidius.blowhard.ui.presentation/DocumentLibraryAction.DeleteRequested.component1|component1(){}[0]
+        final fun copy(io.github.artemidius.blowhard.core.api/DocumentId = ...): io.github.artemidius.blowhard.ui.presentation/DocumentLibraryAction.DeleteRequested // io.github.artemidius.blowhard.ui.presentation/DocumentLibraryAction.DeleteRequested.copy|copy(io.github.artemidius.blowhard.core.api.DocumentId){}[0]
+        final fun equals(kotlin/Any?): kotlin/Boolean // io.github.artemidius.blowhard.ui.presentation/DocumentLibraryAction.DeleteRequested.equals|equals(kotlin.Any?){}[0]
+        final fun hashCode(): kotlin/Int // io.github.artemidius.blowhard.ui.presentation/DocumentLibraryAction.DeleteRequested.hashCode|hashCode(){}[0]
+        final fun toString(): kotlin/String // io.github.artemidius.blowhard.ui.presentation/DocumentLibraryAction.DeleteRequested.toString|toString(){}[0]
+    }
+
+    final object DeleteConfirmed : io.github.artemidius.blowhard.ui.presentation/DocumentLibraryAction { // io.github.artemidius.blowhard.ui.presentation/DocumentLibraryAction.DeleteConfirmed|null[0]
+        final fun equals(kotlin/Any?): kotlin/Boolean // io.github.artemidius.blowhard.ui.presentation/DocumentLibraryAction.DeleteConfirmed.equals|equals(kotlin.Any?){}[0]
+        final fun hashCode(): kotlin/Int // io.github.artemidius.blowhard.ui.presentation/DocumentLibraryAction.DeleteConfirmed.hashCode|hashCode(){}[0]
+        final fun toString(): kotlin/String // io.github.artemidius.blowhard.ui.presentation/DocumentLibraryAction.DeleteConfirmed.toString|toString(){}[0]
+    }
+
+    final object DeleteDismissed : io.github.artemidius.blowhard.ui.presentation/DocumentLibraryAction { // io.github.artemidius.blowhard.ui.presentation/DocumentLibraryAction.DeleteDismissed|null[0]
+        final fun equals(kotlin/Any?): kotlin/Boolean // io.github.artemidius.blowhard.ui.presentation/DocumentLibraryAction.DeleteDismissed.equals|equals(kotlin.Any?){}[0]
+        final fun hashCode(): kotlin/Int // io.github.artemidius.blowhard.ui.presentation/DocumentLibraryAction.DeleteDismissed.hashCode|hashCode(){}[0]
+        final fun toString(): kotlin/String // io.github.artemidius.blowhard.ui.presentation/DocumentLibraryAction.DeleteDismissed.toString|toString(){}[0]
+    }
+
+    final object ImportRequested : io.github.artemidius.blowhard.ui.presentation/DocumentLibraryAction { // io.github.artemidius.blowhard.ui.presentation/DocumentLibraryAction.ImportRequested|null[0]
+        final fun equals(kotlin/Any?): kotlin/Boolean // io.github.artemidius.blowhard.ui.presentation/DocumentLibraryAction.ImportRequested.equals|equals(kotlin.Any?){}[0]
+        final fun hashCode(): kotlin/Int // io.github.artemidius.blowhard.ui.presentation/DocumentLibraryAction.ImportRequested.hashCode|hashCode(){}[0]
+        final fun toString(): kotlin/String // io.github.artemidius.blowhard.ui.presentation/DocumentLibraryAction.ImportRequested.toString|toString(){}[0]
+    }
+
+    final object NoticeDismissed : io.github.artemidius.blowhard.ui.presentation/DocumentLibraryAction { // io.github.artemidius.blowhard.ui.presentation/DocumentLibraryAction.NoticeDismissed|null[0]
+        final fun equals(kotlin/Any?): kotlin/Boolean // io.github.artemidius.blowhard.ui.presentation/DocumentLibraryAction.NoticeDismissed.equals|equals(kotlin.Any?){}[0]
+        final fun hashCode(): kotlin/Int // io.github.artemidius.blowhard.ui.presentation/DocumentLibraryAction.NoticeDismissed.hashCode|hashCode(){}[0]
+        final fun toString(): kotlin/String // io.github.artemidius.blowhard.ui.presentation/DocumentLibraryAction.NoticeDismissed.toString|toString(){}[0]
+    }
+
+    final object RefreshRequested : io.github.artemidius.blowhard.ui.presentation/DocumentLibraryAction { // io.github.artemidius.blowhard.ui.presentation/DocumentLibraryAction.RefreshRequested|null[0]
+        final fun equals(kotlin/Any?): kotlin/Boolean // io.github.artemidius.blowhard.ui.presentation/DocumentLibraryAction.RefreshRequested.equals|equals(kotlin.Any?){}[0]
+        final fun hashCode(): kotlin/Int // io.github.artemidius.blowhard.ui.presentation/DocumentLibraryAction.RefreshRequested.hashCode|hashCode(){}[0]
+        final fun toString(): kotlin/String // io.github.artemidius.blowhard.ui.presentation/DocumentLibraryAction.RefreshRequested.toString|toString(){}[0]
+    }
+}
+
+sealed interface io.github.artemidius.blowhard.ui.presentation/DocumentLibraryNotice { // io.github.artemidius.blowhard.ui.presentation/DocumentLibraryNotice|null[0]
+    final class Deleted : io.github.artemidius.blowhard.ui.presentation/DocumentLibraryNotice { // io.github.artemidius.blowhard.ui.presentation/DocumentLibraryNotice.Deleted|null[0]
+        constructor <init>(kotlin/String) // io.github.artemidius.blowhard.ui.presentation/DocumentLibraryNotice.Deleted.<init>|<init>(kotlin.String){}[0]
+
+        final val displayName // io.github.artemidius.blowhard.ui.presentation/DocumentLibraryNotice.Deleted.displayName|{}displayName[0]
+            final fun <get-displayName>(): kotlin/String // io.github.artemidius.blowhard.ui.presentation/DocumentLibraryNotice.Deleted.displayName.<get-displayName>|<get-displayName>(){}[0]
+
+        final fun component1(): kotlin/String // io.github.artemidius.blowhard.ui.presentation/DocumentLibraryNotice.Deleted.component1|component1(){}[0]
+        final fun copy(kotlin/String = ...): io.github.artemidius.blowhard.ui.presentation/DocumentLibraryNotice.Deleted // io.github.artemidius.blowhard.ui.presentation/DocumentLibraryNotice.Deleted.copy|copy(kotlin.String){}[0]
+        final fun equals(kotlin/Any?): kotlin/Boolean // io.github.artemidius.blowhard.ui.presentation/DocumentLibraryNotice.Deleted.equals|equals(kotlin.Any?){}[0]
+        final fun hashCode(): kotlin/Int // io.github.artemidius.blowhard.ui.presentation/DocumentLibraryNotice.Deleted.hashCode|hashCode(){}[0]
+        final fun toString(): kotlin/String // io.github.artemidius.blowhard.ui.presentation/DocumentLibraryNotice.Deleted.toString|toString(){}[0]
+    }
+
+    final class ImportRejected : io.github.artemidius.blowhard.ui.presentation/DocumentLibraryNotice { // io.github.artemidius.blowhard.ui.presentation/DocumentLibraryNotice.ImportRejected|null[0]
+        constructor <init>(io.github.artemidius.blowhard.core.api/DocumentImportRejection) // io.github.artemidius.blowhard.ui.presentation/DocumentLibraryNotice.ImportRejected.<init>|<init>(io.github.artemidius.blowhard.core.api.DocumentImportRejection){}[0]
+
+        final val reason // io.github.artemidius.blowhard.ui.presentation/DocumentLibraryNotice.ImportRejected.reason|{}reason[0]
+            final fun <get-reason>(): io.github.artemidius.blowhard.core.api/DocumentImportRejection // io.github.artemidius.blowhard.ui.presentation/DocumentLibraryNotice.ImportRejected.reason.<get-reason>|<get-reason>(){}[0]
+
+        final fun component1(): io.github.artemidius.blowhard.core.api/DocumentImportRejection // io.github.artemidius.blowhard.ui.presentation/DocumentLibraryNotice.ImportRejected.component1|component1(){}[0]
+        final fun copy(io.github.artemidius.blowhard.core.api/DocumentImportRejection = ...): io.github.artemidius.blowhard.ui.presentation/DocumentLibraryNotice.ImportRejected // io.github.artemidius.blowhard.ui.presentation/DocumentLibraryNotice.ImportRejected.copy|copy(io.github.artemidius.blowhard.core.api.DocumentImportRejection){}[0]
+        final fun equals(kotlin/Any?): kotlin/Boolean // io.github.artemidius.blowhard.ui.presentation/DocumentLibraryNotice.ImportRejected.equals|equals(kotlin.Any?){}[0]
+        final fun hashCode(): kotlin/Int // io.github.artemidius.blowhard.ui.presentation/DocumentLibraryNotice.ImportRejected.hashCode|hashCode(){}[0]
+        final fun toString(): kotlin/String // io.github.artemidius.blowhard.ui.presentation/DocumentLibraryNotice.ImportRejected.toString|toString(){}[0]
+    }
+
+    final class Imported : io.github.artemidius.blowhard.ui.presentation/DocumentLibraryNotice { // io.github.artemidius.blowhard.ui.presentation/DocumentLibraryNotice.Imported|null[0]
+        constructor <init>(kotlin/String) // io.github.artemidius.blowhard.ui.presentation/DocumentLibraryNotice.Imported.<init>|<init>(kotlin.String){}[0]
+
+        final val displayName // io.github.artemidius.blowhard.ui.presentation/DocumentLibraryNotice.Imported.displayName|{}displayName[0]
+            final fun <get-displayName>(): kotlin/String // io.github.artemidius.blowhard.ui.presentation/DocumentLibraryNotice.Imported.displayName.<get-displayName>|<get-displayName>(){}[0]
+
+        final fun component1(): kotlin/String // io.github.artemidius.blowhard.ui.presentation/DocumentLibraryNotice.Imported.component1|component1(){}[0]
+        final fun copy(kotlin/String = ...): io.github.artemidius.blowhard.ui.presentation/DocumentLibraryNotice.Imported // io.github.artemidius.blowhard.ui.presentation/DocumentLibraryNotice.Imported.copy|copy(kotlin.String){}[0]
+        final fun equals(kotlin/Any?): kotlin/Boolean // io.github.artemidius.blowhard.ui.presentation/DocumentLibraryNotice.Imported.equals|equals(kotlin.Any?){}[0]
+        final fun hashCode(): kotlin/Int // io.github.artemidius.blowhard.ui.presentation/DocumentLibraryNotice.Imported.hashCode|hashCode(){}[0]
+        final fun toString(): kotlin/String // io.github.artemidius.blowhard.ui.presentation/DocumentLibraryNotice.Imported.toString|toString(){}[0]
+    }
+
+    final object OperationUnavailable : io.github.artemidius.blowhard.ui.presentation/DocumentLibraryNotice { // io.github.artemidius.blowhard.ui.presentation/DocumentLibraryNotice.OperationUnavailable|null[0]
+        final fun equals(kotlin/Any?): kotlin/Boolean // io.github.artemidius.blowhard.ui.presentation/DocumentLibraryNotice.OperationUnavailable.equals|equals(kotlin.Any?){}[0]
+        final fun hashCode(): kotlin/Int // io.github.artemidius.blowhard.ui.presentation/DocumentLibraryNotice.OperationUnavailable.hashCode|hashCode(){}[0]
+        final fun toString(): kotlin/String // io.github.artemidius.blowhard.ui.presentation/DocumentLibraryNotice.OperationUnavailable.toString|toString(){}[0]
     }
 }
 
@@ -459,6 +555,37 @@ final class io.github.artemidius.blowhard.ui.presentation/ConversationUiState { 
     final fun toString(): kotlin/String // io.github.artemidius.blowhard.ui.presentation/ConversationUiState.toString|toString(){}[0]
 }
 
+final class io.github.artemidius.blowhard.ui.presentation/DocumentLibraryPresenter { // io.github.artemidius.blowhard.ui.presentation/DocumentLibraryPresenter|null[0]
+    constructor <init>(io.github.artemidius.blowhard.core.api/DocumentLibrary, io.github.artemidius.blowhard.ui.presentation/DocumentPicker, kotlin.coroutines/CoroutineContext) // io.github.artemidius.blowhard.ui.presentation/DocumentLibraryPresenter.<init>|<init>(io.github.artemidius.blowhard.core.api.DocumentLibrary;io.github.artemidius.blowhard.ui.presentation.DocumentPicker;kotlin.coroutines.CoroutineContext){}[0]
+
+    final val state // io.github.artemidius.blowhard.ui.presentation/DocumentLibraryPresenter.state|{}state[0]
+        final fun <get-state>(): kotlinx.coroutines.flow/StateFlow<io.github.artemidius.blowhard.ui.presentation/DocumentLibraryUiState> // io.github.artemidius.blowhard.ui.presentation/DocumentLibraryPresenter.state.<get-state>|<get-state>(){}[0]
+
+    final fun close() // io.github.artemidius.blowhard.ui.presentation/DocumentLibraryPresenter.close|close(){}[0]
+}
+
+final class io.github.artemidius.blowhard.ui.presentation/DocumentLibraryUiState { // io.github.artemidius.blowhard.ui.presentation/DocumentLibraryUiState|null[0]
+    constructor <init>(kotlin.collections/List<io.github.artemidius.blowhard.core.api/ImportedDocument> = ..., kotlin/Boolean = ..., io.github.artemidius.blowhard.core.api/ImportedDocument? = ..., io.github.artemidius.blowhard.ui.presentation/DocumentLibraryNotice? = ...) // io.github.artemidius.blowhard.ui.presentation/DocumentLibraryUiState.<init>|<init>(kotlin.collections.List<io.github.artemidius.blowhard.core.api.ImportedDocument>;kotlin.Boolean;io.github.artemidius.blowhard.core.api.ImportedDocument?;io.github.artemidius.blowhard.ui.presentation.DocumentLibraryNotice?){}[0]
+
+    final val documents // io.github.artemidius.blowhard.ui.presentation/DocumentLibraryUiState.documents|{}documents[0]
+        final fun <get-documents>(): kotlin.collections/List<io.github.artemidius.blowhard.core.api/ImportedDocument> // io.github.artemidius.blowhard.ui.presentation/DocumentLibraryUiState.documents.<get-documents>|<get-documents>(){}[0]
+    final val isBusy // io.github.artemidius.blowhard.ui.presentation/DocumentLibraryUiState.isBusy|{}isBusy[0]
+        final fun <get-isBusy>(): kotlin/Boolean // io.github.artemidius.blowhard.ui.presentation/DocumentLibraryUiState.isBusy.<get-isBusy>|<get-isBusy>(){}[0]
+    final val notice // io.github.artemidius.blowhard.ui.presentation/DocumentLibraryUiState.notice|{}notice[0]
+        final fun <get-notice>(): io.github.artemidius.blowhard.ui.presentation/DocumentLibraryNotice? // io.github.artemidius.blowhard.ui.presentation/DocumentLibraryUiState.notice.<get-notice>|<get-notice>(){}[0]
+    final val pendingDeletion // io.github.artemidius.blowhard.ui.presentation/DocumentLibraryUiState.pendingDeletion|{}pendingDeletion[0]
+        final fun <get-pendingDeletion>(): io.github.artemidius.blowhard.core.api/ImportedDocument? // io.github.artemidius.blowhard.ui.presentation/DocumentLibraryUiState.pendingDeletion.<get-pendingDeletion>|<get-pendingDeletion>(){}[0]
+
+    final fun component1(): kotlin.collections/List<io.github.artemidius.blowhard.core.api/ImportedDocument> // io.github.artemidius.blowhard.ui.presentation/DocumentLibraryUiState.component1|component1(){}[0]
+    final fun component2(): kotlin/Boolean // io.github.artemidius.blowhard.ui.presentation/DocumentLibraryUiState.component2|component2(){}[0]
+    final fun component3(): io.github.artemidius.blowhard.core.api/ImportedDocument? // io.github.artemidius.blowhard.ui.presentation/DocumentLibraryUiState.component3|component3(){}[0]
+    final fun component4(): io.github.artemidius.blowhard.ui.presentation/DocumentLibraryNotice? // io.github.artemidius.blowhard.ui.presentation/DocumentLibraryUiState.component4|component4(){}[0]
+    final fun copy(kotlin.collections/List<io.github.artemidius.blowhard.core.api/ImportedDocument> = ..., kotlin/Boolean = ..., io.github.artemidius.blowhard.core.api/ImportedDocument? = ..., io.github.artemidius.blowhard.ui.presentation/DocumentLibraryNotice? = ...): io.github.artemidius.blowhard.ui.presentation/DocumentLibraryUiState // io.github.artemidius.blowhard.ui.presentation/DocumentLibraryUiState.copy|copy(kotlin.collections.List<io.github.artemidius.blowhard.core.api.ImportedDocument>;kotlin.Boolean;io.github.artemidius.blowhard.core.api.ImportedDocument?;io.github.artemidius.blowhard.ui.presentation.DocumentLibraryNotice?){}[0]
+    final fun equals(kotlin/Any?): kotlin/Boolean // io.github.artemidius.blowhard.ui.presentation/DocumentLibraryUiState.equals|equals(kotlin.Any?){}[0]
+    final fun hashCode(): kotlin/Int // io.github.artemidius.blowhard.ui.presentation/DocumentLibraryUiState.hashCode|hashCode(){}[0]
+    final fun toString(): kotlin/String // io.github.artemidius.blowhard.ui.presentation/DocumentLibraryUiState.toString|toString(){}[0]
+}
+
 final class io.github.artemidius.blowhard.ui.presentation/RunInspectorPresenter { // io.github.artemidius.blowhard.ui.presentation/RunInspectorPresenter|null[0]
     constructor <init>(io.github.artemidius.blowhard.core.api/RunInspector, io.github.artemidius.blowhard.core.api/RunDiagnosticReportGenerator, io.github.artemidius.blowhard.ui.presentation/RunDiagnosticReportSaver, kotlin.coroutines/CoroutineContext) // io.github.artemidius.blowhard.ui.presentation/RunInspectorPresenter.<init>|<init>(io.github.artemidius.blowhard.core.api.RunInspector;io.github.artemidius.blowhard.core.api.RunDiagnosticReportGenerator;io.github.artemidius.blowhard.ui.presentation.RunDiagnosticReportSaver;kotlin.coroutines.CoroutineContext){}[0]
 
@@ -510,6 +637,18 @@ final val io.github.artemidius.blowhard.ui.presentation/io_github_artemidius_blo
 final val io.github.artemidius.blowhard.ui.presentation/io_github_artemidius_blowhard_ui_presentation_ConversationPresenter$stableprop // io.github.artemidius.blowhard.ui.presentation/io_github_artemidius_blowhard_ui_presentation_ConversationPresenter$stableprop|#static{}io_github_artemidius_blowhard_ui_presentation_ConversationPresenter$stableprop[0]
 final val io.github.artemidius.blowhard.ui.presentation/io_github_artemidius_blowhard_ui_presentation_ConversationUiModel$stableprop // io.github.artemidius.blowhard.ui.presentation/io_github_artemidius_blowhard_ui_presentation_ConversationUiModel$stableprop|#static{}io_github_artemidius_blowhard_ui_presentation_ConversationUiModel$stableprop[0]
 final val io.github.artemidius.blowhard.ui.presentation/io_github_artemidius_blowhard_ui_presentation_ConversationUiState$stableprop // io.github.artemidius.blowhard.ui.presentation/io_github_artemidius_blowhard_ui_presentation_ConversationUiState$stableprop|#static{}io_github_artemidius_blowhard_ui_presentation_ConversationUiState$stableprop[0]
+final val io.github.artemidius.blowhard.ui.presentation/io_github_artemidius_blowhard_ui_presentation_DocumentLibraryAction_DeleteConfirmed$stableprop // io.github.artemidius.blowhard.ui.presentation/io_github_artemidius_blowhard_ui_presentation_DocumentLibraryAction_DeleteConfirmed$stableprop|#static{}io_github_artemidius_blowhard_ui_presentation_DocumentLibraryAction_DeleteConfirmed$stableprop[0]
+final val io.github.artemidius.blowhard.ui.presentation/io_github_artemidius_blowhard_ui_presentation_DocumentLibraryAction_DeleteDismissed$stableprop // io.github.artemidius.blowhard.ui.presentation/io_github_artemidius_blowhard_ui_presentation_DocumentLibraryAction_DeleteDismissed$stableprop|#static{}io_github_artemidius_blowhard_ui_presentation_DocumentLibraryAction_DeleteDismissed$stableprop[0]
+final val io.github.artemidius.blowhard.ui.presentation/io_github_artemidius_blowhard_ui_presentation_DocumentLibraryAction_DeleteRequested$stableprop // io.github.artemidius.blowhard.ui.presentation/io_github_artemidius_blowhard_ui_presentation_DocumentLibraryAction_DeleteRequested$stableprop|#static{}io_github_artemidius_blowhard_ui_presentation_DocumentLibraryAction_DeleteRequested$stableprop[0]
+final val io.github.artemidius.blowhard.ui.presentation/io_github_artemidius_blowhard_ui_presentation_DocumentLibraryAction_ImportRequested$stableprop // io.github.artemidius.blowhard.ui.presentation/io_github_artemidius_blowhard_ui_presentation_DocumentLibraryAction_ImportRequested$stableprop|#static{}io_github_artemidius_blowhard_ui_presentation_DocumentLibraryAction_ImportRequested$stableprop[0]
+final val io.github.artemidius.blowhard.ui.presentation/io_github_artemidius_blowhard_ui_presentation_DocumentLibraryAction_NoticeDismissed$stableprop // io.github.artemidius.blowhard.ui.presentation/io_github_artemidius_blowhard_ui_presentation_DocumentLibraryAction_NoticeDismissed$stableprop|#static{}io_github_artemidius_blowhard_ui_presentation_DocumentLibraryAction_NoticeDismissed$stableprop[0]
+final val io.github.artemidius.blowhard.ui.presentation/io_github_artemidius_blowhard_ui_presentation_DocumentLibraryAction_RefreshRequested$stableprop // io.github.artemidius.blowhard.ui.presentation/io_github_artemidius_blowhard_ui_presentation_DocumentLibraryAction_RefreshRequested$stableprop|#static{}io_github_artemidius_blowhard_ui_presentation_DocumentLibraryAction_RefreshRequested$stableprop[0]
+final val io.github.artemidius.blowhard.ui.presentation/io_github_artemidius_blowhard_ui_presentation_DocumentLibraryNotice_Deleted$stableprop // io.github.artemidius.blowhard.ui.presentation/io_github_artemidius_blowhard_ui_presentation_DocumentLibraryNotice_Deleted$stableprop|#static{}io_github_artemidius_blowhard_ui_presentation_DocumentLibraryNotice_Deleted$stableprop[0]
+final val io.github.artemidius.blowhard.ui.presentation/io_github_artemidius_blowhard_ui_presentation_DocumentLibraryNotice_ImportRejected$stableprop // io.github.artemidius.blowhard.ui.presentation/io_github_artemidius_blowhard_ui_presentation_DocumentLibraryNotice_ImportRejected$stableprop|#static{}io_github_artemidius_blowhard_ui_presentation_DocumentLibraryNotice_ImportRejected$stableprop[0]
+final val io.github.artemidius.blowhard.ui.presentation/io_github_artemidius_blowhard_ui_presentation_DocumentLibraryNotice_Imported$stableprop // io.github.artemidius.blowhard.ui.presentation/io_github_artemidius_blowhard_ui_presentation_DocumentLibraryNotice_Imported$stableprop|#static{}io_github_artemidius_blowhard_ui_presentation_DocumentLibraryNotice_Imported$stableprop[0]
+final val io.github.artemidius.blowhard.ui.presentation/io_github_artemidius_blowhard_ui_presentation_DocumentLibraryNotice_OperationUnavailable$stableprop // io.github.artemidius.blowhard.ui.presentation/io_github_artemidius_blowhard_ui_presentation_DocumentLibraryNotice_OperationUnavailable$stableprop|#static{}io_github_artemidius_blowhard_ui_presentation_DocumentLibraryNotice_OperationUnavailable$stableprop[0]
+final val io.github.artemidius.blowhard.ui.presentation/io_github_artemidius_blowhard_ui_presentation_DocumentLibraryPresenter$stableprop // io.github.artemidius.blowhard.ui.presentation/io_github_artemidius_blowhard_ui_presentation_DocumentLibraryPresenter$stableprop|#static{}io_github_artemidius_blowhard_ui_presentation_DocumentLibraryPresenter$stableprop[0]
+final val io.github.artemidius.blowhard.ui.presentation/io_github_artemidius_blowhard_ui_presentation_DocumentLibraryUiState$stableprop // io.github.artemidius.blowhard.ui.presentation/io_github_artemidius_blowhard_ui_presentation_DocumentLibraryUiState$stableprop|#static{}io_github_artemidius_blowhard_ui_presentation_DocumentLibraryUiState$stableprop[0]
 final val io.github.artemidius.blowhard.ui.presentation/io_github_artemidius_blowhard_ui_presentation_InspectorPresenterEvent_Action$stableprop // io.github.artemidius.blowhard.ui.presentation/io_github_artemidius_blowhard_ui_presentation_InspectorPresenterEvent_Action$stableprop|#static{}io_github_artemidius_blowhard_ui_presentation_InspectorPresenterEvent_Action$stableprop[0]
 final val io.github.artemidius.blowhard.ui.presentation/io_github_artemidius_blowhard_ui_presentation_InspectorPresenterEvent_Exported$stableprop // io.github.artemidius.blowhard.ui.presentation/io_github_artemidius_blowhard_ui_presentation_InspectorPresenterEvent_Exported$stableprop|#static{}io_github_artemidius_blowhard_ui_presentation_InspectorPresenterEvent_Exported$stableprop[0]
 final val io.github.artemidius.blowhard.ui.presentation/io_github_artemidius_blowhard_ui_presentation_InspectorPresenterEvent_Loaded$stableprop // io.github.artemidius.blowhard.ui.presentation/io_github_artemidius_blowhard_ui_presentation_InspectorPresenterEvent_Loaded$stableprop|#static{}io_github_artemidius_blowhard_ui_presentation_InspectorPresenterEvent_Loaded$stableprop[0]
@@ -558,6 +697,18 @@ final fun io.github.artemidius.blowhard.ui.presentation/io_github_artemidius_blo
 final fun io.github.artemidius.blowhard.ui.presentation/io_github_artemidius_blowhard_ui_presentation_ConversationPresenter$stableprop_getter(): kotlin/Int // io.github.artemidius.blowhard.ui.presentation/io_github_artemidius_blowhard_ui_presentation_ConversationPresenter$stableprop_getter|io_github_artemidius_blowhard_ui_presentation_ConversationPresenter$stableprop_getter(){}[0]
 final fun io.github.artemidius.blowhard.ui.presentation/io_github_artemidius_blowhard_ui_presentation_ConversationUiModel$stableprop_getter(): kotlin/Int // io.github.artemidius.blowhard.ui.presentation/io_github_artemidius_blowhard_ui_presentation_ConversationUiModel$stableprop_getter|io_github_artemidius_blowhard_ui_presentation_ConversationUiModel$stableprop_getter(){}[0]
 final fun io.github.artemidius.blowhard.ui.presentation/io_github_artemidius_blowhard_ui_presentation_ConversationUiState$stableprop_getter(): kotlin/Int // io.github.artemidius.blowhard.ui.presentation/io_github_artemidius_blowhard_ui_presentation_ConversationUiState$stableprop_getter|io_github_artemidius_blowhard_ui_presentation_ConversationUiState$stableprop_getter(){}[0]
+final fun io.github.artemidius.blowhard.ui.presentation/io_github_artemidius_blowhard_ui_presentation_DocumentLibraryAction_DeleteConfirmed$stableprop_getter(): kotlin/Int // io.github.artemidius.blowhard.ui.presentation/io_github_artemidius_blowhard_ui_presentation_DocumentLibraryAction_DeleteConfirmed$stableprop_getter|io_github_artemidius_blowhard_ui_presentation_DocumentLibraryAction_DeleteConfirmed$stableprop_getter(){}[0]
+final fun io.github.artemidius.blowhard.ui.presentation/io_github_artemidius_blowhard_ui_presentation_DocumentLibraryAction_DeleteDismissed$stableprop_getter(): kotlin/Int // io.github.artemidius.blowhard.ui.presentation/io_github_artemidius_blowhard_ui_presentation_DocumentLibraryAction_DeleteDismissed$stableprop_getter|io_github_artemidius_blowhard_ui_presentation_DocumentLibraryAction_DeleteDismissed$stableprop_getter(){}[0]
+final fun io.github.artemidius.blowhard.ui.presentation/io_github_artemidius_blowhard_ui_presentation_DocumentLibraryAction_DeleteRequested$stableprop_getter(): kotlin/Int // io.github.artemidius.blowhard.ui.presentation/io_github_artemidius_blowhard_ui_presentation_DocumentLibraryAction_DeleteRequested$stableprop_getter|io_github_artemidius_blowhard_ui_presentation_DocumentLibraryAction_DeleteRequested$stableprop_getter(){}[0]
+final fun io.github.artemidius.blowhard.ui.presentation/io_github_artemidius_blowhard_ui_presentation_DocumentLibraryAction_ImportRequested$stableprop_getter(): kotlin/Int // io.github.artemidius.blowhard.ui.presentation/io_github_artemidius_blowhard_ui_presentation_DocumentLibraryAction_ImportRequested$stableprop_getter|io_github_artemidius_blowhard_ui_presentation_DocumentLibraryAction_ImportRequested$stableprop_getter(){}[0]
+final fun io.github.artemidius.blowhard.ui.presentation/io_github_artemidius_blowhard_ui_presentation_DocumentLibraryAction_NoticeDismissed$stableprop_getter(): kotlin/Int // io.github.artemidius.blowhard.ui.presentation/io_github_artemidius_blowhard_ui_presentation_DocumentLibraryAction_NoticeDismissed$stableprop_getter|io_github_artemidius_blowhard_ui_presentation_DocumentLibraryAction_NoticeDismissed$stableprop_getter(){}[0]
+final fun io.github.artemidius.blowhard.ui.presentation/io_github_artemidius_blowhard_ui_presentation_DocumentLibraryAction_RefreshRequested$stableprop_getter(): kotlin/Int // io.github.artemidius.blowhard.ui.presentation/io_github_artemidius_blowhard_ui_presentation_DocumentLibraryAction_RefreshRequested$stableprop_getter|io_github_artemidius_blowhard_ui_presentation_DocumentLibraryAction_RefreshRequested$stableprop_getter(){}[0]
+final fun io.github.artemidius.blowhard.ui.presentation/io_github_artemidius_blowhard_ui_presentation_DocumentLibraryNotice_Deleted$stableprop_getter(): kotlin/Int // io.github.artemidius.blowhard.ui.presentation/io_github_artemidius_blowhard_ui_presentation_DocumentLibraryNotice_Deleted$stableprop_getter|io_github_artemidius_blowhard_ui_presentation_DocumentLibraryNotice_Deleted$stableprop_getter(){}[0]
+final fun io.github.artemidius.blowhard.ui.presentation/io_github_artemidius_blowhard_ui_presentation_DocumentLibraryNotice_ImportRejected$stableprop_getter(): kotlin/Int // io.github.artemidius.blowhard.ui.presentation/io_github_artemidius_blowhard_ui_presentation_DocumentLibraryNotice_ImportRejected$stableprop_getter|io_github_artemidius_blowhard_ui_presentation_DocumentLibraryNotice_ImportRejected$stableprop_getter(){}[0]
+final fun io.github.artemidius.blowhard.ui.presentation/io_github_artemidius_blowhard_ui_presentation_DocumentLibraryNotice_Imported$stableprop_getter(): kotlin/Int // io.github.artemidius.blowhard.ui.presentation/io_github_artemidius_blowhard_ui_presentation_DocumentLibraryNotice_Imported$stableprop_getter|io_github_artemidius_blowhard_ui_presentation_DocumentLibraryNotice_Imported$stableprop_getter(){}[0]
+final fun io.github.artemidius.blowhard.ui.presentation/io_github_artemidius_blowhard_ui_presentation_DocumentLibraryNotice_OperationUnavailable$stableprop_getter(): kotlin/Int // io.github.artemidius.blowhard.ui.presentation/io_github_artemidius_blowhard_ui_presentation_DocumentLibraryNotice_OperationUnavailable$stableprop_getter|io_github_artemidius_blowhard_ui_presentation_DocumentLibraryNotice_OperationUnavailable$stableprop_getter(){}[0]
+final fun io.github.artemidius.blowhard.ui.presentation/io_github_artemidius_blowhard_ui_presentation_DocumentLibraryPresenter$stableprop_getter(): kotlin/Int // io.github.artemidius.blowhard.ui.presentation/io_github_artemidius_blowhard_ui_presentation_DocumentLibraryPresenter$stableprop_getter|io_github_artemidius_blowhard_ui_presentation_DocumentLibraryPresenter$stableprop_getter(){}[0]
+final fun io.github.artemidius.blowhard.ui.presentation/io_github_artemidius_blowhard_ui_presentation_DocumentLibraryUiState$stableprop_getter(): kotlin/Int // io.github.artemidius.blowhard.ui.presentation/io_github_artemidius_blowhard_ui_presentation_DocumentLibraryUiState$stableprop_getter|io_github_artemidius_blowhard_ui_presentation_DocumentLibraryUiState$stableprop_getter(){}[0]
 final fun io.github.artemidius.blowhard.ui.presentation/io_github_artemidius_blowhard_ui_presentation_InspectorPresenterEvent_Action$stableprop_getter(): kotlin/Int // io.github.artemidius.blowhard.ui.presentation/io_github_artemidius_blowhard_ui_presentation_InspectorPresenterEvent_Action$stableprop_getter|io_github_artemidius_blowhard_ui_presentation_InspectorPresenterEvent_Action$stableprop_getter(){}[0]
 final fun io.github.artemidius.blowhard.ui.presentation/io_github_artemidius_blowhard_ui_presentation_InspectorPresenterEvent_Exported$stableprop_getter(): kotlin/Int // io.github.artemidius.blowhard.ui.presentation/io_github_artemidius_blowhard_ui_presentation_InspectorPresenterEvent_Exported$stableprop_getter|io_github_artemidius_blowhard_ui_presentation_InspectorPresenterEvent_Exported$stableprop_getter(){}[0]
 final fun io.github.artemidius.blowhard.ui.presentation/io_github_artemidius_blowhard_ui_presentation_InspectorPresenterEvent_Loaded$stableprop_getter(): kotlin/Int // io.github.artemidius.blowhard.ui.presentation/io_github_artemidius_blowhard_ui_presentation_InspectorPresenterEvent_Loaded$stableprop_getter|io_github_artemidius_blowhard_ui_presentation_InspectorPresenterEvent_Loaded$stableprop_getter(){}[0]

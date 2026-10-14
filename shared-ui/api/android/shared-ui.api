@@ -353,6 +353,139 @@ public abstract interface class io/github/artemidius/blowhard/ui/presentation/De
 	public abstract fun prepare-TKNjWRg (Ljava/lang/String;Lio/github/artemidius/blowhard/ui/presentation/DemoScenario;)V
 }
 
+public abstract interface class io/github/artemidius/blowhard/ui/presentation/DocumentLibraryAction {
+}
+
+public final class io/github/artemidius/blowhard/ui/presentation/DocumentLibraryAction$DeleteConfirmed : io/github/artemidius/blowhard/ui/presentation/DocumentLibraryAction {
+	public static final field $stable I
+	public static final field INSTANCE Lio/github/artemidius/blowhard/ui/presentation/DocumentLibraryAction$DeleteConfirmed;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class io/github/artemidius/blowhard/ui/presentation/DocumentLibraryAction$DeleteDismissed : io/github/artemidius/blowhard/ui/presentation/DocumentLibraryAction {
+	public static final field $stable I
+	public static final field INSTANCE Lio/github/artemidius/blowhard/ui/presentation/DocumentLibraryAction$DeleteDismissed;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class io/github/artemidius/blowhard/ui/presentation/DocumentLibraryAction$DeleteRequested : io/github/artemidius/blowhard/ui/presentation/DocumentLibraryAction {
+	public static final field $stable I
+	public synthetic fun <init> (Ljava/lang/String;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1-VJy53Lc ()Ljava/lang/String;
+	public final fun copy-1IVQLQQ (Ljava/lang/String;)Lio/github/artemidius/blowhard/ui/presentation/DocumentLibraryAction$DeleteRequested;
+	public static synthetic fun copy-1IVQLQQ$default (Lio/github/artemidius/blowhard/ui/presentation/DocumentLibraryAction$DeleteRequested;Ljava/lang/String;ILjava/lang/Object;)Lio/github/artemidius/blowhard/ui/presentation/DocumentLibraryAction$DeleteRequested;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getId-VJy53Lc ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class io/github/artemidius/blowhard/ui/presentation/DocumentLibraryAction$ImportRequested : io/github/artemidius/blowhard/ui/presentation/DocumentLibraryAction {
+	public static final field $stable I
+	public static final field INSTANCE Lio/github/artemidius/blowhard/ui/presentation/DocumentLibraryAction$ImportRequested;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class io/github/artemidius/blowhard/ui/presentation/DocumentLibraryAction$NoticeDismissed : io/github/artemidius/blowhard/ui/presentation/DocumentLibraryAction {
+	public static final field $stable I
+	public static final field INSTANCE Lio/github/artemidius/blowhard/ui/presentation/DocumentLibraryAction$NoticeDismissed;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class io/github/artemidius/blowhard/ui/presentation/DocumentLibraryAction$RefreshRequested : io/github/artemidius/blowhard/ui/presentation/DocumentLibraryAction {
+	public static final field $stable I
+	public static final field INSTANCE Lio/github/artemidius/blowhard/ui/presentation/DocumentLibraryAction$RefreshRequested;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public abstract interface class io/github/artemidius/blowhard/ui/presentation/DocumentLibraryNotice {
+}
+
+public final class io/github/artemidius/blowhard/ui/presentation/DocumentLibraryNotice$Deleted : io/github/artemidius/blowhard/ui/presentation/DocumentLibraryNotice {
+	public static final field $stable I
+	public fun <init> (Ljava/lang/String;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun copy (Ljava/lang/String;)Lio/github/artemidius/blowhard/ui/presentation/DocumentLibraryNotice$Deleted;
+	public static synthetic fun copy$default (Lio/github/artemidius/blowhard/ui/presentation/DocumentLibraryNotice$Deleted;Ljava/lang/String;ILjava/lang/Object;)Lio/github/artemidius/blowhard/ui/presentation/DocumentLibraryNotice$Deleted;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getDisplayName ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class io/github/artemidius/blowhard/ui/presentation/DocumentLibraryNotice$ImportRejected : io/github/artemidius/blowhard/ui/presentation/DocumentLibraryNotice {
+	public static final field $stable I
+	public fun <init> (Lio/github/artemidius/blowhard/core/api/DocumentImportRejection;)V
+	public final fun component1 ()Lio/github/artemidius/blowhard/core/api/DocumentImportRejection;
+	public final fun copy (Lio/github/artemidius/blowhard/core/api/DocumentImportRejection;)Lio/github/artemidius/blowhard/ui/presentation/DocumentLibraryNotice$ImportRejected;
+	public static synthetic fun copy$default (Lio/github/artemidius/blowhard/ui/presentation/DocumentLibraryNotice$ImportRejected;Lio/github/artemidius/blowhard/core/api/DocumentImportRejection;ILjava/lang/Object;)Lio/github/artemidius/blowhard/ui/presentation/DocumentLibraryNotice$ImportRejected;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getReason ()Lio/github/artemidius/blowhard/core/api/DocumentImportRejection;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class io/github/artemidius/blowhard/ui/presentation/DocumentLibraryNotice$Imported : io/github/artemidius/blowhard/ui/presentation/DocumentLibraryNotice {
+	public static final field $stable I
+	public fun <init> (Ljava/lang/String;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun copy (Ljava/lang/String;)Lio/github/artemidius/blowhard/ui/presentation/DocumentLibraryNotice$Imported;
+	public static synthetic fun copy$default (Lio/github/artemidius/blowhard/ui/presentation/DocumentLibraryNotice$Imported;Ljava/lang/String;ILjava/lang/Object;)Lio/github/artemidius/blowhard/ui/presentation/DocumentLibraryNotice$Imported;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getDisplayName ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class io/github/artemidius/blowhard/ui/presentation/DocumentLibraryNotice$OperationUnavailable : io/github/artemidius/blowhard/ui/presentation/DocumentLibraryNotice {
+	public static final field $stable I
+	public static final field INSTANCE Lio/github/artemidius/blowhard/ui/presentation/DocumentLibraryNotice$OperationUnavailable;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class io/github/artemidius/blowhard/ui/presentation/DocumentLibraryPresenter {
+	public static final field $stable I
+	public fun <init> (Lio/github/artemidius/blowhard/core/api/DocumentLibrary;Lio/github/artemidius/blowhard/ui/presentation/DocumentPicker;Lkotlin/coroutines/CoroutineContext;)V
+	public final fun close ()V
+	public final fun getState ()Lkotlinx/coroutines/flow/StateFlow;
+}
+
+public final class io/github/artemidius/blowhard/ui/presentation/DocumentLibraryUiState {
+	public static final field $stable I
+	public fun <init> ()V
+	public fun <init> (Ljava/util/List;ZLio/github/artemidius/blowhard/core/api/ImportedDocument;Lio/github/artemidius/blowhard/ui/presentation/DocumentLibraryNotice;)V
+	public synthetic fun <init> (Ljava/util/List;ZLio/github/artemidius/blowhard/core/api/ImportedDocument;Lio/github/artemidius/blowhard/ui/presentation/DocumentLibraryNotice;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()Ljava/util/List;
+	public final fun component2 ()Z
+	public final fun component3 ()Lio/github/artemidius/blowhard/core/api/ImportedDocument;
+	public final fun component4 ()Lio/github/artemidius/blowhard/ui/presentation/DocumentLibraryNotice;
+	public final fun copy (Ljava/util/List;ZLio/github/artemidius/blowhard/core/api/ImportedDocument;Lio/github/artemidius/blowhard/ui/presentation/DocumentLibraryNotice;)Lio/github/artemidius/blowhard/ui/presentation/DocumentLibraryUiState;
+	public static synthetic fun copy$default (Lio/github/artemidius/blowhard/ui/presentation/DocumentLibraryUiState;Ljava/util/List;ZLio/github/artemidius/blowhard/core/api/ImportedDocument;Lio/github/artemidius/blowhard/ui/presentation/DocumentLibraryNotice;ILjava/lang/Object;)Lio/github/artemidius/blowhard/ui/presentation/DocumentLibraryUiState;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getDocuments ()Ljava/util/List;
+	public final fun getNotice ()Lio/github/artemidius/blowhard/ui/presentation/DocumentLibraryNotice;
+	public final fun getPendingDeletion ()Lio/github/artemidius/blowhard/core/api/ImportedDocument;
+	public fun hashCode ()I
+	public final fun isBusy ()Z
+	public fun toString ()Ljava/lang/String;
+}
+
+public abstract interface class io/github/artemidius/blowhard/ui/presentation/DocumentPicker {
+	public abstract fun select (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+}
+
 public final class io/github/artemidius/blowhard/ui/presentation/MessageDelivery : java/lang/Enum {
 	public static final field CANCELLED Lio/github/artemidius/blowhard/ui/presentation/MessageDelivery;
 	public static final field COMPLETE Lio/github/artemidius/blowhard/ui/presentation/MessageDelivery;
