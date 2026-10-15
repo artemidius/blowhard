@@ -33,11 +33,12 @@ internal fun ConversationPane(
     connection: ConnectionSettingsState,
     onAction: (ConversationAction) -> Unit,
     onOpenSettings: () -> Unit,
+    onOpenDocuments: () -> Unit,
     onInspectRun: (RunId) -> Unit,
     compact: Boolean,
 ) {
     Column(Modifier.fillMaxSize(), horizontalAlignment = Alignment.CenterHorizontally) {
-        if (compact) CompactConversationNavigation(state, onAction, onOpenSettings)
+        if (compact) CompactConversationNavigation(state, onAction, onOpenSettings, onOpenDocuments)
         ConversationHeader(state, connection, onAction, onOpenSettings)
         HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
         MessageList(
@@ -111,6 +112,7 @@ private fun CompactConversationNavigation(
     state: ConversationUiState,
     onAction: (ConversationAction) -> Unit,
     onOpenSettings: () -> Unit,
+    onOpenDocuments: () -> Unit,
 ) {
     LazyRow(
         modifier = Modifier.fillMaxWidth().padding(horizontal = 12.dp, vertical = 8.dp),
@@ -123,6 +125,9 @@ private fun CompactConversationNavigation(
         }
         item {
             TextButton(onClick = onOpenSettings) { Text("Settings") }
+        }
+        item {
+            TextButton(onClick = onOpenDocuments) { Text("Documents") }
         }
         items(state.conversations, key = { it.id.value }) { conversation ->
             TextButton(onClick = { onAction(ConversationAction.ConversationSelected(conversation.id)) }) {
