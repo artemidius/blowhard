@@ -23,6 +23,15 @@ final class io.github.artemidius.blowhard.adapters.mistral/MistralChatConfigurat
     final fun toString(): kotlin/String // io.github.artemidius.blowhard.adapters.mistral/MistralChatConfiguration.toString|toString(){}[0]
 }
 
+final class io.github.artemidius.blowhard.adapters.mistral/MistralDocumentOcrPort : io.github.artemidius.blowhard.core.domain/DocumentOcrPort { // io.github.artemidius.blowhard.adapters.mistral/MistralDocumentOcrPort|null[0]
+    final fun close() // io.github.artemidius.blowhard.adapters.mistral/MistralDocumentOcrPort.close|close(){}[0]
+    final suspend fun process(io.github.artemidius.blowhard.core.domain/DocumentOcrRequest): io.github.artemidius.blowhard.core.domain/DocumentOcrPortResult // io.github.artemidius.blowhard.adapters.mistral/MistralDocumentOcrPort.process|process(io.github.artemidius.blowhard.core.domain.DocumentOcrRequest){}[0]
+
+    final object Companion { // io.github.artemidius.blowhard.adapters.mistral/MistralDocumentOcrPort.Companion|null[0]
+        final fun create(io.github.artemidius.blowhard.adapters.mistral/MistralCredentialProvider): io.github.artemidius.blowhard.adapters.mistral/MistralDocumentOcrPort // io.github.artemidius.blowhard.adapters.mistral/MistralDocumentOcrPort.Companion.create|create(io.github.artemidius.blowhard.adapters.mistral.MistralCredentialProvider){}[0]
+    }
+}
+
 final class io.github.artemidius.blowhard.adapters.mistral/MistralModelCatalog : io.github.artemidius.blowhard.core.domain/ModelCatalogPort { // io.github.artemidius.blowhard.adapters.mistral/MistralModelCatalog|null[0]
     final fun close() // io.github.artemidius.blowhard.adapters.mistral/MistralModelCatalog.close|close(){}[0]
     final suspend fun listModels(): io.github.artemidius.blowhard.core.domain/ModelCatalogResult // io.github.artemidius.blowhard.adapters.mistral/MistralModelCatalog.listModels|listModels(){}[0]
