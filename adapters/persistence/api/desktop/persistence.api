@@ -3,6 +3,11 @@ public final class io/github/artemidius/blowhard/adapters/persistence/DesktopCon
 	public final fun open (Ljava/lang/String;)Lio/github/artemidius/blowhard/core/domain/ConversationStore;
 }
 
+public final class io/github/artemidius/blowhard/adapters/persistence/DesktopDocumentProcessingStores {
+	public static final field INSTANCE Lio/github/artemidius/blowhard/adapters/persistence/DesktopDocumentProcessingStores;
+	public final fun open (Ljava/lang/String;)Lio/github/artemidius/blowhard/core/domain/DocumentProcessingStore;
+}
+
 public final class io/github/artemidius/blowhard/adapters/persistence/DesktopDocumentStores {
 	public static final field INSTANCE Lio/github/artemidius/blowhard/adapters/persistence/DesktopDocumentStores;
 	public final fun open (Ljava/lang/String;)Lio/github/artemidius/blowhard/core/domain/DocumentStore;

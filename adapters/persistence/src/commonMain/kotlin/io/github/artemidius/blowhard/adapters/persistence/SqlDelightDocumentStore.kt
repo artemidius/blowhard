@@ -16,7 +16,8 @@ import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 
 internal class SqlDelightDocumentStore(private val driver: SqlDriver) : DocumentStore {
-    private val queries = BlowhardDatabase(driver).documentQueries
+    private val database = BlowhardDatabase(driver)
+    private val queries = database.documentQueries
     private val access = Mutex()
     private var closed = false
 
@@ -45,7 +46,13 @@ internal class SqlDelightDocumentStore(private val driver: SqlDriver) : Document
 
     override suspend fun delete(id: DocumentId): DocumentStoreDeletionResult =
         safely(DocumentStoreDeletionResult.UNAVAILABLE) {
-            if (queries.deleteDocument(id.value).value > 0) {
+            var deleted = false
+            queries.transaction {
+                database.documentExtractionQueries.deleteExtractionPages(id.value).value
+                database.documentExtractionQueries.deleteExtraction(id.value).value
+                deleted = queries.deleteDocument(id.value).value > 0
+            }
+            if (deleted) {
                 DocumentStoreDeletionResult.DELETED
             } else {
                 DocumentStoreDeletionResult.NOT_FOUND
@@ -85,7 +92,7 @@ private fun io.github.artemidius.blowhard.adapters.persistence.db.DocumentQuerie
     ).value
 }
 
-private fun toImportedDocument(
+internal fun toImportedDocument(
     id: String,
     displayName: String,
     sizeBytes: Long,
