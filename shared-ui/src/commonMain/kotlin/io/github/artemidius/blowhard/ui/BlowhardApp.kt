@@ -1,3 +1,5 @@
+@file:Suppress("FunctionNaming", "ktlint:standard:function-naming")
+
 package io.github.artemidius.blowhard.ui
 
 import androidx.compose.material3.MaterialTheme
@@ -9,58 +11,123 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import io.github.artemidius.blowhard.ui.presentation.ConnectionSettingsPresenter
+import io.github.artemidius.blowhard.ui.presentation.ConnectionSettingsUiState
 import io.github.artemidius.blowhard.ui.presentation.ConversationPresenter
+import io.github.artemidius.blowhard.ui.presentation.ConversationUiState
+import io.github.artemidius.blowhard.ui.presentation.DocumentLibraryPresenter
+import io.github.artemidius.blowhard.ui.presentation.DocumentLibraryUiState
 import io.github.artemidius.blowhard.ui.presentation.RunInspectorAction
 import io.github.artemidius.blowhard.ui.presentation.RunInspectorPresenter
+import io.github.artemidius.blowhard.ui.presentation.RunInspectorUiState
 
 /** Root presentation entry point shared by Blowhard clients. */
-@Suppress("FunctionNaming", "ktlint:standard:function-naming")
 @Composable
 public fun BlowhardApp(
     conversationPresenter: ConversationPresenter,
     connectionSettingsPresenter: ConnectionSettingsPresenter,
     runInspectorPresenter: RunInspectorPresenter,
+    documentLibraryPresenter: DocumentLibraryPresenter,
     requiresConnection: Boolean = false,
 ) {
     val conversationState by conversationPresenter.state.collectAsState()
     val settingsState by connectionSettingsPresenter.state.collectAsState()
     val inspectorState by runInspectorPresenter.state.collectAsState()
+    val documentLibraryState by documentLibraryPresenter.state.collectAsState()
     var destination by remember { mutableStateOf(WorkspaceDestination.CONVERSATION) }
     MaterialTheme(colorScheme = BlowhardColors, shapes = BlowhardShapes, typography = BlowhardTypography) {
         Surface {
-            if (requiresConnection && !settingsState.settings.canUseLiveMode) {
-                ConnectionSettingsScreen(
-                    state = settingsState,
-                    onAction = connectionSettingsPresenter::dispatch,
-                    onBack = null,
-                )
-                return@Surface
-            }
-            when (destination) {
-                WorkspaceDestination.CONVERSATION -> ConversationScreen(
-                    state = conversationState,
-                    connection = settingsState.settings,
-                    onAction = conversationPresenter::dispatch,
-                    onOpenSettings = { destination = WorkspaceDestination.SETTINGS },
-                    onInspectRun = { runId ->
-                        runInspectorPresenter.dispatch(RunInspectorAction.Open(runId))
-                        destination = WorkspaceDestination.INSPECTOR
-                    },
-                )
-
-                WorkspaceDestination.SETTINGS -> ConnectionSettingsScreen(
-                    state = settingsState,
-                    onAction = connectionSettingsPresenter::dispatch,
-                    onBack = { destination = WorkspaceDestination.CONVERSATION },
-                )
-
-                WorkspaceDestination.INSPECTOR -> RunInspectorScreen(
-                    state = inspectorState,
-                    onAction = runInspectorPresenter::dispatch,
-                    onBack = { destination = WorkspaceDestination.CONVERSATION },
-                )
-            }
+            WorkspaceContent(
+                destination = destination,
+                requiresConnection = requiresConnection,
+                conversationState = conversationState,
+                settingsState = settingsState,
+                inspectorState = inspectorState,
+                documentLibraryState = documentLibraryState,
+                conversationPresenter = conversationPresenter,
+                connectionSettingsPresenter = connectionSettingsPresenter,
+                runInspectorPresenter = runInspectorPresenter,
+                documentLibraryPresenter = documentLibraryPresenter,
+                navigate = { destination = it },
+            )
         }
+    }
+}
+
+@Composable
+private fun WorkspaceContent(
+    destination: WorkspaceDestination,
+    requiresConnection: Boolean,
+    conversationState: ConversationUiState,
+    settingsState: ConnectionSettingsUiState,
+    inspectorState: RunInspectorUiState,
+    documentLibraryState: DocumentLibraryUiState,
+    conversationPresenter: ConversationPresenter,
+    connectionSettingsPresenter: ConnectionSettingsPresenter,
+    runInspectorPresenter: RunInspectorPresenter,
+    documentLibraryPresenter: DocumentLibraryPresenter,
+    navigate: (WorkspaceDestination) -> Unit,
+) {
+    if (requiresConnection && !settingsState.settings.canUseLiveMode) {
+        ConnectionSettingsScreen(settingsState, connectionSettingsPresenter::dispatch, onBack = null)
+        return
+    }
+    WorkspaceDestinationContent(
+        destination,
+        conversationState,
+        settingsState,
+        inspectorState,
+        documentLibraryState,
+        conversationPresenter,
+        connectionSettingsPresenter,
+        runInspectorPresenter,
+        documentLibraryPresenter,
+        navigate,
+    )
+}
+
+@Composable
+private fun WorkspaceDestinationContent(
+    destination: WorkspaceDestination,
+    conversationState: ConversationUiState,
+    settingsState: ConnectionSettingsUiState,
+    inspectorState: RunInspectorUiState,
+    documentLibraryState: DocumentLibraryUiState,
+    conversationPresenter: ConversationPresenter,
+    connectionSettingsPresenter: ConnectionSettingsPresenter,
+    runInspectorPresenter: RunInspectorPresenter,
+    documentLibraryPresenter: DocumentLibraryPresenter,
+    navigate: (WorkspaceDestination) -> Unit,
+) {
+    when (destination) {
+        WorkspaceDestination.CONVERSATION -> ConversationScreen(
+            state = conversationState,
+            connection = settingsState.settings,
+            onAction = conversationPresenter::dispatch,
+            onOpenSettings = { navigate(WorkspaceDestination.SETTINGS) },
+            onOpenDocuments = { navigate(WorkspaceDestination.DOCUMENTS) },
+            onInspectRun = { runId ->
+                runInspectorPresenter.dispatch(RunInspectorAction.Open(runId))
+                navigate(WorkspaceDestination.INSPECTOR)
+            },
+        )
+
+        WorkspaceDestination.SETTINGS -> ConnectionSettingsScreen(
+            settingsState,
+            connectionSettingsPresenter::dispatch,
+            onBack = { navigate(WorkspaceDestination.CONVERSATION) },
+        )
+
+        WorkspaceDestination.INSPECTOR -> RunInspectorScreen(
+            inspectorState,
+            runInspectorPresenter::dispatch,
+            onBack = { navigate(WorkspaceDestination.CONVERSATION) },
+        )
+
+        WorkspaceDestination.DOCUMENTS -> DocumentLibraryScreen(
+            documentLibraryState,
+            documentLibraryPresenter::dispatch,
+            onBack = { navigate(WorkspaceDestination.CONVERSATION) },
+        )
     }
 }
 
@@ -68,4 +135,5 @@ private enum class WorkspaceDestination {
     CONVERSATION,
     SETTINGS,
     INSPECTOR,
+    DOCUMENTS,
 }

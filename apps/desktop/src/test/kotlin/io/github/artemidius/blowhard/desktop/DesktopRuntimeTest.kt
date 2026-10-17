@@ -269,9 +269,11 @@ class DesktopRuntimeTest {
     fun `runtime closes provider resources exactly once`() {
         var closeCalls = 0
         var historyCloseCalls = 0
+        var documentCloseCalls = 0
         val runtime = createDesktopRuntime(
             closeHistoryResources = { historyCloseCalls += 1 },
             closeProviderResources = { closeCalls += 1 },
+            closeDocumentResources = { documentCloseCalls += 1 },
         )
 
         runtime.close()
@@ -279,18 +281,22 @@ class DesktopRuntimeTest {
 
         assertEquals(1, closeCalls)
         assertEquals(1, historyCloseCalls)
+        assertEquals(1, documentCloseCalls)
     }
 
     @Test
     fun `provider resources close when history closure fails`() {
         var providerCloseCalls = 0
+        var documentCloseCalls = 0
         val runtime = createDesktopRuntime(
             closeHistoryResources = { error("history close failure") },
             closeProviderResources = { providerCloseCalls += 1 },
+            closeDocumentResources = { documentCloseCalls += 1 },
         )
 
         assertFailsWith<IllegalStateException> { runtime.close() }
         assertEquals(1, providerCloseCalls)
+        assertEquals(1, documentCloseCalls)
         runtime.close()
         assertEquals(1, providerCloseCalls)
     }
@@ -365,6 +371,7 @@ private fun createDesktopRuntime(
     conversationStore: ConversationStore? = null,
     closeHistoryResources: () -> Unit = {},
     closeProviderResources: () -> Unit = {},
+    closeDocumentResources: () -> Unit = {},
     reportSaver: RunDiagnosticReportSaver = RunDiagnosticReportSaver {
         RunDiagnosticReportSaveResult.UNAVAILABLE
     },
@@ -380,6 +387,7 @@ private fun createDesktopRuntime(
         conversationStore = conversationStore,
         closeHistoryResources = closeHistoryResources,
         closeProviderResources = closeProviderResources,
+        closeDocumentResources = closeDocumentResources,
     )
 }
 

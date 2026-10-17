@@ -49,6 +49,7 @@ internal fun ConversationSidebar(
     connection: ConnectionSettingsState,
     onAction: (ConversationAction) -> Unit,
     onOpenSettings: () -> Unit,
+    onOpenDocuments: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val listState = rememberSelectedConversationListState(state)
@@ -78,12 +79,19 @@ internal fun ConversationSidebar(
                 )
             }
         }
-        SidebarStatus(connection, onOpenSettings)
+        SidebarStatus(connection, onOpenSettings, onOpenDocuments)
     }
 }
 
 @Composable
-private fun SidebarStatus(connection: ConnectionSettingsState, onOpenSettings: () -> Unit) {
+private fun SidebarStatus(
+    connection: ConnectionSettingsState,
+    onOpenSettings: () -> Unit,
+    onOpenDocuments: () -> Unit,
+) {
+    OutlinedButton(onClick = onOpenDocuments, modifier = Modifier.fillMaxWidth()) {
+        Text("Local documents")
+    }
     OutlinedButton(onClick = onOpenSettings, modifier = Modifier.fillMaxWidth()) {
         Text("Provider settings")
     }
