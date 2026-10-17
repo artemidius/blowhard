@@ -1,8 +1,8 @@
 # Local document lifecycle
 
-Blowhard treats document selection, inspection, ownership, presentation, and any future provider
-use as distinct boundaries. The current lifecycle is entirely local: importing a document never
-starts generation and never sends bytes to Mistral.
+Blowhard treats document selection, inspection, ownership, presentation, and provider processing
+as distinct boundaries. Import remains entirely local. OCR begins only after a second, explicit
+**Extract with Mistral** action.
 
 ```mermaid
 flowchart LR
@@ -14,6 +14,10 @@ flowchart LR
     Inspector --> Policy[Size, page and pixel limits]
     Store --> SQLite[SQLDelight app-owned row]
     UI[Shared presenter and Compose UI] --> Library
+    UI -->|explicit extraction| OCR[core:application OCR service]
+    OCR --> Processor[Fixed-host Mistral OCR adapter]
+    OCR --> ExtractionStore[Atomic extraction store]
+    ExtractionStore --> SQLite
     Mobile[Future mobile picker] -. same source contract .-> Source
 ```
 
@@ -29,6 +33,11 @@ maps metadata and copied bytes to one SQLDelight row and supplies desktop, Andro
 driver factories. `shared-ui` serializes picker, refresh, import, confirmation, and deletion actions
 without knowing a native path or database type. The desktop composition root provides the AWT
 picker and owns both the database session and presenter lifecycle.
+
+The OCR boundary follows the same direction. `core:api` exposes immutable extraction pages and
+typed processing results. `core:domain` defines the processor and extraction-store ports.
+`core:application` owns validation and orchestration. The Mistral transport and SQLDelight schema
+remain adapter details, while the shared workbench depends only on the core contracts.
 
 ## Import transaction
 
@@ -64,25 +73,45 @@ session, reopens it, verifies the original identity and timestamp, deletes it, a
 reopen is empty. Closing sessions and presenters is idempotent. If storage cannot open, the rest of
 the application still starts and the document library returns only unavailable outcomes.
 
+## Explicit OCR transaction
+
+Opening a document performs only a local extraction lookup. Choosing **Extract with Mistral** reads
+the already imported bytes, verifies the stored source identity, and submits one bounded request to
+the fixed Mistral OCR endpoint. PDF, PNG, and JPEG data is encoded as a local data URI; Blowhard does
+not ask the provider to fetch an arbitrary URL. The adapter requests page Markdown and tables while
+excluding generated images.
+
+The application accepts at most the configured page count and output size. Page indices must be
+unique, contiguous, and ordered from zero, and every result remains tied to the imported document
+identity. A successful result atomically replaces the previous extraction. Provider, transport,
+content-type, schema, storage, and validation failures become typed notices. No POST is retried
+automatically, and coroutine cancellation is preserved.
+
+The workbench reads the durable extraction on restart and shows source metadata beside extracted
+Markdown. Selecting a page is local presentation state. Reopening, refreshing, or changing pages
+does not contact Mistral.
+
 ## Ownership, retention, and deletion
 
 The selected original remains owned by the user and is never changed. Blowhard owns only its copied
 database row. Imported documents remain until individually deleted; there is no automatic expiry or
 background upload. Confirmation names the local document and states that the original is unaffected.
-Metadata and copied content are removed together.
+Metadata, copied content, and any stored extraction are removed together.
 
 The database is not application-encrypted. It does not protect content from the same OS user,
 malware, backups, filesystem snapshots, or a compromised operating system. SQLite deletion is not
-secure erasure. Future provider attachments must add a separate, explicit disclosure and request
-boundary; local import alone is not consent to external processing.
+secure erasure. Local deletion cannot erase content already processed under Mistral's service-side
+retention policy; the data-URI OCR request does not create a provider file resource for Blowhard to
+delete.
 
 ## Deliberate limitations
 
-- The current parser verifies a conservative structural subset; it does not render, extract text,
-  decompress pixels, execute PDF content, or resolve external resources.
+- The local parser verifies a conservative structural subset; it does not render, decompress
+  pixels, execute PDF content, or resolve external resources.
 - Valid PDFs using encryption, object streams, or page structures outside the explicit subset are
   rejected.
-- Documents cannot yet be attached to a conversation, indexed, searched, or sent to a provider.
+- The source panel shows verified metadata and page identity, not a rendered PDF or bitmap.
+- Documents cannot yet be attached to a conversation, indexed, searched, or used by chat.
 - Desktop has a picker implementation; mobile clients can reuse the lifecycle after supplying their
   own platform picker and storage composition.
 
