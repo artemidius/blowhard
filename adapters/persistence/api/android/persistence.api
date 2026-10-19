@@ -3,6 +3,11 @@ public final class io/github/artemidius/blowhard/adapters/persistence/AndroidCon
 	public final fun open (Landroid/content/Context;Ljava/lang/String;)Lio/github/artemidius/blowhard/core/domain/ConversationStore;
 }
 
+public final class io/github/artemidius/blowhard/adapters/persistence/AndroidDocumentProcessingStores {
+	public static final field INSTANCE Lio/github/artemidius/blowhard/adapters/persistence/AndroidDocumentProcessingStores;
+	public final fun open (Landroid/content/Context;Ljava/lang/String;)Lio/github/artemidius/blowhard/core/domain/DocumentProcessingStore;
+}
+
 public final class io/github/artemidius/blowhard/adapters/persistence/AndroidDocumentStores {
 	public static final field INSTANCE Lio/github/artemidius/blowhard/adapters/persistence/AndroidDocumentStores;
 	public final fun open (Landroid/content/Context;Ljava/lang/String;)Lio/github/artemidius/blowhard/core/domain/DocumentStore;
