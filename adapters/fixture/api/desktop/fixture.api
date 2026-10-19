@@ -1,3 +1,8 @@
+public final class io/github/artemidius/blowhard/adapters/fixture/FixtureDocumentOcrPort : io/github/artemidius/blowhard/core/domain/DocumentOcrPort {
+	public fun <init> ()V
+	public fun process (Lio/github/artemidius/blowhard/core/domain/DocumentOcrRequest;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+}
+
 public abstract interface class io/github/artemidius/blowhard/adapters/fixture/FixtureScenario {
 }
 

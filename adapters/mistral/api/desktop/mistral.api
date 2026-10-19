@@ -17,6 +17,16 @@ public abstract interface class io/github/artemidius/blowhard/adapters/mistral/M
 	public abstract fun apiKey (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 }
 
+public final class io/github/artemidius/blowhard/adapters/mistral/MistralDocumentOcrPort : io/github/artemidius/blowhard/core/domain/DocumentOcrPort {
+	public static final field Companion Lio/github/artemidius/blowhard/adapters/mistral/MistralDocumentOcrPort$Companion;
+	public final fun close ()V
+	public fun process (Lio/github/artemidius/blowhard/core/domain/DocumentOcrRequest;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+}
+
+public final class io/github/artemidius/blowhard/adapters/mistral/MistralDocumentOcrPort$Companion {
+	public final fun create (Lio/github/artemidius/blowhard/adapters/mistral/MistralCredentialProvider;)Lio/github/artemidius/blowhard/adapters/mistral/MistralDocumentOcrPort;
+}
+
 public final class io/github/artemidius/blowhard/adapters/mistral/MistralModelCatalog : io/github/artemidius/blowhard/core/domain/ModelCatalogPort {
 	public static final field Companion Lio/github/artemidius/blowhard/adapters/mistral/MistralModelCatalog$Companion;
 	public final fun close ()V
