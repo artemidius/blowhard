@@ -20,6 +20,7 @@ import androidx.compose.ui.window.rememberWindowState
 import io.github.artemidius.blowhard.adapters.fixture.FixtureTextGenerationPort
 import io.github.artemidius.blowhard.adapters.mistral.MistralChatConfiguration
 import io.github.artemidius.blowhard.adapters.mistral.MistralCredentialProvider
+import io.github.artemidius.blowhard.adapters.mistral.MistralDocumentOcrPort
 import io.github.artemidius.blowhard.adapters.mistral.MistralModelCatalog
 import io.github.artemidius.blowhard.adapters.mistral.MistralTextGenerationPort
 import io.github.artemidius.blowhard.adapters.mistral.asMistralCredentialProvider
@@ -120,8 +121,8 @@ private fun createDesktopBootstrap(): DesktopBootstrap {
 private fun createDesktopRuntime(environment: DesktopEnvironment, configurationDirectory: Path): DesktopRuntime {
     val packagingSmokeTest = isPackagingSmokeTest(System.getenv())
     val history = DesktopHistorySession.open(configurationDirectory)
-    val documents = DesktopDocumentSession.open(configurationDirectory)
     val providers = createProviderComposition(packagingSmokeTest)
+    val documents = DesktopDocumentSession.open(configurationDirectory, processor = providers.documentOcr)
     val scenarios = FixtureScenarioRouter()
     val generation = createGenerationRouter(scenarios, providers.credentialProvider)
     val runtime = DesktopRuntime.create(
@@ -135,11 +136,19 @@ private fun createDesktopRuntime(environment: DesktopEnvironment, configurationD
         conversationStore = history.conversationStore,
         closeHistoryResources = history::close,
         documentLibrary = documents.library,
+        documentOcr = documents.ocr,
         documentPicker = AwtDocumentPicker,
         closeDocumentResources = documents::close,
         closeProviderResources = {
-            generation.close()
-            providers.modelCatalog.close()
+            try {
+                generation.close()
+            } finally {
+                try {
+                    providers.documentOcr.close()
+                } finally {
+                    providers.modelCatalog.close()
+                }
+            }
         },
     )
     if (!packagingSmokeTest && history.initialState.selectedConversation.messages.isNotEmpty()) {
@@ -152,12 +161,13 @@ private fun createProviderComposition(packagingSmokeTest: Boolean): DesktopProvi
     val credentialStore = DesktopCredentialStores.mistralApiKey()
     val credentialProvider = credentialStore.asMistralCredentialProvider()
     val modelCatalog = MistralModelCatalog.create(credentialProvider)
+    val documentOcr = MistralDocumentOcrPort.create(credentialProvider)
     val connectionSettings = DefaultConnectionSettings(
         credentialStore,
         modelCatalog,
         startInLiveMode = !packagingSmokeTest,
     )
-    return DesktopProviderComposition(connectionSettings, credentialProvider, modelCatalog)
+    return DesktopProviderComposition(connectionSettings, credentialProvider, modelCatalog, documentOcr)
 }
 
 private fun createGenerationRouter(
@@ -182,6 +192,7 @@ private data class DesktopProviderComposition(
     val connectionSettings: DefaultConnectionSettings,
     val credentialProvider: MistralCredentialProvider,
     val modelCatalog: MistralModelCatalog,
+    val documentOcr: MistralDocumentOcrPort,
 )
 
 internal fun isPackagingSmokeTest(environment: Map<String, String>): Boolean =

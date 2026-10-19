@@ -2,6 +2,8 @@ package io.github.artemidius.blowhard.ui.presentation
 
 import io.github.artemidius.blowhard.core.api.DocumentContentDescriptor
 import io.github.artemidius.blowhard.core.api.DocumentDeletionResult
+import io.github.artemidius.blowhard.core.api.DocumentExtraction
+import io.github.artemidius.blowhard.core.api.DocumentExtractionLookupResult
 import io.github.artemidius.blowhard.core.api.DocumentId
 import io.github.artemidius.blowhard.core.api.DocumentImportRejection
 import io.github.artemidius.blowhard.core.api.DocumentImportResult
@@ -9,7 +11,11 @@ import io.github.artemidius.blowhard.core.api.DocumentImportSource
 import io.github.artemidius.blowhard.core.api.DocumentLibrary
 import io.github.artemidius.blowhard.core.api.DocumentListResult
 import io.github.artemidius.blowhard.core.api.DocumentLookupResult
+import io.github.artemidius.blowhard.core.api.DocumentOcr
+import io.github.artemidius.blowhard.core.api.DocumentProcessingRejection
+import io.github.artemidius.blowhard.core.api.DocumentProcessingResult
 import io.github.artemidius.blowhard.core.api.DocumentReadResult
+import io.github.artemidius.blowhard.core.api.ExtractedDocumentPage
 import io.github.artemidius.blowhard.core.api.ImportedDocument
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.StandardTestDispatcher
@@ -158,14 +164,82 @@ class DocumentLibraryPresenterTest {
         presenter.close()
     }
 
+    @Test
+    fun `workbench loads durable extraction selects bounded pages and closes locally`() = runTest {
+        val source = document("source", pages = 2)
+        val extraction = extraction(source.id)
+        val ocr = FakeDocumentOcr(lookupResult = DocumentExtractionLookupResult.Found(extraction))
+        val presenter = presenter(FakeDocumentLibrary(mutableListOf(source)), ocr = ocr)
+        runCurrent()
+
+        presenter.dispatch(DocumentLibraryAction.OpenRequested(source.id))
+        presenter.dispatch(DocumentLibraryAction.PageSelected(1))
+        presenter.dispatch(DocumentLibraryAction.PageSelected(9))
+        runCurrent()
+
+        assertEquals(source, presenter.state.value.selectedDocument)
+        assertEquals(extraction, presenter.state.value.extraction)
+        assertEquals(1, presenter.state.value.selectedPageIndex)
+
+        presenter.dispatch(DocumentLibraryAction.WorkbenchClosed)
+        runCurrent()
+        assertNull(presenter.state.value.selectedDocument)
+        assertNull(presenter.state.value.extraction)
+        presenter.close()
+    }
+
+    @Test
+    fun `explicit processing publishes validated output or typed rejection`() = runTest {
+        val source = document("source", pages = 2)
+        val extraction = extraction(source.id)
+        val ocr = FakeDocumentOcr(processResult = DocumentProcessingResult.Processed(extraction))
+        val presenter = presenter(FakeDocumentLibrary(mutableListOf(source)), ocr = ocr)
+        runCurrent()
+
+        presenter.dispatch(DocumentLibraryAction.ProcessRequested(source.id))
+        runCurrent()
+
+        assertEquals(listOf(source.id), ocr.processedIds)
+        assertEquals(extraction, presenter.state.value.extraction)
+        assertEquals(DocumentLibraryNotice.Processed(source.displayName), presenter.state.value.notice)
+
+        ocr.processResult = DocumentProcessingResult.Rejected(DocumentProcessingRejection.OUTPUT_TOO_LARGE)
+        presenter.dispatch(DocumentLibraryAction.ProcessRequested(source.id))
+        runCurrent()
+        assertEquals(
+            DocumentLibraryNotice.ProcessingRejected(DocumentProcessingRejection.OUTPUT_TOO_LARGE),
+            presenter.state.value.notice,
+        )
+        assertEquals(extraction, presenter.state.value.extraction)
+        presenter.close()
+    }
+
     private fun kotlinx.coroutines.test.TestScope.presenter(
         library: DocumentLibrary,
         picker: DocumentPicker = FakeDocumentPicker(null),
+        ocr: DocumentOcr = FakeDocumentOcr(),
     ): DocumentLibraryPresenter = DocumentLibraryPresenter(
         library,
         picker,
         StandardTestDispatcher(testScheduler),
+        ocr,
     )
+}
+
+private class FakeDocumentOcr(
+    private val lookupResult: DocumentExtractionLookupResult = DocumentExtractionLookupResult.NotProcessed,
+    var processResult: DocumentProcessingResult = DocumentProcessingResult.Rejected(
+        DocumentProcessingRejection.PROCESSOR_UNAVAILABLE,
+    ),
+) : DocumentOcr {
+    val processedIds = mutableListOf<DocumentId>()
+
+    override suspend fun process(id: DocumentId): DocumentProcessingResult {
+        processedIds += id
+        return processResult
+    }
+
+    override suspend fun find(id: DocumentId): DocumentExtractionLookupResult = lookupResult
 }
 
 private class FakeDocumentPicker(
@@ -217,10 +291,17 @@ private data class FakeDocumentSource(override val displayName: String) : Docume
     override suspend fun read(maximumBytes: Long): DocumentReadResult = DocumentReadResult.Content(byteArrayOf(1))
 }
 
-private fun document(id: String): ImportedDocument = ImportedDocument(
+private fun document(id: String, pages: Int = 1): ImportedDocument = ImportedDocument(
     id = DocumentId(id),
     displayName = "$id.pdf",
     sizeBytes = 1,
     importedAtEpochMilliseconds = 1,
-    content = DocumentContentDescriptor.Pdf(1),
+    content = DocumentContentDescriptor.Pdf(pages),
+)
+
+private fun extraction(id: DocumentId): DocumentExtraction = DocumentExtraction(
+    sourceDocumentId = id,
+    processor = "fixture-ocr-v1",
+    processedAtEpochMilliseconds = 2,
+    pages = listOf(ExtractedDocumentPage(0, "one"), ExtractedDocumentPage(1, "two")),
 )

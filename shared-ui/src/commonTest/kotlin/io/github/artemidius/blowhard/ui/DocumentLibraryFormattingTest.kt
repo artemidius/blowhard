@@ -3,6 +3,7 @@ package io.github.artemidius.blowhard.ui
 import io.github.artemidius.blowhard.core.api.DocumentContentDescriptor
 import io.github.artemidius.blowhard.core.api.DocumentFormat
 import io.github.artemidius.blowhard.core.api.DocumentImportRejection
+import io.github.artemidius.blowhard.core.api.DocumentProcessingRejection
 import io.github.artemidius.blowhard.ui.presentation.DocumentLibraryNotice
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -28,5 +29,17 @@ internal class DocumentLibraryFormattingTest {
 
         assertEquals("The selected document exceeds the 20 MB local import limit.", message)
         assertFalse(message.contains("/"))
+    }
+
+    @Test
+    internal fun `processing feedback is provider-neutral and actionable`() {
+        assertEquals(
+            "The extracted text exceeded the local safety limit.",
+            DocumentLibraryNotice.ProcessingRejected(DocumentProcessingRejection.OUTPUT_TOO_LARGE).message(),
+        )
+        assertEquals(
+            "Mistral OCR is unavailable. Check the connection and key.",
+            DocumentLibraryNotice.ProcessingRejected(DocumentProcessingRejection.PROCESSOR_UNAVAILABLE).message(),
+        )
     }
 }

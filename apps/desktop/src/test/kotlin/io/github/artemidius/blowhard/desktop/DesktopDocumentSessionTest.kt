@@ -1,10 +1,13 @@
 package io.github.artemidius.blowhard.desktop
 
+import io.github.artemidius.blowhard.adapters.fixture.FixtureDocumentOcrPort
 import io.github.artemidius.blowhard.core.api.DocumentDeletionResult
+import io.github.artemidius.blowhard.core.api.DocumentExtractionLookupResult
 import io.github.artemidius.blowhard.core.api.DocumentId
 import io.github.artemidius.blowhard.core.api.DocumentImportResult
 import io.github.artemidius.blowhard.core.api.DocumentImportSource
 import io.github.artemidius.blowhard.core.api.DocumentListResult
+import io.github.artemidius.blowhard.core.api.DocumentProcessingResult
 import io.github.artemidius.blowhard.core.api.DocumentReadResult
 import io.github.artemidius.blowhard.core.application.DocumentIdFactory
 import io.github.artemidius.blowhard.core.application.DocumentImportClock
@@ -25,10 +28,13 @@ internal class DesktopDocumentSessionTest {
                 configurationDirectory = directory,
                 idFactory = DocumentIdFactory { id },
                 clock = DocumentImportClock { IMPORT_TIME },
+                processor = FixtureDocumentOcrPort(),
             )
             assertTrue(first.available)
             val imported = runBlocking { first.library.import(ByteArrayDocumentSource("fixture.pdf", PDF)) }
             assertEquals(id, assertIs<DocumentImportResult.Imported>(imported).document.id)
+            val processed = runBlocking { first.ocr.process(id) }
+            assertEquals(1, assertIs<DocumentProcessingResult.Processed>(processed).extraction.pages.size)
             first.close()
             first.close()
 
@@ -38,6 +44,8 @@ internal class DesktopDocumentSessionTest {
                 val documents = assertIs<DocumentListResult.Available>(reopened.library.list()).documents
                 assertEquals(listOf(id), documents.map { it.id })
                 assertEquals(IMPORT_TIME, documents.single().importedAtEpochMilliseconds)
+                val extraction = assertIs<DocumentExtractionLookupResult.Found>(reopened.ocr.find(id)).extraction
+                assertEquals("fixture-ocr-v1", extraction.processor)
                 assertEquals(DocumentDeletionResult.DELETED, reopened.library.delete(id))
             }
             reopened.close()

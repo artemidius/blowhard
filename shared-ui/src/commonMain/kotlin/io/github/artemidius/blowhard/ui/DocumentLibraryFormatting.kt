@@ -3,6 +3,7 @@ package io.github.artemidius.blowhard.ui
 import io.github.artemidius.blowhard.core.api.DocumentContentDescriptor
 import io.github.artemidius.blowhard.core.api.DocumentFormat
 import io.github.artemidius.blowhard.core.api.DocumentImportRejection
+import io.github.artemidius.blowhard.core.api.DocumentProcessingRejection
 import io.github.artemidius.blowhard.ui.presentation.DocumentLibraryNotice
 
 internal fun DocumentContentDescriptor.description(): String = when (this) {
@@ -25,8 +26,19 @@ internal fun Long.readableByteCount(): String = when {
 internal fun DocumentLibraryNotice.message(): String = when (this) {
     is DocumentLibraryNotice.Imported -> "Imported “$displayName” into local app storage."
     is DocumentLibraryNotice.Deleted -> "Deleted “$displayName” from local app storage."
+    is DocumentLibraryNotice.Processed -> "Extracted and stored text from “$displayName”."
+    is DocumentLibraryNotice.ProcessingRejected -> reason.message()
     is DocumentLibraryNotice.ImportRejected -> reason.message()
     DocumentLibraryNotice.OperationUnavailable -> "The local document operation could not complete safely."
+}
+
+private fun DocumentProcessingRejection.message(): String = when (this) {
+    DocumentProcessingRejection.DOCUMENT_NOT_FOUND -> "The source document no longer exists."
+    DocumentProcessingRejection.CONTENT_UNAVAILABLE -> "The locally stored source could not be read safely."
+    DocumentProcessingRejection.PROCESSOR_UNAVAILABLE -> "Mistral OCR is unavailable. Check the connection and key."
+    DocumentProcessingRejection.OUTPUT_INVALID -> "Mistral returned an invalid document extraction."
+    DocumentProcessingRejection.OUTPUT_TOO_LARGE -> "The extracted text exceeded the local safety limit."
+    DocumentProcessingRejection.STORAGE_UNAVAILABLE -> "The extraction could not be stored safely."
 }
 
 private fun DocumentImportRejection.message(): String = when (this) {
