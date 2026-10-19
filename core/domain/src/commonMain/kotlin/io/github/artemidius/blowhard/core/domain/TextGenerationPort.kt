@@ -25,7 +25,37 @@ public data class GenerationRequest(
     public val prompt: PromptText,
     public val target: GenerationTarget = GenerationTarget.Demo,
     public val parameters: GenerationParameters = GenerationParameters(),
+    public val image: GenerationImage? = null,
 )
+
+/** One bounded, application-authorized image copied into a provider request. */
+public class GenerationImage private constructor(public val mediaType: GenerationImageMediaType, content: ByteArray) {
+    private val ownedContent: ByteArray = content.copyOf()
+
+    /** Returns a defensive copy of the selected image bytes. */
+    public fun copyBytes(): ByteArray = ownedContent.copyOf()
+
+    /** Number of bytes in the validated image. */
+    public val sizeBytes: Int
+        get() = ownedContent.size
+
+    /** Creates validated image values without retaining caller-owned bytes. */
+    public companion object {
+        /** Copies a non-empty image that fits Mistral's documented per-image limit. */
+        public fun from(mediaType: GenerationImageMediaType, content: ByteArray): GenerationImage? =
+            content.takeIf { it.isNotEmpty() && it.size <= MAX_GENERATION_IMAGE_BYTES }
+                ?.let { GenerationImage(mediaType, it) }
+    }
+}
+
+/** Supported media types for one image question. */
+public enum class GenerationImageMediaType(public val value: String) {
+    PNG("image/png"),
+    JPEG("image/jpeg"),
+}
+
+/** Mistral's documented maximum is 20 MB; the application uses a strict byte ceiling. */
+public const val MAX_GENERATION_IMAGE_BYTES: Int = 20 * 1024 * 1024
 
 /** Provider-neutral event produced during generation. */
 public sealed interface GenerationEvent {
