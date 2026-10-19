@@ -7,6 +7,7 @@ import io.github.artemidius.blowhard.core.api.RunId
 import io.github.artemidius.blowhard.core.api.RunInspection
 import io.github.artemidius.blowhard.core.api.RunInspectionEvent
 import io.github.artemidius.blowhard.core.api.RunSnapshot
+import io.github.artemidius.blowhard.core.domain.GenerationImage
 import io.github.artemidius.blowhard.core.domain.PromptText
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -17,6 +18,7 @@ internal class RunRecord(
     val prompt: PromptText,
     val target: GenerationTarget,
     val parameters: GenerationParameters,
+    val image: GenerationImage?,
     initialSnapshot: RunSnapshot,
 ) {
     val snapshots = MutableStateFlow(initialSnapshot)

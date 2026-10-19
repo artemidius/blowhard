@@ -47,7 +47,11 @@ class DefaultConnectionSettingsTest {
         val catalog = FakeModelCatalog(
             ModelCatalogResult.Success(
                 listOf(
-                    model("chat", availability = ModelAvailability.AVAILABLE),
+                    model(
+                        "chat",
+                        availability = ModelAvailability.AVAILABLE,
+                        vision = CapabilitySupport.SUPPORTED,
+                    ),
                     model("archived", availability = ModelAvailability.ARCHIVED),
                     model("unknown", availability = ModelAvailability.UNKNOWN),
                     model("embedding", chat = CapabilitySupport.UNSUPPORTED),
@@ -61,6 +65,7 @@ class DefaultConnectionSettingsTest {
         val result = assertIs<ConnectionTestResult.Success>(settings.testConnection())
 
         assertEquals(listOf("chat"), result.models.map { it.id })
+        assertTrue(result.models.single().supportsVision)
         assertEquals("chat", settings.state.value.selectedModelId)
         assertEquals(ConnectionStatus.READY, settings.state.value.connectionStatus)
     }
@@ -293,6 +298,7 @@ private fun model(
     id: String,
     availability: ModelAvailability = ModelAvailability.AVAILABLE,
     chat: CapabilitySupport = CapabilitySupport.SUPPORTED,
+    vision: CapabilitySupport = CapabilitySupport.UNKNOWN,
 ): AvailableModel = AvailableModel(
     id = id,
     aliases = emptyList(),
@@ -303,7 +309,7 @@ private fun model(
         fillInMiddle = CapabilitySupport.UNKNOWN,
         functionCalling = CapabilitySupport.UNKNOWN,
         fineTuning = CapabilitySupport.UNKNOWN,
-        vision = CapabilitySupport.UNKNOWN,
+        vision = vision,
         classification = CapabilitySupport.UNKNOWN,
     ),
 )

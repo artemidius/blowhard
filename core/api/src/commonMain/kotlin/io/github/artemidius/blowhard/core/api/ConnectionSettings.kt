@@ -57,7 +57,11 @@ public data class ConnectionSettingsState(
 }
 
 /** Provider-neutral model choice proven compatible by the latest connection test. */
-public data class SelectableModel(public val id: String, public val contextWindowTokens: Long?) {
+public data class SelectableModel(
+    public val id: String,
+    public val contextWindowTokens: Long?,
+    public val supportsVision: Boolean = false,
+) {
     init {
         require(id.isNotBlank()) { "Model identifier must not be blank" }
         require(contextWindowTokens == null || contextWindowTokens > 0) { "Context window must be positive" }

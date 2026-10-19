@@ -221,10 +221,13 @@ final enum class io.github.artemidius.blowhard.core.api/RunTerminalStatus : kotl
 }
 
 final enum class io.github.artemidius.blowhard.core.api/StartRunRejection : kotlin/Enum<io.github.artemidius.blowhard.core.api/StartRunRejection> { // io.github.artemidius.blowhard.core.api/StartRunRejection|null[0]
+    enum entry ATTACHMENT_NOT_AVAILABLE // io.github.artemidius.blowhard.core.api/StartRunRejection.ATTACHMENT_NOT_AVAILABLE|null[0]
+    enum entry ATTACHMENT_NOT_SUPPORTED // io.github.artemidius.blowhard.core.api/StartRunRejection.ATTACHMENT_NOT_SUPPORTED|null[0]
     enum entry BLANK_PROMPT // io.github.artemidius.blowhard.core.api/StartRunRejection.BLANK_PROMPT|null[0]
     enum entry CONVERSATION_BUSY // io.github.artemidius.blowhard.core.api/StartRunRejection.CONVERSATION_BUSY|null[0]
     enum entry LIFECYCLE_CLOSED // io.github.artemidius.blowhard.core.api/StartRunRejection.LIFECYCLE_CLOSED|null[0]
     enum entry LIVE_CONFIGURATION_NOT_READY // io.github.artemidius.blowhard.core.api/StartRunRejection.LIVE_CONFIGURATION_NOT_READY|null[0]
+    enum entry MODEL_DOES_NOT_SUPPORT_VISION // io.github.artemidius.blowhard.core.api/StartRunRejection.MODEL_DOES_NOT_SUPPORT_VISION|null[0]
     enum entry STORAGE_UNAVAILABLE // io.github.artemidius.blowhard.core.api/StartRunRejection.STORAGE_UNAVAILABLE|null[0]
 
     final val entries // io.github.artemidius.blowhard.core.api/StartRunRejection.entries|#static{}entries[0]
@@ -923,6 +926,19 @@ final class io.github.artemidius.blowhard.core.api/ImportedDocument { // io.gith
     }
 }
 
+final class io.github.artemidius.blowhard.core.api/RunAttachment { // io.github.artemidius.blowhard.core.api/RunAttachment|null[0]
+    constructor <init>(io.github.artemidius.blowhard.core.api/DocumentId) // io.github.artemidius.blowhard.core.api/RunAttachment.<init>|<init>(io.github.artemidius.blowhard.core.api.DocumentId){}[0]
+
+    final val documentId // io.github.artemidius.blowhard.core.api/RunAttachment.documentId|{}documentId[0]
+        final fun <get-documentId>(): io.github.artemidius.blowhard.core.api/DocumentId // io.github.artemidius.blowhard.core.api/RunAttachment.documentId.<get-documentId>|<get-documentId>(){}[0]
+
+    final fun component1(): io.github.artemidius.blowhard.core.api/DocumentId // io.github.artemidius.blowhard.core.api/RunAttachment.component1|component1(){}[0]
+    final fun copy(io.github.artemidius.blowhard.core.api/DocumentId = ...): io.github.artemidius.blowhard.core.api/RunAttachment // io.github.artemidius.blowhard.core.api/RunAttachment.copy|copy(io.github.artemidius.blowhard.core.api.DocumentId){}[0]
+    final fun equals(kotlin/Any?): kotlin/Boolean // io.github.artemidius.blowhard.core.api/RunAttachment.equals|equals(kotlin.Any?){}[0]
+    final fun hashCode(): kotlin/Int // io.github.artemidius.blowhard.core.api/RunAttachment.hashCode|hashCode(){}[0]
+    final fun toString(): kotlin/String // io.github.artemidius.blowhard.core.api/RunAttachment.toString|toString(){}[0]
+}
+
 final class io.github.artemidius.blowhard.core.api/RunDiagnosticReport { // io.github.artemidius.blowhard.core.api/RunDiagnosticReport|null[0]
     constructor <init>(kotlin/String, kotlin/String) // io.github.artemidius.blowhard.core.api/RunDiagnosticReport.<init>|<init>(kotlin.String;kotlin.String){}[0]
 
@@ -1002,24 +1018,29 @@ final class io.github.artemidius.blowhard.core.api/RunInspection { // io.github.
 }
 
 final class io.github.artemidius.blowhard.core.api/SelectableModel { // io.github.artemidius.blowhard.core.api/SelectableModel|null[0]
-    constructor <init>(kotlin/String, kotlin/Long?) // io.github.artemidius.blowhard.core.api/SelectableModel.<init>|<init>(kotlin.String;kotlin.Long?){}[0]
+    constructor <init>(kotlin/String, kotlin/Long?, kotlin/Boolean = ...) // io.github.artemidius.blowhard.core.api/SelectableModel.<init>|<init>(kotlin.String;kotlin.Long?;kotlin.Boolean){}[0]
 
     final val contextWindowTokens // io.github.artemidius.blowhard.core.api/SelectableModel.contextWindowTokens|{}contextWindowTokens[0]
         final fun <get-contextWindowTokens>(): kotlin/Long? // io.github.artemidius.blowhard.core.api/SelectableModel.contextWindowTokens.<get-contextWindowTokens>|<get-contextWindowTokens>(){}[0]
     final val id // io.github.artemidius.blowhard.core.api/SelectableModel.id|{}id[0]
         final fun <get-id>(): kotlin/String // io.github.artemidius.blowhard.core.api/SelectableModel.id.<get-id>|<get-id>(){}[0]
+    final val supportsVision // io.github.artemidius.blowhard.core.api/SelectableModel.supportsVision|{}supportsVision[0]
+        final fun <get-supportsVision>(): kotlin/Boolean // io.github.artemidius.blowhard.core.api/SelectableModel.supportsVision.<get-supportsVision>|<get-supportsVision>(){}[0]
 
     final fun component1(): kotlin/String // io.github.artemidius.blowhard.core.api/SelectableModel.component1|component1(){}[0]
     final fun component2(): kotlin/Long? // io.github.artemidius.blowhard.core.api/SelectableModel.component2|component2(){}[0]
-    final fun copy(kotlin/String = ..., kotlin/Long? = ...): io.github.artemidius.blowhard.core.api/SelectableModel // io.github.artemidius.blowhard.core.api/SelectableModel.copy|copy(kotlin.String;kotlin.Long?){}[0]
+    final fun component3(): kotlin/Boolean // io.github.artemidius.blowhard.core.api/SelectableModel.component3|component3(){}[0]
+    final fun copy(kotlin/String = ..., kotlin/Long? = ..., kotlin/Boolean = ...): io.github.artemidius.blowhard.core.api/SelectableModel // io.github.artemidius.blowhard.core.api/SelectableModel.copy|copy(kotlin.String;kotlin.Long?;kotlin.Boolean){}[0]
     final fun equals(kotlin/Any?): kotlin/Boolean // io.github.artemidius.blowhard.core.api/SelectableModel.equals|equals(kotlin.Any?){}[0]
     final fun hashCode(): kotlin/Int // io.github.artemidius.blowhard.core.api/SelectableModel.hashCode|hashCode(){}[0]
     final fun toString(): kotlin/String // io.github.artemidius.blowhard.core.api/SelectableModel.toString|toString(){}[0]
 }
 
 final class io.github.artemidius.blowhard.core.api/StartRunRequest { // io.github.artemidius.blowhard.core.api/StartRunRequest|null[0]
-    constructor <init>(io.github.artemidius.blowhard.core.api/ConversationId, kotlin/String) // io.github.artemidius.blowhard.core.api/StartRunRequest.<init>|<init>(io.github.artemidius.blowhard.core.api.ConversationId;kotlin.String){}[0]
+    constructor <init>(io.github.artemidius.blowhard.core.api/ConversationId, kotlin/String, io.github.artemidius.blowhard.core.api/RunAttachment? = ...) // io.github.artemidius.blowhard.core.api/StartRunRequest.<init>|<init>(io.github.artemidius.blowhard.core.api.ConversationId;kotlin.String;io.github.artemidius.blowhard.core.api.RunAttachment?){}[0]
 
+    final val attachment // io.github.artemidius.blowhard.core.api/StartRunRequest.attachment|{}attachment[0]
+        final fun <get-attachment>(): io.github.artemidius.blowhard.core.api/RunAttachment? // io.github.artemidius.blowhard.core.api/StartRunRequest.attachment.<get-attachment>|<get-attachment>(){}[0]
     final val conversationId // io.github.artemidius.blowhard.core.api/StartRunRequest.conversationId|{}conversationId[0]
         final fun <get-conversationId>(): io.github.artemidius.blowhard.core.api/ConversationId // io.github.artemidius.blowhard.core.api/StartRunRequest.conversationId.<get-conversationId>|<get-conversationId>(){}[0]
     final val prompt // io.github.artemidius.blowhard.core.api/StartRunRequest.prompt|{}prompt[0]
@@ -1027,7 +1048,8 @@ final class io.github.artemidius.blowhard.core.api/StartRunRequest { // io.githu
 
     final fun component1(): io.github.artemidius.blowhard.core.api/ConversationId // io.github.artemidius.blowhard.core.api/StartRunRequest.component1|component1(){}[0]
     final fun component2(): kotlin/String // io.github.artemidius.blowhard.core.api/StartRunRequest.component2|component2(){}[0]
-    final fun copy(io.github.artemidius.blowhard.core.api/ConversationId = ..., kotlin/String = ...): io.github.artemidius.blowhard.core.api/StartRunRequest // io.github.artemidius.blowhard.core.api/StartRunRequest.copy|copy(io.github.artemidius.blowhard.core.api.ConversationId;kotlin.String){}[0]
+    final fun component3(): io.github.artemidius.blowhard.core.api/RunAttachment? // io.github.artemidius.blowhard.core.api/StartRunRequest.component3|component3(){}[0]
+    final fun copy(io.github.artemidius.blowhard.core.api/ConversationId = ..., kotlin/String = ..., io.github.artemidius.blowhard.core.api/RunAttachment? = ...): io.github.artemidius.blowhard.core.api/StartRunRequest // io.github.artemidius.blowhard.core.api/StartRunRequest.copy|copy(io.github.artemidius.blowhard.core.api.ConversationId;kotlin.String;io.github.artemidius.blowhard.core.api.RunAttachment?){}[0]
     final fun equals(kotlin/Any?): kotlin/Boolean // io.github.artemidius.blowhard.core.api/StartRunRequest.equals|equals(kotlin.Any?){}[0]
     final fun hashCode(): kotlin/Int // io.github.artemidius.blowhard.core.api/StartRunRequest.hashCode|hashCode(){}[0]
     final fun toString(): kotlin/String // io.github.artemidius.blowhard.core.api/StartRunRequest.toString|toString(){}[0]

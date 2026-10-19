@@ -1,7 +1,11 @@
 package io.github.artemidius.blowhard.core.api
 
 /** Untrusted client input used to request a new generation attempt. */
-public data class StartRunRequest(public val conversationId: ConversationId, public val prompt: String)
+public data class StartRunRequest(
+    public val conversationId: ConversationId,
+    public val prompt: String,
+    public val attachment: RunAttachment? = null,
+)
 
 /** Result of asking the application to start a run. */
 public sealed interface StartRunResult {
@@ -23,6 +27,15 @@ public enum class StartRunRejection {
 
     /** Live mode is selected, but its credential, model, or verification is stale. */
     LIVE_CONFIGURATION_NOT_READY,
+
+    /** The selected model does not explicitly advertise vision support. */
+    MODEL_DOES_NOT_SUPPORT_VISION,
+
+    /** The selected document is missing, stale, or outside the allowed attachment scope. */
+    ATTACHMENT_NOT_AVAILABLE,
+
+    /** The selected document is not a supported bounded image. */
+    ATTACHMENT_NOT_SUPPORTED,
 
     /** Durable storage rejected the attempt before provider work began. */
     STORAGE_UNAVAILABLE,
