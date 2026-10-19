@@ -6,6 +6,8 @@ import io.github.artemidius.blowhard.core.api.RunId
 import io.github.artemidius.blowhard.core.api.TokenUsage
 import io.github.artemidius.blowhard.core.domain.GenerationEvent
 import io.github.artemidius.blowhard.core.domain.GenerationFailureKind
+import io.github.artemidius.blowhard.core.domain.GenerationImage
+import io.github.artemidius.blowhard.core.domain.GenerationImageMediaType
 import io.github.artemidius.blowhard.core.domain.GenerationRequest
 import io.github.artemidius.blowhard.core.domain.GenerationRetryAdvice
 import io.github.artemidius.blowhard.core.domain.PromptText
@@ -87,6 +89,33 @@ class MistralTextGenerationPortTest {
             val json = Json.parseToJsonElement(sent.body.toByteArray().decodeToString()).jsonObject
             assertFalse("max_tokens" in json)
             assertFalse("temperature" in json)
+        } finally {
+            fixture.port.close()
+        }
+    }
+
+    @Test
+    fun `selected local image is serialized as a bounded data URL after text`() = runTest {
+        val fixture = generationResponding(successStream("A synthetic image"))
+        try {
+            val image = requireNotNull(
+                GenerationImage.from(GenerationImageMediaType.PNG, byteArrayOf(1, 2, 3)),
+            )
+
+            fixture.port.generate(request(image = image)).toList()
+
+            val sent = fixture.requests.single()
+            val json = Json.parseToJsonElement(sent.body.toByteArray().decodeToString()).jsonObject
+            val content = json.getValue("messages").jsonArray.single().jsonObject
+                .getValue("content").jsonArray
+            assertEquals("text", content[0].jsonObject.getValue("type").jsonPrimitive.content)
+            assertEquals("hello", content[0].jsonObject.getValue("text").jsonPrimitive.content)
+            assertEquals("image_url", content[1].jsonObject.getValue("type").jsonPrimitive.content)
+            assertEquals(
+                "data:image/png;base64,AQID",
+                content[1].jsonObject.getValue("image_url").jsonPrimitive.content,
+            )
+            assertFalse(sent.body.toByteArray().decodeToString().contains("file://"))
         } finally {
             fixture.port.close()
         }
@@ -469,6 +498,7 @@ private fun assertFailure(expected: GenerationFailureKind, events: List<Generati
 private fun request(
     prompt: String = "hello",
     parameters: GenerationParameters = GenerationParameters(maxOutputTokens = 64, temperature = 0.2),
+    image: GenerationImage? = null,
 ): GenerationRequest {
     val accepted = assertIs<PromptTextResult.Accepted>(PromptText.from(prompt))
     return GenerationRequest(
@@ -476,6 +506,7 @@ private fun request(
         ConversationId("conversation-1"),
         accepted.prompt,
         parameters = parameters,
+        image = image,
     )
 }
 
