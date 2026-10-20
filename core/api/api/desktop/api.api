@@ -516,6 +516,98 @@ public final class io/github/artemidius/blowhard/core/api/ImportedDocument {
 public final class io/github/artemidius/blowhard/core/api/ImportedDocument$Companion {
 }
 
+public final class io/github/artemidius/blowhard/core/api/MeetingActionItem {
+	public static final field Companion Lio/github/artemidius/blowhard/core/api/MeetingActionItem$Companion;
+	public static final field MAX_DESCRIPTION_LENGTH I
+	public static final field MAX_OWNER_LENGTH I
+	public fun <init> (Ljava/lang/String;Ljava/lang/String;Lio/github/artemidius/blowhard/core/api/MeetingNoteDate;Ljava/util/List;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun component2 ()Ljava/lang/String;
+	public final fun component3 ()Lio/github/artemidius/blowhard/core/api/MeetingNoteDate;
+	public final fun component4 ()Ljava/util/List;
+	public final fun copy (Ljava/lang/String;Ljava/lang/String;Lio/github/artemidius/blowhard/core/api/MeetingNoteDate;Ljava/util/List;)Lio/github/artemidius/blowhard/core/api/MeetingActionItem;
+	public static synthetic fun copy$default (Lio/github/artemidius/blowhard/core/api/MeetingActionItem;Ljava/lang/String;Ljava/lang/String;Lio/github/artemidius/blowhard/core/api/MeetingNoteDate;Ljava/util/List;ILjava/lang/Object;)Lio/github/artemidius/blowhard/core/api/MeetingActionItem;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getDescription ()Ljava/lang/String;
+	public final fun getDueDate ()Lio/github/artemidius/blowhard/core/api/MeetingNoteDate;
+	public final fun getOwner ()Ljava/lang/String;
+	public final fun getSources ()Ljava/util/List;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class io/github/artemidius/blowhard/core/api/MeetingActionItem$Companion {
+}
+
+public final class io/github/artemidius/blowhard/core/api/MeetingDecision {
+	public static final field Companion Lio/github/artemidius/blowhard/core/api/MeetingDecision$Companion;
+	public static final field MAX_SOURCES I
+	public static final field MAX_SUMMARY_LENGTH I
+	public fun <init> (Ljava/lang/String;Ljava/util/List;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun component2 ()Ljava/util/List;
+	public final fun copy (Ljava/lang/String;Ljava/util/List;)Lio/github/artemidius/blowhard/core/api/MeetingDecision;
+	public static synthetic fun copy$default (Lio/github/artemidius/blowhard/core/api/MeetingDecision;Ljava/lang/String;Ljava/util/List;ILjava/lang/Object;)Lio/github/artemidius/blowhard/core/api/MeetingDecision;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getSources ()Ljava/util/List;
+	public final fun getSummary ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class io/github/artemidius/blowhard/core/api/MeetingDecision$Companion {
+}
+
+public final class io/github/artemidius/blowhard/core/api/MeetingNoteContent {
+	public static final field Companion Lio/github/artemidius/blowhard/core/api/MeetingNoteContent$Companion;
+	public static final field MAX_ITEMS I
+	public static final field MAX_TITLE_LENGTH I
+	public fun <init> (Ljava/lang/String;Ljava/util/List;Ljava/util/List;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun component2 ()Ljava/util/List;
+	public final fun component3 ()Ljava/util/List;
+	public final fun copy (Ljava/lang/String;Ljava/util/List;Ljava/util/List;)Lio/github/artemidius/blowhard/core/api/MeetingNoteContent;
+	public static synthetic fun copy$default (Lio/github/artemidius/blowhard/core/api/MeetingNoteContent;Ljava/lang/String;Ljava/util/List;Ljava/util/List;ILjava/lang/Object;)Lio/github/artemidius/blowhard/core/api/MeetingNoteContent;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getActionItems ()Ljava/util/List;
+	public final fun getDecisions ()Ljava/util/List;
+	public final fun getTitle ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class io/github/artemidius/blowhard/core/api/MeetingNoteContent$Companion {
+}
+
+public final class io/github/artemidius/blowhard/core/api/MeetingNoteDate {
+	public fun <init> (Ljava/lang/String;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun copy (Ljava/lang/String;)Lio/github/artemidius/blowhard/core/api/MeetingNoteDate;
+	public static synthetic fun copy$default (Lio/github/artemidius/blowhard/core/api/MeetingNoteDate;Ljava/lang/String;ILjava/lang/Object;)Lio/github/artemidius/blowhard/core/api/MeetingNoteDate;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getValue ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class io/github/artemidius/blowhard/core/api/MeetingNoteSourceReference {
+	public static final field Companion Lio/github/artemidius/blowhard/core/api/MeetingNoteSourceReference$Companion;
+	public static final field MAX_EXCERPT_LENGTH I
+	public fun <init> (ILjava/lang/String;)V
+	public final fun component1 ()I
+	public final fun component2 ()Ljava/lang/String;
+	public final fun copy (ILjava/lang/String;)Lio/github/artemidius/blowhard/core/api/MeetingNoteSourceReference;
+	public static synthetic fun copy$default (Lio/github/artemidius/blowhard/core/api/MeetingNoteSourceReference;ILjava/lang/String;ILjava/lang/Object;)Lio/github/artemidius/blowhard/core/api/MeetingNoteSourceReference;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getExcerpt ()Ljava/lang/String;
+	public final fun getPageIndex ()I
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class io/github/artemidius/blowhard/core/api/MeetingNoteSourceReference$Companion {
+}
+
 public final class io/github/artemidius/blowhard/core/api/MessageId {
 	public static final synthetic fun box-impl (Ljava/lang/String;)Lio/github/artemidius/blowhard/core/api/MessageId;
 	public static fun constructor-impl (Ljava/lang/String;)Ljava/lang/String;
