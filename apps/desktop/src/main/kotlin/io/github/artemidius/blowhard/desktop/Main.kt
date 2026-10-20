@@ -137,6 +137,7 @@ private fun createDesktopRuntime(environment: DesktopEnvironment, configurationD
         closeHistoryResources = history::close,
         documentLibrary = documents.library,
         documentOcr = documents.ocr,
+        documentProcessingStore = documents.processingStore,
         documentPicker = AwtDocumentPicker,
         closeDocumentResources = documents::close,
         closeProviderResources = {

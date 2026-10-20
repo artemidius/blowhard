@@ -36,28 +36,47 @@ internal fun ModelSettingsSection(settings: ConnectionSettingsState, onAction: (
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
             } else {
-                OutlinedButton(onClick = { expanded = true }) {
-                    Text("Model: ${settings.selectedModelId ?: "Choose a model"}  ▾")
-                }
-                DropdownMenu(expanded = expanded, onDismissRequest = { expanded = false }) {
-                    settings.models.forEach { model ->
-                        DropdownMenuItem(
-                            text = { Text(model.id) },
-                            onClick = {
-                                expanded = false
-                                onAction(ConnectionSettingsAction.ModelSelected(model.id))
-                            },
-                        )
-                    }
-                }
-                val selected = settings.models.firstOrNull { it.id == settings.selectedModelId }
-                Text(
-                    selected?.contextWindowTokens?.let { "Documented context window: $it tokens" }
-                        ?: "The provider did not report a context-window size.",
-                    style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                )
+                VerifiedModelContent(settings, expanded, { expanded = it }, onAction)
             }
         }
     }
+}
+
+@Composable
+private fun VerifiedModelContent(
+    settings: ConnectionSettingsState,
+    expanded: Boolean,
+    setExpanded: (Boolean) -> Unit,
+    onAction: (ConnectionSettingsAction) -> Unit,
+) {
+    OutlinedButton(onClick = { setExpanded(true) }) {
+        Text("Model: ${settings.selectedModelId ?: "Choose a model"}  ▾")
+    }
+    DropdownMenu(expanded = expanded, onDismissRequest = { setExpanded(false) }) {
+        settings.models.forEach { model ->
+            DropdownMenuItem(
+                text = { Text(if (model.supportsVision) "${model.id} · vision" else model.id) },
+                onClick = {
+                    setExpanded(false)
+                    onAction(ConnectionSettingsAction.ModelSelected(model.id))
+                },
+            )
+        }
+    }
+    val selected = settings.models.firstOrNull { it.id == settings.selectedModelId }
+    Text(
+        selected?.contextWindowTokens?.let { "Documented context window: $it tokens" }
+            ?: "The provider did not report a context-window size.",
+        style = MaterialTheme.typography.bodySmall,
+        color = MaterialTheme.colorScheme.onSurfaceVariant,
+    )
+    Text(
+        if (selected?.supportsVision == true) {
+            "The provider explicitly reports vision support for this model."
+        } else {
+            "Image attachment is disabled because vision support was not reported."
+        },
+        style = MaterialTheme.typography.bodySmall,
+        color = MaterialTheme.colorScheme.onSurfaceVariant,
+    )
 }

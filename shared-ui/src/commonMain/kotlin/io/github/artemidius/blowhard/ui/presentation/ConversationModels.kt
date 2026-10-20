@@ -1,7 +1,9 @@
 package io.github.artemidius.blowhard.ui.presentation
 
 import io.github.artemidius.blowhard.core.api.ConversationId
+import io.github.artemidius.blowhard.core.api.DocumentId
 import io.github.artemidius.blowhard.core.api.GenerationTarget
+import io.github.artemidius.blowhard.core.api.ImportedDocument
 import io.github.artemidius.blowhard.core.api.RunId
 
 /** Immutable state rendered by the shared conversation screen. */
@@ -11,6 +13,7 @@ public data class ConversationUiState(
     public val composer: String = "",
     public val scenario: DemoScenario = DemoScenario.SUCCESS,
     public val pendingDeletionConversationId: ConversationId? = null,
+    public val selectedImage: SelectedImageUi? = null,
 ) {
     init {
         require(conversations.any { it.id == selectedConversationId }) {
@@ -61,7 +64,18 @@ public data class ChatMessageUi(
     public val target: GenerationTarget? = null,
     public val attemptId: RunId? = null,
     public val canRegenerate: Boolean = false,
+    public val attachedImageName: String? = null,
 )
+
+/** Non-sensitive metadata for one explicitly selected local image. */
+public data class SelectedImageUi(public val documentId: DocumentId, public val displayName: String) {
+    init {
+        require(displayName.isNotBlank()) { "Selected image name must not be blank" }
+        require(displayName.length <= ImportedDocument.MAX_DISPLAY_NAME_LENGTH) {
+            "Selected image name is too long"
+        }
+    }
+}
 
 /** Author represented by a message bubble. */
 public enum class ChatRole {
