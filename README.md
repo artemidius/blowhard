@@ -160,6 +160,14 @@ response sizes, page ordering, content type, and output shape are validated befo
 atomically persisted. Reopening the workbench reads local output without repeating provider work.
 See [`ADR 0029`](docs/decisions/0029-explicit-bounded-document-ocr.md).
 
+Verified vision models can receive one explicitly selected imported PNG or JPEG with the next
+conversation prompt. The composer passes only an opaque document identity; the application checks
+the captured model capability before reading local storage, and the Mistral adapter constructs one
+bounded data URI without exposing a native path or accepting a remote URL. Rejected starts restore
+the selection, while regeneration never resubmits an image implicitly. See
+[`ADR 0030`](docs/decisions/0030-explicit-local-image-questions.md) and the
+[image-question guide](docs/architecture/image-questions.md).
+
 ## Run the desktop application
 
 ```shell
@@ -184,6 +192,11 @@ imported copy does not modify the originally selected file.
 Open a stored document to inspect its verified source metadata and any durable OCR output. Choose
 **Extract with Mistral** to submit it; local import alone never uploads content. Successful output
 is grouped by page and retained with the app-owned copy until that document is deleted.
+
+With a verified vision model selected, choose **Attach local image** in the composer to send one
+imported PNG or JPEG with the next prompt. The selection is explicit and one-shot. Blowhard does not
+attach PDFs, send every imported file, accept provider-fetched image URLs, or reuse an image during
+regeneration.
 
 Use `Command+Enter` on macOS or `Ctrl+Enter` on Windows and Linux to send from the composer. Native
 menus expose New conversation, Send, Stop, Regenerate latest response, Copy latest response, and
