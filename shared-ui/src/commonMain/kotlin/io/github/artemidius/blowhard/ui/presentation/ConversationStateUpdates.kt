@@ -62,7 +62,7 @@ internal fun ConversationUiState.prepareRunStart(
 ): ConversationUiState = updateConversation(conversationId) {
     it.copy(runState = ConversationRunState.STARTING, notice = null)
 }.let { state ->
-    if (clearComposer) state.copy(composer = "") else state
+    if (clearComposer) state.copy(composer = "", selectedImage = null) else state
 }
 
 internal fun ConversationUiState.regenerationPrompt(messageId: String): String? {
@@ -90,6 +90,7 @@ internal fun ConversationUiState.beginRun(
     userMessageId: String,
     assistantMessageId: String,
     target: GenerationTarget,
+    attachedImageName: String?,
 ): ConversationUiState = updateConversation(conversationId) { conversation ->
     val title = if (conversation.messages.isEmpty()) prompt.toConversationTitle() else conversation.title
     conversation.copy(
@@ -104,6 +105,7 @@ internal fun ConversationUiState.beginRun(
                 text = prompt,
                 target = target,
                 attemptId = runId,
+                attachedImageName = attachedImageName,
             ),
             ChatMessageUi(
                 id = assistantMessageId,

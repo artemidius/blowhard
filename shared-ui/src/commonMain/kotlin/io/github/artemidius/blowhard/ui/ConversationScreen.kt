@@ -12,6 +12,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import io.github.artemidius.blowhard.core.api.ConnectionSettingsState
+import io.github.artemidius.blowhard.core.api.ImportedDocument
 import io.github.artemidius.blowhard.core.api.RunId
 import io.github.artemidius.blowhard.ui.presentation.ConversationAction
 import io.github.artemidius.blowhard.ui.presentation.ConversationUiState
@@ -20,6 +21,7 @@ import io.github.artemidius.blowhard.ui.presentation.ConversationUiState
 internal fun ConversationScreen(
     state: ConversationUiState,
     connection: ConnectionSettingsState,
+    availableImages: List<ImportedDocument>,
     onAction: (ConversationAction) -> Unit,
     onOpenSettings: () -> Unit,
     onOpenDocuments: () -> Unit,
@@ -29,11 +31,20 @@ internal fun ConversationScreen(
         modifier = Modifier.fillMaxSize().background(MaterialTheme.colorScheme.background),
     ) {
         if (conversationLayoutFor(maxWidth) == ConversationLayout.WIDE) {
-            WideConversationScreen(state, connection, onAction, onOpenSettings, onOpenDocuments, onInspectRun)
+            WideConversationScreen(
+                state,
+                connection,
+                availableImages,
+                onAction,
+                onOpenSettings,
+                onOpenDocuments,
+                onInspectRun,
+            )
         } else {
             ConversationPane(
                 state,
                 connection,
+                availableImages,
                 onAction,
                 onOpenSettings,
                 onOpenDocuments,
@@ -55,6 +66,7 @@ internal fun ConversationScreen(
 private fun WideConversationScreen(
     state: ConversationUiState,
     connection: ConnectionSettingsState,
+    availableImages: List<ImportedDocument>,
     onAction: (ConversationAction) -> Unit,
     onOpenSettings: () -> Unit,
     onOpenDocuments: () -> Unit,
@@ -72,6 +84,7 @@ private fun WideConversationScreen(
         ConversationPane(
             state,
             connection,
+            availableImages,
             onAction,
             onOpenSettings,
             onOpenDocuments,

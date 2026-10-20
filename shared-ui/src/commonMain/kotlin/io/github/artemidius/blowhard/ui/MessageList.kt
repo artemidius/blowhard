@@ -87,6 +87,13 @@ private fun MessageBubble(
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                     fontWeight = FontWeight.Bold,
                 )
+                message.attachedImageName?.let { imageName ->
+                    Text(
+                        "IMAGE · $imageName",
+                        style = MaterialTheme.typography.labelMedium,
+                        color = MaterialTheme.colorScheme.primary,
+                    )
+                }
                 if (message.text.isBlank() && message.delivery == MessageDelivery.STREAMING) {
                     Text("Waiting for output…", color = MaterialTheme.colorScheme.onSurfaceVariant)
                 } else {

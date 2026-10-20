@@ -42,6 +42,7 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import io.github.artemidius.blowhard.core.api.ConnectionSettingsState
 import io.github.artemidius.blowhard.core.api.GenerationMode
+import io.github.artemidius.blowhard.core.api.ImportedDocument
 import io.github.artemidius.blowhard.ui.presentation.ConversationAction
 import io.github.artemidius.blowhard.ui.presentation.ConversationUiState
 import io.github.artemidius.blowhard.ui.presentation.DemoScenario
@@ -50,6 +51,8 @@ import io.github.artemidius.blowhard.ui.presentation.DemoScenario
 internal fun ComposerPanel(
     state: ConversationUiState,
     connection: ConnectionSettingsState,
+    availableImages: List<ImportedDocument>,
+    onOpenDocuments: () -> Unit,
     onAction: (ConversationAction) -> Unit,
 ) {
     val composerFocus = remember { FocusRequester() }
@@ -60,9 +63,91 @@ internal fun ComposerPanel(
         modifier = Modifier.widthIn(max = 920.dp).fillMaxWidth().padding(horizontal = 24.dp, vertical = 16.dp),
         verticalArrangement = Arrangement.spacedBy(10.dp),
     ) {
+        ImageAttachmentSelector(state, connection, availableImages, onOpenDocuments, onAction)
         ComposerInput(state, connection, composerFocus, onAction)
         ComposerActions(state = state, onAction = onAction)
         if (connection.mode == GenerationMode.DEMO) ScenarioSelector(state = state, onAction = onAction)
+    }
+}
+
+@Composable
+private fun ImageAttachmentSelector(
+    state: ConversationUiState,
+    connection: ConnectionSettingsState,
+    availableImages: List<ImportedDocument>,
+    onOpenDocuments: () -> Unit,
+    onAction: (ConversationAction) -> Unit,
+) {
+    var expanded by remember { mutableStateOf(false) }
+    val modelSupportsVision = connection.models
+        .firstOrNull { it.id == connection.selectedModelId }
+        ?.supportsVision == true
+    val enabled = !state.selectedConversation.runState.isActive
+    when {
+        state.selectedImage != null -> SelectedImageRow(state, enabled, onAction)
+
+        !modelSupportsVision -> Text(
+            "Image questions require a model that explicitly supports vision.",
+            style = MaterialTheme.typography.bodySmall,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+        )
+
+        availableImages.isEmpty() -> TextButton(onClick = onOpenDocuments, enabled = enabled) {
+            Text("+ Import an image")
+        }
+
+        else -> ImageChoices(availableImages, expanded, enabled, { expanded = it }, onAction)
+    }
+}
+
+@Composable
+private fun ImageChoices(
+    availableImages: List<ImportedDocument>,
+    expanded: Boolean,
+    enabled: Boolean,
+    setExpanded: (Boolean) -> Unit,
+    onAction: (ConversationAction) -> Unit,
+) {
+    TextButton(onClick = { setExpanded(!expanded) }, enabled = enabled) {
+        Text(if (expanded) "Close image picker" else "+ Attach local image")
+    }
+    if (!expanded) return
+    LazyRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+        items(availableImages, key = { it.id.value }) { image ->
+            FilterChip(
+                selected = false,
+                onClick = {
+                    onAction(ConversationAction.ImageSelected(image.id, image.displayName))
+                    setExpanded(false)
+                },
+                label = { Text(image.displayName, maxLines = 1) },
+            )
+        }
+    }
+    Text(
+        "Only the image you select is sent with the next prompt.",
+        style = MaterialTheme.typography.bodySmall,
+        color = MaterialTheme.colorScheme.onSurfaceVariant,
+    )
+}
+
+@Composable
+private fun SelectedImageRow(state: ConversationUiState, enabled: Boolean, onAction: (ConversationAction) -> Unit) {
+    val image = requireNotNull(state.selectedImage)
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.spacedBy(8.dp),
+    ) {
+        Text(
+            "Image · ${image.displayName}",
+            modifier = Modifier.weight(1f),
+            style = MaterialTheme.typography.labelLarge,
+            maxLines = 1,
+        )
+        TextButton(onClick = { onAction(ConversationAction.ImageCleared) }, enabled = enabled) {
+            Text("Remove")
+        }
     }
 }
 

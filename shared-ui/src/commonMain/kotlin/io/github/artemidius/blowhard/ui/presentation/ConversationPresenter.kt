@@ -5,7 +5,9 @@ import io.github.artemidius.blowhard.core.api.ConversationId
 import io.github.artemidius.blowhard.core.api.ConversationLibrary
 import io.github.artemidius.blowhard.core.api.ConversationRuns
 import io.github.artemidius.blowhard.core.api.GenerationTarget
+import io.github.artemidius.blowhard.core.api.ImportedDocument
 import io.github.artemidius.blowhard.core.api.ObserveRunResult
+import io.github.artemidius.blowhard.core.api.RunAttachment
 import io.github.artemidius.blowhard.core.api.RunId
 import io.github.artemidius.blowhard.core.api.RunSnapshot
 import io.github.artemidius.blowhard.core.api.StartRunRejection
@@ -88,21 +90,11 @@ public class ConversationPresenter(
             mutableState.value = conversationManagement.handle(mutableState.value, action)
             return
         }
+        action.applyLocalState(mutableState.value)?.let {
+            mutableState.value = it
+            return
+        }
         when (action) {
-            is ConversationAction.ComposerChanged ->
-                mutableState.value =
-                    mutableState.value.copy(composer = action.value)
-
-            is ConversationAction.ConversationSelected -> if (
-                mutableState.value.conversations.any { it.id == action.id }
-            ) {
-                mutableState.value = mutableState.value.copy(selectedConversationId = action.id)
-            }
-
-            is ConversationAction.ScenarioChanged ->
-                mutableState.value =
-                    mutableState.value.copy(scenario = action.scenario)
-
             ConversationAction.Send -> mutableState.value.sendAttempt()?.let { startAttempt(it) }
 
             ConversationAction.Stop -> stop()
@@ -114,12 +106,16 @@ public class ConversationPresenter(
                 mutableState.value = messageClipboard.copy(mutableState.value, action.messageId)
             }
 
-            ConversationAction.NoticeDismissed -> mutableState.value = mutableState.value.withSelectedNotice(null)
-
+            is ConversationAction.ComposerChanged,
+            is ConversationAction.ConversationSelected,
+            is ConversationAction.ScenarioChanged,
             ConversationAction.NewConversation,
             ConversationAction.DeleteConversationConfirmed,
             ConversationAction.DeleteConversationDismissed,
             is ConversationAction.DeleteConversationRequested,
+            ConversationAction.ImageCleared,
+            is ConversationAction.ImageSelected,
+            ConversationAction.NoticeDismissed,
             -> error("Conversation management action was not routed")
         }
     }
@@ -127,29 +123,18 @@ public class ConversationPresenter(
     private suspend fun startAttempt(attempt: StartAttempt) {
         val conversationId = attempt.beforeStart.selectedConversationId
         mutableState.value = attempt.beforeStart.prepareRunStart(conversationId, attempt.clearComposer)
-        val scenarioPrepared = try {
-            scenarioSelection.prepare(conversationId, attempt.beforeStart.scenario)
-            true
-        } catch (_: Throwable) {
-            false
-        }
-
-        val result = if (scenarioPrepared) {
-            try {
-                runs.start(StartRunRequest(conversationId, attempt.prompt))
-            } catch (cancelled: CancellationException) {
-                throw cancelled
-            } catch (_: Throwable) {
-                null
-            }
-        } else {
-            null
-        }
+        val result = requestStart(attempt, conversationId)
         if (result == null) {
             mutableState.value = attempt.beforeStart.withSelectedNotice(UiNotice(START_FAILURE_MESSAGE))
         } else {
             when (result) {
-                is StartRunResult.Started -> observe(result.runId, conversationId, attempt.prompt, result.target)
+                is StartRunResult.Started -> observe(
+                    result.runId,
+                    conversationId,
+                    attempt.prompt,
+                    result.target,
+                    attempt.image,
+                )
 
                 is StartRunResult.Rejected -> {
                     mutableState.value =
@@ -159,11 +144,22 @@ public class ConversationPresenter(
         }
     }
 
+    private suspend fun requestStart(attempt: StartAttempt, conversationId: ConversationId): StartRunResult? = try {
+        scenarioSelection.prepare(conversationId, attempt.beforeStart.scenario)
+        val attachment = attempt.image?.let { RunAttachment(it.documentId) }
+        runs.start(StartRunRequest(conversationId, attempt.prompt, attachment))
+    } catch (cancelled: CancellationException) {
+        throw cancelled
+    } catch (_: Throwable) {
+        null
+    }
+
     private suspend fun observe(
         runId: RunId,
         conversationId: ConversationId,
         prompt: String,
         target: GenerationTarget,
+        image: SelectedImageUi?,
     ) {
         val userMessageId = messageIds.next()
         val assistantMessageId = messageIds.next()
@@ -175,6 +171,7 @@ public class ConversationPresenter(
             userMessageId = userMessageId,
             assistantMessageId = assistantMessageId,
             target = target,
+            attachedImageName = image?.displayName,
         )
         val observation = try {
             runs.observe(runId)
@@ -242,17 +239,22 @@ public class ConversationPresenter(
 
 private data class ActiveRun(val runId: RunId, val assistantMessageId: String)
 
-private data class StartAttempt(val beforeStart: ConversationUiState, val prompt: String, val clearComposer: Boolean)
+private data class StartAttempt(
+    val beforeStart: ConversationUiState,
+    val prompt: String,
+    val clearComposer: Boolean,
+    val image: SelectedImageUi?,
+)
 
 private fun ConversationUiState.sendAttempt(): StartAttempt? = if (canSend) {
-    StartAttempt(this, composer.trim(), clearComposer = true)
+    StartAttempt(this, composer.trim(), clearComposer = true, image = selectedImage)
 } else {
     null
 }
 
 private fun ConversationUiState.regenerationAttempt(messageId: String): StartAttempt? =
     regenerationPrompt(messageId)?.let { prompt ->
-        StartAttempt(this, prompt, clearComposer = false)
+        StartAttempt(this, prompt, clearComposer = false, image = null)
     }
 
 private sealed interface PresenterEvent {
@@ -296,4 +298,28 @@ private fun ConversationAction.isConversationManagement(): Boolean = when (this)
     -> true
 
     else -> false
+}
+
+private fun ConversationAction.applyLocalState(state: ConversationUiState): ConversationUiState? = when (this) {
+    is ConversationAction.ComposerChanged -> state.copy(composer = value)
+
+    is ConversationAction.ConversationSelected -> if (state.conversations.any { it.id == id }) {
+        state.copy(selectedConversationId = id)
+    } else {
+        state
+    }
+
+    is ConversationAction.ScenarioChanged -> state.copy(scenario = scenario)
+
+    is ConversationAction.ImageSelected -> displayName.takeIf {
+        it.isNotBlank() && it.length <= ImportedDocument.MAX_DISPLAY_NAME_LENGTH
+    }?.let {
+        state.copy(selectedImage = SelectedImageUi(id, it))
+    } ?: state
+
+    ConversationAction.ImageCleared -> state.copy(selectedImage = null)
+
+    ConversationAction.NoticeDismissed -> state.withSelectedNotice(null)
+
+    else -> null
 }
