@@ -926,6 +926,118 @@ final class io.github.artemidius.blowhard.core.api/ImportedDocument { // io.gith
     }
 }
 
+final class io.github.artemidius.blowhard.core.api/MeetingActionItem { // io.github.artemidius.blowhard.core.api/MeetingActionItem|null[0]
+    constructor <init>(kotlin/String, kotlin/String?, io.github.artemidius.blowhard.core.api/MeetingNoteDate?, kotlin.collections/List<io.github.artemidius.blowhard.core.api/MeetingNoteSourceReference>) // io.github.artemidius.blowhard.core.api/MeetingActionItem.<init>|<init>(kotlin.String;kotlin.String?;io.github.artemidius.blowhard.core.api.MeetingNoteDate?;kotlin.collections.List<io.github.artemidius.blowhard.core.api.MeetingNoteSourceReference>){}[0]
+
+    final val description // io.github.artemidius.blowhard.core.api/MeetingActionItem.description|{}description[0]
+        final fun <get-description>(): kotlin/String // io.github.artemidius.blowhard.core.api/MeetingActionItem.description.<get-description>|<get-description>(){}[0]
+    final val dueDate // io.github.artemidius.blowhard.core.api/MeetingActionItem.dueDate|{}dueDate[0]
+        final fun <get-dueDate>(): io.github.artemidius.blowhard.core.api/MeetingNoteDate? // io.github.artemidius.blowhard.core.api/MeetingActionItem.dueDate.<get-dueDate>|<get-dueDate>(){}[0]
+    final val owner // io.github.artemidius.blowhard.core.api/MeetingActionItem.owner|{}owner[0]
+        final fun <get-owner>(): kotlin/String? // io.github.artemidius.blowhard.core.api/MeetingActionItem.owner.<get-owner>|<get-owner>(){}[0]
+    final val sources // io.github.artemidius.blowhard.core.api/MeetingActionItem.sources|{}sources[0]
+        final fun <get-sources>(): kotlin.collections/List<io.github.artemidius.blowhard.core.api/MeetingNoteSourceReference> // io.github.artemidius.blowhard.core.api/MeetingActionItem.sources.<get-sources>|<get-sources>(){}[0]
+
+    final fun component1(): kotlin/String // io.github.artemidius.blowhard.core.api/MeetingActionItem.component1|component1(){}[0]
+    final fun component2(): kotlin/String? // io.github.artemidius.blowhard.core.api/MeetingActionItem.component2|component2(){}[0]
+    final fun component3(): io.github.artemidius.blowhard.core.api/MeetingNoteDate? // io.github.artemidius.blowhard.core.api/MeetingActionItem.component3|component3(){}[0]
+    final fun component4(): kotlin.collections/List<io.github.artemidius.blowhard.core.api/MeetingNoteSourceReference> // io.github.artemidius.blowhard.core.api/MeetingActionItem.component4|component4(){}[0]
+    final fun copy(kotlin/String = ..., kotlin/String? = ..., io.github.artemidius.blowhard.core.api/MeetingNoteDate? = ..., kotlin.collections/List<io.github.artemidius.blowhard.core.api/MeetingNoteSourceReference> = ...): io.github.artemidius.blowhard.core.api/MeetingActionItem // io.github.artemidius.blowhard.core.api/MeetingActionItem.copy|copy(kotlin.String;kotlin.String?;io.github.artemidius.blowhard.core.api.MeetingNoteDate?;kotlin.collections.List<io.github.artemidius.blowhard.core.api.MeetingNoteSourceReference>){}[0]
+    final fun equals(kotlin/Any?): kotlin/Boolean // io.github.artemidius.blowhard.core.api/MeetingActionItem.equals|equals(kotlin.Any?){}[0]
+    final fun hashCode(): kotlin/Int // io.github.artemidius.blowhard.core.api/MeetingActionItem.hashCode|hashCode(){}[0]
+    final fun toString(): kotlin/String // io.github.artemidius.blowhard.core.api/MeetingActionItem.toString|toString(){}[0]
+
+    final object Companion { // io.github.artemidius.blowhard.core.api/MeetingActionItem.Companion|null[0]
+        final const val MAX_DESCRIPTION_LENGTH // io.github.artemidius.blowhard.core.api/MeetingActionItem.Companion.MAX_DESCRIPTION_LENGTH|{}MAX_DESCRIPTION_LENGTH[0]
+            final fun <get-MAX_DESCRIPTION_LENGTH>(): kotlin/Int // io.github.artemidius.blowhard.core.api/MeetingActionItem.Companion.MAX_DESCRIPTION_LENGTH.<get-MAX_DESCRIPTION_LENGTH>|<get-MAX_DESCRIPTION_LENGTH>(){}[0]
+        final const val MAX_OWNER_LENGTH // io.github.artemidius.blowhard.core.api/MeetingActionItem.Companion.MAX_OWNER_LENGTH|{}MAX_OWNER_LENGTH[0]
+            final fun <get-MAX_OWNER_LENGTH>(): kotlin/Int // io.github.artemidius.blowhard.core.api/MeetingActionItem.Companion.MAX_OWNER_LENGTH.<get-MAX_OWNER_LENGTH>|<get-MAX_OWNER_LENGTH>(){}[0]
+    }
+}
+
+final class io.github.artemidius.blowhard.core.api/MeetingDecision { // io.github.artemidius.blowhard.core.api/MeetingDecision|null[0]
+    constructor <init>(kotlin/String, kotlin.collections/List<io.github.artemidius.blowhard.core.api/MeetingNoteSourceReference>) // io.github.artemidius.blowhard.core.api/MeetingDecision.<init>|<init>(kotlin.String;kotlin.collections.List<io.github.artemidius.blowhard.core.api.MeetingNoteSourceReference>){}[0]
+
+    final val sources // io.github.artemidius.blowhard.core.api/MeetingDecision.sources|{}sources[0]
+        final fun <get-sources>(): kotlin.collections/List<io.github.artemidius.blowhard.core.api/MeetingNoteSourceReference> // io.github.artemidius.blowhard.core.api/MeetingDecision.sources.<get-sources>|<get-sources>(){}[0]
+    final val summary // io.github.artemidius.blowhard.core.api/MeetingDecision.summary|{}summary[0]
+        final fun <get-summary>(): kotlin/String // io.github.artemidius.blowhard.core.api/MeetingDecision.summary.<get-summary>|<get-summary>(){}[0]
+
+    final fun component1(): kotlin/String // io.github.artemidius.blowhard.core.api/MeetingDecision.component1|component1(){}[0]
+    final fun component2(): kotlin.collections/List<io.github.artemidius.blowhard.core.api/MeetingNoteSourceReference> // io.github.artemidius.blowhard.core.api/MeetingDecision.component2|component2(){}[0]
+    final fun copy(kotlin/String = ..., kotlin.collections/List<io.github.artemidius.blowhard.core.api/MeetingNoteSourceReference> = ...): io.github.artemidius.blowhard.core.api/MeetingDecision // io.github.artemidius.blowhard.core.api/MeetingDecision.copy|copy(kotlin.String;kotlin.collections.List<io.github.artemidius.blowhard.core.api.MeetingNoteSourceReference>){}[0]
+    final fun equals(kotlin/Any?): kotlin/Boolean // io.github.artemidius.blowhard.core.api/MeetingDecision.equals|equals(kotlin.Any?){}[0]
+    final fun hashCode(): kotlin/Int // io.github.artemidius.blowhard.core.api/MeetingDecision.hashCode|hashCode(){}[0]
+    final fun toString(): kotlin/String // io.github.artemidius.blowhard.core.api/MeetingDecision.toString|toString(){}[0]
+
+    final object Companion { // io.github.artemidius.blowhard.core.api/MeetingDecision.Companion|null[0]
+        final const val MAX_SOURCES // io.github.artemidius.blowhard.core.api/MeetingDecision.Companion.MAX_SOURCES|{}MAX_SOURCES[0]
+            final fun <get-MAX_SOURCES>(): kotlin/Int // io.github.artemidius.blowhard.core.api/MeetingDecision.Companion.MAX_SOURCES.<get-MAX_SOURCES>|<get-MAX_SOURCES>(){}[0]
+        final const val MAX_SUMMARY_LENGTH // io.github.artemidius.blowhard.core.api/MeetingDecision.Companion.MAX_SUMMARY_LENGTH|{}MAX_SUMMARY_LENGTH[0]
+            final fun <get-MAX_SUMMARY_LENGTH>(): kotlin/Int // io.github.artemidius.blowhard.core.api/MeetingDecision.Companion.MAX_SUMMARY_LENGTH.<get-MAX_SUMMARY_LENGTH>|<get-MAX_SUMMARY_LENGTH>(){}[0]
+    }
+}
+
+final class io.github.artemidius.blowhard.core.api/MeetingNoteContent { // io.github.artemidius.blowhard.core.api/MeetingNoteContent|null[0]
+    constructor <init>(kotlin/String?, kotlin.collections/List<io.github.artemidius.blowhard.core.api/MeetingDecision>, kotlin.collections/List<io.github.artemidius.blowhard.core.api/MeetingActionItem>) // io.github.artemidius.blowhard.core.api/MeetingNoteContent.<init>|<init>(kotlin.String?;kotlin.collections.List<io.github.artemidius.blowhard.core.api.MeetingDecision>;kotlin.collections.List<io.github.artemidius.blowhard.core.api.MeetingActionItem>){}[0]
+
+    final val actionItems // io.github.artemidius.blowhard.core.api/MeetingNoteContent.actionItems|{}actionItems[0]
+        final fun <get-actionItems>(): kotlin.collections/List<io.github.artemidius.blowhard.core.api/MeetingActionItem> // io.github.artemidius.blowhard.core.api/MeetingNoteContent.actionItems.<get-actionItems>|<get-actionItems>(){}[0]
+    final val decisions // io.github.artemidius.blowhard.core.api/MeetingNoteContent.decisions|{}decisions[0]
+        final fun <get-decisions>(): kotlin.collections/List<io.github.artemidius.blowhard.core.api/MeetingDecision> // io.github.artemidius.blowhard.core.api/MeetingNoteContent.decisions.<get-decisions>|<get-decisions>(){}[0]
+    final val title // io.github.artemidius.blowhard.core.api/MeetingNoteContent.title|{}title[0]
+        final fun <get-title>(): kotlin/String? // io.github.artemidius.blowhard.core.api/MeetingNoteContent.title.<get-title>|<get-title>(){}[0]
+
+    final fun component1(): kotlin/String? // io.github.artemidius.blowhard.core.api/MeetingNoteContent.component1|component1(){}[0]
+    final fun component2(): kotlin.collections/List<io.github.artemidius.blowhard.core.api/MeetingDecision> // io.github.artemidius.blowhard.core.api/MeetingNoteContent.component2|component2(){}[0]
+    final fun component3(): kotlin.collections/List<io.github.artemidius.blowhard.core.api/MeetingActionItem> // io.github.artemidius.blowhard.core.api/MeetingNoteContent.component3|component3(){}[0]
+    final fun copy(kotlin/String? = ..., kotlin.collections/List<io.github.artemidius.blowhard.core.api/MeetingDecision> = ..., kotlin.collections/List<io.github.artemidius.blowhard.core.api/MeetingActionItem> = ...): io.github.artemidius.blowhard.core.api/MeetingNoteContent // io.github.artemidius.blowhard.core.api/MeetingNoteContent.copy|copy(kotlin.String?;kotlin.collections.List<io.github.artemidius.blowhard.core.api.MeetingDecision>;kotlin.collections.List<io.github.artemidius.blowhard.core.api.MeetingActionItem>){}[0]
+    final fun equals(kotlin/Any?): kotlin/Boolean // io.github.artemidius.blowhard.core.api/MeetingNoteContent.equals|equals(kotlin.Any?){}[0]
+    final fun hashCode(): kotlin/Int // io.github.artemidius.blowhard.core.api/MeetingNoteContent.hashCode|hashCode(){}[0]
+    final fun toString(): kotlin/String // io.github.artemidius.blowhard.core.api/MeetingNoteContent.toString|toString(){}[0]
+
+    final object Companion { // io.github.artemidius.blowhard.core.api/MeetingNoteContent.Companion|null[0]
+        final const val MAX_ITEMS // io.github.artemidius.blowhard.core.api/MeetingNoteContent.Companion.MAX_ITEMS|{}MAX_ITEMS[0]
+            final fun <get-MAX_ITEMS>(): kotlin/Int // io.github.artemidius.blowhard.core.api/MeetingNoteContent.Companion.MAX_ITEMS.<get-MAX_ITEMS>|<get-MAX_ITEMS>(){}[0]
+        final const val MAX_TITLE_LENGTH // io.github.artemidius.blowhard.core.api/MeetingNoteContent.Companion.MAX_TITLE_LENGTH|{}MAX_TITLE_LENGTH[0]
+            final fun <get-MAX_TITLE_LENGTH>(): kotlin/Int // io.github.artemidius.blowhard.core.api/MeetingNoteContent.Companion.MAX_TITLE_LENGTH.<get-MAX_TITLE_LENGTH>|<get-MAX_TITLE_LENGTH>(){}[0]
+    }
+}
+
+final class io.github.artemidius.blowhard.core.api/MeetingNoteDate { // io.github.artemidius.blowhard.core.api/MeetingNoteDate|null[0]
+    constructor <init>(kotlin/String) // io.github.artemidius.blowhard.core.api/MeetingNoteDate.<init>|<init>(kotlin.String){}[0]
+
+    final val value // io.github.artemidius.blowhard.core.api/MeetingNoteDate.value|{}value[0]
+        final fun <get-value>(): kotlin/String // io.github.artemidius.blowhard.core.api/MeetingNoteDate.value.<get-value>|<get-value>(){}[0]
+
+    final fun component1(): kotlin/String // io.github.artemidius.blowhard.core.api/MeetingNoteDate.component1|component1(){}[0]
+    final fun copy(kotlin/String = ...): io.github.artemidius.blowhard.core.api/MeetingNoteDate // io.github.artemidius.blowhard.core.api/MeetingNoteDate.copy|copy(kotlin.String){}[0]
+    final fun equals(kotlin/Any?): kotlin/Boolean // io.github.artemidius.blowhard.core.api/MeetingNoteDate.equals|equals(kotlin.Any?){}[0]
+    final fun hashCode(): kotlin/Int // io.github.artemidius.blowhard.core.api/MeetingNoteDate.hashCode|hashCode(){}[0]
+    final fun toString(): kotlin/String // io.github.artemidius.blowhard.core.api/MeetingNoteDate.toString|toString(){}[0]
+}
+
+final class io.github.artemidius.blowhard.core.api/MeetingNoteSourceReference { // io.github.artemidius.blowhard.core.api/MeetingNoteSourceReference|null[0]
+    constructor <init>(kotlin/Int, kotlin/String) // io.github.artemidius.blowhard.core.api/MeetingNoteSourceReference.<init>|<init>(kotlin.Int;kotlin.String){}[0]
+
+    final val excerpt // io.github.artemidius.blowhard.core.api/MeetingNoteSourceReference.excerpt|{}excerpt[0]
+        final fun <get-excerpt>(): kotlin/String // io.github.artemidius.blowhard.core.api/MeetingNoteSourceReference.excerpt.<get-excerpt>|<get-excerpt>(){}[0]
+    final val pageIndex // io.github.artemidius.blowhard.core.api/MeetingNoteSourceReference.pageIndex|{}pageIndex[0]
+        final fun <get-pageIndex>(): kotlin/Int // io.github.artemidius.blowhard.core.api/MeetingNoteSourceReference.pageIndex.<get-pageIndex>|<get-pageIndex>(){}[0]
+
+    final fun component1(): kotlin/Int // io.github.artemidius.blowhard.core.api/MeetingNoteSourceReference.component1|component1(){}[0]
+    final fun component2(): kotlin/String // io.github.artemidius.blowhard.core.api/MeetingNoteSourceReference.component2|component2(){}[0]
+    final fun copy(kotlin/Int = ..., kotlin/String = ...): io.github.artemidius.blowhard.core.api/MeetingNoteSourceReference // io.github.artemidius.blowhard.core.api/MeetingNoteSourceReference.copy|copy(kotlin.Int;kotlin.String){}[0]
+    final fun equals(kotlin/Any?): kotlin/Boolean // io.github.artemidius.blowhard.core.api/MeetingNoteSourceReference.equals|equals(kotlin.Any?){}[0]
+    final fun hashCode(): kotlin/Int // io.github.artemidius.blowhard.core.api/MeetingNoteSourceReference.hashCode|hashCode(){}[0]
+    final fun toString(): kotlin/String // io.github.artemidius.blowhard.core.api/MeetingNoteSourceReference.toString|toString(){}[0]
+
+    final object Companion { // io.github.artemidius.blowhard.core.api/MeetingNoteSourceReference.Companion|null[0]
+        final const val MAX_EXCERPT_LENGTH // io.github.artemidius.blowhard.core.api/MeetingNoteSourceReference.Companion.MAX_EXCERPT_LENGTH|{}MAX_EXCERPT_LENGTH[0]
+            final fun <get-MAX_EXCERPT_LENGTH>(): kotlin/Int // io.github.artemidius.blowhard.core.api/MeetingNoteSourceReference.Companion.MAX_EXCERPT_LENGTH.<get-MAX_EXCERPT_LENGTH>|<get-MAX_EXCERPT_LENGTH>(){}[0]
+    }
+}
+
 final class io.github.artemidius.blowhard.core.api/RunAttachment { // io.github.artemidius.blowhard.core.api/RunAttachment|null[0]
     constructor <init>(io.github.artemidius.blowhard.core.api/DocumentId) // io.github.artemidius.blowhard.core.api/RunAttachment.<init>|<init>(io.github.artemidius.blowhard.core.api.DocumentId){}[0]
 

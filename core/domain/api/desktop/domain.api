@@ -492,6 +492,66 @@ public final class io/github/artemidius/blowhard/core/domain/GenerationRetryAdvi
 	public static fun values ()[Lio/github/artemidius/blowhard/core/domain/GenerationRetryAdvice;
 }
 
+public final class io/github/artemidius/blowhard/core/domain/MeetingNoteGenerationFailureKind : java/lang/Enum {
+	public static final field AUTHENTICATION Lio/github/artemidius/blowhard/core/domain/MeetingNoteGenerationFailureKind;
+	public static final field INPUT_REJECTED Lio/github/artemidius/blowhard/core/domain/MeetingNoteGenerationFailureKind;
+	public static final field INVALID_RESPONSE Lio/github/artemidius/blowhard/core/domain/MeetingNoteGenerationFailureKind;
+	public static final field RATE_LIMITED Lio/github/artemidius/blowhard/core/domain/MeetingNoteGenerationFailureKind;
+	public static final field REMOTE_FAILURE Lio/github/artemidius/blowhard/core/domain/MeetingNoteGenerationFailureKind;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public static fun valueOf (Ljava/lang/String;)Lio/github/artemidius/blowhard/core/domain/MeetingNoteGenerationFailureKind;
+	public static fun values ()[Lio/github/artemidius/blowhard/core/domain/MeetingNoteGenerationFailureKind;
+}
+
+public abstract interface class io/github/artemidius/blowhard/core/domain/MeetingNoteGenerationPort {
+	public abstract fun generate (Lio/github/artemidius/blowhard/core/domain/MeetingNoteGenerationRequest;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+}
+
+public final class io/github/artemidius/blowhard/core/domain/MeetingNoteGenerationRequest {
+	public static final field Companion Lio/github/artemidius/blowhard/core/domain/MeetingNoteGenerationRequest$Companion;
+	public static final field MAX_INSTRUCTION_CHARACTERS I
+	public static final field MAX_OUTPUT_TOKENS I
+	public static final field MAX_SCHEMA_CHARACTERS I
+	public static final field MAX_SCHEMA_NAME_CHARACTERS I
+	public static final field MAX_SOURCE_CHARACTERS I
+	public fun <init> (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;I)V
+	public final fun getInstructions ()Ljava/lang/String;
+	public final fun getMaximumOutputTokens ()I
+	public final fun getSchemaJson ()Ljava/lang/String;
+	public final fun getSchemaName ()Ljava/lang/String;
+	public final fun getSourceJson ()Ljava/lang/String;
+}
+
+public final class io/github/artemidius/blowhard/core/domain/MeetingNoteGenerationRequest$Companion {
+}
+
+public abstract interface class io/github/artemidius/blowhard/core/domain/MeetingNoteGenerationResult {
+}
+
+public final class io/github/artemidius/blowhard/core/domain/MeetingNoteGenerationResult$Failed : io/github/artemidius/blowhard/core/domain/MeetingNoteGenerationResult {
+	public fun <init> (Lio/github/artemidius/blowhard/core/domain/MeetingNoteGenerationFailureKind;)V
+	public final fun component1 ()Lio/github/artemidius/blowhard/core/domain/MeetingNoteGenerationFailureKind;
+	public final fun copy (Lio/github/artemidius/blowhard/core/domain/MeetingNoteGenerationFailureKind;)Lio/github/artemidius/blowhard/core/domain/MeetingNoteGenerationResult$Failed;
+	public static synthetic fun copy$default (Lio/github/artemidius/blowhard/core/domain/MeetingNoteGenerationResult$Failed;Lio/github/artemidius/blowhard/core/domain/MeetingNoteGenerationFailureKind;ILjava/lang/Object;)Lio/github/artemidius/blowhard/core/domain/MeetingNoteGenerationResult$Failed;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getKind ()Lio/github/artemidius/blowhard/core/domain/MeetingNoteGenerationFailureKind;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class io/github/artemidius/blowhard/core/domain/MeetingNoteGenerationResult$Generated : io/github/artemidius/blowhard/core/domain/MeetingNoteGenerationResult {
+	public fun <init> (Ljava/lang/String;Ljava/lang/String;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun component2 ()Ljava/lang/String;
+	public final fun copy (Ljava/lang/String;Ljava/lang/String;)Lio/github/artemidius/blowhard/core/domain/MeetingNoteGenerationResult$Generated;
+	public static synthetic fun copy$default (Lio/github/artemidius/blowhard/core/domain/MeetingNoteGenerationResult$Generated;Ljava/lang/String;Ljava/lang/String;ILjava/lang/Object;)Lio/github/artemidius/blowhard/core/domain/MeetingNoteGenerationResult$Generated;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getJson ()Ljava/lang/String;
+	public final fun getModelId ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
 public final class io/github/artemidius/blowhard/core/domain/ModelAvailability : java/lang/Enum {
 	public static final field ARCHIVED Lio/github/artemidius/blowhard/core/domain/ModelAvailability;
 	public static final field AVAILABLE Lio/github/artemidius/blowhard/core/domain/ModelAvailability;
