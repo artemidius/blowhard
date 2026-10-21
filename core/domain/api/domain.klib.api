@@ -136,6 +136,19 @@ final enum class io.github.artemidius.blowhard.core.domain/MeetingNoteGeneration
     final fun values(): kotlin/Array<io.github.artemidius.blowhard.core.domain/MeetingNoteGenerationFailureKind> // io.github.artemidius.blowhard.core.domain/MeetingNoteGenerationFailureKind.values|values#static(){}[0]
 }
 
+final enum class io.github.artemidius.blowhard.core.domain/MeetingNoteInsertResult : kotlin/Enum<io.github.artemidius.blowhard.core.domain/MeetingNoteInsertResult> { // io.github.artemidius.blowhard.core.domain/MeetingNoteInsertResult|null[0]
+    enum entry ID_CONFLICT // io.github.artemidius.blowhard.core.domain/MeetingNoteInsertResult.ID_CONFLICT|null[0]
+    enum entry INSERTED // io.github.artemidius.blowhard.core.domain/MeetingNoteInsertResult.INSERTED|null[0]
+    enum entry SOURCE_NOT_FOUND // io.github.artemidius.blowhard.core.domain/MeetingNoteInsertResult.SOURCE_NOT_FOUND|null[0]
+    enum entry UNAVAILABLE // io.github.artemidius.blowhard.core.domain/MeetingNoteInsertResult.UNAVAILABLE|null[0]
+
+    final val entries // io.github.artemidius.blowhard.core.domain/MeetingNoteInsertResult.entries|#static{}entries[0]
+        final fun <get-entries>(): kotlin.enums/EnumEntries<io.github.artemidius.blowhard.core.domain/MeetingNoteInsertResult> // io.github.artemidius.blowhard.core.domain/MeetingNoteInsertResult.entries.<get-entries>|<get-entries>#static(){}[0]
+
+    final fun valueOf(kotlin/String): io.github.artemidius.blowhard.core.domain/MeetingNoteInsertResult // io.github.artemidius.blowhard.core.domain/MeetingNoteInsertResult.valueOf|valueOf#static(kotlin.String){}[0]
+    final fun values(): kotlin/Array<io.github.artemidius.blowhard.core.domain/MeetingNoteInsertResult> // io.github.artemidius.blowhard.core.domain/MeetingNoteInsertResult.values|values#static(){}[0]
+}
+
 final enum class io.github.artemidius.blowhard.core.domain/ModelAvailability : kotlin/Enum<io.github.artemidius.blowhard.core.domain/ModelAvailability> { // io.github.artemidius.blowhard.core.domain/ModelAvailability|null[0]
     enum entry ARCHIVED // io.github.artemidius.blowhard.core.domain/ModelAvailability.ARCHIVED|null[0]
     enum entry AVAILABLE // io.github.artemidius.blowhard.core.domain/ModelAvailability.AVAILABLE|null[0]
@@ -266,6 +279,12 @@ abstract interface io.github.artemidius.blowhard.core.domain/DocumentStore { // 
     abstract suspend fun find(io.github.artemidius.blowhard.core.api/DocumentId): io.github.artemidius.blowhard.core.domain/DocumentStoreLookupResult // io.github.artemidius.blowhard.core.domain/DocumentStore.find|find(io.github.artemidius.blowhard.core.api.DocumentId){}[0]
     abstract suspend fun list(): io.github.artemidius.blowhard.core.domain/DocumentStoreListResult // io.github.artemidius.blowhard.core.domain/DocumentStore.list|list(){}[0]
     abstract suspend fun save(io.github.artemidius.blowhard.core.api/ImportedDocument, kotlin/ByteArray): io.github.artemidius.blowhard.core.domain/DocumentSaveResult // io.github.artemidius.blowhard.core.domain/DocumentStore.save|save(io.github.artemidius.blowhard.core.api.ImportedDocument;kotlin.ByteArray){}[0]
+}
+
+abstract interface io.github.artemidius.blowhard.core.domain/MeetingNoteStore { // io.github.artemidius.blowhard.core.domain/MeetingNoteStore|null[0]
+    abstract suspend fun find(io.github.artemidius.blowhard.core.api/MeetingNoteId): io.github.artemidius.blowhard.core.domain/MeetingNoteStoreLookup // io.github.artemidius.blowhard.core.domain/MeetingNoteStore.find|find(io.github.artemidius.blowhard.core.api.MeetingNoteId){}[0]
+    abstract suspend fun insert(io.github.artemidius.blowhard.core.api/MeetingNoteRecord): io.github.artemidius.blowhard.core.domain/MeetingNoteInsertResult // io.github.artemidius.blowhard.core.domain/MeetingNoteStore.insert|insert(io.github.artemidius.blowhard.core.api.MeetingNoteRecord){}[0]
+    abstract suspend fun update(io.github.artemidius.blowhard.core.api/MeetingNoteId, kotlin/Long, io.github.artemidius.blowhard.core.api/MeetingNoteContent, kotlin/Long): io.github.artemidius.blowhard.core.domain/MeetingNoteStoreUpdateResult // io.github.artemidius.blowhard.core.domain/MeetingNoteStore.update|update(io.github.artemidius.blowhard.core.api.MeetingNoteId;kotlin.Long;io.github.artemidius.blowhard.core.api.MeetingNoteContent;kotlin.Long){}[0]
 }
 
 sealed interface io.github.artemidius.blowhard.core.domain/CredentialMutationResult { // io.github.artemidius.blowhard.core.domain/CredentialMutationResult|null[0]
@@ -566,6 +585,66 @@ sealed interface io.github.artemidius.blowhard.core.domain/MeetingNoteGeneration
         final fun equals(kotlin/Any?): kotlin/Boolean // io.github.artemidius.blowhard.core.domain/MeetingNoteGenerationResult.Generated.equals|equals(kotlin.Any?){}[0]
         final fun hashCode(): kotlin/Int // io.github.artemidius.blowhard.core.domain/MeetingNoteGenerationResult.Generated.hashCode|hashCode(){}[0]
         final fun toString(): kotlin/String // io.github.artemidius.blowhard.core.domain/MeetingNoteGenerationResult.Generated.toString|toString(){}[0]
+    }
+}
+
+sealed interface io.github.artemidius.blowhard.core.domain/MeetingNoteStoreLookup { // io.github.artemidius.blowhard.core.domain/MeetingNoteStoreLookup|null[0]
+    final class Found : io.github.artemidius.blowhard.core.domain/MeetingNoteStoreLookup { // io.github.artemidius.blowhard.core.domain/MeetingNoteStoreLookup.Found|null[0]
+        constructor <init>(io.github.artemidius.blowhard.core.api/MeetingNoteRecord) // io.github.artemidius.blowhard.core.domain/MeetingNoteStoreLookup.Found.<init>|<init>(io.github.artemidius.blowhard.core.api.MeetingNoteRecord){}[0]
+
+        final val note // io.github.artemidius.blowhard.core.domain/MeetingNoteStoreLookup.Found.note|{}note[0]
+            final fun <get-note>(): io.github.artemidius.blowhard.core.api/MeetingNoteRecord // io.github.artemidius.blowhard.core.domain/MeetingNoteStoreLookup.Found.note.<get-note>|<get-note>(){}[0]
+
+        final fun component1(): io.github.artemidius.blowhard.core.api/MeetingNoteRecord // io.github.artemidius.blowhard.core.domain/MeetingNoteStoreLookup.Found.component1|component1(){}[0]
+        final fun copy(io.github.artemidius.blowhard.core.api/MeetingNoteRecord = ...): io.github.artemidius.blowhard.core.domain/MeetingNoteStoreLookup.Found // io.github.artemidius.blowhard.core.domain/MeetingNoteStoreLookup.Found.copy|copy(io.github.artemidius.blowhard.core.api.MeetingNoteRecord){}[0]
+        final fun equals(kotlin/Any?): kotlin/Boolean // io.github.artemidius.blowhard.core.domain/MeetingNoteStoreLookup.Found.equals|equals(kotlin.Any?){}[0]
+        final fun hashCode(): kotlin/Int // io.github.artemidius.blowhard.core.domain/MeetingNoteStoreLookup.Found.hashCode|hashCode(){}[0]
+        final fun toString(): kotlin/String // io.github.artemidius.blowhard.core.domain/MeetingNoteStoreLookup.Found.toString|toString(){}[0]
+    }
+
+    final object NotFound : io.github.artemidius.blowhard.core.domain/MeetingNoteStoreLookup { // io.github.artemidius.blowhard.core.domain/MeetingNoteStoreLookup.NotFound|null[0]
+        final fun equals(kotlin/Any?): kotlin/Boolean // io.github.artemidius.blowhard.core.domain/MeetingNoteStoreLookup.NotFound.equals|equals(kotlin.Any?){}[0]
+        final fun hashCode(): kotlin/Int // io.github.artemidius.blowhard.core.domain/MeetingNoteStoreLookup.NotFound.hashCode|hashCode(){}[0]
+        final fun toString(): kotlin/String // io.github.artemidius.blowhard.core.domain/MeetingNoteStoreLookup.NotFound.toString|toString(){}[0]
+    }
+
+    final object Unavailable : io.github.artemidius.blowhard.core.domain/MeetingNoteStoreLookup { // io.github.artemidius.blowhard.core.domain/MeetingNoteStoreLookup.Unavailable|null[0]
+        final fun equals(kotlin/Any?): kotlin/Boolean // io.github.artemidius.blowhard.core.domain/MeetingNoteStoreLookup.Unavailable.equals|equals(kotlin.Any?){}[0]
+        final fun hashCode(): kotlin/Int // io.github.artemidius.blowhard.core.domain/MeetingNoteStoreLookup.Unavailable.hashCode|hashCode(){}[0]
+        final fun toString(): kotlin/String // io.github.artemidius.blowhard.core.domain/MeetingNoteStoreLookup.Unavailable.toString|toString(){}[0]
+    }
+}
+
+sealed interface io.github.artemidius.blowhard.core.domain/MeetingNoteStoreUpdateResult { // io.github.artemidius.blowhard.core.domain/MeetingNoteStoreUpdateResult|null[0]
+    final class Updated : io.github.artemidius.blowhard.core.domain/MeetingNoteStoreUpdateResult { // io.github.artemidius.blowhard.core.domain/MeetingNoteStoreUpdateResult.Updated|null[0]
+        constructor <init>(io.github.artemidius.blowhard.core.api/MeetingNoteRecord) // io.github.artemidius.blowhard.core.domain/MeetingNoteStoreUpdateResult.Updated.<init>|<init>(io.github.artemidius.blowhard.core.api.MeetingNoteRecord){}[0]
+
+        final val note // io.github.artemidius.blowhard.core.domain/MeetingNoteStoreUpdateResult.Updated.note|{}note[0]
+            final fun <get-note>(): io.github.artemidius.blowhard.core.api/MeetingNoteRecord // io.github.artemidius.blowhard.core.domain/MeetingNoteStoreUpdateResult.Updated.note.<get-note>|<get-note>(){}[0]
+
+        final fun component1(): io.github.artemidius.blowhard.core.api/MeetingNoteRecord // io.github.artemidius.blowhard.core.domain/MeetingNoteStoreUpdateResult.Updated.component1|component1(){}[0]
+        final fun copy(io.github.artemidius.blowhard.core.api/MeetingNoteRecord = ...): io.github.artemidius.blowhard.core.domain/MeetingNoteStoreUpdateResult.Updated // io.github.artemidius.blowhard.core.domain/MeetingNoteStoreUpdateResult.Updated.copy|copy(io.github.artemidius.blowhard.core.api.MeetingNoteRecord){}[0]
+        final fun equals(kotlin/Any?): kotlin/Boolean // io.github.artemidius.blowhard.core.domain/MeetingNoteStoreUpdateResult.Updated.equals|equals(kotlin.Any?){}[0]
+        final fun hashCode(): kotlin/Int // io.github.artemidius.blowhard.core.domain/MeetingNoteStoreUpdateResult.Updated.hashCode|hashCode(){}[0]
+        final fun toString(): kotlin/String // io.github.artemidius.blowhard.core.domain/MeetingNoteStoreUpdateResult.Updated.toString|toString(){}[0]
+    }
+
+    final object Conflict : io.github.artemidius.blowhard.core.domain/MeetingNoteStoreUpdateResult { // io.github.artemidius.blowhard.core.domain/MeetingNoteStoreUpdateResult.Conflict|null[0]
+        final fun equals(kotlin/Any?): kotlin/Boolean // io.github.artemidius.blowhard.core.domain/MeetingNoteStoreUpdateResult.Conflict.equals|equals(kotlin.Any?){}[0]
+        final fun hashCode(): kotlin/Int // io.github.artemidius.blowhard.core.domain/MeetingNoteStoreUpdateResult.Conflict.hashCode|hashCode(){}[0]
+        final fun toString(): kotlin/String // io.github.artemidius.blowhard.core.domain/MeetingNoteStoreUpdateResult.Conflict.toString|toString(){}[0]
+    }
+
+    final object NotFound : io.github.artemidius.blowhard.core.domain/MeetingNoteStoreUpdateResult { // io.github.artemidius.blowhard.core.domain/MeetingNoteStoreUpdateResult.NotFound|null[0]
+        final fun equals(kotlin/Any?): kotlin/Boolean // io.github.artemidius.blowhard.core.domain/MeetingNoteStoreUpdateResult.NotFound.equals|equals(kotlin.Any?){}[0]
+        final fun hashCode(): kotlin/Int // io.github.artemidius.blowhard.core.domain/MeetingNoteStoreUpdateResult.NotFound.hashCode|hashCode(){}[0]
+        final fun toString(): kotlin/String // io.github.artemidius.blowhard.core.domain/MeetingNoteStoreUpdateResult.NotFound.toString|toString(){}[0]
+    }
+
+    final object Unavailable : io.github.artemidius.blowhard.core.domain/MeetingNoteStoreUpdateResult { // io.github.artemidius.blowhard.core.domain/MeetingNoteStoreUpdateResult.Unavailable|null[0]
+        final fun equals(kotlin/Any?): kotlin/Boolean // io.github.artemidius.blowhard.core.domain/MeetingNoteStoreUpdateResult.Unavailable.equals|equals(kotlin.Any?){}[0]
+        final fun hashCode(): kotlin/Int // io.github.artemidius.blowhard.core.domain/MeetingNoteStoreUpdateResult.Unavailable.hashCode|hashCode(){}[0]
+        final fun toString(): kotlin/String // io.github.artemidius.blowhard.core.domain/MeetingNoteStoreUpdateResult.Unavailable.toString|toString(){}[0]
     }
 }
 
