@@ -1,0 +1,108 @@
+{
+  "datasetVersion": "meeting-note-synthetic-v1",
+  "templateVersion": "meeting-note-v1",
+  "fixtureModel": "fixture-meeting-note-v1",
+  "reportDate": "2026-11-11",
+  "cases": [
+    {
+      "id": "basic-decision-action",
+      "pages": ["Decision: ship version two. Action: Ana reviews the checklist by 2026-12-01."],
+      "providerJson": "{\"template_version\":\"meeting-note-v1\",\"title\":\"Release meeting\",\"decisions\":[{\"summary\":\"Ship version two\",\"sources\":[{\"page_index\":0,\"excerpt\":\"ship version two\"}]}],\"action_items\":[{\"description\":\"Review the checklist\",\"owner\":\"Ana\",\"due_date\":\"2026-12-01\",\"sources\":[{\"page_index\":0,\"excerpt\":\"Ana reviews the checklist by 2026-12-01\"}]}]}",
+      "expected": {
+        "title": "Release meeting",
+        "decisions": [{"summary": "Ship version two", "sources": [{"page_index": 0, "excerpt": "ship version two"}]}],
+        "action_items": [{"description": "Review the checklist", "owner": "Ana", "due_date": "2026-12-01", "sources": [{"page_index": 0, "excerpt": "Ana reviews the checklist by 2026-12-01"}]}]
+      }
+    },
+    {
+      "id": "unknown-owner-date",
+      "pages": ["Action: prepare the launch notes. No owner or deadline was assigned."],
+      "providerJson": "{\"template_version\":\"meeting-note-v1\",\"title\":null,\"decisions\":[],\"action_items\":[{\"description\":\"Prepare the launch notes\",\"owner\":null,\"due_date\":null,\"sources\":[{\"page_index\":0,\"excerpt\":\"prepare the launch notes\"}]}]}",
+      "expected": {
+        "decisions": [],
+        "action_items": [{"description": "Prepare the launch notes", "sources": [{"page_index": 0, "excerpt": "prepare the launch notes"}]}]
+      }
+    },
+    {
+      "id": "nullable-title",
+      "pages": ["Decision: retain the current API."],
+      "providerJson": "{\"template_version\":\"meeting-note-v1\",\"title\":null,\"decisions\":[{\"summary\":\"Retain the current API\",\"sources\":[{\"page_index\":0,\"excerpt\":\"retain the current API\"}]}],\"action_items\":[]}",
+      "expected": {
+        "decisions": [{"summary": "Retain the current API", "sources": [{"page_index": 0, "excerpt": "retain the current API"}]}],
+        "action_items": []
+      }
+    },
+    {
+      "id": "multiple-decisions",
+      "pages": ["Decision: use SQLite. Decision: keep exports explicit."],
+      "providerJson": "{\"template_version\":\"meeting-note-v1\",\"title\":\"Architecture review\",\"decisions\":[{\"summary\":\"Use SQLite\",\"sources\":[{\"page_index\":0,\"excerpt\":\"use SQLite\"}]},{\"summary\":\"Keep exports explicit\",\"sources\":[{\"page_index\":0,\"excerpt\":\"keep exports explicit\"}]}],\"action_items\":[]}",
+      "expected": {
+        "title": "Architecture review",
+        "decisions": [
+          {"summary": "Use SQLite", "sources": [{"page_index": 0, "excerpt": "use SQLite"}]},
+          {"summary": "Keep exports explicit", "sources": [{"page_index": 0, "excerpt": "keep exports explicit"}]}
+        ],
+        "action_items": []
+      }
+    },
+    {
+      "id": "action-only",
+      "pages": ["Mira will update the documentation."],
+      "providerJson": "{\"template_version\":\"meeting-note-v1\",\"title\":\"Documentation sync\",\"decisions\":[],\"action_items\":[{\"description\":\"Update the documentation\",\"owner\":\"Mira\",\"due_date\":null,\"sources\":[{\"page_index\":0,\"excerpt\":\"Mira will update the documentation\"}]}]}",
+      "expected": {
+        "title": "Documentation sync",
+        "decisions": [],
+        "action_items": [{"description": "Update the documentation", "owner": "Mira", "sources": [{"page_index": 0, "excerpt": "Mira will update the documentation"}]}]
+      }
+    },
+    {
+      "id": "decision-only",
+      "pages": ["The team agreed to postpone migration."],
+      "providerJson": "{\"template_version\":\"meeting-note-v1\",\"title\":null,\"decisions\":[{\"summary\":\"Postpone migration\",\"sources\":[{\"page_index\":0,\"excerpt\":\"agreed to postpone migration\"}]}],\"action_items\":[]}",
+      "expected": {
+        "decisions": [{"summary": "Postpone migration", "sources": [{"page_index": 0, "excerpt": "agreed to postpone migration"}]}],
+        "action_items": []
+      }
+    },
+    {
+      "id": "multi-page-sources",
+      "pages": ["Decision: approve the prototype.", "Action: Lee records the demo by 2026-12-15."],
+      "providerJson": "{\"template_version\":\"meeting-note-v1\",\"title\":\"Prototype review\",\"decisions\":[{\"summary\":\"Approve the prototype\",\"sources\":[{\"page_index\":0,\"excerpt\":\"approve the prototype\"}]}],\"action_items\":[{\"description\":\"Record the demo\",\"owner\":\"Lee\",\"due_date\":\"2026-12-15\",\"sources\":[{\"page_index\":1,\"excerpt\":\"Lee records the demo by 2026-12-15\"}]}]}",
+      "expected": {
+        "title": "Prototype review",
+        "decisions": [{"summary": "Approve the prototype", "sources": [{"page_index": 0, "excerpt": "approve the prototype"}]}],
+        "action_items": [{"description": "Record the demo", "owner": "Lee", "due_date": "2026-12-15", "sources": [{"page_index": 1, "excerpt": "Lee records the demo by 2026-12-15"}]}]
+      }
+    },
+    {
+      "id": "explicit-abstention",
+      "pages": ["Introductions and general discussion. No decisions or assigned actions."],
+      "providerJson": "{\"template_version\":\"meeting-note-v1\",\"title\":null,\"decisions\":[],\"action_items\":[]}",
+      "expected": {"decisions": [], "action_items": []}
+    },
+    {
+      "id": "malformed-json",
+      "pages": ["Decision: keep the parser strict."],
+      "providerJson": "{not-json",
+      "expectedRejection": "INVALID_OUTPUT"
+    },
+    {
+      "id": "unknown-field",
+      "pages": ["Decision: reject unknown fields."],
+      "providerJson": "{\"template_version\":\"meeting-note-v1\",\"title\":null,\"decisions\":[],\"action_items\":[],\"extra\":true}",
+      "expectedRejection": "INVALID_OUTPUT"
+    },
+    {
+      "id": "invalid-date",
+      "pages": ["Action: Sam checks the build on 2026-02-30."],
+      "providerJson": "{\"template_version\":\"meeting-note-v1\",\"title\":null,\"decisions\":[],\"action_items\":[{\"description\":\"Check the build\",\"owner\":\"Sam\",\"due_date\":\"2026-02-30\",\"sources\":[{\"page_index\":0,\"excerpt\":\"Sam checks the build on 2026-02-30\"}]}]}",
+      "expectedRejection": "INVALID_OUTPUT"
+    },
+    {
+      "id": "unsupported-citation",
+      "pages": ["Decision: citations must resolve."],
+      "providerJson": "{\"template_version\":\"meeting-note-v1\",\"title\":null,\"decisions\":[{\"summary\":\"Citations must resolve\",\"sources\":[{\"page_index\":0,\"excerpt\":\"text absent from source\"}]}],\"action_items\":[]}",
+      "expectedRejection": "INVALID_OUTPUT"
+    }
+  ]
+}
