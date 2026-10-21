@@ -17,3 +17,7 @@ final object io.github.artemidius.blowhard.adapters.persistence/NativeDocumentPr
 final object io.github.artemidius.blowhard.adapters.persistence/NativeDocumentStores { // io.github.artemidius.blowhard.adapters.persistence/NativeDocumentStores|null[0]
     final fun open(kotlin/String): io.github.artemidius.blowhard.core.domain/DocumentStore // io.github.artemidius.blowhard.adapters.persistence/NativeDocumentStores.open|open(kotlin.String){}[0]
 }
+
+final object io.github.artemidius.blowhard.adapters.persistence/NativeMeetingNoteStores { // io.github.artemidius.blowhard.adapters.persistence/NativeMeetingNoteStores|null[0]
+    final fun open(kotlin/String): io.github.artemidius.blowhard.core.domain/MeetingNoteStore // io.github.artemidius.blowhard.adapters.persistence/NativeMeetingNoteStores.open|open(kotlin.String){}[0]
+}

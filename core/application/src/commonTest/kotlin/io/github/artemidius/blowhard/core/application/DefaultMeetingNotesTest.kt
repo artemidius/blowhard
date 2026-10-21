@@ -200,6 +200,8 @@ private class FakeMeetingNoteStore : MeetingNoteStore {
             ).also { records[id] = it }.let(MeetingNoteStoreUpdateResult::Updated)
         }
     }
+
+    override suspend fun close() = Unit
 }
 
 private val SOURCE_ID = DocumentId("source-1")

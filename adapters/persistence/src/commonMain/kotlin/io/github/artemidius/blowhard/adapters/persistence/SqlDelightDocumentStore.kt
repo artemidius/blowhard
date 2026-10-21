@@ -48,6 +48,7 @@ internal class SqlDelightDocumentStore(private val driver: SqlDriver) : Document
         safely(DocumentStoreDeletionResult.UNAVAILABLE) {
             var deleted = false
             queries.transaction {
+                database.meetingNoteQueries.deleteMeetingNotesByDocument(id.value).value
                 database.documentExtractionQueries.deleteExtractionPages(id.value).value
                 database.documentExtractionQueries.deleteExtraction(id.value).value
                 deleted = queries.deleteDocument(id.value).value > 0

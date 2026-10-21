@@ -13,3 +13,8 @@ public final class io/github/artemidius/blowhard/adapters/persistence/DesktopDoc
 	public final fun open (Ljava/lang/String;)Lio/github/artemidius/blowhard/core/domain/DocumentStore;
 }
 
+public final class io/github/artemidius/blowhard/adapters/persistence/DesktopMeetingNoteStores {
+	public static final field INSTANCE Lio/github/artemidius/blowhard/adapters/persistence/DesktopMeetingNoteStores;
+	public final fun open (Ljava/lang/String;)Lio/github/artemidius/blowhard/core/domain/MeetingNoteStore;
+}
+

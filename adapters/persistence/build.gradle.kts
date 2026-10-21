@@ -43,6 +43,7 @@ kotlin {
     sourceSets {
         commonMain.dependencies {
             api(project(":core:domain"))
+            implementation(libs.kotlinx.serialization.json)
             implementation(libs.sqldelight.runtime)
         }
 
