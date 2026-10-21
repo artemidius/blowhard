@@ -143,8 +143,111 @@ public abstract interface class io/github/artemidius/blowhard/core/application/D
 	public abstract fun nowEpochMilliseconds ()J
 }
 
+public final class io/github/artemidius/blowhard/core/application/EvaluationCheck : java/lang/Enum {
+	public static final field FAIL Lio/github/artemidius/blowhard/core/application/EvaluationCheck;
+	public static final field NOT_APPLICABLE Lio/github/artemidius/blowhard/core/application/EvaluationCheck;
+	public static final field PASS Lio/github/artemidius/blowhard/core/application/EvaluationCheck;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public static fun valueOf (Ljava/lang/String;)Lio/github/artemidius/blowhard/core/application/EvaluationCheck;
+	public static fun values ()[Lio/github/artemidius/blowhard/core/application/EvaluationCheck;
+}
+
+public final class io/github/artemidius/blowhard/core/application/EvaluationMetric {
+	public fun <init> (II)V
+	public final fun component1 ()I
+	public final fun component2 ()I
+	public final fun copy (II)Lio/github/artemidius/blowhard/core/application/EvaluationMetric;
+	public static synthetic fun copy$default (Lio/github/artemidius/blowhard/core/application/EvaluationMetric;IIILjava/lang/Object;)Lio/github/artemidius/blowhard/core/application/EvaluationMetric;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getFailed ()I
+	public final fun getPassed ()I
+	public final fun getTotal ()I
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
 public abstract interface class io/github/artemidius/blowhard/core/application/MeetingNoteClock {
 	public abstract fun nowEpochMilliseconds ()J
+}
+
+public final class io/github/artemidius/blowhard/core/application/MeetingNoteEvaluationCase {
+	public fun <init> (Ljava/lang/String;Lio/github/artemidius/blowhard/core/api/DocumentExtraction;Lio/github/artemidius/blowhard/core/application/MeetingNoteEvaluationExpectation;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun component2 ()Lio/github/artemidius/blowhard/core/api/DocumentExtraction;
+	public final fun component3 ()Lio/github/artemidius/blowhard/core/application/MeetingNoteEvaluationExpectation;
+	public final fun copy (Ljava/lang/String;Lio/github/artemidius/blowhard/core/api/DocumentExtraction;Lio/github/artemidius/blowhard/core/application/MeetingNoteEvaluationExpectation;)Lio/github/artemidius/blowhard/core/application/MeetingNoteEvaluationCase;
+	public static synthetic fun copy$default (Lio/github/artemidius/blowhard/core/application/MeetingNoteEvaluationCase;Ljava/lang/String;Lio/github/artemidius/blowhard/core/api/DocumentExtraction;Lio/github/artemidius/blowhard/core/application/MeetingNoteEvaluationExpectation;ILjava/lang/Object;)Lio/github/artemidius/blowhard/core/application/MeetingNoteEvaluationCase;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getExpectation ()Lio/github/artemidius/blowhard/core/application/MeetingNoteEvaluationExpectation;
+	public final fun getExtraction ()Lio/github/artemidius/blowhard/core/api/DocumentExtraction;
+	public final fun getId ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class io/github/artemidius/blowhard/core/application/MeetingNoteEvaluationExpectation {
+	public fun <init> (ZLio/github/artemidius/blowhard/core/api/MeetingNoteContent;Lio/github/artemidius/blowhard/core/api/MeetingNoteGenerationRejection;)V
+	public final fun component1 ()Z
+	public final fun component2 ()Lio/github/artemidius/blowhard/core/api/MeetingNoteContent;
+	public final fun component3 ()Lio/github/artemidius/blowhard/core/api/MeetingNoteGenerationRejection;
+	public final fun copy (ZLio/github/artemidius/blowhard/core/api/MeetingNoteContent;Lio/github/artemidius/blowhard/core/api/MeetingNoteGenerationRejection;)Lio/github/artemidius/blowhard/core/application/MeetingNoteEvaluationExpectation;
+	public static synthetic fun copy$default (Lio/github/artemidius/blowhard/core/application/MeetingNoteEvaluationExpectation;ZLio/github/artemidius/blowhard/core/api/MeetingNoteContent;Lio/github/artemidius/blowhard/core/api/MeetingNoteGenerationRejection;ILjava/lang/Object;)Lio/github/artemidius/blowhard/core/application/MeetingNoteEvaluationExpectation;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getContent ()Lio/github/artemidius/blowhard/core/api/MeetingNoteContent;
+	public final fun getRejection ()Lio/github/artemidius/blowhard/core/api/MeetingNoteGenerationRejection;
+	public final fun getSchemaValid ()Z
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class io/github/artemidius/blowhard/core/application/MeetingNoteEvaluationScore {
+	public fun <init> (Ljava/lang/String;Lio/github/artemidius/blowhard/core/application/EvaluationCheck;Lio/github/artemidius/blowhard/core/application/EvaluationCheck;Lio/github/artemidius/blowhard/core/application/EvaluationCheck;Lio/github/artemidius/blowhard/core/application/EvaluationCheck;Lio/github/artemidius/blowhard/core/application/EvaluationCheck;Lio/github/artemidius/blowhard/core/api/MeetingNoteGenerationRejection;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun component2 ()Lio/github/artemidius/blowhard/core/application/EvaluationCheck;
+	public final fun component3 ()Lio/github/artemidius/blowhard/core/application/EvaluationCheck;
+	public final fun component4 ()Lio/github/artemidius/blowhard/core/application/EvaluationCheck;
+	public final fun component5 ()Lio/github/artemidius/blowhard/core/application/EvaluationCheck;
+	public final fun component6 ()Lio/github/artemidius/blowhard/core/application/EvaluationCheck;
+	public final fun component7 ()Lio/github/artemidius/blowhard/core/api/MeetingNoteGenerationRejection;
+	public final fun copy (Ljava/lang/String;Lio/github/artemidius/blowhard/core/application/EvaluationCheck;Lio/github/artemidius/blowhard/core/application/EvaluationCheck;Lio/github/artemidius/blowhard/core/application/EvaluationCheck;Lio/github/artemidius/blowhard/core/application/EvaluationCheck;Lio/github/artemidius/blowhard/core/application/EvaluationCheck;Lio/github/artemidius/blowhard/core/api/MeetingNoteGenerationRejection;)Lio/github/artemidius/blowhard/core/application/MeetingNoteEvaluationScore;
+	public static synthetic fun copy$default (Lio/github/artemidius/blowhard/core/application/MeetingNoteEvaluationScore;Ljava/lang/String;Lio/github/artemidius/blowhard/core/application/EvaluationCheck;Lio/github/artemidius/blowhard/core/application/EvaluationCheck;Lio/github/artemidius/blowhard/core/application/EvaluationCheck;Lio/github/artemidius/blowhard/core/application/EvaluationCheck;Lio/github/artemidius/blowhard/core/application/EvaluationCheck;Lio/github/artemidius/blowhard/core/api/MeetingNoteGenerationRejection;ILjava/lang/Object;)Lio/github/artemidius/blowhard/core/application/MeetingNoteEvaluationScore;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getCaseId ()Ljava/lang/String;
+	public final fun getExpectedOutcome ()Lio/github/artemidius/blowhard/core/application/EvaluationCheck;
+	public final fun getFieldCorrectness ()Lio/github/artemidius/blowhard/core/application/EvaluationCheck;
+	public final fun getMissingFieldHandling ()Lio/github/artemidius/blowhard/core/application/EvaluationCheck;
+	public final fun getObservedRejection ()Lio/github/artemidius/blowhard/core/api/MeetingNoteGenerationRejection;
+	public final fun getSchemaValidity ()Lio/github/artemidius/blowhard/core/application/EvaluationCheck;
+	public final fun getSourceResolution ()Lio/github/artemidius/blowhard/core/application/EvaluationCheck;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class io/github/artemidius/blowhard/core/application/MeetingNoteEvaluationScorer {
+	public static final field INSTANCE Lio/github/artemidius/blowhard/core/application/MeetingNoteEvaluationScorer;
+	public final fun score (Lio/github/artemidius/blowhard/core/application/MeetingNoteEvaluationCase;Lio/github/artemidius/blowhard/core/api/MeetingNoteGenerationOutcome;)Lio/github/artemidius/blowhard/core/application/MeetingNoteEvaluationScore;
+	public final fun summarize (Ljava/util/List;)Lio/github/artemidius/blowhard/core/application/MeetingNoteEvaluationSummary;
+}
+
+public final class io/github/artemidius/blowhard/core/application/MeetingNoteEvaluationSummary {
+	public fun <init> (ILio/github/artemidius/blowhard/core/application/EvaluationMetric;Lio/github/artemidius/blowhard/core/application/EvaluationMetric;Lio/github/artemidius/blowhard/core/application/EvaluationMetric;Lio/github/artemidius/blowhard/core/application/EvaluationMetric;Lio/github/artemidius/blowhard/core/application/EvaluationMetric;)V
+	public final fun component1 ()I
+	public final fun component2 ()Lio/github/artemidius/blowhard/core/application/EvaluationMetric;
+	public final fun component3 ()Lio/github/artemidius/blowhard/core/application/EvaluationMetric;
+	public final fun component4 ()Lio/github/artemidius/blowhard/core/application/EvaluationMetric;
+	public final fun component5 ()Lio/github/artemidius/blowhard/core/application/EvaluationMetric;
+	public final fun component6 ()Lio/github/artemidius/blowhard/core/application/EvaluationMetric;
+	public final fun copy (ILio/github/artemidius/blowhard/core/application/EvaluationMetric;Lio/github/artemidius/blowhard/core/application/EvaluationMetric;Lio/github/artemidius/blowhard/core/application/EvaluationMetric;Lio/github/artemidius/blowhard/core/application/EvaluationMetric;Lio/github/artemidius/blowhard/core/application/EvaluationMetric;)Lio/github/artemidius/blowhard/core/application/MeetingNoteEvaluationSummary;
+	public static synthetic fun copy$default (Lio/github/artemidius/blowhard/core/application/MeetingNoteEvaluationSummary;ILio/github/artemidius/blowhard/core/application/EvaluationMetric;Lio/github/artemidius/blowhard/core/application/EvaluationMetric;Lio/github/artemidius/blowhard/core/application/EvaluationMetric;Lio/github/artemidius/blowhard/core/application/EvaluationMetric;Lio/github/artemidius/blowhard/core/application/EvaluationMetric;ILjava/lang/Object;)Lio/github/artemidius/blowhard/core/application/MeetingNoteEvaluationSummary;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getExpectedOutcome ()Lio/github/artemidius/blowhard/core/application/EvaluationMetric;
+	public final fun getFieldCorrectness ()Lio/github/artemidius/blowhard/core/application/EvaluationMetric;
+	public final fun getMissingFieldHandling ()Lio/github/artemidius/blowhard/core/application/EvaluationMetric;
+	public final fun getSampleCount ()I
+	public final fun getSchemaValidity ()Lio/github/artemidius/blowhard/core/application/EvaluationMetric;
+	public final fun getSourceResolution ()Lio/github/artemidius/blowhard/core/application/EvaluationMetric;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
 }
 
 public abstract interface class io/github/artemidius/blowhard/core/application/MeetingNoteIdFactory {

@@ -6,6 +6,18 @@
 // - Show declarations: true
 
 // Library unique name: <Blowhard.core:application>
+final enum class io.github.artemidius.blowhard.core.application/EvaluationCheck : kotlin/Enum<io.github.artemidius.blowhard.core.application/EvaluationCheck> { // io.github.artemidius.blowhard.core.application/EvaluationCheck|null[0]
+    enum entry FAIL // io.github.artemidius.blowhard.core.application/EvaluationCheck.FAIL|null[0]
+    enum entry NOT_APPLICABLE // io.github.artemidius.blowhard.core.application/EvaluationCheck.NOT_APPLICABLE|null[0]
+    enum entry PASS // io.github.artemidius.blowhard.core.application/EvaluationCheck.PASS|null[0]
+
+    final val entries // io.github.artemidius.blowhard.core.application/EvaluationCheck.entries|#static{}entries[0]
+        final fun <get-entries>(): kotlin.enums/EnumEntries<io.github.artemidius.blowhard.core.application/EvaluationCheck> // io.github.artemidius.blowhard.core.application/EvaluationCheck.entries.<get-entries>|<get-entries>#static(){}[0]
+
+    final fun valueOf(kotlin/String): io.github.artemidius.blowhard.core.application/EvaluationCheck // io.github.artemidius.blowhard.core.application/EvaluationCheck.valueOf|valueOf#static(kotlin.String){}[0]
+    final fun values(): kotlin/Array<io.github.artemidius.blowhard.core.application/EvaluationCheck> // io.github.artemidius.blowhard.core.application/EvaluationCheck.values|values#static(){}[0]
+}
+
 abstract fun interface io.github.artemidius.blowhard.core.application/DocumentIdFactory { // io.github.artemidius.blowhard.core.application/DocumentIdFactory|null[0]
     abstract fun create(): io.github.artemidius.blowhard.core.api/DocumentId // io.github.artemidius.blowhard.core.application/DocumentIdFactory.create|create(){}[0]
 }
@@ -186,6 +198,121 @@ final class io.github.artemidius.blowhard.core.application/DocumentOcrPolicy { /
     }
 }
 
+final class io.github.artemidius.blowhard.core.application/EvaluationMetric { // io.github.artemidius.blowhard.core.application/EvaluationMetric|null[0]
+    constructor <init>(kotlin/Int, kotlin/Int) // io.github.artemidius.blowhard.core.application/EvaluationMetric.<init>|<init>(kotlin.Int;kotlin.Int){}[0]
+
+    final val failed // io.github.artemidius.blowhard.core.application/EvaluationMetric.failed|{}failed[0]
+        final fun <get-failed>(): kotlin/Int // io.github.artemidius.blowhard.core.application/EvaluationMetric.failed.<get-failed>|<get-failed>(){}[0]
+    final val passed // io.github.artemidius.blowhard.core.application/EvaluationMetric.passed|{}passed[0]
+        final fun <get-passed>(): kotlin/Int // io.github.artemidius.blowhard.core.application/EvaluationMetric.passed.<get-passed>|<get-passed>(){}[0]
+    final val total // io.github.artemidius.blowhard.core.application/EvaluationMetric.total|{}total[0]
+        final fun <get-total>(): kotlin/Int // io.github.artemidius.blowhard.core.application/EvaluationMetric.total.<get-total>|<get-total>(){}[0]
+
+    final fun component1(): kotlin/Int // io.github.artemidius.blowhard.core.application/EvaluationMetric.component1|component1(){}[0]
+    final fun component2(): kotlin/Int // io.github.artemidius.blowhard.core.application/EvaluationMetric.component2|component2(){}[0]
+    final fun copy(kotlin/Int = ..., kotlin/Int = ...): io.github.artemidius.blowhard.core.application/EvaluationMetric // io.github.artemidius.blowhard.core.application/EvaluationMetric.copy|copy(kotlin.Int;kotlin.Int){}[0]
+    final fun equals(kotlin/Any?): kotlin/Boolean // io.github.artemidius.blowhard.core.application/EvaluationMetric.equals|equals(kotlin.Any?){}[0]
+    final fun hashCode(): kotlin/Int // io.github.artemidius.blowhard.core.application/EvaluationMetric.hashCode|hashCode(){}[0]
+    final fun toString(): kotlin/String // io.github.artemidius.blowhard.core.application/EvaluationMetric.toString|toString(){}[0]
+}
+
+final class io.github.artemidius.blowhard.core.application/MeetingNoteEvaluationCase { // io.github.artemidius.blowhard.core.application/MeetingNoteEvaluationCase|null[0]
+    constructor <init>(kotlin/String, io.github.artemidius.blowhard.core.api/DocumentExtraction, io.github.artemidius.blowhard.core.application/MeetingNoteEvaluationExpectation) // io.github.artemidius.blowhard.core.application/MeetingNoteEvaluationCase.<init>|<init>(kotlin.String;io.github.artemidius.blowhard.core.api.DocumentExtraction;io.github.artemidius.blowhard.core.application.MeetingNoteEvaluationExpectation){}[0]
+
+    final val expectation // io.github.artemidius.blowhard.core.application/MeetingNoteEvaluationCase.expectation|{}expectation[0]
+        final fun <get-expectation>(): io.github.artemidius.blowhard.core.application/MeetingNoteEvaluationExpectation // io.github.artemidius.blowhard.core.application/MeetingNoteEvaluationCase.expectation.<get-expectation>|<get-expectation>(){}[0]
+    final val extraction // io.github.artemidius.blowhard.core.application/MeetingNoteEvaluationCase.extraction|{}extraction[0]
+        final fun <get-extraction>(): io.github.artemidius.blowhard.core.api/DocumentExtraction // io.github.artemidius.blowhard.core.application/MeetingNoteEvaluationCase.extraction.<get-extraction>|<get-extraction>(){}[0]
+    final val id // io.github.artemidius.blowhard.core.application/MeetingNoteEvaluationCase.id|{}id[0]
+        final fun <get-id>(): kotlin/String // io.github.artemidius.blowhard.core.application/MeetingNoteEvaluationCase.id.<get-id>|<get-id>(){}[0]
+
+    final fun component1(): kotlin/String // io.github.artemidius.blowhard.core.application/MeetingNoteEvaluationCase.component1|component1(){}[0]
+    final fun component2(): io.github.artemidius.blowhard.core.api/DocumentExtraction // io.github.artemidius.blowhard.core.application/MeetingNoteEvaluationCase.component2|component2(){}[0]
+    final fun component3(): io.github.artemidius.blowhard.core.application/MeetingNoteEvaluationExpectation // io.github.artemidius.blowhard.core.application/MeetingNoteEvaluationCase.component3|component3(){}[0]
+    final fun copy(kotlin/String = ..., io.github.artemidius.blowhard.core.api/DocumentExtraction = ..., io.github.artemidius.blowhard.core.application/MeetingNoteEvaluationExpectation = ...): io.github.artemidius.blowhard.core.application/MeetingNoteEvaluationCase // io.github.artemidius.blowhard.core.application/MeetingNoteEvaluationCase.copy|copy(kotlin.String;io.github.artemidius.blowhard.core.api.DocumentExtraction;io.github.artemidius.blowhard.core.application.MeetingNoteEvaluationExpectation){}[0]
+    final fun equals(kotlin/Any?): kotlin/Boolean // io.github.artemidius.blowhard.core.application/MeetingNoteEvaluationCase.equals|equals(kotlin.Any?){}[0]
+    final fun hashCode(): kotlin/Int // io.github.artemidius.blowhard.core.application/MeetingNoteEvaluationCase.hashCode|hashCode(){}[0]
+    final fun toString(): kotlin/String // io.github.artemidius.blowhard.core.application/MeetingNoteEvaluationCase.toString|toString(){}[0]
+}
+
+final class io.github.artemidius.blowhard.core.application/MeetingNoteEvaluationExpectation { // io.github.artemidius.blowhard.core.application/MeetingNoteEvaluationExpectation|null[0]
+    constructor <init>(kotlin/Boolean, io.github.artemidius.blowhard.core.api/MeetingNoteContent?, io.github.artemidius.blowhard.core.api/MeetingNoteGenerationRejection?) // io.github.artemidius.blowhard.core.application/MeetingNoteEvaluationExpectation.<init>|<init>(kotlin.Boolean;io.github.artemidius.blowhard.core.api.MeetingNoteContent?;io.github.artemidius.blowhard.core.api.MeetingNoteGenerationRejection?){}[0]
+
+    final val content // io.github.artemidius.blowhard.core.application/MeetingNoteEvaluationExpectation.content|{}content[0]
+        final fun <get-content>(): io.github.artemidius.blowhard.core.api/MeetingNoteContent? // io.github.artemidius.blowhard.core.application/MeetingNoteEvaluationExpectation.content.<get-content>|<get-content>(){}[0]
+    final val rejection // io.github.artemidius.blowhard.core.application/MeetingNoteEvaluationExpectation.rejection|{}rejection[0]
+        final fun <get-rejection>(): io.github.artemidius.blowhard.core.api/MeetingNoteGenerationRejection? // io.github.artemidius.blowhard.core.application/MeetingNoteEvaluationExpectation.rejection.<get-rejection>|<get-rejection>(){}[0]
+    final val schemaValid // io.github.artemidius.blowhard.core.application/MeetingNoteEvaluationExpectation.schemaValid|{}schemaValid[0]
+        final fun <get-schemaValid>(): kotlin/Boolean // io.github.artemidius.blowhard.core.application/MeetingNoteEvaluationExpectation.schemaValid.<get-schemaValid>|<get-schemaValid>(){}[0]
+
+    final fun component1(): kotlin/Boolean // io.github.artemidius.blowhard.core.application/MeetingNoteEvaluationExpectation.component1|component1(){}[0]
+    final fun component2(): io.github.artemidius.blowhard.core.api/MeetingNoteContent? // io.github.artemidius.blowhard.core.application/MeetingNoteEvaluationExpectation.component2|component2(){}[0]
+    final fun component3(): io.github.artemidius.blowhard.core.api/MeetingNoteGenerationRejection? // io.github.artemidius.blowhard.core.application/MeetingNoteEvaluationExpectation.component3|component3(){}[0]
+    final fun copy(kotlin/Boolean = ..., io.github.artemidius.blowhard.core.api/MeetingNoteContent? = ..., io.github.artemidius.blowhard.core.api/MeetingNoteGenerationRejection? = ...): io.github.artemidius.blowhard.core.application/MeetingNoteEvaluationExpectation // io.github.artemidius.blowhard.core.application/MeetingNoteEvaluationExpectation.copy|copy(kotlin.Boolean;io.github.artemidius.blowhard.core.api.MeetingNoteContent?;io.github.artemidius.blowhard.core.api.MeetingNoteGenerationRejection?){}[0]
+    final fun equals(kotlin/Any?): kotlin/Boolean // io.github.artemidius.blowhard.core.application/MeetingNoteEvaluationExpectation.equals|equals(kotlin.Any?){}[0]
+    final fun hashCode(): kotlin/Int // io.github.artemidius.blowhard.core.application/MeetingNoteEvaluationExpectation.hashCode|hashCode(){}[0]
+    final fun toString(): kotlin/String // io.github.artemidius.blowhard.core.application/MeetingNoteEvaluationExpectation.toString|toString(){}[0]
+}
+
+final class io.github.artemidius.blowhard.core.application/MeetingNoteEvaluationScore { // io.github.artemidius.blowhard.core.application/MeetingNoteEvaluationScore|null[0]
+    constructor <init>(kotlin/String, io.github.artemidius.blowhard.core.application/EvaluationCheck, io.github.artemidius.blowhard.core.application/EvaluationCheck, io.github.artemidius.blowhard.core.application/EvaluationCheck, io.github.artemidius.blowhard.core.application/EvaluationCheck, io.github.artemidius.blowhard.core.application/EvaluationCheck, io.github.artemidius.blowhard.core.api/MeetingNoteGenerationRejection?) // io.github.artemidius.blowhard.core.application/MeetingNoteEvaluationScore.<init>|<init>(kotlin.String;io.github.artemidius.blowhard.core.application.EvaluationCheck;io.github.artemidius.blowhard.core.application.EvaluationCheck;io.github.artemidius.blowhard.core.application.EvaluationCheck;io.github.artemidius.blowhard.core.application.EvaluationCheck;io.github.artemidius.blowhard.core.application.EvaluationCheck;io.github.artemidius.blowhard.core.api.MeetingNoteGenerationRejection?){}[0]
+
+    final val caseId // io.github.artemidius.blowhard.core.application/MeetingNoteEvaluationScore.caseId|{}caseId[0]
+        final fun <get-caseId>(): kotlin/String // io.github.artemidius.blowhard.core.application/MeetingNoteEvaluationScore.caseId.<get-caseId>|<get-caseId>(){}[0]
+    final val expectedOutcome // io.github.artemidius.blowhard.core.application/MeetingNoteEvaluationScore.expectedOutcome|{}expectedOutcome[0]
+        final fun <get-expectedOutcome>(): io.github.artemidius.blowhard.core.application/EvaluationCheck // io.github.artemidius.blowhard.core.application/MeetingNoteEvaluationScore.expectedOutcome.<get-expectedOutcome>|<get-expectedOutcome>(){}[0]
+    final val fieldCorrectness // io.github.artemidius.blowhard.core.application/MeetingNoteEvaluationScore.fieldCorrectness|{}fieldCorrectness[0]
+        final fun <get-fieldCorrectness>(): io.github.artemidius.blowhard.core.application/EvaluationCheck // io.github.artemidius.blowhard.core.application/MeetingNoteEvaluationScore.fieldCorrectness.<get-fieldCorrectness>|<get-fieldCorrectness>(){}[0]
+    final val missingFieldHandling // io.github.artemidius.blowhard.core.application/MeetingNoteEvaluationScore.missingFieldHandling|{}missingFieldHandling[0]
+        final fun <get-missingFieldHandling>(): io.github.artemidius.blowhard.core.application/EvaluationCheck // io.github.artemidius.blowhard.core.application/MeetingNoteEvaluationScore.missingFieldHandling.<get-missingFieldHandling>|<get-missingFieldHandling>(){}[0]
+    final val observedRejection // io.github.artemidius.blowhard.core.application/MeetingNoteEvaluationScore.observedRejection|{}observedRejection[0]
+        final fun <get-observedRejection>(): io.github.artemidius.blowhard.core.api/MeetingNoteGenerationRejection? // io.github.artemidius.blowhard.core.application/MeetingNoteEvaluationScore.observedRejection.<get-observedRejection>|<get-observedRejection>(){}[0]
+    final val schemaValidity // io.github.artemidius.blowhard.core.application/MeetingNoteEvaluationScore.schemaValidity|{}schemaValidity[0]
+        final fun <get-schemaValidity>(): io.github.artemidius.blowhard.core.application/EvaluationCheck // io.github.artemidius.blowhard.core.application/MeetingNoteEvaluationScore.schemaValidity.<get-schemaValidity>|<get-schemaValidity>(){}[0]
+    final val sourceResolution // io.github.artemidius.blowhard.core.application/MeetingNoteEvaluationScore.sourceResolution|{}sourceResolution[0]
+        final fun <get-sourceResolution>(): io.github.artemidius.blowhard.core.application/EvaluationCheck // io.github.artemidius.blowhard.core.application/MeetingNoteEvaluationScore.sourceResolution.<get-sourceResolution>|<get-sourceResolution>(){}[0]
+
+    final fun component1(): kotlin/String // io.github.artemidius.blowhard.core.application/MeetingNoteEvaluationScore.component1|component1(){}[0]
+    final fun component2(): io.github.artemidius.blowhard.core.application/EvaluationCheck // io.github.artemidius.blowhard.core.application/MeetingNoteEvaluationScore.component2|component2(){}[0]
+    final fun component3(): io.github.artemidius.blowhard.core.application/EvaluationCheck // io.github.artemidius.blowhard.core.application/MeetingNoteEvaluationScore.component3|component3(){}[0]
+    final fun component4(): io.github.artemidius.blowhard.core.application/EvaluationCheck // io.github.artemidius.blowhard.core.application/MeetingNoteEvaluationScore.component4|component4(){}[0]
+    final fun component5(): io.github.artemidius.blowhard.core.application/EvaluationCheck // io.github.artemidius.blowhard.core.application/MeetingNoteEvaluationScore.component5|component5(){}[0]
+    final fun component6(): io.github.artemidius.blowhard.core.application/EvaluationCheck // io.github.artemidius.blowhard.core.application/MeetingNoteEvaluationScore.component6|component6(){}[0]
+    final fun component7(): io.github.artemidius.blowhard.core.api/MeetingNoteGenerationRejection? // io.github.artemidius.blowhard.core.application/MeetingNoteEvaluationScore.component7|component7(){}[0]
+    final fun copy(kotlin/String = ..., io.github.artemidius.blowhard.core.application/EvaluationCheck = ..., io.github.artemidius.blowhard.core.application/EvaluationCheck = ..., io.github.artemidius.blowhard.core.application/EvaluationCheck = ..., io.github.artemidius.blowhard.core.application/EvaluationCheck = ..., io.github.artemidius.blowhard.core.application/EvaluationCheck = ..., io.github.artemidius.blowhard.core.api/MeetingNoteGenerationRejection? = ...): io.github.artemidius.blowhard.core.application/MeetingNoteEvaluationScore // io.github.artemidius.blowhard.core.application/MeetingNoteEvaluationScore.copy|copy(kotlin.String;io.github.artemidius.blowhard.core.application.EvaluationCheck;io.github.artemidius.blowhard.core.application.EvaluationCheck;io.github.artemidius.blowhard.core.application.EvaluationCheck;io.github.artemidius.blowhard.core.application.EvaluationCheck;io.github.artemidius.blowhard.core.application.EvaluationCheck;io.github.artemidius.blowhard.core.api.MeetingNoteGenerationRejection?){}[0]
+    final fun equals(kotlin/Any?): kotlin/Boolean // io.github.artemidius.blowhard.core.application/MeetingNoteEvaluationScore.equals|equals(kotlin.Any?){}[0]
+    final fun hashCode(): kotlin/Int // io.github.artemidius.blowhard.core.application/MeetingNoteEvaluationScore.hashCode|hashCode(){}[0]
+    final fun toString(): kotlin/String // io.github.artemidius.blowhard.core.application/MeetingNoteEvaluationScore.toString|toString(){}[0]
+}
+
+final class io.github.artemidius.blowhard.core.application/MeetingNoteEvaluationSummary { // io.github.artemidius.blowhard.core.application/MeetingNoteEvaluationSummary|null[0]
+    constructor <init>(kotlin/Int, io.github.artemidius.blowhard.core.application/EvaluationMetric, io.github.artemidius.blowhard.core.application/EvaluationMetric, io.github.artemidius.blowhard.core.application/EvaluationMetric, io.github.artemidius.blowhard.core.application/EvaluationMetric, io.github.artemidius.blowhard.core.application/EvaluationMetric) // io.github.artemidius.blowhard.core.application/MeetingNoteEvaluationSummary.<init>|<init>(kotlin.Int;io.github.artemidius.blowhard.core.application.EvaluationMetric;io.github.artemidius.blowhard.core.application.EvaluationMetric;io.github.artemidius.blowhard.core.application.EvaluationMetric;io.github.artemidius.blowhard.core.application.EvaluationMetric;io.github.artemidius.blowhard.core.application.EvaluationMetric){}[0]
+
+    final val expectedOutcome // io.github.artemidius.blowhard.core.application/MeetingNoteEvaluationSummary.expectedOutcome|{}expectedOutcome[0]
+        final fun <get-expectedOutcome>(): io.github.artemidius.blowhard.core.application/EvaluationMetric // io.github.artemidius.blowhard.core.application/MeetingNoteEvaluationSummary.expectedOutcome.<get-expectedOutcome>|<get-expectedOutcome>(){}[0]
+    final val fieldCorrectness // io.github.artemidius.blowhard.core.application/MeetingNoteEvaluationSummary.fieldCorrectness|{}fieldCorrectness[0]
+        final fun <get-fieldCorrectness>(): io.github.artemidius.blowhard.core.application/EvaluationMetric // io.github.artemidius.blowhard.core.application/MeetingNoteEvaluationSummary.fieldCorrectness.<get-fieldCorrectness>|<get-fieldCorrectness>(){}[0]
+    final val missingFieldHandling // io.github.artemidius.blowhard.core.application/MeetingNoteEvaluationSummary.missingFieldHandling|{}missingFieldHandling[0]
+        final fun <get-missingFieldHandling>(): io.github.artemidius.blowhard.core.application/EvaluationMetric // io.github.artemidius.blowhard.core.application/MeetingNoteEvaluationSummary.missingFieldHandling.<get-missingFieldHandling>|<get-missingFieldHandling>(){}[0]
+    final val sampleCount // io.github.artemidius.blowhard.core.application/MeetingNoteEvaluationSummary.sampleCount|{}sampleCount[0]
+        final fun <get-sampleCount>(): kotlin/Int // io.github.artemidius.blowhard.core.application/MeetingNoteEvaluationSummary.sampleCount.<get-sampleCount>|<get-sampleCount>(){}[0]
+    final val schemaValidity // io.github.artemidius.blowhard.core.application/MeetingNoteEvaluationSummary.schemaValidity|{}schemaValidity[0]
+        final fun <get-schemaValidity>(): io.github.artemidius.blowhard.core.application/EvaluationMetric // io.github.artemidius.blowhard.core.application/MeetingNoteEvaluationSummary.schemaValidity.<get-schemaValidity>|<get-schemaValidity>(){}[0]
+    final val sourceResolution // io.github.artemidius.blowhard.core.application/MeetingNoteEvaluationSummary.sourceResolution|{}sourceResolution[0]
+        final fun <get-sourceResolution>(): io.github.artemidius.blowhard.core.application/EvaluationMetric // io.github.artemidius.blowhard.core.application/MeetingNoteEvaluationSummary.sourceResolution.<get-sourceResolution>|<get-sourceResolution>(){}[0]
+
+    final fun component1(): kotlin/Int // io.github.artemidius.blowhard.core.application/MeetingNoteEvaluationSummary.component1|component1(){}[0]
+    final fun component2(): io.github.artemidius.blowhard.core.application/EvaluationMetric // io.github.artemidius.blowhard.core.application/MeetingNoteEvaluationSummary.component2|component2(){}[0]
+    final fun component3(): io.github.artemidius.blowhard.core.application/EvaluationMetric // io.github.artemidius.blowhard.core.application/MeetingNoteEvaluationSummary.component3|component3(){}[0]
+    final fun component4(): io.github.artemidius.blowhard.core.application/EvaluationMetric // io.github.artemidius.blowhard.core.application/MeetingNoteEvaluationSummary.component4|component4(){}[0]
+    final fun component5(): io.github.artemidius.blowhard.core.application/EvaluationMetric // io.github.artemidius.blowhard.core.application/MeetingNoteEvaluationSummary.component5|component5(){}[0]
+    final fun component6(): io.github.artemidius.blowhard.core.application/EvaluationMetric // io.github.artemidius.blowhard.core.application/MeetingNoteEvaluationSummary.component6|component6(){}[0]
+    final fun copy(kotlin/Int = ..., io.github.artemidius.blowhard.core.application/EvaluationMetric = ..., io.github.artemidius.blowhard.core.application/EvaluationMetric = ..., io.github.artemidius.blowhard.core.application/EvaluationMetric = ..., io.github.artemidius.blowhard.core.application/EvaluationMetric = ..., io.github.artemidius.blowhard.core.application/EvaluationMetric = ...): io.github.artemidius.blowhard.core.application/MeetingNoteEvaluationSummary // io.github.artemidius.blowhard.core.application/MeetingNoteEvaluationSummary.copy|copy(kotlin.Int;io.github.artemidius.blowhard.core.application.EvaluationMetric;io.github.artemidius.blowhard.core.application.EvaluationMetric;io.github.artemidius.blowhard.core.application.EvaluationMetric;io.github.artemidius.blowhard.core.application.EvaluationMetric;io.github.artemidius.blowhard.core.application.EvaluationMetric){}[0]
+    final fun equals(kotlin/Any?): kotlin/Boolean // io.github.artemidius.blowhard.core.application/MeetingNoteEvaluationSummary.equals|equals(kotlin.Any?){}[0]
+    final fun hashCode(): kotlin/Int // io.github.artemidius.blowhard.core.application/MeetingNoteEvaluationSummary.hashCode|hashCode(){}[0]
+    final fun toString(): kotlin/String // io.github.artemidius.blowhard.core.application/MeetingNoteEvaluationSummary.toString|toString(){}[0]
+}
+
 final class io.github.artemidius.blowhard.core.application/RunCheckpointPolicy { // io.github.artemidius.blowhard.core.application/RunCheckpointPolicy|null[0]
     constructor <init>(kotlin/Int = ..., kotlin/Long = ...) // io.github.artemidius.blowhard.core.application/RunCheckpointPolicy.<init>|<init>(kotlin.Int;kotlin.Long){}[0]
 
@@ -219,6 +346,11 @@ final class io.github.artemidius.blowhard.core.application/SequentialRunIdFactor
     constructor <init>(kotlin/String = ...) // io.github.artemidius.blowhard.core.application/SequentialRunIdFactory.<init>|<init>(kotlin.String){}[0]
 
     final suspend fun next(): io.github.artemidius.blowhard.core.api/RunId // io.github.artemidius.blowhard.core.application/SequentialRunIdFactory.next|next(){}[0]
+}
+
+final object io.github.artemidius.blowhard.core.application/MeetingNoteEvaluationScorer { // io.github.artemidius.blowhard.core.application/MeetingNoteEvaluationScorer|null[0]
+    final fun score(io.github.artemidius.blowhard.core.application/MeetingNoteEvaluationCase, io.github.artemidius.blowhard.core.api/MeetingNoteGenerationOutcome): io.github.artemidius.blowhard.core.application/MeetingNoteEvaluationScore // io.github.artemidius.blowhard.core.application/MeetingNoteEvaluationScorer.score|score(io.github.artemidius.blowhard.core.application.MeetingNoteEvaluationCase;io.github.artemidius.blowhard.core.api.MeetingNoteGenerationOutcome){}[0]
+    final fun summarize(kotlin.collections/List<io.github.artemidius.blowhard.core.application/MeetingNoteEvaluationScore>): io.github.artemidius.blowhard.core.application/MeetingNoteEvaluationSummary // io.github.artemidius.blowhard.core.application/MeetingNoteEvaluationScorer.summarize|summarize(kotlin.collections.List<io.github.artemidius.blowhard.core.application.MeetingNoteEvaluationScore>){}[0]
 }
 
 final object io.github.artemidius.blowhard.core.application/SystemRunClock : io.github.artemidius.blowhard.core.application/RunClock { // io.github.artemidius.blowhard.core.application/SystemRunClock|null[0]
