@@ -19,6 +19,9 @@ public interface MeetingNoteStore {
         editedContent: MeetingNoteContent,
         updatedAtEpochMilliseconds: Long,
     ): MeetingNoteStoreUpdateResult
+
+    /** Releases local storage resources. Repeated calls have no effect. */
+    public suspend fun close()
 }
 
 /** Durable insert outcome. */
