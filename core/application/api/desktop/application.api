@@ -70,6 +70,14 @@ public final class io/github/artemidius/blowhard/core/application/DefaultDocumen
 	public fun process-SXksg0M (Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 }
 
+public final class io/github/artemidius/blowhard/core/application/DefaultMeetingNotes : io/github/artemidius/blowhard/core/api/MeetingNotes {
+	public fun <init> (Lio/github/artemidius/blowhard/core/domain/DocumentProcessingStore;Lio/github/artemidius/blowhard/core/domain/MeetingNoteGenerationPort;Lio/github/artemidius/blowhard/core/domain/MeetingNoteStore;Lio/github/artemidius/blowhard/core/application/MeetingNoteIdFactory;Lio/github/artemidius/blowhard/core/application/MeetingNoteClock;)V
+	public fun export-dlPNo9w (Ljava/lang/String;Lio/github/artemidius/blowhard/core/api/MeetingNoteExportFormat;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public fun find-0lfORfk (Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public fun generate-SXksg0M (Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public fun update-d3QKCPo (Ljava/lang/String;JLio/github/artemidius/blowhard/core/api/MeetingNoteContent;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+}
+
 public final class io/github/artemidius/blowhard/core/application/DefaultRunDiagnosticReportGenerator : io/github/artemidius/blowhard/core/api/RunDiagnosticReportGenerator {
 	public fun <init> (Lio/github/artemidius/blowhard/core/api/RunInspector;)V
 	public fun generate-Mzzv5v0 (Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
@@ -133,6 +141,14 @@ public final class io/github/artemidius/blowhard/core/application/DocumentOcrPol
 
 public abstract interface class io/github/artemidius/blowhard/core/application/DocumentProcessingClock {
 	public abstract fun nowEpochMilliseconds ()J
+}
+
+public abstract interface class io/github/artemidius/blowhard/core/application/MeetingNoteClock {
+	public abstract fun nowEpochMilliseconds ()J
+}
+
+public abstract interface class io/github/artemidius/blowhard/core/application/MeetingNoteIdFactory {
+	public abstract fun create-_5zNQ1E ()Ljava/lang/String;
 }
 
 public final class io/github/artemidius/blowhard/core/application/RunCheckpointPolicy {

@@ -18,6 +18,14 @@ abstract fun interface io.github.artemidius.blowhard.core.application/DocumentPr
     abstract fun nowEpochMilliseconds(): kotlin/Long // io.github.artemidius.blowhard.core.application/DocumentProcessingClock.nowEpochMilliseconds|nowEpochMilliseconds(){}[0]
 }
 
+abstract fun interface io.github.artemidius.blowhard.core.application/MeetingNoteClock { // io.github.artemidius.blowhard.core.application/MeetingNoteClock|null[0]
+    abstract fun nowEpochMilliseconds(): kotlin/Long // io.github.artemidius.blowhard.core.application/MeetingNoteClock.nowEpochMilliseconds|nowEpochMilliseconds(){}[0]
+}
+
+abstract fun interface io.github.artemidius.blowhard.core.application/MeetingNoteIdFactory { // io.github.artemidius.blowhard.core.application/MeetingNoteIdFactory|null[0]
+    abstract fun create(): io.github.artemidius.blowhard.core.api/MeetingNoteId // io.github.artemidius.blowhard.core.application/MeetingNoteIdFactory.create|create(){}[0]
+}
+
 abstract fun interface io.github.artemidius.blowhard.core.application/RunClock { // io.github.artemidius.blowhard.core.application/RunClock|null[0]
     abstract fun now(): io.github.artemidius.blowhard.core.api/RunTimestamp // io.github.artemidius.blowhard.core.application/RunClock.now|now(){}[0]
 }
@@ -105,6 +113,15 @@ final class io.github.artemidius.blowhard.core.application/DefaultDocumentOcr : 
 
     final suspend fun find(io.github.artemidius.blowhard.core.api/DocumentId): io.github.artemidius.blowhard.core.api/DocumentExtractionLookupResult // io.github.artemidius.blowhard.core.application/DefaultDocumentOcr.find|find(io.github.artemidius.blowhard.core.api.DocumentId){}[0]
     final suspend fun process(io.github.artemidius.blowhard.core.api/DocumentId): io.github.artemidius.blowhard.core.api/DocumentProcessingResult // io.github.artemidius.blowhard.core.application/DefaultDocumentOcr.process|process(io.github.artemidius.blowhard.core.api.DocumentId){}[0]
+}
+
+final class io.github.artemidius.blowhard.core.application/DefaultMeetingNotes : io.github.artemidius.blowhard.core.api/MeetingNotes { // io.github.artemidius.blowhard.core.application/DefaultMeetingNotes|null[0]
+    constructor <init>(io.github.artemidius.blowhard.core.domain/DocumentProcessingStore, io.github.artemidius.blowhard.core.domain/MeetingNoteGenerationPort, io.github.artemidius.blowhard.core.domain/MeetingNoteStore, io.github.artemidius.blowhard.core.application/MeetingNoteIdFactory, io.github.artemidius.blowhard.core.application/MeetingNoteClock) // io.github.artemidius.blowhard.core.application/DefaultMeetingNotes.<init>|<init>(io.github.artemidius.blowhard.core.domain.DocumentProcessingStore;io.github.artemidius.blowhard.core.domain.MeetingNoteGenerationPort;io.github.artemidius.blowhard.core.domain.MeetingNoteStore;io.github.artemidius.blowhard.core.application.MeetingNoteIdFactory;io.github.artemidius.blowhard.core.application.MeetingNoteClock){}[0]
+
+    final suspend fun export(io.github.artemidius.blowhard.core.api/MeetingNoteId, io.github.artemidius.blowhard.core.api/MeetingNoteExportFormat): io.github.artemidius.blowhard.core.api/MeetingNoteExportOutcome // io.github.artemidius.blowhard.core.application/DefaultMeetingNotes.export|export(io.github.artemidius.blowhard.core.api.MeetingNoteId;io.github.artemidius.blowhard.core.api.MeetingNoteExportFormat){}[0]
+    final suspend fun find(io.github.artemidius.blowhard.core.api/MeetingNoteId): io.github.artemidius.blowhard.core.api/MeetingNoteLookupOutcome // io.github.artemidius.blowhard.core.application/DefaultMeetingNotes.find|find(io.github.artemidius.blowhard.core.api.MeetingNoteId){}[0]
+    final suspend fun generate(io.github.artemidius.blowhard.core.api/DocumentId): io.github.artemidius.blowhard.core.api/MeetingNoteGenerationOutcome // io.github.artemidius.blowhard.core.application/DefaultMeetingNotes.generate|generate(io.github.artemidius.blowhard.core.api.DocumentId){}[0]
+    final suspend fun update(io.github.artemidius.blowhard.core.api/MeetingNoteId, kotlin/Long, io.github.artemidius.blowhard.core.api/MeetingNoteContent): io.github.artemidius.blowhard.core.api/MeetingNoteUpdateOutcome // io.github.artemidius.blowhard.core.application/DefaultMeetingNotes.update|update(io.github.artemidius.blowhard.core.api.MeetingNoteId;kotlin.Long;io.github.artemidius.blowhard.core.api.MeetingNoteContent){}[0]
 }
 
 final class io.github.artemidius.blowhard.core.application/DefaultRunDiagnosticReportGenerator : io.github.artemidius.blowhard.core.api/RunDiagnosticReportGenerator { // io.github.artemidius.blowhard.core.application/DefaultRunDiagnosticReportGenerator|null[0]
