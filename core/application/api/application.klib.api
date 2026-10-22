@@ -18,6 +18,23 @@ final enum class io.github.artemidius.blowhard.core.application/EvaluationCheck 
     final fun values(): kotlin/Array<io.github.artemidius.blowhard.core.application/EvaluationCheck> // io.github.artemidius.blowhard.core.application/EvaluationCheck.values|values#static(){}[0]
 }
 
+final enum class io.github.artemidius.blowhard.core.application/ToolOrchestrationFailure : kotlin/Enum<io.github.artemidius.blowhard.core.application/ToolOrchestrationFailure> { // io.github.artemidius.blowhard.core.application/ToolOrchestrationFailure|null[0]
+    enum entry AUTHENTICATION // io.github.artemidius.blowhard.core.application/ToolOrchestrationFailure.AUTHENTICATION|null[0]
+    enum entry CALL_LIMIT_EXCEEDED // io.github.artemidius.blowhard.core.application/ToolOrchestrationFailure.CALL_LIMIT_EXCEEDED|null[0]
+    enum entry DUPLICATE_CALL_ID // io.github.artemidius.blowhard.core.application/ToolOrchestrationFailure.DUPLICATE_CALL_ID|null[0]
+    enum entry INVALID_PROVIDER_RESPONSE // io.github.artemidius.blowhard.core.application/ToolOrchestrationFailure.INVALID_PROVIDER_RESPONSE|null[0]
+    enum entry PROVIDER_UNAVAILABLE // io.github.artemidius.blowhard.core.application/ToolOrchestrationFailure.PROVIDER_UNAVAILABLE|null[0]
+    enum entry RATE_LIMITED // io.github.artemidius.blowhard.core.application/ToolOrchestrationFailure.RATE_LIMITED|null[0]
+    enum entry STEP_LIMIT_EXCEEDED // io.github.artemidius.blowhard.core.application/ToolOrchestrationFailure.STEP_LIMIT_EXCEEDED|null[0]
+    enum entry TIMED_OUT // io.github.artemidius.blowhard.core.application/ToolOrchestrationFailure.TIMED_OUT|null[0]
+
+    final val entries // io.github.artemidius.blowhard.core.application/ToolOrchestrationFailure.entries|#static{}entries[0]
+        final fun <get-entries>(): kotlin.enums/EnumEntries<io.github.artemidius.blowhard.core.application/ToolOrchestrationFailure> // io.github.artemidius.blowhard.core.application/ToolOrchestrationFailure.entries.<get-entries>|<get-entries>#static(){}[0]
+
+    final fun valueOf(kotlin/String): io.github.artemidius.blowhard.core.application/ToolOrchestrationFailure // io.github.artemidius.blowhard.core.application/ToolOrchestrationFailure.valueOf|valueOf#static(kotlin.String){}[0]
+    final fun values(): kotlin/Array<io.github.artemidius.blowhard.core.application/ToolOrchestrationFailure> // io.github.artemidius.blowhard.core.application/ToolOrchestrationFailure.values|values#static(){}[0]
+}
+
 abstract fun interface io.github.artemidius.blowhard.core.application/DocumentIdFactory { // io.github.artemidius.blowhard.core.application/DocumentIdFactory|null[0]
     abstract fun create(): io.github.artemidius.blowhard.core.api/DocumentId // io.github.artemidius.blowhard.core.application/DocumentIdFactory.create|create(){}[0]
 }
@@ -44,6 +61,132 @@ abstract fun interface io.github.artemidius.blowhard.core.application/RunClock {
 
 abstract fun interface io.github.artemidius.blowhard.core.application/RunIdFactory { // io.github.artemidius.blowhard.core.application/RunIdFactory|null[0]
     abstract suspend fun next(): io.github.artemidius.blowhard.core.api/RunId // io.github.artemidius.blowhard.core.application/RunIdFactory.next|next(){}[0]
+}
+
+sealed interface io.github.artemidius.blowhard.core.application/ToolOrchestrationState { // io.github.artemidius.blowhard.core.application/ToolOrchestrationState|null[0]
+    abstract val runId // io.github.artemidius.blowhard.core.application/ToolOrchestrationState.runId|{}runId[0]
+        abstract fun <get-runId>(): io.github.artemidius.blowhard.core.api/RunId // io.github.artemidius.blowhard.core.application/ToolOrchestrationState.runId.<get-runId>|<get-runId>(){}[0]
+    abstract val trace // io.github.artemidius.blowhard.core.application/ToolOrchestrationState.trace|{}trace[0]
+        abstract fun <get-trace>(): kotlin.collections/List<io.github.artemidius.blowhard.core.application/ToolTraceEvent> // io.github.artemidius.blowhard.core.application/ToolOrchestrationState.trace.<get-trace>|<get-trace>(){}[0]
+
+    final class Failed : io.github.artemidius.blowhard.core.application/ToolOrchestrationState { // io.github.artemidius.blowhard.core.application/ToolOrchestrationState.Failed|null[0]
+        constructor <init>(io.github.artemidius.blowhard.core.api/RunId, io.github.artemidius.blowhard.core.application/ToolOrchestrationFailure, kotlin.collections/List<io.github.artemidius.blowhard.core.application/ToolTraceEvent>) // io.github.artemidius.blowhard.core.application/ToolOrchestrationState.Failed.<init>|<init>(io.github.artemidius.blowhard.core.api.RunId;io.github.artemidius.blowhard.core.application.ToolOrchestrationFailure;kotlin.collections.List<io.github.artemidius.blowhard.core.application.ToolTraceEvent>){}[0]
+
+        final val reason // io.github.artemidius.blowhard.core.application/ToolOrchestrationState.Failed.reason|{}reason[0]
+            final fun <get-reason>(): io.github.artemidius.blowhard.core.application/ToolOrchestrationFailure // io.github.artemidius.blowhard.core.application/ToolOrchestrationState.Failed.reason.<get-reason>|<get-reason>(){}[0]
+        final val runId // io.github.artemidius.blowhard.core.application/ToolOrchestrationState.Failed.runId|{}runId[0]
+            final fun <get-runId>(): io.github.artemidius.blowhard.core.api/RunId // io.github.artemidius.blowhard.core.application/ToolOrchestrationState.Failed.runId.<get-runId>|<get-runId>(){}[0]
+        final val trace // io.github.artemidius.blowhard.core.application/ToolOrchestrationState.Failed.trace|{}trace[0]
+            final fun <get-trace>(): kotlin.collections/List<io.github.artemidius.blowhard.core.application/ToolTraceEvent> // io.github.artemidius.blowhard.core.application/ToolOrchestrationState.Failed.trace.<get-trace>|<get-trace>(){}[0]
+
+        final fun component1(): io.github.artemidius.blowhard.core.api/RunId // io.github.artemidius.blowhard.core.application/ToolOrchestrationState.Failed.component1|component1(){}[0]
+        final fun component2(): io.github.artemidius.blowhard.core.application/ToolOrchestrationFailure // io.github.artemidius.blowhard.core.application/ToolOrchestrationState.Failed.component2|component2(){}[0]
+        final fun component3(): kotlin.collections/List<io.github.artemidius.blowhard.core.application/ToolTraceEvent> // io.github.artemidius.blowhard.core.application/ToolOrchestrationState.Failed.component3|component3(){}[0]
+        final fun copy(io.github.artemidius.blowhard.core.api/RunId = ..., io.github.artemidius.blowhard.core.application/ToolOrchestrationFailure = ..., kotlin.collections/List<io.github.artemidius.blowhard.core.application/ToolTraceEvent> = ...): io.github.artemidius.blowhard.core.application/ToolOrchestrationState.Failed // io.github.artemidius.blowhard.core.application/ToolOrchestrationState.Failed.copy|copy(io.github.artemidius.blowhard.core.api.RunId;io.github.artemidius.blowhard.core.application.ToolOrchestrationFailure;kotlin.collections.List<io.github.artemidius.blowhard.core.application.ToolTraceEvent>){}[0]
+        final fun equals(kotlin/Any?): kotlin/Boolean // io.github.artemidius.blowhard.core.application/ToolOrchestrationState.Failed.equals|equals(kotlin.Any?){}[0]
+        final fun hashCode(): kotlin/Int // io.github.artemidius.blowhard.core.application/ToolOrchestrationState.Failed.hashCode|hashCode(){}[0]
+        final fun toString(): kotlin/String // io.github.artemidius.blowhard.core.application/ToolOrchestrationState.Failed.toString|toString(){}[0]
+    }
+
+    final class Running : io.github.artemidius.blowhard.core.application/ToolOrchestrationState { // io.github.artemidius.blowhard.core.application/ToolOrchestrationState.Running|null[0]
+        constructor <init>(io.github.artemidius.blowhard.core.api/RunId, kotlin/Int, kotlin/Int, kotlin.collections/List<io.github.artemidius.blowhard.core.application/ToolTraceEvent>) // io.github.artemidius.blowhard.core.application/ToolOrchestrationState.Running.<init>|<init>(io.github.artemidius.blowhard.core.api.RunId;kotlin.Int;kotlin.Int;kotlin.collections.List<io.github.artemidius.blowhard.core.application.ToolTraceEvent>){}[0]
+
+        final val completedCalls // io.github.artemidius.blowhard.core.application/ToolOrchestrationState.Running.completedCalls|{}completedCalls[0]
+            final fun <get-completedCalls>(): kotlin/Int // io.github.artemidius.blowhard.core.application/ToolOrchestrationState.Running.completedCalls.<get-completedCalls>|<get-completedCalls>(){}[0]
+        final val runId // io.github.artemidius.blowhard.core.application/ToolOrchestrationState.Running.runId|{}runId[0]
+            final fun <get-runId>(): io.github.artemidius.blowhard.core.api/RunId // io.github.artemidius.blowhard.core.application/ToolOrchestrationState.Running.runId.<get-runId>|<get-runId>(){}[0]
+        final val step // io.github.artemidius.blowhard.core.application/ToolOrchestrationState.Running.step|{}step[0]
+            final fun <get-step>(): kotlin/Int // io.github.artemidius.blowhard.core.application/ToolOrchestrationState.Running.step.<get-step>|<get-step>(){}[0]
+        final val trace // io.github.artemidius.blowhard.core.application/ToolOrchestrationState.Running.trace|{}trace[0]
+            final fun <get-trace>(): kotlin.collections/List<io.github.artemidius.blowhard.core.application/ToolTraceEvent> // io.github.artemidius.blowhard.core.application/ToolOrchestrationState.Running.trace.<get-trace>|<get-trace>(){}[0]
+
+        final fun component1(): io.github.artemidius.blowhard.core.api/RunId // io.github.artemidius.blowhard.core.application/ToolOrchestrationState.Running.component1|component1(){}[0]
+        final fun component2(): kotlin/Int // io.github.artemidius.blowhard.core.application/ToolOrchestrationState.Running.component2|component2(){}[0]
+        final fun component3(): kotlin/Int // io.github.artemidius.blowhard.core.application/ToolOrchestrationState.Running.component3|component3(){}[0]
+        final fun component4(): kotlin.collections/List<io.github.artemidius.blowhard.core.application/ToolTraceEvent> // io.github.artemidius.blowhard.core.application/ToolOrchestrationState.Running.component4|component4(){}[0]
+        final fun copy(io.github.artemidius.blowhard.core.api/RunId = ..., kotlin/Int = ..., kotlin/Int = ..., kotlin.collections/List<io.github.artemidius.blowhard.core.application/ToolTraceEvent> = ...): io.github.artemidius.blowhard.core.application/ToolOrchestrationState.Running // io.github.artemidius.blowhard.core.application/ToolOrchestrationState.Running.copy|copy(io.github.artemidius.blowhard.core.api.RunId;kotlin.Int;kotlin.Int;kotlin.collections.List<io.github.artemidius.blowhard.core.application.ToolTraceEvent>){}[0]
+        final fun equals(kotlin/Any?): kotlin/Boolean // io.github.artemidius.blowhard.core.application/ToolOrchestrationState.Running.equals|equals(kotlin.Any?){}[0]
+        final fun hashCode(): kotlin/Int // io.github.artemidius.blowhard.core.application/ToolOrchestrationState.Running.hashCode|hashCode(){}[0]
+        final fun toString(): kotlin/String // io.github.artemidius.blowhard.core.application/ToolOrchestrationState.Running.toString|toString(){}[0]
+    }
+
+    final class Succeeded : io.github.artemidius.blowhard.core.application/ToolOrchestrationState { // io.github.artemidius.blowhard.core.application/ToolOrchestrationState.Succeeded|null[0]
+        constructor <init>(io.github.artemidius.blowhard.core.api/RunId, kotlin/String, kotlin.collections/List<io.github.artemidius.blowhard.core.application/ToolTraceEvent>) // io.github.artemidius.blowhard.core.application/ToolOrchestrationState.Succeeded.<init>|<init>(io.github.artemidius.blowhard.core.api.RunId;kotlin.String;kotlin.collections.List<io.github.artemidius.blowhard.core.application.ToolTraceEvent>){}[0]
+
+        final val answer // io.github.artemidius.blowhard.core.application/ToolOrchestrationState.Succeeded.answer|{}answer[0]
+            final fun <get-answer>(): kotlin/String // io.github.artemidius.blowhard.core.application/ToolOrchestrationState.Succeeded.answer.<get-answer>|<get-answer>(){}[0]
+        final val runId // io.github.artemidius.blowhard.core.application/ToolOrchestrationState.Succeeded.runId|{}runId[0]
+            final fun <get-runId>(): io.github.artemidius.blowhard.core.api/RunId // io.github.artemidius.blowhard.core.application/ToolOrchestrationState.Succeeded.runId.<get-runId>|<get-runId>(){}[0]
+        final val trace // io.github.artemidius.blowhard.core.application/ToolOrchestrationState.Succeeded.trace|{}trace[0]
+            final fun <get-trace>(): kotlin.collections/List<io.github.artemidius.blowhard.core.application/ToolTraceEvent> // io.github.artemidius.blowhard.core.application/ToolOrchestrationState.Succeeded.trace.<get-trace>|<get-trace>(){}[0]
+
+        final fun component1(): io.github.artemidius.blowhard.core.api/RunId // io.github.artemidius.blowhard.core.application/ToolOrchestrationState.Succeeded.component1|component1(){}[0]
+        final fun component2(): kotlin/String // io.github.artemidius.blowhard.core.application/ToolOrchestrationState.Succeeded.component2|component2(){}[0]
+        final fun component3(): kotlin.collections/List<io.github.artemidius.blowhard.core.application/ToolTraceEvent> // io.github.artemidius.blowhard.core.application/ToolOrchestrationState.Succeeded.component3|component3(){}[0]
+        final fun copy(io.github.artemidius.blowhard.core.api/RunId = ..., kotlin/String = ..., kotlin.collections/List<io.github.artemidius.blowhard.core.application/ToolTraceEvent> = ...): io.github.artemidius.blowhard.core.application/ToolOrchestrationState.Succeeded // io.github.artemidius.blowhard.core.application/ToolOrchestrationState.Succeeded.copy|copy(io.github.artemidius.blowhard.core.api.RunId;kotlin.String;kotlin.collections.List<io.github.artemidius.blowhard.core.application.ToolTraceEvent>){}[0]
+        final fun equals(kotlin/Any?): kotlin/Boolean // io.github.artemidius.blowhard.core.application/ToolOrchestrationState.Succeeded.equals|equals(kotlin.Any?){}[0]
+        final fun hashCode(): kotlin/Int // io.github.artemidius.blowhard.core.application/ToolOrchestrationState.Succeeded.hashCode|hashCode(){}[0]
+        final fun toString(): kotlin/String // io.github.artemidius.blowhard.core.application/ToolOrchestrationState.Succeeded.toString|toString(){}[0]
+    }
+
+    final class Waiting : io.github.artemidius.blowhard.core.application/ToolOrchestrationState { // io.github.artemidius.blowhard.core.application/ToolOrchestrationState.Waiting|null[0]
+        constructor <init>(io.github.artemidius.blowhard.core.api/RunId, kotlin.collections/List<io.github.artemidius.blowhard.core.application/ToolTraceEvent> = ...) // io.github.artemidius.blowhard.core.application/ToolOrchestrationState.Waiting.<init>|<init>(io.github.artemidius.blowhard.core.api.RunId;kotlin.collections.List<io.github.artemidius.blowhard.core.application.ToolTraceEvent>){}[0]
+
+        final val runId // io.github.artemidius.blowhard.core.application/ToolOrchestrationState.Waiting.runId|{}runId[0]
+            final fun <get-runId>(): io.github.artemidius.blowhard.core.api/RunId // io.github.artemidius.blowhard.core.application/ToolOrchestrationState.Waiting.runId.<get-runId>|<get-runId>(){}[0]
+        final val trace // io.github.artemidius.blowhard.core.application/ToolOrchestrationState.Waiting.trace|{}trace[0]
+            final fun <get-trace>(): kotlin.collections/List<io.github.artemidius.blowhard.core.application/ToolTraceEvent> // io.github.artemidius.blowhard.core.application/ToolOrchestrationState.Waiting.trace.<get-trace>|<get-trace>(){}[0]
+
+        final fun component1(): io.github.artemidius.blowhard.core.api/RunId // io.github.artemidius.blowhard.core.application/ToolOrchestrationState.Waiting.component1|component1(){}[0]
+        final fun component2(): kotlin.collections/List<io.github.artemidius.blowhard.core.application/ToolTraceEvent> // io.github.artemidius.blowhard.core.application/ToolOrchestrationState.Waiting.component2|component2(){}[0]
+        final fun copy(io.github.artemidius.blowhard.core.api/RunId = ..., kotlin.collections/List<io.github.artemidius.blowhard.core.application/ToolTraceEvent> = ...): io.github.artemidius.blowhard.core.application/ToolOrchestrationState.Waiting // io.github.artemidius.blowhard.core.application/ToolOrchestrationState.Waiting.copy|copy(io.github.artemidius.blowhard.core.api.RunId;kotlin.collections.List<io.github.artemidius.blowhard.core.application.ToolTraceEvent>){}[0]
+        final fun equals(kotlin/Any?): kotlin/Boolean // io.github.artemidius.blowhard.core.application/ToolOrchestrationState.Waiting.equals|equals(kotlin.Any?){}[0]
+        final fun hashCode(): kotlin/Int // io.github.artemidius.blowhard.core.application/ToolOrchestrationState.Waiting.hashCode|hashCode(){}[0]
+        final fun toString(): kotlin/String // io.github.artemidius.blowhard.core.application/ToolOrchestrationState.Waiting.toString|toString(){}[0]
+    }
+}
+
+sealed interface io.github.artemidius.blowhard.core.application/ToolTraceEvent { // io.github.artemidius.blowhard.core.application/ToolTraceEvent|null[0]
+    final class CallCompleted : io.github.artemidius.blowhard.core.application/ToolTraceEvent { // io.github.artemidius.blowhard.core.application/ToolTraceEvent.CallCompleted|null[0]
+        constructor <init>(kotlin/Int, io.github.artemidius.blowhard.core.domain/ToolCallId, io.github.artemidius.blowhard.core.domain/ToolName, io.github.artemidius.blowhard.core.domain/ToolCallOutcome) // io.github.artemidius.blowhard.core.application/ToolTraceEvent.CallCompleted.<init>|<init>(kotlin.Int;io.github.artemidius.blowhard.core.domain.ToolCallId;io.github.artemidius.blowhard.core.domain.ToolName;io.github.artemidius.blowhard.core.domain.ToolCallOutcome){}[0]
+
+        final val id // io.github.artemidius.blowhard.core.application/ToolTraceEvent.CallCompleted.id|{}id[0]
+            final fun <get-id>(): io.github.artemidius.blowhard.core.domain/ToolCallId // io.github.artemidius.blowhard.core.application/ToolTraceEvent.CallCompleted.id.<get-id>|<get-id>(){}[0]
+        final val name // io.github.artemidius.blowhard.core.application/ToolTraceEvent.CallCompleted.name|{}name[0]
+            final fun <get-name>(): io.github.artemidius.blowhard.core.domain/ToolName // io.github.artemidius.blowhard.core.application/ToolTraceEvent.CallCompleted.name.<get-name>|<get-name>(){}[0]
+        final val outcome // io.github.artemidius.blowhard.core.application/ToolTraceEvent.CallCompleted.outcome|{}outcome[0]
+            final fun <get-outcome>(): io.github.artemidius.blowhard.core.domain/ToolCallOutcome // io.github.artemidius.blowhard.core.application/ToolTraceEvent.CallCompleted.outcome.<get-outcome>|<get-outcome>(){}[0]
+        final val step // io.github.artemidius.blowhard.core.application/ToolTraceEvent.CallCompleted.step|{}step[0]
+            final fun <get-step>(): kotlin/Int // io.github.artemidius.blowhard.core.application/ToolTraceEvent.CallCompleted.step.<get-step>|<get-step>(){}[0]
+
+        final fun component1(): kotlin/Int // io.github.artemidius.blowhard.core.application/ToolTraceEvent.CallCompleted.component1|component1(){}[0]
+        final fun component2(): io.github.artemidius.blowhard.core.domain/ToolCallId // io.github.artemidius.blowhard.core.application/ToolTraceEvent.CallCompleted.component2|component2(){}[0]
+        final fun component3(): io.github.artemidius.blowhard.core.domain/ToolName // io.github.artemidius.blowhard.core.application/ToolTraceEvent.CallCompleted.component3|component3(){}[0]
+        final fun component4(): io.github.artemidius.blowhard.core.domain/ToolCallOutcome // io.github.artemidius.blowhard.core.application/ToolTraceEvent.CallCompleted.component4|component4(){}[0]
+        final fun copy(kotlin/Int = ..., io.github.artemidius.blowhard.core.domain/ToolCallId = ..., io.github.artemidius.blowhard.core.domain/ToolName = ..., io.github.artemidius.blowhard.core.domain/ToolCallOutcome = ...): io.github.artemidius.blowhard.core.application/ToolTraceEvent.CallCompleted // io.github.artemidius.blowhard.core.application/ToolTraceEvent.CallCompleted.copy|copy(kotlin.Int;io.github.artemidius.blowhard.core.domain.ToolCallId;io.github.artemidius.blowhard.core.domain.ToolName;io.github.artemidius.blowhard.core.domain.ToolCallOutcome){}[0]
+        final fun equals(kotlin/Any?): kotlin/Boolean // io.github.artemidius.blowhard.core.application/ToolTraceEvent.CallCompleted.equals|equals(kotlin.Any?){}[0]
+        final fun hashCode(): kotlin/Int // io.github.artemidius.blowhard.core.application/ToolTraceEvent.CallCompleted.hashCode|hashCode(){}[0]
+        final fun toString(): kotlin/String // io.github.artemidius.blowhard.core.application/ToolTraceEvent.CallCompleted.toString|toString(){}[0]
+    }
+
+    final class ProviderTurn : io.github.artemidius.blowhard.core.application/ToolTraceEvent { // io.github.artemidius.blowhard.core.application/ToolTraceEvent.ProviderTurn|null[0]
+        constructor <init>(kotlin/Int) // io.github.artemidius.blowhard.core.application/ToolTraceEvent.ProviderTurn.<init>|<init>(kotlin.Int){}[0]
+
+        final val step // io.github.artemidius.blowhard.core.application/ToolTraceEvent.ProviderTurn.step|{}step[0]
+            final fun <get-step>(): kotlin/Int // io.github.artemidius.blowhard.core.application/ToolTraceEvent.ProviderTurn.step.<get-step>|<get-step>(){}[0]
+
+        final fun component1(): kotlin/Int // io.github.artemidius.blowhard.core.application/ToolTraceEvent.ProviderTurn.component1|component1(){}[0]
+        final fun copy(kotlin/Int = ...): io.github.artemidius.blowhard.core.application/ToolTraceEvent.ProviderTurn // io.github.artemidius.blowhard.core.application/ToolTraceEvent.ProviderTurn.copy|copy(kotlin.Int){}[0]
+        final fun equals(kotlin/Any?): kotlin/Boolean // io.github.artemidius.blowhard.core.application/ToolTraceEvent.ProviderTurn.equals|equals(kotlin.Any?){}[0]
+        final fun hashCode(): kotlin/Int // io.github.artemidius.blowhard.core.application/ToolTraceEvent.ProviderTurn.hashCode|hashCode(){}[0]
+        final fun toString(): kotlin/String // io.github.artemidius.blowhard.core.application/ToolTraceEvent.ProviderTurn.toString|toString(){}[0]
+    }
+}
+
+final class io.github.artemidius.blowhard.core.application/BoundedToolOrchestrator { // io.github.artemidius.blowhard.core.application/BoundedToolOrchestrator|null[0]
+    constructor <init>(io.github.artemidius.blowhard.core.domain/ToolModelPort, io.github.artemidius.blowhard.core.application/ToolRegistry, io.github.artemidius.blowhard.core.application/ToolOrchestrationPolicy = ...) // io.github.artemidius.blowhard.core.application/BoundedToolOrchestrator.<init>|<init>(io.github.artemidius.blowhard.core.domain.ToolModelPort;io.github.artemidius.blowhard.core.application.ToolRegistry;io.github.artemidius.blowhard.core.application.ToolOrchestrationPolicy){}[0]
+
+    final suspend fun run(io.github.artemidius.blowhard.core.api/RunId, kotlin/String, kotlin.coroutines/SuspendFunction1<io.github.artemidius.blowhard.core.application/ToolOrchestrationState, kotlin/Unit> = ...): io.github.artemidius.blowhard.core.application/ToolOrchestrationState // io.github.artemidius.blowhard.core.application/BoundedToolOrchestrator.run|run(io.github.artemidius.blowhard.core.api.RunId;kotlin.String;kotlin.coroutines.SuspendFunction1<io.github.artemidius.blowhard.core.application.ToolOrchestrationState,kotlin.Unit>){}[0]
 }
 
 final class io.github.artemidius.blowhard.core.application/ConversationHistoryEntry { // io.github.artemidius.blowhard.core.application/ConversationHistoryEntry|null[0]
@@ -362,6 +505,31 @@ final class io.github.artemidius.blowhard.core.application/SequentialRunIdFactor
     constructor <init>(kotlin/String = ...) // io.github.artemidius.blowhard.core.application/SequentialRunIdFactory.<init>|<init>(kotlin.String){}[0]
 
     final suspend fun next(): io.github.artemidius.blowhard.core.api/RunId // io.github.artemidius.blowhard.core.application/SequentialRunIdFactory.next|next(){}[0]
+}
+
+final class io.github.artemidius.blowhard.core.application/ToolOrchestrationPolicy { // io.github.artemidius.blowhard.core.application/ToolOrchestrationPolicy|null[0]
+    constructor <init>(kotlin/Int = ..., kotlin/Int = ..., kotlin/Int = ..., kotlin/Long = ..., kotlin/Int = ...) // io.github.artemidius.blowhard.core.application/ToolOrchestrationPolicy.<init>|<init>(kotlin.Int;kotlin.Int;kotlin.Int;kotlin.Long;kotlin.Int){}[0]
+
+    final val maximumAnswerCharacters // io.github.artemidius.blowhard.core.application/ToolOrchestrationPolicy.maximumAnswerCharacters|{}maximumAnswerCharacters[0]
+        final fun <get-maximumAnswerCharacters>(): kotlin/Int // io.github.artemidius.blowhard.core.application/ToolOrchestrationPolicy.maximumAnswerCharacters.<get-maximumAnswerCharacters>|<get-maximumAnswerCharacters>(){}[0]
+    final val maximumCallsPerStep // io.github.artemidius.blowhard.core.application/ToolOrchestrationPolicy.maximumCallsPerStep|{}maximumCallsPerStep[0]
+        final fun <get-maximumCallsPerStep>(): kotlin/Int // io.github.artemidius.blowhard.core.application/ToolOrchestrationPolicy.maximumCallsPerStep.<get-maximumCallsPerStep>|<get-maximumCallsPerStep>(){}[0]
+    final val maximumSteps // io.github.artemidius.blowhard.core.application/ToolOrchestrationPolicy.maximumSteps|{}maximumSteps[0]
+        final fun <get-maximumSteps>(): kotlin/Int // io.github.artemidius.blowhard.core.application/ToolOrchestrationPolicy.maximumSteps.<get-maximumSteps>|<get-maximumSteps>(){}[0]
+    final val maximumTotalCalls // io.github.artemidius.blowhard.core.application/ToolOrchestrationPolicy.maximumTotalCalls|{}maximumTotalCalls[0]
+        final fun <get-maximumTotalCalls>(): kotlin/Int // io.github.artemidius.blowhard.core.application/ToolOrchestrationPolicy.maximumTotalCalls.<get-maximumTotalCalls>|<get-maximumTotalCalls>(){}[0]
+    final val timeoutMilliseconds // io.github.artemidius.blowhard.core.application/ToolOrchestrationPolicy.timeoutMilliseconds|{}timeoutMilliseconds[0]
+        final fun <get-timeoutMilliseconds>(): kotlin/Long // io.github.artemidius.blowhard.core.application/ToolOrchestrationPolicy.timeoutMilliseconds.<get-timeoutMilliseconds>|<get-timeoutMilliseconds>(){}[0]
+
+    final fun component1(): kotlin/Int // io.github.artemidius.blowhard.core.application/ToolOrchestrationPolicy.component1|component1(){}[0]
+    final fun component2(): kotlin/Int // io.github.artemidius.blowhard.core.application/ToolOrchestrationPolicy.component2|component2(){}[0]
+    final fun component3(): kotlin/Int // io.github.artemidius.blowhard.core.application/ToolOrchestrationPolicy.component3|component3(){}[0]
+    final fun component4(): kotlin/Long // io.github.artemidius.blowhard.core.application/ToolOrchestrationPolicy.component4|component4(){}[0]
+    final fun component5(): kotlin/Int // io.github.artemidius.blowhard.core.application/ToolOrchestrationPolicy.component5|component5(){}[0]
+    final fun copy(kotlin/Int = ..., kotlin/Int = ..., kotlin/Int = ..., kotlin/Long = ..., kotlin/Int = ...): io.github.artemidius.blowhard.core.application/ToolOrchestrationPolicy // io.github.artemidius.blowhard.core.application/ToolOrchestrationPolicy.copy|copy(kotlin.Int;kotlin.Int;kotlin.Int;kotlin.Long;kotlin.Int){}[0]
+    final fun equals(kotlin/Any?): kotlin/Boolean // io.github.artemidius.blowhard.core.application/ToolOrchestrationPolicy.equals|equals(kotlin.Any?){}[0]
+    final fun hashCode(): kotlin/Int // io.github.artemidius.blowhard.core.application/ToolOrchestrationPolicy.hashCode|hashCode(){}[0]
+    final fun toString(): kotlin/String // io.github.artemidius.blowhard.core.application/ToolOrchestrationPolicy.toString|toString(){}[0]
 }
 
 final class io.github.artemidius.blowhard.core.application/ToolRegistry { // io.github.artemidius.blowhard.core.application/ToolRegistry|null[0]
