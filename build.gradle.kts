@@ -197,6 +197,8 @@ private val allowedProjectDependencies = mapOf(
         ":shared-ui",
     ),
     ":apps:evaluation" to setOf(
+        ":adapters:mistral",
+        ":adapters:platform",
         ":core:api",
         ":core:application",
         ":core:domain",
