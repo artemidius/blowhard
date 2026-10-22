@@ -28,6 +28,7 @@ subprojects {
 }
 
 val documentedModules = listOf(
+    project(":apps:evaluation"),
     project(":adapters:documents"),
     project(":adapters:fixture"),
     project(":adapters:mistral"),
@@ -194,6 +195,11 @@ private val allowedProjectDependencies = mapOf(
         ":adapters:platform",
         ":core:application",
         ":shared-ui",
+    ),
+    ":apps:evaluation" to setOf(
+        ":core:api",
+        ":core:application",
+        ":core:domain",
     ),
     ":core:api" to emptySet(),
     ":core:application" to setOf(":core:api", ":core:domain"),
