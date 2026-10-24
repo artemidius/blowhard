@@ -341,6 +341,22 @@ final class io.github.artemidius.blowhard.core.application/DocumentOcrPolicy { /
     }
 }
 
+final class io.github.artemidius.blowhard.core.application/DocumentReadScope { // io.github.artemidius.blowhard.core.application/DocumentReadScope|null[0]
+    constructor <init>(io.github.artemidius.blowhard.core.api/ConversationId, kotlin.collections/Set<io.github.artemidius.blowhard.core.api/DocumentId>) // io.github.artemidius.blowhard.core.application/DocumentReadScope.<init>|<init>(io.github.artemidius.blowhard.core.api.ConversationId;kotlin.collections.Set<io.github.artemidius.blowhard.core.api.DocumentId>){}[0]
+
+    final val conversationId // io.github.artemidius.blowhard.core.application/DocumentReadScope.conversationId|{}conversationId[0]
+        final fun <get-conversationId>(): io.github.artemidius.blowhard.core.api/ConversationId // io.github.artemidius.blowhard.core.application/DocumentReadScope.conversationId.<get-conversationId>|<get-conversationId>(){}[0]
+    final val documentIds // io.github.artemidius.blowhard.core.application/DocumentReadScope.documentIds|{}documentIds[0]
+        final fun <get-documentIds>(): kotlin.collections/Set<io.github.artemidius.blowhard.core.api/DocumentId> // io.github.artemidius.blowhard.core.application/DocumentReadScope.documentIds.<get-documentIds>|<get-documentIds>(){}[0]
+
+    final fun component1(): io.github.artemidius.blowhard.core.api/ConversationId // io.github.artemidius.blowhard.core.application/DocumentReadScope.component1|component1(){}[0]
+    final fun component2(): kotlin.collections/Set<io.github.artemidius.blowhard.core.api/DocumentId> // io.github.artemidius.blowhard.core.application/DocumentReadScope.component2|component2(){}[0]
+    final fun copy(io.github.artemidius.blowhard.core.api/ConversationId = ..., kotlin.collections/Set<io.github.artemidius.blowhard.core.api/DocumentId> = ...): io.github.artemidius.blowhard.core.application/DocumentReadScope // io.github.artemidius.blowhard.core.application/DocumentReadScope.copy|copy(io.github.artemidius.blowhard.core.api.ConversationId;kotlin.collections.Set<io.github.artemidius.blowhard.core.api.DocumentId>){}[0]
+    final fun equals(kotlin/Any?): kotlin/Boolean // io.github.artemidius.blowhard.core.application/DocumentReadScope.equals|equals(kotlin.Any?){}[0]
+    final fun hashCode(): kotlin/Int // io.github.artemidius.blowhard.core.application/DocumentReadScope.hashCode|hashCode(){}[0]
+    final fun toString(): kotlin/String // io.github.artemidius.blowhard.core.application/DocumentReadScope.toString|toString(){}[0]
+}
+
 final class io.github.artemidius.blowhard.core.application/EvaluationMetric { // io.github.artemidius.blowhard.core.application/EvaluationMetric|null[0]
     constructor <init>(kotlin/Int, kotlin/Int) // io.github.artemidius.blowhard.core.application/EvaluationMetric.<init>|<init>(kotlin.Int;kotlin.Int){}[0]
 
@@ -546,6 +562,10 @@ final class io.github.artemidius.blowhard.core.application/ToolRegistry { // io.
 final object io.github.artemidius.blowhard.core.application/MeetingNoteEvaluationScorer { // io.github.artemidius.blowhard.core.application/MeetingNoteEvaluationScorer|null[0]
     final fun score(io.github.artemidius.blowhard.core.application/MeetingNoteEvaluationCase, io.github.artemidius.blowhard.core.api/MeetingNoteGenerationOutcome): io.github.artemidius.blowhard.core.application/MeetingNoteEvaluationScore // io.github.artemidius.blowhard.core.application/MeetingNoteEvaluationScorer.score|score(io.github.artemidius.blowhard.core.application.MeetingNoteEvaluationCase;io.github.artemidius.blowhard.core.api.MeetingNoteGenerationOutcome){}[0]
     final fun summarize(kotlin.collections/List<io.github.artemidius.blowhard.core.application/MeetingNoteEvaluationScore>): io.github.artemidius.blowhard.core.application/MeetingNoteEvaluationSummary // io.github.artemidius.blowhard.core.application/MeetingNoteEvaluationScorer.summarize|summarize(kotlin.collections.List<io.github.artemidius.blowhard.core.application.MeetingNoteEvaluationScore>){}[0]
+}
+
+final object io.github.artemidius.blowhard.core.application/ScopedDocumentReadTools { // io.github.artemidius.blowhard.core.application/ScopedDocumentReadTools|null[0]
+    final fun create(io.github.artemidius.blowhard.core.application/DocumentReadScope, io.github.artemidius.blowhard.core.domain/DocumentProcessingStore): kotlin.collections/List<io.github.artemidius.blowhard.core.application/RegisteredTool> // io.github.artemidius.blowhard.core.application/ScopedDocumentReadTools.create|create(io.github.artemidius.blowhard.core.application.DocumentReadScope;io.github.artemidius.blowhard.core.domain.DocumentProcessingStore){}[0]
 }
 
 final object io.github.artemidius.blowhard.core.application/SystemRunClock : io.github.artemidius.blowhard.core.application/RunClock { // io.github.artemidius.blowhard.core.application/SystemRunClock|null[0]
