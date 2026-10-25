@@ -1,3 +1,10 @@
+public final class io/github/artemidius/blowhard/core/application/BoundedToolOrchestrator {
+	public fun <init> (Lio/github/artemidius/blowhard/core/domain/ToolModelPort;Lio/github/artemidius/blowhard/core/application/ToolRegistry;Lio/github/artemidius/blowhard/core/application/ToolOrchestrationPolicy;)V
+	public synthetic fun <init> (Lio/github/artemidius/blowhard/core/domain/ToolModelPort;Lio/github/artemidius/blowhard/core/application/ToolRegistry;Lio/github/artemidius/blowhard/core/application/ToolOrchestrationPolicy;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun run-4XaK4u0 (Ljava/lang/String;Ljava/lang/String;Lkotlin/jvm/functions/Function2;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public static synthetic fun run-4XaK4u0$default (Lio/github/artemidius/blowhard/core/application/BoundedToolOrchestrator;Ljava/lang/String;Ljava/lang/String;Lkotlin/jvm/functions/Function2;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
+}
+
 public final class io/github/artemidius/blowhard/core/application/ConversationHistoryEntry {
 	public fun <init> (Lio/github/artemidius/blowhard/core/domain/StoredConversation;Lio/github/artemidius/blowhard/core/domain/StoredTranscript;)V
 	public final fun component1 ()Lio/github/artemidius/blowhard/core/domain/StoredConversation;
@@ -315,6 +322,107 @@ public final class io/github/artemidius/blowhard/core/application/SystemRunClock
 	public fun now-Yj_JHEY ()J
 }
 
+public final class io/github/artemidius/blowhard/core/application/ToolOrchestrationFailure : java/lang/Enum {
+	public static final field AUTHENTICATION Lio/github/artemidius/blowhard/core/application/ToolOrchestrationFailure;
+	public static final field CALL_LIMIT_EXCEEDED Lio/github/artemidius/blowhard/core/application/ToolOrchestrationFailure;
+	public static final field DUPLICATE_CALL_ID Lio/github/artemidius/blowhard/core/application/ToolOrchestrationFailure;
+	public static final field INVALID_PROVIDER_RESPONSE Lio/github/artemidius/blowhard/core/application/ToolOrchestrationFailure;
+	public static final field PROVIDER_UNAVAILABLE Lio/github/artemidius/blowhard/core/application/ToolOrchestrationFailure;
+	public static final field RATE_LIMITED Lio/github/artemidius/blowhard/core/application/ToolOrchestrationFailure;
+	public static final field STEP_LIMIT_EXCEEDED Lio/github/artemidius/blowhard/core/application/ToolOrchestrationFailure;
+	public static final field TIMED_OUT Lio/github/artemidius/blowhard/core/application/ToolOrchestrationFailure;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public static fun valueOf (Ljava/lang/String;)Lio/github/artemidius/blowhard/core/application/ToolOrchestrationFailure;
+	public static fun values ()[Lio/github/artemidius/blowhard/core/application/ToolOrchestrationFailure;
+}
+
+public final class io/github/artemidius/blowhard/core/application/ToolOrchestrationPolicy {
+	public fun <init> ()V
+	public fun <init> (IIIJI)V
+	public synthetic fun <init> (IIIJIILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()I
+	public final fun component2 ()I
+	public final fun component3 ()I
+	public final fun component4 ()J
+	public final fun component5 ()I
+	public final fun copy (IIIJI)Lio/github/artemidius/blowhard/core/application/ToolOrchestrationPolicy;
+	public static synthetic fun copy$default (Lio/github/artemidius/blowhard/core/application/ToolOrchestrationPolicy;IIIJIILjava/lang/Object;)Lio/github/artemidius/blowhard/core/application/ToolOrchestrationPolicy;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getMaximumAnswerCharacters ()I
+	public final fun getMaximumCallsPerStep ()I
+	public final fun getMaximumSteps ()I
+	public final fun getMaximumTotalCalls ()I
+	public final fun getTimeoutMilliseconds ()J
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public abstract interface class io/github/artemidius/blowhard/core/application/ToolOrchestrationState {
+	public abstract fun getRunId-oS5FZMg ()Ljava/lang/String;
+	public abstract fun getTrace ()Ljava/util/List;
+}
+
+public final class io/github/artemidius/blowhard/core/application/ToolOrchestrationState$Failed : io/github/artemidius/blowhard/core/application/ToolOrchestrationState {
+	public synthetic fun <init> (Ljava/lang/String;Lio/github/artemidius/blowhard/core/application/ToolOrchestrationFailure;Ljava/util/List;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1-oS5FZMg ()Ljava/lang/String;
+	public final fun component2 ()Lio/github/artemidius/blowhard/core/application/ToolOrchestrationFailure;
+	public final fun component3 ()Ljava/util/List;
+	public final fun copy-8nT5kng (Ljava/lang/String;Lio/github/artemidius/blowhard/core/application/ToolOrchestrationFailure;Ljava/util/List;)Lio/github/artemidius/blowhard/core/application/ToolOrchestrationState$Failed;
+	public static synthetic fun copy-8nT5kng$default (Lio/github/artemidius/blowhard/core/application/ToolOrchestrationState$Failed;Ljava/lang/String;Lio/github/artemidius/blowhard/core/application/ToolOrchestrationFailure;Ljava/util/List;ILjava/lang/Object;)Lio/github/artemidius/blowhard/core/application/ToolOrchestrationState$Failed;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getReason ()Lio/github/artemidius/blowhard/core/application/ToolOrchestrationFailure;
+	public fun getRunId-oS5FZMg ()Ljava/lang/String;
+	public fun getTrace ()Ljava/util/List;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class io/github/artemidius/blowhard/core/application/ToolOrchestrationState$Running : io/github/artemidius/blowhard/core/application/ToolOrchestrationState {
+	public synthetic fun <init> (Ljava/lang/String;IILjava/util/List;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1-oS5FZMg ()Ljava/lang/String;
+	public final fun component2 ()I
+	public final fun component3 ()I
+	public final fun component4 ()Ljava/util/List;
+	public final fun copy-4XaK4u0 (Ljava/lang/String;IILjava/util/List;)Lio/github/artemidius/blowhard/core/application/ToolOrchestrationState$Running;
+	public static synthetic fun copy-4XaK4u0$default (Lio/github/artemidius/blowhard/core/application/ToolOrchestrationState$Running;Ljava/lang/String;IILjava/util/List;ILjava/lang/Object;)Lio/github/artemidius/blowhard/core/application/ToolOrchestrationState$Running;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getCompletedCalls ()I
+	public fun getRunId-oS5FZMg ()Ljava/lang/String;
+	public final fun getStep ()I
+	public fun getTrace ()Ljava/util/List;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class io/github/artemidius/blowhard/core/application/ToolOrchestrationState$Succeeded : io/github/artemidius/blowhard/core/application/ToolOrchestrationState {
+	public synthetic fun <init> (Ljava/lang/String;Ljava/lang/String;Ljava/util/List;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1-oS5FZMg ()Ljava/lang/String;
+	public final fun component2 ()Ljava/lang/String;
+	public final fun component3 ()Ljava/util/List;
+	public final fun copy-8nT5kng (Ljava/lang/String;Ljava/lang/String;Ljava/util/List;)Lio/github/artemidius/blowhard/core/application/ToolOrchestrationState$Succeeded;
+	public static synthetic fun copy-8nT5kng$default (Lio/github/artemidius/blowhard/core/application/ToolOrchestrationState$Succeeded;Ljava/lang/String;Ljava/lang/String;Ljava/util/List;ILjava/lang/Object;)Lio/github/artemidius/blowhard/core/application/ToolOrchestrationState$Succeeded;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getAnswer ()Ljava/lang/String;
+	public fun getRunId-oS5FZMg ()Ljava/lang/String;
+	public fun getTrace ()Ljava/util/List;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class io/github/artemidius/blowhard/core/application/ToolOrchestrationState$Waiting : io/github/artemidius/blowhard/core/application/ToolOrchestrationState {
+	public synthetic fun <init> (Ljava/lang/String;Ljava/util/List;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public synthetic fun <init> (Ljava/lang/String;Ljava/util/List;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1-oS5FZMg ()Ljava/lang/String;
+	public final fun component2 ()Ljava/util/List;
+	public final fun copy-Mzzv5v0 (Ljava/lang/String;Ljava/util/List;)Lio/github/artemidius/blowhard/core/application/ToolOrchestrationState$Waiting;
+	public static synthetic fun copy-Mzzv5v0$default (Lio/github/artemidius/blowhard/core/application/ToolOrchestrationState$Waiting;Ljava/lang/String;Ljava/util/List;ILjava/lang/Object;)Lio/github/artemidius/blowhard/core/application/ToolOrchestrationState$Waiting;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun getRunId-oS5FZMg ()Ljava/lang/String;
+	public fun getTrace ()Ljava/util/List;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
 public final class io/github/artemidius/blowhard/core/application/ToolRegistry {
 	public static final field Companion Lio/github/artemidius/blowhard/core/application/ToolRegistry$Companion;
 	public final fun execute (Lio/github/artemidius/blowhard/core/domain/ToolCallProposal;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
@@ -323,5 +431,36 @@ public final class io/github/artemidius/blowhard/core/application/ToolRegistry {
 
 public final class io/github/artemidius/blowhard/core/application/ToolRegistry$Companion {
 	public final fun create (Ljava/util/List;)Lio/github/artemidius/blowhard/core/application/ToolRegistry;
+}
+
+public abstract interface class io/github/artemidius/blowhard/core/application/ToolTraceEvent {
+}
+
+public final class io/github/artemidius/blowhard/core/application/ToolTraceEvent$CallCompleted : io/github/artemidius/blowhard/core/application/ToolTraceEvent {
+	public synthetic fun <init> (ILjava/lang/String;Ljava/lang/String;Lio/github/artemidius/blowhard/core/domain/ToolCallOutcome;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()I
+	public final fun component2-MQ9gDDE ()Ljava/lang/String;
+	public final fun component3-msraECc ()Ljava/lang/String;
+	public final fun component4 ()Lio/github/artemidius/blowhard/core/domain/ToolCallOutcome;
+	public final fun copy-5TECSbk (ILjava/lang/String;Ljava/lang/String;Lio/github/artemidius/blowhard/core/domain/ToolCallOutcome;)Lio/github/artemidius/blowhard/core/application/ToolTraceEvent$CallCompleted;
+	public static synthetic fun copy-5TECSbk$default (Lio/github/artemidius/blowhard/core/application/ToolTraceEvent$CallCompleted;ILjava/lang/String;Ljava/lang/String;Lio/github/artemidius/blowhard/core/domain/ToolCallOutcome;ILjava/lang/Object;)Lio/github/artemidius/blowhard/core/application/ToolTraceEvent$CallCompleted;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getId-MQ9gDDE ()Ljava/lang/String;
+	public final fun getName-msraECc ()Ljava/lang/String;
+	public final fun getOutcome ()Lio/github/artemidius/blowhard/core/domain/ToolCallOutcome;
+	public final fun getStep ()I
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class io/github/artemidius/blowhard/core/application/ToolTraceEvent$ProviderTurn : io/github/artemidius/blowhard/core/application/ToolTraceEvent {
+	public fun <init> (I)V
+	public final fun component1 ()I
+	public final fun copy (I)Lio/github/artemidius/blowhard/core/application/ToolTraceEvent$ProviderTurn;
+	public static synthetic fun copy$default (Lio/github/artemidius/blowhard/core/application/ToolTraceEvent$ProviderTurn;IILjava/lang/Object;)Lio/github/artemidius/blowhard/core/application/ToolTraceEvent$ProviderTurn;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getStep ()I
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
 }
 
