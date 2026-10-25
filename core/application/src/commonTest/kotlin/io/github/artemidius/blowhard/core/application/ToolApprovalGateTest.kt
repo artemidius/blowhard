@@ -157,6 +157,7 @@ private fun binding(
     expiresAt: Long = 1_000,
 ): ToolApprovalBinding = ToolApprovalBinding(
     ToolApprovalId(id),
+    ToolApprovalRunId("run-1"),
     proposal(arguments, name),
     ToolApprovalDestination("Local notes / Release plan"),
     expiresAt,

@@ -10,6 +10,10 @@ import io.github.artemidius.blowhard.core.api.MeetingNoteDate
 import io.github.artemidius.blowhard.core.api.MeetingNoteId
 import io.github.artemidius.blowhard.core.api.MeetingNoteRecord
 import io.github.artemidius.blowhard.core.api.MeetingNoteSourceReference
+import io.github.artemidius.blowhard.core.domain.ApprovedMeetingNoteInsertResult
+import io.github.artemidius.blowhard.core.domain.ApprovedMeetingNoteReceiptLookup
+import io.github.artemidius.blowhard.core.domain.ApprovedMeetingNoteWrite
+import io.github.artemidius.blowhard.core.domain.ApprovedNoteWriteOperationId
 import io.github.artemidius.blowhard.core.domain.DocumentSaveResult
 import io.github.artemidius.blowhard.core.domain.MeetingNoteInsertResult
 import io.github.artemidius.blowhard.core.domain.MeetingNoteStore
@@ -56,10 +60,56 @@ internal class DesktopMeetingNoteStoreTest {
         store.close()
         assertEquals(MeetingNoteInsertResult.UNAVAILABLE, store.insert(record()))
         assertEquals(MeetingNoteStoreLookup.Unavailable, store.find(NOTE_ID))
+        assertEquals(ApprovedMeetingNoteInsertResult.Unavailable, store.insertApproved(approvedWrite()))
+        assertEquals(
+            ApprovedMeetingNoteReceiptLookup.Unavailable,
+            store.findApprovedOperation(OPERATION_ID),
+        )
         assertEquals(
             MeetingNoteStoreUpdateResult.Unavailable,
             store.update(NOTE_ID, 0, content(), CLOSED_UPDATE_AT),
         )
+    }
+
+    @Test
+    internal fun approvedWriteAndReceiptCommitAtomicallyAndReplayWithoutDuplication() = withTemporaryDatabase { path ->
+        saveDocument(path)
+        DesktopMeetingNoteStores.open(path).useMeetingNoteStore { store ->
+            assertEquals(ApprovedMeetingNoteInsertResult.Inserted, store.insertApproved(approvedWrite()))
+            assertEquals(
+                ApprovedMeetingNoteInsertResult.AlreadyCommitted(NOTE_ID),
+                store.insertApproved(approvedWrite()),
+            )
+            assertEquals(
+                ApprovedMeetingNoteInsertResult.IdConflict,
+                store.insertApproved(approvedWrite(ApprovedNoteWriteOperationId("operation-2"))),
+            )
+        }
+
+        DesktopMeetingNoteStores.open(path).useMeetingNoteStore { store ->
+            assertEquals(
+                ApprovedMeetingNoteReceiptLookup.Committed(NOTE_ID),
+                store.findApprovedOperation(OPERATION_ID),
+            )
+        }
+        assertEquals(1L, noteRowCount(path))
+        assertEquals(1L, receiptRowCount(path))
+    }
+
+    @Test
+    internal fun failedApprovedWriteLeavesNoReceiptOrPartialNote() = withTemporaryDatabase { path ->
+        DesktopMeetingNoteStores.open(path).useMeetingNoteStore { store ->
+            assertEquals(
+                ApprovedMeetingNoteInsertResult.SourceNotFound,
+                store.insertApproved(approvedWrite()),
+            )
+            assertEquals(
+                ApprovedMeetingNoteReceiptLookup.NotFound,
+                store.findApprovedOperation(OPERATION_ID),
+            )
+        }
+        assertEquals(0L, noteRowCount(path))
+        assertEquals(0L, receiptRowCount(path))
     }
 
     @Test
@@ -112,6 +162,16 @@ internal class DesktopMeetingNoteStoreTest {
         revision = 0,
     )
 
+    private fun approvedWrite(operationId: ApprovedNoteWriteOperationId = OPERATION_ID): ApprovedMeetingNoteWrite =
+        ApprovedMeetingNoteWrite(
+            operationId = operationId,
+            approvalId = "approval-1",
+            runId = "run-1",
+            callId = "call-1",
+            argumentsJson = "{\"note_id\":\"note-1\"}",
+            note = record(),
+        )
+
     private fun content(): MeetingNoteContent {
         val source = MeetingNoteSourceReference(0, "ship on Friday")
         return MeetingNoteContent(
@@ -131,24 +191,30 @@ internal class DesktopMeetingNoteStoreTest {
         }
     }
 
-    private fun noteRowCount(path: String): Long = DriverManager.getConnection("jdbc:sqlite:$path").use { connection ->
-        connection.createStatement().use { statement ->
-            statement.executeQuery("SELECT COUNT(*) FROM meeting_note").use { rows ->
-                check(rows.next())
-                rows.getLong(1)
-            }
-        }
-    }
-
     private companion object {
         val DOCUMENT_ID = DocumentId("document-1")
         val NOTE_ID = MeetingNoteId("note-1")
+        val OPERATION_ID = ApprovedNoteWriteOperationId("operation-1")
         val SOURCE_BYTES = "source".encodeToByteArray()
         const val UPDATED_AT = 20L
         const val STALE_UPDATE_AT = 21L
         const val CLOSED_UPDATE_AT = 30L
     }
 }
+
+private fun noteRowCount(path: String): Long = tableRowCount(path, "meeting_note")
+
+private fun receiptRowCount(path: String): Long = tableRowCount(path, "meeting_note_write_receipt")
+
+private fun tableRowCount(path: String, table: String): Long =
+    DriverManager.getConnection("jdbc:sqlite:$path").use { connection ->
+        connection.createStatement().use { statement ->
+            statement.executeQuery("SELECT COUNT(*) FROM $table").use { rows ->
+                check(rows.next())
+                rows.getLong(1)
+            }
+        }
+    }
 
 private suspend fun <T> MeetingNoteStore.useMeetingNoteStore(block: suspend (MeetingNoteStore) -> T): T = try {
     block(this)

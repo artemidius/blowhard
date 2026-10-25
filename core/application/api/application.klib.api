@@ -98,6 +98,67 @@ abstract fun interface io.github.artemidius.blowhard.core.application/ToolApprov
     abstract fun nowEpochMilliseconds(): kotlin/Long // io.github.artemidius.blowhard.core.application/ToolApprovalClock.nowEpochMilliseconds|nowEpochMilliseconds(){}[0]
 }
 
+sealed interface io.github.artemidius.blowhard.core.application/ApprovedMeetingNotePreparation { // io.github.artemidius.blowhard.core.application/ApprovedMeetingNotePreparation|null[0]
+    final class Proposed : io.github.artemidius.blowhard.core.application/ApprovedMeetingNotePreparation { // io.github.artemidius.blowhard.core.application/ApprovedMeetingNotePreparation.Proposed|null[0]
+        constructor <init>(io.github.artemidius.blowhard.core.application/ApprovedMeetingNoteProposal) // io.github.artemidius.blowhard.core.application/ApprovedMeetingNotePreparation.Proposed.<init>|<init>(io.github.artemidius.blowhard.core.application.ApprovedMeetingNoteProposal){}[0]
+
+        final val value // io.github.artemidius.blowhard.core.application/ApprovedMeetingNotePreparation.Proposed.value|{}value[0]
+            final fun <get-value>(): io.github.artemidius.blowhard.core.application/ApprovedMeetingNoteProposal // io.github.artemidius.blowhard.core.application/ApprovedMeetingNotePreparation.Proposed.value.<get-value>|<get-value>(){}[0]
+
+        final fun component1(): io.github.artemidius.blowhard.core.application/ApprovedMeetingNoteProposal // io.github.artemidius.blowhard.core.application/ApprovedMeetingNotePreparation.Proposed.component1|component1(){}[0]
+        final fun copy(io.github.artemidius.blowhard.core.application/ApprovedMeetingNoteProposal = ...): io.github.artemidius.blowhard.core.application/ApprovedMeetingNotePreparation.Proposed // io.github.artemidius.blowhard.core.application/ApprovedMeetingNotePreparation.Proposed.copy|copy(io.github.artemidius.blowhard.core.application.ApprovedMeetingNoteProposal){}[0]
+        final fun equals(kotlin/Any?): kotlin/Boolean // io.github.artemidius.blowhard.core.application/ApprovedMeetingNotePreparation.Proposed.equals|equals(kotlin.Any?){}[0]
+        final fun hashCode(): kotlin/Int // io.github.artemidius.blowhard.core.application/ApprovedMeetingNotePreparation.Proposed.hashCode|hashCode(){}[0]
+        final fun toString(): kotlin/String // io.github.artemidius.blowhard.core.application/ApprovedMeetingNotePreparation.Proposed.toString|toString(){}[0]
+    }
+
+    final class Rejected : io.github.artemidius.blowhard.core.application/ApprovedMeetingNotePreparation { // io.github.artemidius.blowhard.core.application/ApprovedMeetingNotePreparation.Rejected|null[0]
+        constructor <init>(io.github.artemidius.blowhard.core.application/ToolApprovalOutcome) // io.github.artemidius.blowhard.core.application/ApprovedMeetingNotePreparation.Rejected.<init>|<init>(io.github.artemidius.blowhard.core.application.ToolApprovalOutcome){}[0]
+
+        final val reason // io.github.artemidius.blowhard.core.application/ApprovedMeetingNotePreparation.Rejected.reason|{}reason[0]
+            final fun <get-reason>(): io.github.artemidius.blowhard.core.application/ToolApprovalOutcome // io.github.artemidius.blowhard.core.application/ApprovedMeetingNotePreparation.Rejected.reason.<get-reason>|<get-reason>(){}[0]
+
+        final fun component1(): io.github.artemidius.blowhard.core.application/ToolApprovalOutcome // io.github.artemidius.blowhard.core.application/ApprovedMeetingNotePreparation.Rejected.component1|component1(){}[0]
+        final fun copy(io.github.artemidius.blowhard.core.application/ToolApprovalOutcome = ...): io.github.artemidius.blowhard.core.application/ApprovedMeetingNotePreparation.Rejected // io.github.artemidius.blowhard.core.application/ApprovedMeetingNotePreparation.Rejected.copy|copy(io.github.artemidius.blowhard.core.application.ToolApprovalOutcome){}[0]
+        final fun equals(kotlin/Any?): kotlin/Boolean // io.github.artemidius.blowhard.core.application/ApprovedMeetingNotePreparation.Rejected.equals|equals(kotlin.Any?){}[0]
+        final fun hashCode(): kotlin/Int // io.github.artemidius.blowhard.core.application/ApprovedMeetingNotePreparation.Rejected.hashCode|hashCode(){}[0]
+        final fun toString(): kotlin/String // io.github.artemidius.blowhard.core.application/ApprovedMeetingNotePreparation.Rejected.toString|toString(){}[0]
+    }
+
+    final object ContentTooLarge : io.github.artemidius.blowhard.core.application/ApprovedMeetingNotePreparation { // io.github.artemidius.blowhard.core.application/ApprovedMeetingNotePreparation.ContentTooLarge|null[0]
+        final fun equals(kotlin/Any?): kotlin/Boolean // io.github.artemidius.blowhard.core.application/ApprovedMeetingNotePreparation.ContentTooLarge.equals|equals(kotlin.Any?){}[0]
+        final fun hashCode(): kotlin/Int // io.github.artemidius.blowhard.core.application/ApprovedMeetingNotePreparation.ContentTooLarge.hashCode|hashCode(){}[0]
+        final fun toString(): kotlin/String // io.github.artemidius.blowhard.core.application/ApprovedMeetingNotePreparation.ContentTooLarge.toString|toString(){}[0]
+    }
+}
+
+sealed interface io.github.artemidius.blowhard.core.application/ApprovedMeetingNoteRecovery { // io.github.artemidius.blowhard.core.application/ApprovedMeetingNoteRecovery|null[0]
+    final class Committed : io.github.artemidius.blowhard.core.application/ApprovedMeetingNoteRecovery { // io.github.artemidius.blowhard.core.application/ApprovedMeetingNoteRecovery.Committed|null[0]
+        constructor <init>(io.github.artemidius.blowhard.core.api/MeetingNoteRecord) // io.github.artemidius.blowhard.core.application/ApprovedMeetingNoteRecovery.Committed.<init>|<init>(io.github.artemidius.blowhard.core.api.MeetingNoteRecord){}[0]
+
+        final val note // io.github.artemidius.blowhard.core.application/ApprovedMeetingNoteRecovery.Committed.note|{}note[0]
+            final fun <get-note>(): io.github.artemidius.blowhard.core.api/MeetingNoteRecord // io.github.artemidius.blowhard.core.application/ApprovedMeetingNoteRecovery.Committed.note.<get-note>|<get-note>(){}[0]
+
+        final fun component1(): io.github.artemidius.blowhard.core.api/MeetingNoteRecord // io.github.artemidius.blowhard.core.application/ApprovedMeetingNoteRecovery.Committed.component1|component1(){}[0]
+        final fun copy(io.github.artemidius.blowhard.core.api/MeetingNoteRecord = ...): io.github.artemidius.blowhard.core.application/ApprovedMeetingNoteRecovery.Committed // io.github.artemidius.blowhard.core.application/ApprovedMeetingNoteRecovery.Committed.copy|copy(io.github.artemidius.blowhard.core.api.MeetingNoteRecord){}[0]
+        final fun equals(kotlin/Any?): kotlin/Boolean // io.github.artemidius.blowhard.core.application/ApprovedMeetingNoteRecovery.Committed.equals|equals(kotlin.Any?){}[0]
+        final fun hashCode(): kotlin/Int // io.github.artemidius.blowhard.core.application/ApprovedMeetingNoteRecovery.Committed.hashCode|hashCode(){}[0]
+        final fun toString(): kotlin/String // io.github.artemidius.blowhard.core.application/ApprovedMeetingNoteRecovery.Committed.toString|toString(){}[0]
+    }
+
+    final object NotApplied : io.github.artemidius.blowhard.core.application/ApprovedMeetingNoteRecovery { // io.github.artemidius.blowhard.core.application/ApprovedMeetingNoteRecovery.NotApplied|null[0]
+        final fun equals(kotlin/Any?): kotlin/Boolean // io.github.artemidius.blowhard.core.application/ApprovedMeetingNoteRecovery.NotApplied.equals|equals(kotlin.Any?){}[0]
+        final fun hashCode(): kotlin/Int // io.github.artemidius.blowhard.core.application/ApprovedMeetingNoteRecovery.NotApplied.hashCode|hashCode(){}[0]
+        final fun toString(): kotlin/String // io.github.artemidius.blowhard.core.application/ApprovedMeetingNoteRecovery.NotApplied.toString|toString(){}[0]
+    }
+
+    final object Uncertain : io.github.artemidius.blowhard.core.application/ApprovedMeetingNoteRecovery { // io.github.artemidius.blowhard.core.application/ApprovedMeetingNoteRecovery.Uncertain|null[0]
+        final fun equals(kotlin/Any?): kotlin/Boolean // io.github.artemidius.blowhard.core.application/ApprovedMeetingNoteRecovery.Uncertain.equals|equals(kotlin.Any?){}[0]
+        final fun hashCode(): kotlin/Int // io.github.artemidius.blowhard.core.application/ApprovedMeetingNoteRecovery.Uncertain.hashCode|hashCode(){}[0]
+        final fun toString(): kotlin/String // io.github.artemidius.blowhard.core.application/ApprovedMeetingNoteRecovery.Uncertain.toString|toString(){}[0]
+    }
+}
+
 sealed interface io.github.artemidius.blowhard.core.application/ToolOrchestrationState { // io.github.artemidius.blowhard.core.application/ToolOrchestrationState|null[0]
     abstract val runId // io.github.artemidius.blowhard.core.application/ToolOrchestrationState.runId|{}runId[0]
         abstract fun <get-runId>(): io.github.artemidius.blowhard.core.api/RunId // io.github.artemidius.blowhard.core.application/ToolOrchestrationState.runId.<get-runId>|<get-runId>(){}[0]
@@ -215,6 +276,37 @@ sealed interface io.github.artemidius.blowhard.core.application/ToolTraceEvent {
         final fun equals(kotlin/Any?): kotlin/Boolean // io.github.artemidius.blowhard.core.application/ToolTraceEvent.ProviderTurn.equals|equals(kotlin.Any?){}[0]
         final fun hashCode(): kotlin/Int // io.github.artemidius.blowhard.core.application/ToolTraceEvent.ProviderTurn.hashCode|hashCode(){}[0]
         final fun toString(): kotlin/String // io.github.artemidius.blowhard.core.application/ToolTraceEvent.ProviderTurn.toString|toString(){}[0]
+    }
+}
+
+final class io.github.artemidius.blowhard.core.application/ApprovedMeetingNoteProposal { // io.github.artemidius.blowhard.core.application/ApprovedMeetingNoteProposal|null[0]
+    constructor <init>(io.github.artemidius.blowhard.core.domain/ApprovedNoteWriteOperationId, io.github.artemidius.blowhard.core.application/ToolApprovalBinding, io.github.artemidius.blowhard.core.api/MeetingNoteRecord) // io.github.artemidius.blowhard.core.application/ApprovedMeetingNoteProposal.<init>|<init>(io.github.artemidius.blowhard.core.domain.ApprovedNoteWriteOperationId;io.github.artemidius.blowhard.core.application.ToolApprovalBinding;io.github.artemidius.blowhard.core.api.MeetingNoteRecord){}[0]
+
+    final val binding // io.github.artemidius.blowhard.core.application/ApprovedMeetingNoteProposal.binding|{}binding[0]
+        final fun <get-binding>(): io.github.artemidius.blowhard.core.application/ToolApprovalBinding // io.github.artemidius.blowhard.core.application/ApprovedMeetingNoteProposal.binding.<get-binding>|<get-binding>(){}[0]
+    final val note // io.github.artemidius.blowhard.core.application/ApprovedMeetingNoteProposal.note|{}note[0]
+        final fun <get-note>(): io.github.artemidius.blowhard.core.api/MeetingNoteRecord // io.github.artemidius.blowhard.core.application/ApprovedMeetingNoteProposal.note.<get-note>|<get-note>(){}[0]
+    final val operationId // io.github.artemidius.blowhard.core.application/ApprovedMeetingNoteProposal.operationId|{}operationId[0]
+        final fun <get-operationId>(): io.github.artemidius.blowhard.core.domain/ApprovedNoteWriteOperationId // io.github.artemidius.blowhard.core.application/ApprovedMeetingNoteProposal.operationId.<get-operationId>|<get-operationId>(){}[0]
+
+    final fun component1(): io.github.artemidius.blowhard.core.domain/ApprovedNoteWriteOperationId // io.github.artemidius.blowhard.core.application/ApprovedMeetingNoteProposal.component1|component1(){}[0]
+    final fun component2(): io.github.artemidius.blowhard.core.application/ToolApprovalBinding // io.github.artemidius.blowhard.core.application/ApprovedMeetingNoteProposal.component2|component2(){}[0]
+    final fun component3(): io.github.artemidius.blowhard.core.api/MeetingNoteRecord // io.github.artemidius.blowhard.core.application/ApprovedMeetingNoteProposal.component3|component3(){}[0]
+    final fun copy(io.github.artemidius.blowhard.core.domain/ApprovedNoteWriteOperationId = ..., io.github.artemidius.blowhard.core.application/ToolApprovalBinding = ..., io.github.artemidius.blowhard.core.api/MeetingNoteRecord = ...): io.github.artemidius.blowhard.core.application/ApprovedMeetingNoteProposal // io.github.artemidius.blowhard.core.application/ApprovedMeetingNoteProposal.copy|copy(io.github.artemidius.blowhard.core.domain.ApprovedNoteWriteOperationId;io.github.artemidius.blowhard.core.application.ToolApprovalBinding;io.github.artemidius.blowhard.core.api.MeetingNoteRecord){}[0]
+    final fun equals(kotlin/Any?): kotlin/Boolean // io.github.artemidius.blowhard.core.application/ApprovedMeetingNoteProposal.equals|equals(kotlin.Any?){}[0]
+    final fun hashCode(): kotlin/Int // io.github.artemidius.blowhard.core.application/ApprovedMeetingNoteProposal.hashCode|hashCode(){}[0]
+    final fun toString(): kotlin/String // io.github.artemidius.blowhard.core.application/ApprovedMeetingNoteProposal.toString|toString(){}[0]
+}
+
+final class io.github.artemidius.blowhard.core.application/ApprovedMeetingNoteWriter { // io.github.artemidius.blowhard.core.application/ApprovedMeetingNoteWriter|null[0]
+    final suspend fun approve(io.github.artemidius.blowhard.core.application/ToolApprovalId): io.github.artemidius.blowhard.core.application/ToolApprovalOutcome // io.github.artemidius.blowhard.core.application/ApprovedMeetingNoteWriter.approve|approve(io.github.artemidius.blowhard.core.application.ToolApprovalId){}[0]
+    final suspend fun deny(io.github.artemidius.blowhard.core.application/ToolApprovalId): io.github.artemidius.blowhard.core.application/ToolApprovalOutcome // io.github.artemidius.blowhard.core.application/ApprovedMeetingNoteWriter.deny|deny(io.github.artemidius.blowhard.core.application.ToolApprovalId){}[0]
+    final suspend fun prepare(io.github.artemidius.blowhard.core.api/MeetingNoteRecord, io.github.artemidius.blowhard.core.application/ToolApprovalId, io.github.artemidius.blowhard.core.application/ToolApprovalRunId, io.github.artemidius.blowhard.core.domain/ToolCallId, io.github.artemidius.blowhard.core.application/ToolApprovalDestination, kotlin/Long): io.github.artemidius.blowhard.core.application/ApprovedMeetingNotePreparation // io.github.artemidius.blowhard.core.application/ApprovedMeetingNoteWriter.prepare|prepare(io.github.artemidius.blowhard.core.api.MeetingNoteRecord;io.github.artemidius.blowhard.core.application.ToolApprovalId;io.github.artemidius.blowhard.core.application.ToolApprovalRunId;io.github.artemidius.blowhard.core.domain.ToolCallId;io.github.artemidius.blowhard.core.application.ToolApprovalDestination;kotlin.Long){}[0]
+    final suspend fun recover(io.github.artemidius.blowhard.core.domain/ApprovedNoteWriteOperationId): io.github.artemidius.blowhard.core.application/ApprovedMeetingNoteRecovery // io.github.artemidius.blowhard.core.application/ApprovedMeetingNoteWriter.recover|recover(io.github.artemidius.blowhard.core.domain.ApprovedNoteWriteOperationId){}[0]
+    final suspend fun write(io.github.artemidius.blowhard.core.application/ApprovedMeetingNoteProposal): io.github.artemidius.blowhard.core.domain/ToolCallResult // io.github.artemidius.blowhard.core.application/ApprovedMeetingNoteWriter.write|write(io.github.artemidius.blowhard.core.application.ApprovedMeetingNoteProposal){}[0]
+
+    final object Companion { // io.github.artemidius.blowhard.core.application/ApprovedMeetingNoteWriter.Companion|null[0]
+        final fun create(io.github.artemidius.blowhard.core.domain/MeetingNoteStore, io.github.artemidius.blowhard.core.application/ToolApprovalClock): io.github.artemidius.blowhard.core.application/ApprovedMeetingNoteWriter // io.github.artemidius.blowhard.core.application/ApprovedMeetingNoteWriter.Companion.create|create(io.github.artemidius.blowhard.core.domain.MeetingNoteStore;io.github.artemidius.blowhard.core.application.ToolApprovalClock){}[0]
     }
 }
 
@@ -572,7 +664,7 @@ final class io.github.artemidius.blowhard.core.application/SequentialRunIdFactor
 }
 
 final class io.github.artemidius.blowhard.core.application/ToolApprovalBinding { // io.github.artemidius.blowhard.core.application/ToolApprovalBinding|null[0]
-    constructor <init>(io.github.artemidius.blowhard.core.application/ToolApprovalId, io.github.artemidius.blowhard.core.domain/ToolCallProposal, io.github.artemidius.blowhard.core.application/ToolApprovalDestination, kotlin/Long) // io.github.artemidius.blowhard.core.application/ToolApprovalBinding.<init>|<init>(io.github.artemidius.blowhard.core.application.ToolApprovalId;io.github.artemidius.blowhard.core.domain.ToolCallProposal;io.github.artemidius.blowhard.core.application.ToolApprovalDestination;kotlin.Long){}[0]
+    constructor <init>(io.github.artemidius.blowhard.core.application/ToolApprovalId, io.github.artemidius.blowhard.core.application/ToolApprovalRunId, io.github.artemidius.blowhard.core.domain/ToolCallProposal, io.github.artemidius.blowhard.core.application/ToolApprovalDestination, kotlin/Long) // io.github.artemidius.blowhard.core.application/ToolApprovalBinding.<init>|<init>(io.github.artemidius.blowhard.core.application.ToolApprovalId;io.github.artemidius.blowhard.core.application.ToolApprovalRunId;io.github.artemidius.blowhard.core.domain.ToolCallProposal;io.github.artemidius.blowhard.core.application.ToolApprovalDestination;kotlin.Long){}[0]
 
     final val destination // io.github.artemidius.blowhard.core.application/ToolApprovalBinding.destination|{}destination[0]
         final fun <get-destination>(): io.github.artemidius.blowhard.core.application/ToolApprovalDestination // io.github.artemidius.blowhard.core.application/ToolApprovalBinding.destination.<get-destination>|<get-destination>(){}[0]
@@ -582,12 +674,15 @@ final class io.github.artemidius.blowhard.core.application/ToolApprovalBinding {
         final fun <get-id>(): io.github.artemidius.blowhard.core.application/ToolApprovalId // io.github.artemidius.blowhard.core.application/ToolApprovalBinding.id.<get-id>|<get-id>(){}[0]
     final val proposal // io.github.artemidius.blowhard.core.application/ToolApprovalBinding.proposal|{}proposal[0]
         final fun <get-proposal>(): io.github.artemidius.blowhard.core.domain/ToolCallProposal // io.github.artemidius.blowhard.core.application/ToolApprovalBinding.proposal.<get-proposal>|<get-proposal>(){}[0]
+    final val runId // io.github.artemidius.blowhard.core.application/ToolApprovalBinding.runId|{}runId[0]
+        final fun <get-runId>(): io.github.artemidius.blowhard.core.application/ToolApprovalRunId // io.github.artemidius.blowhard.core.application/ToolApprovalBinding.runId.<get-runId>|<get-runId>(){}[0]
 
     final fun component1(): io.github.artemidius.blowhard.core.application/ToolApprovalId // io.github.artemidius.blowhard.core.application/ToolApprovalBinding.component1|component1(){}[0]
-    final fun component2(): io.github.artemidius.blowhard.core.domain/ToolCallProposal // io.github.artemidius.blowhard.core.application/ToolApprovalBinding.component2|component2(){}[0]
-    final fun component3(): io.github.artemidius.blowhard.core.application/ToolApprovalDestination // io.github.artemidius.blowhard.core.application/ToolApprovalBinding.component3|component3(){}[0]
-    final fun component4(): kotlin/Long // io.github.artemidius.blowhard.core.application/ToolApprovalBinding.component4|component4(){}[0]
-    final fun copy(io.github.artemidius.blowhard.core.application/ToolApprovalId = ..., io.github.artemidius.blowhard.core.domain/ToolCallProposal = ..., io.github.artemidius.blowhard.core.application/ToolApprovalDestination = ..., kotlin/Long = ...): io.github.artemidius.blowhard.core.application/ToolApprovalBinding // io.github.artemidius.blowhard.core.application/ToolApprovalBinding.copy|copy(io.github.artemidius.blowhard.core.application.ToolApprovalId;io.github.artemidius.blowhard.core.domain.ToolCallProposal;io.github.artemidius.blowhard.core.application.ToolApprovalDestination;kotlin.Long){}[0]
+    final fun component2(): io.github.artemidius.blowhard.core.application/ToolApprovalRunId // io.github.artemidius.blowhard.core.application/ToolApprovalBinding.component2|component2(){}[0]
+    final fun component3(): io.github.artemidius.blowhard.core.domain/ToolCallProposal // io.github.artemidius.blowhard.core.application/ToolApprovalBinding.component3|component3(){}[0]
+    final fun component4(): io.github.artemidius.blowhard.core.application/ToolApprovalDestination // io.github.artemidius.blowhard.core.application/ToolApprovalBinding.component4|component4(){}[0]
+    final fun component5(): kotlin/Long // io.github.artemidius.blowhard.core.application/ToolApprovalBinding.component5|component5(){}[0]
+    final fun copy(io.github.artemidius.blowhard.core.application/ToolApprovalId = ..., io.github.artemidius.blowhard.core.application/ToolApprovalRunId = ..., io.github.artemidius.blowhard.core.domain/ToolCallProposal = ..., io.github.artemidius.blowhard.core.application/ToolApprovalDestination = ..., kotlin/Long = ...): io.github.artemidius.blowhard.core.application/ToolApprovalBinding // io.github.artemidius.blowhard.core.application/ToolApprovalBinding.copy|copy(io.github.artemidius.blowhard.core.application.ToolApprovalId;io.github.artemidius.blowhard.core.application.ToolApprovalRunId;io.github.artemidius.blowhard.core.domain.ToolCallProposal;io.github.artemidius.blowhard.core.application.ToolApprovalDestination;kotlin.Long){}[0]
     final fun equals(kotlin/Any?): kotlin/Boolean // io.github.artemidius.blowhard.core.application/ToolApprovalBinding.equals|equals(kotlin.Any?){}[0]
     final fun hashCode(): kotlin/Int // io.github.artemidius.blowhard.core.application/ToolApprovalBinding.hashCode|hashCode(){}[0]
     final fun toString(): kotlin/String // io.github.artemidius.blowhard.core.application/ToolApprovalBinding.toString|toString(){}[0]
@@ -661,6 +756,17 @@ final value class io.github.artemidius.blowhard.core.application/ToolApprovalId 
     final fun equals(kotlin/Any?): kotlin/Boolean // io.github.artemidius.blowhard.core.application/ToolApprovalId.equals|equals(kotlin.Any?){}[0]
     final fun hashCode(): kotlin/Int // io.github.artemidius.blowhard.core.application/ToolApprovalId.hashCode|hashCode(){}[0]
     final fun toString(): kotlin/String // io.github.artemidius.blowhard.core.application/ToolApprovalId.toString|toString(){}[0]
+}
+
+final value class io.github.artemidius.blowhard.core.application/ToolApprovalRunId { // io.github.artemidius.blowhard.core.application/ToolApprovalRunId|null[0]
+    constructor <init>(kotlin/String) // io.github.artemidius.blowhard.core.application/ToolApprovalRunId.<init>|<init>(kotlin.String){}[0]
+
+    final val value // io.github.artemidius.blowhard.core.application/ToolApprovalRunId.value|{}value[0]
+        final fun <get-value>(): kotlin/String // io.github.artemidius.blowhard.core.application/ToolApprovalRunId.value.<get-value>|<get-value>(){}[0]
+
+    final fun equals(kotlin/Any?): kotlin/Boolean // io.github.artemidius.blowhard.core.application/ToolApprovalRunId.equals|equals(kotlin.Any?){}[0]
+    final fun hashCode(): kotlin/Int // io.github.artemidius.blowhard.core.application/ToolApprovalRunId.hashCode|hashCode(){}[0]
+    final fun toString(): kotlin/String // io.github.artemidius.blowhard.core.application/ToolApprovalRunId.toString|toString(){}[0]
 }
 
 final object io.github.artemidius.blowhard.core.application/MeetingNoteEvaluationScorer { // io.github.artemidius.blowhard.core.application/MeetingNoteEvaluationScorer|null[0]

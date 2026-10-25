@@ -24,6 +24,20 @@ public value class ToolApprovalId(public val value: String) {
     }
 }
 
+/** Stable identity of the orchestration run that requested a mutation. */
+@JvmInline
+public value class ToolApprovalRunId(public val value: String) {
+    init {
+        require(
+            value.isNotBlank() &&
+                value.length <= MAXIMUM_APPROVAL_ID_CHARACTERS &&
+                value.none(Char::isISOControl),
+        ) {
+            "Tool approval run identity is invalid"
+        }
+    }
+}
+
 /** Human-readable mutation target shown before consent. */
 @JvmInline
 public value class ToolApprovalDestination(public val value: String) {
@@ -41,6 +55,7 @@ public value class ToolApprovalDestination(public val value: String) {
 /** Exact immutable values covered by one approval request. */
 public data class ToolApprovalBinding(
     public val id: ToolApprovalId,
+    public val runId: ToolApprovalRunId,
     public val proposal: ToolCallProposal,
     public val destination: ToolApprovalDestination,
     public val expiresAtEpochMilliseconds: Long,
