@@ -59,4 +59,13 @@ final class io.github.artemidius.blowhard.adapters.mistral/MistralTextGeneration
     }
 }
 
+final class io.github.artemidius.blowhard.adapters.mistral/MistralToolModelPort : io.github.artemidius.blowhard.core.domain/ToolModelPort { // io.github.artemidius.blowhard.adapters.mistral/MistralToolModelPort|null[0]
+    final fun close() // io.github.artemidius.blowhard.adapters.mistral/MistralToolModelPort.close|close(){}[0]
+    final suspend fun next(io.github.artemidius.blowhard.core.domain/ToolModelRequest): io.github.artemidius.blowhard.core.domain/ToolModelResponse // io.github.artemidius.blowhard.adapters.mistral/MistralToolModelPort.next|next(io.github.artemidius.blowhard.core.domain.ToolModelRequest){}[0]
+
+    final object Companion { // io.github.artemidius.blowhard.adapters.mistral/MistralToolModelPort.Companion|null[0]
+        final fun create(io.github.artemidius.blowhard.adapters.mistral/MistralCredentialProvider, io.github.artemidius.blowhard.adapters.mistral/MistralChatConfiguration): io.github.artemidius.blowhard.adapters.mistral/MistralToolModelPort // io.github.artemidius.blowhard.adapters.mistral/MistralToolModelPort.Companion.create|create(io.github.artemidius.blowhard.adapters.mistral.MistralCredentialProvider;io.github.artemidius.blowhard.adapters.mistral.MistralChatConfiguration){}[0]
+    }
+}
+
 final fun (io.github.artemidius.blowhard.core.domain/CredentialStore).io.github.artemidius.blowhard.adapters.mistral/asMistralCredentialProvider(): io.github.artemidius.blowhard.adapters.mistral/MistralCredentialProvider // io.github.artemidius.blowhard.adapters.mistral/asMistralCredentialProvider|asMistralCredentialProvider@io.github.artemidius.blowhard.core.domain.CredentialStore(){}[0]
