@@ -14,6 +14,7 @@ public data class MeetingNoteUiState(
     public val isBusy: Boolean = false,
     public val notice: MeetingNoteNotice? = null,
     public val export: MeetingNoteExport? = null,
+    public val approval: ProposedMeetingNoteUiState? = null,
 )
 
 /** String-backed editor state that permits incomplete values while the user types. */

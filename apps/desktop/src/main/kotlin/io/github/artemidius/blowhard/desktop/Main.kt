@@ -131,6 +131,7 @@ private fun createDesktopRuntime(environment: DesktopEnvironment, configurationD
         providers.credentialProvider,
     )
     val meetingNotes = createMeetingNotes(documents, meetingNoteGeneration)
+    val meetingNoteApprovals = DesktopMeetingNoteApprovalPort.create(documents.meetingNoteStore)
     val runtime = DesktopRuntime.create(
         clipboardWriter = AwtClipboardWriter(sessionAvailable = { environment.hasClipboardSession }),
         connectionSettings = providers.connectionSettings,
@@ -147,6 +148,7 @@ private fun createDesktopRuntime(environment: DesktopEnvironment, configurationD
         documentPicker = AwtDocumentPicker,
         closeDocumentResources = documents::close,
         meetingNotes = meetingNotes,
+        meetingNoteApprovals = meetingNoteApprovals,
         closeProviderResources = { closeDesktopProviders(generation, meetingNoteGeneration, providers) },
     )
     if (!packagingSmokeTest && history.initialState.selectedConversation.messages.isNotEmpty()) {

@@ -25,10 +25,12 @@ import io.github.artemidius.blowhard.ui.presentation.ConversationUiState
 import io.github.artemidius.blowhard.ui.presentation.DemoScenarioSelection
 import io.github.artemidius.blowhard.ui.presentation.DocumentLibraryPresenter
 import io.github.artemidius.blowhard.ui.presentation.DocumentPicker
+import io.github.artemidius.blowhard.ui.presentation.MeetingNoteApprovalPort
 import io.github.artemidius.blowhard.ui.presentation.MeetingNotePresenter
 import io.github.artemidius.blowhard.ui.presentation.RunDiagnosticReportSaveResult
 import io.github.artemidius.blowhard.ui.presentation.RunDiagnosticReportSaver
 import io.github.artemidius.blowhard.ui.presentation.RunInspectorPresenter
+import io.github.artemidius.blowhard.ui.presentation.UnavailableMeetingNoteApprovalPort
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
 import java.util.UUID
@@ -84,6 +86,7 @@ internal class DesktopRuntime private constructor(
             documentPicker: DocumentPicker = DocumentPicker { null },
             closeDocumentResources: () -> Unit = {},
             meetingNotes: MeetingNotes = UnavailableMeetingNotes,
+            meetingNoteApprovals: MeetingNoteApprovalPort = UnavailableMeetingNoteApprovalPort,
         ): DesktopRuntime {
             val runs = createRuns(generation, connectionSettings, conversationStore, documentProcessingStore)
             val presenters = createPresenters(
@@ -98,6 +101,7 @@ internal class DesktopRuntime private constructor(
                 documentOcr = documentOcr,
                 documentPicker = documentPicker,
                 meetingNotes = meetingNotes,
+                meetingNoteApprovals = meetingNoteApprovals,
             )
             return DesktopRuntime(
                 presenters.conversation,
@@ -146,6 +150,7 @@ private fun createPresenters(
     documentOcr: DocumentOcr,
     documentPicker: DocumentPicker,
     meetingNotes: MeetingNotes,
+    meetingNoteApprovals: MeetingNoteApprovalPort,
 ): DesktopPresenters = DesktopPresenters(
     conversation = ConversationPresenter(
         runs = runs,
@@ -172,7 +177,7 @@ private fun createPresenters(
         coroutineContext = Dispatchers.Default,
         ocr = documentOcr,
     ),
-    meetingNotes = MeetingNotePresenter(meetingNotes, Dispatchers.Default),
+    meetingNotes = MeetingNotePresenter(meetingNotes, Dispatchers.Default, meetingNoteApprovals),
 )
 
 private data class DesktopPresenters(
