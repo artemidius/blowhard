@@ -349,6 +349,12 @@ sealed interface io.github.artemidius.blowhard.core.domain/ApprovedMeetingNoteIn
         final fun toString(): kotlin/String // io.github.artemidius.blowhard.core.domain/ApprovedMeetingNoteInsertResult.Inserted.toString|toString(){}[0]
     }
 
+    final object OperationConflict : io.github.artemidius.blowhard.core.domain/ApprovedMeetingNoteInsertResult { // io.github.artemidius.blowhard.core.domain/ApprovedMeetingNoteInsertResult.OperationConflict|null[0]
+        final fun equals(kotlin/Any?): kotlin/Boolean // io.github.artemidius.blowhard.core.domain/ApprovedMeetingNoteInsertResult.OperationConflict.equals|equals(kotlin.Any?){}[0]
+        final fun hashCode(): kotlin/Int // io.github.artemidius.blowhard.core.domain/ApprovedMeetingNoteInsertResult.OperationConflict.hashCode|hashCode(){}[0]
+        final fun toString(): kotlin/String // io.github.artemidius.blowhard.core.domain/ApprovedMeetingNoteInsertResult.OperationConflict.toString|toString(){}[0]
+    }
+
     final object SourceNotFound : io.github.artemidius.blowhard.core.domain/ApprovedMeetingNoteInsertResult { // io.github.artemidius.blowhard.core.domain/ApprovedMeetingNoteInsertResult.SourceNotFound|null[0]
         final fun equals(kotlin/Any?): kotlin/Boolean // io.github.artemidius.blowhard.core.domain/ApprovedMeetingNoteInsertResult.SourceNotFound.equals|equals(kotlin.Any?){}[0]
         final fun hashCode(): kotlin/Int // io.github.artemidius.blowhard.core.domain/ApprovedMeetingNoteInsertResult.SourceNotFound.hashCode|hashCode(){}[0]

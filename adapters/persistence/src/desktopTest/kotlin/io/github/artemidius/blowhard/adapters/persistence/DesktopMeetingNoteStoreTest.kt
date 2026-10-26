@@ -81,6 +81,10 @@ internal class DesktopMeetingNoteStoreTest {
                 store.insertApproved(approvedWrite()),
             )
             assertEquals(
+                ApprovedMeetingNoteInsertResult.OperationConflict,
+                store.insertApproved(approvedWrite(argumentsJson = "{\"note_id\":\"note-1\",\"changed\":true}")),
+            )
+            assertEquals(
                 ApprovedMeetingNoteInsertResult.IdConflict,
                 store.insertApproved(approvedWrite(ApprovedNoteWriteOperationId("operation-2"))),
             )
@@ -162,15 +166,17 @@ internal class DesktopMeetingNoteStoreTest {
         revision = 0,
     )
 
-    private fun approvedWrite(operationId: ApprovedNoteWriteOperationId = OPERATION_ID): ApprovedMeetingNoteWrite =
-        ApprovedMeetingNoteWrite(
-            operationId = operationId,
-            approvalId = "approval-1",
-            runId = "run-1",
-            callId = "call-1",
-            argumentsJson = "{\"note_id\":\"note-1\"}",
-            note = record(),
-        )
+    private fun approvedWrite(
+        operationId: ApprovedNoteWriteOperationId = OPERATION_ID,
+        argumentsJson: String = "{\"note_id\":\"note-1\"}",
+    ): ApprovedMeetingNoteWrite = ApprovedMeetingNoteWrite(
+        operationId = operationId,
+        approvalId = "approval-1",
+        runId = "run-1",
+        callId = "call-1",
+        argumentsJson = argumentsJson,
+        note = record(),
+    )
 
     private fun content(): MeetingNoteContent {
         val source = MeetingNoteSourceReference(0, "ship on Friday")

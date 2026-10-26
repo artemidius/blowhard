@@ -26,6 +26,13 @@ public final class io/github/artemidius/blowhard/core/domain/ApprovedMeetingNote
 	public fun toString ()Ljava/lang/String;
 }
 
+public final class io/github/artemidius/blowhard/core/domain/ApprovedMeetingNoteInsertResult$OperationConflict : io/github/artemidius/blowhard/core/domain/ApprovedMeetingNoteInsertResult {
+	public static final field INSTANCE Lio/github/artemidius/blowhard/core/domain/ApprovedMeetingNoteInsertResult$OperationConflict;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
 public final class io/github/artemidius/blowhard/core/domain/ApprovedMeetingNoteInsertResult$SourceNotFound : io/github/artemidius/blowhard/core/domain/ApprovedMeetingNoteInsertResult {
 	public static final field INSTANCE Lio/github/artemidius/blowhard/core/domain/ApprovedMeetingNoteInsertResult$SourceNotFound;
 	public fun equals (Ljava/lang/Object;)Z

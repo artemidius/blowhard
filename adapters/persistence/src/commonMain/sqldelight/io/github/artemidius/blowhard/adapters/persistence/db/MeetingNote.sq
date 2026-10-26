@@ -60,6 +60,6 @@ INSERT INTO meeting_note_write_receipt(
 ) VALUES (?, ?, ?, ?, ?, ?);
 
 findMeetingNoteWriteReceipt:
-SELECT note_id
+SELECT approval_id, run_id, call_id, arguments_json, note_id
 FROM meeting_note_write_receipt
 WHERE operation_id = ?;

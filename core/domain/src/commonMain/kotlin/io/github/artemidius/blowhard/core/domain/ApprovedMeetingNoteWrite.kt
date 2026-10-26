@@ -47,6 +47,9 @@ public sealed interface ApprovedMeetingNoteInsertResult {
     /** The requested note identity belongs to another operation. */
     public data object IdConflict : ApprovedMeetingNoteInsertResult
 
+    /** The operation identity is already bound to different consent or arguments. */
+    public data object OperationConflict : ApprovedMeetingNoteInsertResult
+
     /** Storage cannot prove whether the transaction committed. */
     public data object Unavailable : ApprovedMeetingNoteInsertResult
 }

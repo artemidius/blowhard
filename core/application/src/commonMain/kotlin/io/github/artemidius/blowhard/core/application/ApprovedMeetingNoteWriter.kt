@@ -144,6 +144,8 @@ public class ApprovedMeetingNoteWriter private constructor(
 
             ApprovedMeetingNoteInsertResult.IdConflict -> rejected("note_id_conflict")
 
+            ApprovedMeetingNoteInsertResult.OperationConflict -> rejected("operation_id_conflict")
+
             ApprovedMeetingNoteInsertResult.Unavailable -> failed("write_outcome_uncertain")
         }
     }

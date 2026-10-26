@@ -70,6 +70,12 @@ class ApprovedMeetingNoteWriterTest {
         val collision = collisionWriter.proposal(record)
         collisionWriter.approve(collision.binding.id)
         assertEquals(ToolCallOutcome.REJECTED, collisionWriter.write(collision).outcome)
+
+        val operationCollisionStore = ApprovalMeetingNoteStore(ApprovedMeetingNoteInsertResult.OperationConflict)
+        val operationCollisionWriter = writer(operationCollisionStore)
+        val operationCollision = operationCollisionWriter.proposal(record)
+        operationCollisionWriter.approve(operationCollision.binding.id)
+        assertEquals(ToolCallOutcome.REJECTED, operationCollisionWriter.write(operationCollision).outcome)
     }
 
     @Test
