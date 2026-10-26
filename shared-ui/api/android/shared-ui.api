@@ -94,6 +94,13 @@ public final class io/github/artemidius/blowhard/ui/ComposableSingletons$NoticeP
 	public final fun getLambda$1645596550$Blowhard_shared_ui ()Lkotlin/jvm/functions/Function3;
 }
 
+public final class io/github/artemidius/blowhard/ui/ComposableSingletons$ProposedMeetingNoteApprovalDialogKt {
+	public static final field INSTANCE Lio/github/artemidius/blowhard/ui/ComposableSingletons$ProposedMeetingNoteApprovalDialogKt;
+	public fun <init> ()V
+	public final fun getLambda$-2018089553$Blowhard_shared_ui ()Lkotlin/jvm/functions/Function2;
+	public final fun getLambda$-455427158$Blowhard_shared_ui ()Lkotlin/jvm/functions/Function3;
+}
+
 public final class io/github/artemidius/blowhard/ui/ComposableSingletons$RunInspectorScreenKt {
 	public static final field INSTANCE Lio/github/artemidius/blowhard/ui/ComposableSingletons$RunInspectorScreenKt;
 	public fun <init> ()V
@@ -747,6 +754,39 @@ public final class io/github/artemidius/blowhard/ui/presentation/MessageDelivery
 	public static fun getEntries ()Lkotlin/enums/EnumEntries;
 	public static fun valueOf (Ljava/lang/String;)Lio/github/artemidius/blowhard/ui/presentation/MessageDelivery;
 	public static fun values ()[Lio/github/artemidius/blowhard/ui/presentation/MessageDelivery;
+}
+
+public final class io/github/artemidius/blowhard/ui/presentation/ProposedMeetingNoteStatus : java/lang/Enum {
+	public static final field COMMITTED Lio/github/artemidius/blowhard/ui/presentation/ProposedMeetingNoteStatus;
+	public static final field DENIED Lio/github/artemidius/blowhard/ui/presentation/ProposedMeetingNoteStatus;
+	public static final field EXPIRED Lio/github/artemidius/blowhard/ui/presentation/ProposedMeetingNoteStatus;
+	public static final field FAILED Lio/github/artemidius/blowhard/ui/presentation/ProposedMeetingNoteStatus;
+	public static final field INTERRUPTED Lio/github/artemidius/blowhard/ui/presentation/ProposedMeetingNoteStatus;
+	public static final field PENDING Lio/github/artemidius/blowhard/ui/presentation/ProposedMeetingNoteStatus;
+	public static final field UNCERTAIN Lio/github/artemidius/blowhard/ui/presentation/ProposedMeetingNoteStatus;
+	public static final field WRITING Lio/github/artemidius/blowhard/ui/presentation/ProposedMeetingNoteStatus;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public static fun valueOf (Ljava/lang/String;)Lio/github/artemidius/blowhard/ui/presentation/ProposedMeetingNoteStatus;
+	public static fun values ()[Lio/github/artemidius/blowhard/ui/presentation/ProposedMeetingNoteStatus;
+}
+
+public final class io/github/artemidius/blowhard/ui/presentation/ProposedMeetingNoteUiState {
+	public static final field $stable I
+	public fun <init> (Lio/github/artemidius/blowhard/core/api/MeetingNoteRecord;Ljava/lang/String;Lio/github/artemidius/blowhard/ui/presentation/ProposedMeetingNoteStatus;)V
+	public synthetic fun <init> (Lio/github/artemidius/blowhard/core/api/MeetingNoteRecord;Ljava/lang/String;Lio/github/artemidius/blowhard/ui/presentation/ProposedMeetingNoteStatus;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()Lio/github/artemidius/blowhard/core/api/MeetingNoteRecord;
+	public final fun component2 ()Ljava/lang/String;
+	public final fun component3 ()Lio/github/artemidius/blowhard/ui/presentation/ProposedMeetingNoteStatus;
+	public final fun copy (Lio/github/artemidius/blowhard/core/api/MeetingNoteRecord;Ljava/lang/String;Lio/github/artemidius/blowhard/ui/presentation/ProposedMeetingNoteStatus;)Lio/github/artemidius/blowhard/ui/presentation/ProposedMeetingNoteUiState;
+	public static synthetic fun copy$default (Lio/github/artemidius/blowhard/ui/presentation/ProposedMeetingNoteUiState;Lio/github/artemidius/blowhard/core/api/MeetingNoteRecord;Ljava/lang/String;Lio/github/artemidius/blowhard/ui/presentation/ProposedMeetingNoteStatus;ILjava/lang/Object;)Lio/github/artemidius/blowhard/ui/presentation/ProposedMeetingNoteUiState;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getCanApprove ()Z
+	public final fun getCanDeny ()Z
+	public final fun getDestination ()Ljava/lang/String;
+	public final fun getNote ()Lio/github/artemidius/blowhard/core/api/MeetingNoteRecord;
+	public final fun getStatus ()Lio/github/artemidius/blowhard/ui/presentation/ProposedMeetingNoteStatus;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
 }
 
 public final class io/github/artemidius/blowhard/ui/presentation/RunDiagnosticExportStatus : java/lang/Enum {
