@@ -46,6 +46,11 @@ internal fun MeetingNoteScreen(state: MeetingNoteUiState, onAction: (MeetingNote
             MeetingNoteEditor(draft, state, onAction)
         }
     }
+    MeetingNoteOverlays(state, onAction)
+}
+
+@Composable
+private fun MeetingNoteOverlays(state: MeetingNoteUiState, onAction: (MeetingNoteAction) -> Unit) {
     state.export?.let { export ->
         AlertDialog(
             onDismissRequest = { onAction(MeetingNoteAction.ExportDismissed) },
@@ -60,6 +65,14 @@ internal fun MeetingNoteScreen(state: MeetingNoteUiState, onAction: (MeetingNote
             confirmButton = {
                 TextButton(onClick = { onAction(MeetingNoteAction.ExportDismissed) }) { Text("Close") }
             },
+        )
+    }
+    state.approval?.let { approval ->
+        ProposedMeetingNoteApprovalDialog(
+            state = approval,
+            onApprove = { onAction(MeetingNoteAction.ApproveWrite) },
+            onDeny = { onAction(MeetingNoteAction.DenyWrite) },
+            onDismiss = { onAction(MeetingNoteAction.ApprovalDismissed) },
         )
     }
 }
@@ -91,6 +104,10 @@ private fun MeetingNoteHeader(state: MeetingNoteUiState, onAction: (MeetingNoteA
         Button(enabled = state.note != null && !state.isBusy, onClick = { onAction(MeetingNoteAction.Save) }) {
             Text(if (state.isBusy) "Working…" else "Save edit")
         }
+        Button(
+            enabled = state.note != null && !state.isBusy,
+            onClick = { onAction(MeetingNoteAction.ProposeWrite) },
+        ) { Text("Approve local copy") }
     }
 }
 

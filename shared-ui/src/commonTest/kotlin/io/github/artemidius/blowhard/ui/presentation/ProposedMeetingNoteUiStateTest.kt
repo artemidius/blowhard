@@ -7,6 +7,7 @@ import io.github.artemidius.blowhard.core.api.MeetingNoteId
 import io.github.artemidius.blowhard.core.api.MeetingNoteRecord
 import io.github.artemidius.blowhard.core.api.MeetingNoteSourceReference
 import kotlin.test.Test
+import kotlin.test.assertFailsWith
 import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 
@@ -22,6 +23,12 @@ class ProposedMeetingNoteUiStateTest {
             assertFalse(terminal.canApprove)
             assertFalse(terminal.canDeny)
         }
+    }
+
+    @Test
+    fun `destination must remain visible and bounded`() {
+        assertFailsWith<IllegalArgumentException> { ProposedMeetingNoteUiState(note(), "") }
+        assertFailsWith<IllegalArgumentException> { ProposedMeetingNoteUiState(note(), "x".repeat(513)) }
     }
 }
 
