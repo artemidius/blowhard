@@ -20,10 +20,13 @@ import io.github.artemidius.blowhard.core.api.SelectableModel
 import io.github.artemidius.blowhard.core.domain.ConversationStore
 import io.github.artemidius.blowhard.core.domain.GenerationEvent
 import io.github.artemidius.blowhard.core.domain.TextGenerationPort
+import io.github.artemidius.blowhard.ui.presentation.ChatMessageUi
+import io.github.artemidius.blowhard.ui.presentation.ChatRole
 import io.github.artemidius.blowhard.ui.presentation.ClipboardWriteResult
 import io.github.artemidius.blowhard.ui.presentation.ClipboardWriter
 import io.github.artemidius.blowhard.ui.presentation.ConversationAction
 import io.github.artemidius.blowhard.ui.presentation.ConversationRunState
+import io.github.artemidius.blowhard.ui.presentation.ConversationUiModel
 import io.github.artemidius.blowhard.ui.presentation.ConversationUiState
 import io.github.artemidius.blowhard.ui.presentation.RunDiagnosticExportStatus
 import io.github.artemidius.blowhard.ui.presentation.RunDiagnosticReportSaveResult
@@ -109,6 +112,35 @@ class DesktopRuntimeTest {
             }
             assertTrue(state.selectedConversation.messages.last().text.contains("Offline demonstration"))
             assertEquals(2, state.selectedConversation.messages.size)
+        } finally {
+            runtime.close()
+        }
+    }
+
+    @Test
+    fun `package verification waits for a new offline attempt when restored state already succeeded`() = runBlocking {
+        val conversationId = ConversationId("restored")
+        val restored = ConversationUiState(
+            conversations = listOf(
+                ConversationUiModel(
+                    id = conversationId,
+                    title = "Restored live conversation",
+                    messages = listOf(
+                        ChatMessageUi("previous-user", ChatRole.USER, "Previous request"),
+                        ChatMessageUi("previous-assistant", ChatRole.ASSISTANT, "Previous live response"),
+                    ),
+                    runState = ConversationRunState.SUCCEEDED,
+                ),
+            ),
+            selectedConversationId = conversationId,
+        )
+        val runtime = createDesktopRuntime(initialState = restored)
+        try {
+            runPackagingSmokeScenario(runtime.presenter)
+
+            val completed = runtime.presenter.state.value.selectedConversation
+            assertEquals(4, completed.messages.size)
+            assertTrue(completed.messages.last().text.contains("Offline demonstration"))
         } finally {
             runtime.close()
         }
