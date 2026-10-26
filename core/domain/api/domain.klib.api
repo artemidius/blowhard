@@ -319,6 +319,80 @@ abstract interface io.github.artemidius.blowhard.core.domain/MeetingNoteStore { 
     abstract suspend fun find(io.github.artemidius.blowhard.core.api/MeetingNoteId): io.github.artemidius.blowhard.core.domain/MeetingNoteStoreLookup // io.github.artemidius.blowhard.core.domain/MeetingNoteStore.find|find(io.github.artemidius.blowhard.core.api.MeetingNoteId){}[0]
     abstract suspend fun insert(io.github.artemidius.blowhard.core.api/MeetingNoteRecord): io.github.artemidius.blowhard.core.domain/MeetingNoteInsertResult // io.github.artemidius.blowhard.core.domain/MeetingNoteStore.insert|insert(io.github.artemidius.blowhard.core.api.MeetingNoteRecord){}[0]
     abstract suspend fun update(io.github.artemidius.blowhard.core.api/MeetingNoteId, kotlin/Long, io.github.artemidius.blowhard.core.api/MeetingNoteContent, kotlin/Long): io.github.artemidius.blowhard.core.domain/MeetingNoteStoreUpdateResult // io.github.artemidius.blowhard.core.domain/MeetingNoteStore.update|update(io.github.artemidius.blowhard.core.api.MeetingNoteId;kotlin.Long;io.github.artemidius.blowhard.core.api.MeetingNoteContent;kotlin.Long){}[0]
+    open suspend fun findApprovedOperation(io.github.artemidius.blowhard.core.domain/ApprovedNoteWriteOperationId): io.github.artemidius.blowhard.core.domain/ApprovedMeetingNoteReceiptLookup // io.github.artemidius.blowhard.core.domain/MeetingNoteStore.findApprovedOperation|findApprovedOperation(io.github.artemidius.blowhard.core.domain.ApprovedNoteWriteOperationId){}[0]
+    open suspend fun insertApproved(io.github.artemidius.blowhard.core.domain/ApprovedMeetingNoteWrite): io.github.artemidius.blowhard.core.domain/ApprovedMeetingNoteInsertResult // io.github.artemidius.blowhard.core.domain/MeetingNoteStore.insertApproved|insertApproved(io.github.artemidius.blowhard.core.domain.ApprovedMeetingNoteWrite){}[0]
+}
+
+sealed interface io.github.artemidius.blowhard.core.domain/ApprovedMeetingNoteInsertResult { // io.github.artemidius.blowhard.core.domain/ApprovedMeetingNoteInsertResult|null[0]
+    final class AlreadyCommitted : io.github.artemidius.blowhard.core.domain/ApprovedMeetingNoteInsertResult { // io.github.artemidius.blowhard.core.domain/ApprovedMeetingNoteInsertResult.AlreadyCommitted|null[0]
+        constructor <init>(io.github.artemidius.blowhard.core.api/MeetingNoteId) // io.github.artemidius.blowhard.core.domain/ApprovedMeetingNoteInsertResult.AlreadyCommitted.<init>|<init>(io.github.artemidius.blowhard.core.api.MeetingNoteId){}[0]
+
+        final val noteId // io.github.artemidius.blowhard.core.domain/ApprovedMeetingNoteInsertResult.AlreadyCommitted.noteId|{}noteId[0]
+            final fun <get-noteId>(): io.github.artemidius.blowhard.core.api/MeetingNoteId // io.github.artemidius.blowhard.core.domain/ApprovedMeetingNoteInsertResult.AlreadyCommitted.noteId.<get-noteId>|<get-noteId>(){}[0]
+
+        final fun component1(): io.github.artemidius.blowhard.core.api/MeetingNoteId // io.github.artemidius.blowhard.core.domain/ApprovedMeetingNoteInsertResult.AlreadyCommitted.component1|component1(){}[0]
+        final fun copy(io.github.artemidius.blowhard.core.api/MeetingNoteId = ...): io.github.artemidius.blowhard.core.domain/ApprovedMeetingNoteInsertResult.AlreadyCommitted // io.github.artemidius.blowhard.core.domain/ApprovedMeetingNoteInsertResult.AlreadyCommitted.copy|copy(io.github.artemidius.blowhard.core.api.MeetingNoteId){}[0]
+        final fun equals(kotlin/Any?): kotlin/Boolean // io.github.artemidius.blowhard.core.domain/ApprovedMeetingNoteInsertResult.AlreadyCommitted.equals|equals(kotlin.Any?){}[0]
+        final fun hashCode(): kotlin/Int // io.github.artemidius.blowhard.core.domain/ApprovedMeetingNoteInsertResult.AlreadyCommitted.hashCode|hashCode(){}[0]
+        final fun toString(): kotlin/String // io.github.artemidius.blowhard.core.domain/ApprovedMeetingNoteInsertResult.AlreadyCommitted.toString|toString(){}[0]
+    }
+
+    final object IdConflict : io.github.artemidius.blowhard.core.domain/ApprovedMeetingNoteInsertResult { // io.github.artemidius.blowhard.core.domain/ApprovedMeetingNoteInsertResult.IdConflict|null[0]
+        final fun equals(kotlin/Any?): kotlin/Boolean // io.github.artemidius.blowhard.core.domain/ApprovedMeetingNoteInsertResult.IdConflict.equals|equals(kotlin.Any?){}[0]
+        final fun hashCode(): kotlin/Int // io.github.artemidius.blowhard.core.domain/ApprovedMeetingNoteInsertResult.IdConflict.hashCode|hashCode(){}[0]
+        final fun toString(): kotlin/String // io.github.artemidius.blowhard.core.domain/ApprovedMeetingNoteInsertResult.IdConflict.toString|toString(){}[0]
+    }
+
+    final object Inserted : io.github.artemidius.blowhard.core.domain/ApprovedMeetingNoteInsertResult { // io.github.artemidius.blowhard.core.domain/ApprovedMeetingNoteInsertResult.Inserted|null[0]
+        final fun equals(kotlin/Any?): kotlin/Boolean // io.github.artemidius.blowhard.core.domain/ApprovedMeetingNoteInsertResult.Inserted.equals|equals(kotlin.Any?){}[0]
+        final fun hashCode(): kotlin/Int // io.github.artemidius.blowhard.core.domain/ApprovedMeetingNoteInsertResult.Inserted.hashCode|hashCode(){}[0]
+        final fun toString(): kotlin/String // io.github.artemidius.blowhard.core.domain/ApprovedMeetingNoteInsertResult.Inserted.toString|toString(){}[0]
+    }
+
+    final object OperationConflict : io.github.artemidius.blowhard.core.domain/ApprovedMeetingNoteInsertResult { // io.github.artemidius.blowhard.core.domain/ApprovedMeetingNoteInsertResult.OperationConflict|null[0]
+        final fun equals(kotlin/Any?): kotlin/Boolean // io.github.artemidius.blowhard.core.domain/ApprovedMeetingNoteInsertResult.OperationConflict.equals|equals(kotlin.Any?){}[0]
+        final fun hashCode(): kotlin/Int // io.github.artemidius.blowhard.core.domain/ApprovedMeetingNoteInsertResult.OperationConflict.hashCode|hashCode(){}[0]
+        final fun toString(): kotlin/String // io.github.artemidius.blowhard.core.domain/ApprovedMeetingNoteInsertResult.OperationConflict.toString|toString(){}[0]
+    }
+
+    final object SourceNotFound : io.github.artemidius.blowhard.core.domain/ApprovedMeetingNoteInsertResult { // io.github.artemidius.blowhard.core.domain/ApprovedMeetingNoteInsertResult.SourceNotFound|null[0]
+        final fun equals(kotlin/Any?): kotlin/Boolean // io.github.artemidius.blowhard.core.domain/ApprovedMeetingNoteInsertResult.SourceNotFound.equals|equals(kotlin.Any?){}[0]
+        final fun hashCode(): kotlin/Int // io.github.artemidius.blowhard.core.domain/ApprovedMeetingNoteInsertResult.SourceNotFound.hashCode|hashCode(){}[0]
+        final fun toString(): kotlin/String // io.github.artemidius.blowhard.core.domain/ApprovedMeetingNoteInsertResult.SourceNotFound.toString|toString(){}[0]
+    }
+
+    final object Unavailable : io.github.artemidius.blowhard.core.domain/ApprovedMeetingNoteInsertResult { // io.github.artemidius.blowhard.core.domain/ApprovedMeetingNoteInsertResult.Unavailable|null[0]
+        final fun equals(kotlin/Any?): kotlin/Boolean // io.github.artemidius.blowhard.core.domain/ApprovedMeetingNoteInsertResult.Unavailable.equals|equals(kotlin.Any?){}[0]
+        final fun hashCode(): kotlin/Int // io.github.artemidius.blowhard.core.domain/ApprovedMeetingNoteInsertResult.Unavailable.hashCode|hashCode(){}[0]
+        final fun toString(): kotlin/String // io.github.artemidius.blowhard.core.domain/ApprovedMeetingNoteInsertResult.Unavailable.toString|toString(){}[0]
+    }
+}
+
+sealed interface io.github.artemidius.blowhard.core.domain/ApprovedMeetingNoteReceiptLookup { // io.github.artemidius.blowhard.core.domain/ApprovedMeetingNoteReceiptLookup|null[0]
+    final class Committed : io.github.artemidius.blowhard.core.domain/ApprovedMeetingNoteReceiptLookup { // io.github.artemidius.blowhard.core.domain/ApprovedMeetingNoteReceiptLookup.Committed|null[0]
+        constructor <init>(io.github.artemidius.blowhard.core.api/MeetingNoteId) // io.github.artemidius.blowhard.core.domain/ApprovedMeetingNoteReceiptLookup.Committed.<init>|<init>(io.github.artemidius.blowhard.core.api.MeetingNoteId){}[0]
+
+        final val noteId // io.github.artemidius.blowhard.core.domain/ApprovedMeetingNoteReceiptLookup.Committed.noteId|{}noteId[0]
+            final fun <get-noteId>(): io.github.artemidius.blowhard.core.api/MeetingNoteId // io.github.artemidius.blowhard.core.domain/ApprovedMeetingNoteReceiptLookup.Committed.noteId.<get-noteId>|<get-noteId>(){}[0]
+
+        final fun component1(): io.github.artemidius.blowhard.core.api/MeetingNoteId // io.github.artemidius.blowhard.core.domain/ApprovedMeetingNoteReceiptLookup.Committed.component1|component1(){}[0]
+        final fun copy(io.github.artemidius.blowhard.core.api/MeetingNoteId = ...): io.github.artemidius.blowhard.core.domain/ApprovedMeetingNoteReceiptLookup.Committed // io.github.artemidius.blowhard.core.domain/ApprovedMeetingNoteReceiptLookup.Committed.copy|copy(io.github.artemidius.blowhard.core.api.MeetingNoteId){}[0]
+        final fun equals(kotlin/Any?): kotlin/Boolean // io.github.artemidius.blowhard.core.domain/ApprovedMeetingNoteReceiptLookup.Committed.equals|equals(kotlin.Any?){}[0]
+        final fun hashCode(): kotlin/Int // io.github.artemidius.blowhard.core.domain/ApprovedMeetingNoteReceiptLookup.Committed.hashCode|hashCode(){}[0]
+        final fun toString(): kotlin/String // io.github.artemidius.blowhard.core.domain/ApprovedMeetingNoteReceiptLookup.Committed.toString|toString(){}[0]
+    }
+
+    final object NotFound : io.github.artemidius.blowhard.core.domain/ApprovedMeetingNoteReceiptLookup { // io.github.artemidius.blowhard.core.domain/ApprovedMeetingNoteReceiptLookup.NotFound|null[0]
+        final fun equals(kotlin/Any?): kotlin/Boolean // io.github.artemidius.blowhard.core.domain/ApprovedMeetingNoteReceiptLookup.NotFound.equals|equals(kotlin.Any?){}[0]
+        final fun hashCode(): kotlin/Int // io.github.artemidius.blowhard.core.domain/ApprovedMeetingNoteReceiptLookup.NotFound.hashCode|hashCode(){}[0]
+        final fun toString(): kotlin/String // io.github.artemidius.blowhard.core.domain/ApprovedMeetingNoteReceiptLookup.NotFound.toString|toString(){}[0]
+    }
+
+    final object Unavailable : io.github.artemidius.blowhard.core.domain/ApprovedMeetingNoteReceiptLookup { // io.github.artemidius.blowhard.core.domain/ApprovedMeetingNoteReceiptLookup.Unavailable|null[0]
+        final fun equals(kotlin/Any?): kotlin/Boolean // io.github.artemidius.blowhard.core.domain/ApprovedMeetingNoteReceiptLookup.Unavailable.equals|equals(kotlin.Any?){}[0]
+        final fun hashCode(): kotlin/Int // io.github.artemidius.blowhard.core.domain/ApprovedMeetingNoteReceiptLookup.Unavailable.hashCode|hashCode(){}[0]
+        final fun toString(): kotlin/String // io.github.artemidius.blowhard.core.domain/ApprovedMeetingNoteReceiptLookup.Unavailable.toString|toString(){}[0]
+    }
 }
 
 sealed interface io.github.artemidius.blowhard.core.domain/CredentialMutationResult { // io.github.artemidius.blowhard.core.domain/CredentialMutationResult|null[0]
@@ -864,6 +938,34 @@ sealed interface io.github.artemidius.blowhard.core.domain/ToolModelResponse { /
     }
 }
 
+final class io.github.artemidius.blowhard.core.domain/ApprovedMeetingNoteWrite { // io.github.artemidius.blowhard.core.domain/ApprovedMeetingNoteWrite|null[0]
+    constructor <init>(io.github.artemidius.blowhard.core.domain/ApprovedNoteWriteOperationId, kotlin/String, kotlin/String, kotlin/String, kotlin/String, io.github.artemidius.blowhard.core.api/MeetingNoteRecord) // io.github.artemidius.blowhard.core.domain/ApprovedMeetingNoteWrite.<init>|<init>(io.github.artemidius.blowhard.core.domain.ApprovedNoteWriteOperationId;kotlin.String;kotlin.String;kotlin.String;kotlin.String;io.github.artemidius.blowhard.core.api.MeetingNoteRecord){}[0]
+
+    final val approvalId // io.github.artemidius.blowhard.core.domain/ApprovedMeetingNoteWrite.approvalId|{}approvalId[0]
+        final fun <get-approvalId>(): kotlin/String // io.github.artemidius.blowhard.core.domain/ApprovedMeetingNoteWrite.approvalId.<get-approvalId>|<get-approvalId>(){}[0]
+    final val argumentsJson // io.github.artemidius.blowhard.core.domain/ApprovedMeetingNoteWrite.argumentsJson|{}argumentsJson[0]
+        final fun <get-argumentsJson>(): kotlin/String // io.github.artemidius.blowhard.core.domain/ApprovedMeetingNoteWrite.argumentsJson.<get-argumentsJson>|<get-argumentsJson>(){}[0]
+    final val callId // io.github.artemidius.blowhard.core.domain/ApprovedMeetingNoteWrite.callId|{}callId[0]
+        final fun <get-callId>(): kotlin/String // io.github.artemidius.blowhard.core.domain/ApprovedMeetingNoteWrite.callId.<get-callId>|<get-callId>(){}[0]
+    final val note // io.github.artemidius.blowhard.core.domain/ApprovedMeetingNoteWrite.note|{}note[0]
+        final fun <get-note>(): io.github.artemidius.blowhard.core.api/MeetingNoteRecord // io.github.artemidius.blowhard.core.domain/ApprovedMeetingNoteWrite.note.<get-note>|<get-note>(){}[0]
+    final val operationId // io.github.artemidius.blowhard.core.domain/ApprovedMeetingNoteWrite.operationId|{}operationId[0]
+        final fun <get-operationId>(): io.github.artemidius.blowhard.core.domain/ApprovedNoteWriteOperationId // io.github.artemidius.blowhard.core.domain/ApprovedMeetingNoteWrite.operationId.<get-operationId>|<get-operationId>(){}[0]
+    final val runId // io.github.artemidius.blowhard.core.domain/ApprovedMeetingNoteWrite.runId|{}runId[0]
+        final fun <get-runId>(): kotlin/String // io.github.artemidius.blowhard.core.domain/ApprovedMeetingNoteWrite.runId.<get-runId>|<get-runId>(){}[0]
+
+    final fun component1(): io.github.artemidius.blowhard.core.domain/ApprovedNoteWriteOperationId // io.github.artemidius.blowhard.core.domain/ApprovedMeetingNoteWrite.component1|component1(){}[0]
+    final fun component2(): kotlin/String // io.github.artemidius.blowhard.core.domain/ApprovedMeetingNoteWrite.component2|component2(){}[0]
+    final fun component3(): kotlin/String // io.github.artemidius.blowhard.core.domain/ApprovedMeetingNoteWrite.component3|component3(){}[0]
+    final fun component4(): kotlin/String // io.github.artemidius.blowhard.core.domain/ApprovedMeetingNoteWrite.component4|component4(){}[0]
+    final fun component5(): kotlin/String // io.github.artemidius.blowhard.core.domain/ApprovedMeetingNoteWrite.component5|component5(){}[0]
+    final fun component6(): io.github.artemidius.blowhard.core.api/MeetingNoteRecord // io.github.artemidius.blowhard.core.domain/ApprovedMeetingNoteWrite.component6|component6(){}[0]
+    final fun copy(io.github.artemidius.blowhard.core.domain/ApprovedNoteWriteOperationId = ..., kotlin/String = ..., kotlin/String = ..., kotlin/String = ..., kotlin/String = ..., io.github.artemidius.blowhard.core.api/MeetingNoteRecord = ...): io.github.artemidius.blowhard.core.domain/ApprovedMeetingNoteWrite // io.github.artemidius.blowhard.core.domain/ApprovedMeetingNoteWrite.copy|copy(io.github.artemidius.blowhard.core.domain.ApprovedNoteWriteOperationId;kotlin.String;kotlin.String;kotlin.String;kotlin.String;io.github.artemidius.blowhard.core.api.MeetingNoteRecord){}[0]
+    final fun equals(kotlin/Any?): kotlin/Boolean // io.github.artemidius.blowhard.core.domain/ApprovedMeetingNoteWrite.equals|equals(kotlin.Any?){}[0]
+    final fun hashCode(): kotlin/Int // io.github.artemidius.blowhard.core.domain/ApprovedMeetingNoteWrite.hashCode|hashCode(){}[0]
+    final fun toString(): kotlin/String // io.github.artemidius.blowhard.core.domain/ApprovedMeetingNoteWrite.toString|toString(){}[0]
+}
+
 final class io.github.artemidius.blowhard.core.domain/AvailableModel { // io.github.artemidius.blowhard.core.domain/AvailableModel|null[0]
     constructor <init>(kotlin/String, kotlin.collections/List<kotlin/String>, kotlin/Long?, io.github.artemidius.blowhard.core.domain/ModelAvailability, io.github.artemidius.blowhard.core.domain/ModelCapabilities) // io.github.artemidius.blowhard.core.domain/AvailableModel.<init>|<init>(kotlin.String;kotlin.collections.List<kotlin.String>;kotlin.Long?;io.github.artemidius.blowhard.core.domain.ModelAvailability;io.github.artemidius.blowhard.core.domain.ModelCapabilities){}[0]
 
@@ -1256,6 +1358,17 @@ final class io.github.artemidius.blowhard.core.domain/ToolModelRequest { // io.g
     final fun equals(kotlin/Any?): kotlin/Boolean // io.github.artemidius.blowhard.core.domain/ToolModelRequest.equals|equals(kotlin.Any?){}[0]
     final fun hashCode(): kotlin/Int // io.github.artemidius.blowhard.core.domain/ToolModelRequest.hashCode|hashCode(){}[0]
     final fun toString(): kotlin/String // io.github.artemidius.blowhard.core.domain/ToolModelRequest.toString|toString(){}[0]
+}
+
+final value class io.github.artemidius.blowhard.core.domain/ApprovedNoteWriteOperationId { // io.github.artemidius.blowhard.core.domain/ApprovedNoteWriteOperationId|null[0]
+    constructor <init>(kotlin/String) // io.github.artemidius.blowhard.core.domain/ApprovedNoteWriteOperationId.<init>|<init>(kotlin.String){}[0]
+
+    final val value // io.github.artemidius.blowhard.core.domain/ApprovedNoteWriteOperationId.value|{}value[0]
+        final fun <get-value>(): kotlin/String // io.github.artemidius.blowhard.core.domain/ApprovedNoteWriteOperationId.value.<get-value>|<get-value>(){}[0]
+
+    final fun equals(kotlin/Any?): kotlin/Boolean // io.github.artemidius.blowhard.core.domain/ApprovedNoteWriteOperationId.equals|equals(kotlin.Any?){}[0]
+    final fun hashCode(): kotlin/Int // io.github.artemidius.blowhard.core.domain/ApprovedNoteWriteOperationId.hashCode|hashCode(){}[0]
+    final fun toString(): kotlin/String // io.github.artemidius.blowhard.core.domain/ApprovedNoteWriteOperationId.toString|toString(){}[0]
 }
 
 final value class io.github.artemidius.blowhard.core.domain/PromptText { // io.github.artemidius.blowhard.core.domain/PromptText|null[0]

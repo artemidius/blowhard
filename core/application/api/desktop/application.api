@@ -1,3 +1,102 @@
+public abstract interface class io/github/artemidius/blowhard/core/application/ApprovedMeetingNotePreparation {
+}
+
+public final class io/github/artemidius/blowhard/core/application/ApprovedMeetingNotePreparation$ContentTooLarge : io/github/artemidius/blowhard/core/application/ApprovedMeetingNotePreparation {
+	public static final field INSTANCE Lio/github/artemidius/blowhard/core/application/ApprovedMeetingNotePreparation$ContentTooLarge;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class io/github/artemidius/blowhard/core/application/ApprovedMeetingNotePreparation$Proposed : io/github/artemidius/blowhard/core/application/ApprovedMeetingNotePreparation {
+	public fun <init> (Lio/github/artemidius/blowhard/core/application/ApprovedMeetingNoteProposal;)V
+	public final fun component1 ()Lio/github/artemidius/blowhard/core/application/ApprovedMeetingNoteProposal;
+	public final fun copy (Lio/github/artemidius/blowhard/core/application/ApprovedMeetingNoteProposal;)Lio/github/artemidius/blowhard/core/application/ApprovedMeetingNotePreparation$Proposed;
+	public static synthetic fun copy$default (Lio/github/artemidius/blowhard/core/application/ApprovedMeetingNotePreparation$Proposed;Lio/github/artemidius/blowhard/core/application/ApprovedMeetingNoteProposal;ILjava/lang/Object;)Lio/github/artemidius/blowhard/core/application/ApprovedMeetingNotePreparation$Proposed;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getValue ()Lio/github/artemidius/blowhard/core/application/ApprovedMeetingNoteProposal;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class io/github/artemidius/blowhard/core/application/ApprovedMeetingNotePreparation$Rejected : io/github/artemidius/blowhard/core/application/ApprovedMeetingNotePreparation {
+	public fun <init> (Lio/github/artemidius/blowhard/core/application/ToolApprovalOutcome;)V
+	public final fun component1 ()Lio/github/artemidius/blowhard/core/application/ToolApprovalOutcome;
+	public final fun copy (Lio/github/artemidius/blowhard/core/application/ToolApprovalOutcome;)Lio/github/artemidius/blowhard/core/application/ApprovedMeetingNotePreparation$Rejected;
+	public static synthetic fun copy$default (Lio/github/artemidius/blowhard/core/application/ApprovedMeetingNotePreparation$Rejected;Lio/github/artemidius/blowhard/core/application/ToolApprovalOutcome;ILjava/lang/Object;)Lio/github/artemidius/blowhard/core/application/ApprovedMeetingNotePreparation$Rejected;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getReason ()Lio/github/artemidius/blowhard/core/application/ToolApprovalOutcome;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class io/github/artemidius/blowhard/core/application/ApprovedMeetingNoteProposal {
+	public synthetic fun <init> (Ljava/lang/String;Lio/github/artemidius/blowhard/core/application/ToolApprovalBinding;Lio/github/artemidius/blowhard/core/api/MeetingNoteRecord;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1-a7ZyJ7Y ()Ljava/lang/String;
+	public final fun component2 ()Lio/github/artemidius/blowhard/core/application/ToolApprovalBinding;
+	public final fun component3 ()Lio/github/artemidius/blowhard/core/api/MeetingNoteRecord;
+	public final fun copy-MYAXMeQ (Ljava/lang/String;Lio/github/artemidius/blowhard/core/application/ToolApprovalBinding;Lio/github/artemidius/blowhard/core/api/MeetingNoteRecord;)Lio/github/artemidius/blowhard/core/application/ApprovedMeetingNoteProposal;
+	public static synthetic fun copy-MYAXMeQ$default (Lio/github/artemidius/blowhard/core/application/ApprovedMeetingNoteProposal;Ljava/lang/String;Lio/github/artemidius/blowhard/core/application/ToolApprovalBinding;Lio/github/artemidius/blowhard/core/api/MeetingNoteRecord;ILjava/lang/Object;)Lio/github/artemidius/blowhard/core/application/ApprovedMeetingNoteProposal;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getBinding ()Lio/github/artemidius/blowhard/core/application/ToolApprovalBinding;
+	public final fun getNote ()Lio/github/artemidius/blowhard/core/api/MeetingNoteRecord;
+	public final fun getOperationId-a7ZyJ7Y ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public abstract interface class io/github/artemidius/blowhard/core/application/ApprovedMeetingNoteRecovery {
+}
+
+public final class io/github/artemidius/blowhard/core/application/ApprovedMeetingNoteRecovery$Committed : io/github/artemidius/blowhard/core/application/ApprovedMeetingNoteRecovery {
+	public fun <init> (Lio/github/artemidius/blowhard/core/api/MeetingNoteRecord;)V
+	public final fun component1 ()Lio/github/artemidius/blowhard/core/api/MeetingNoteRecord;
+	public final fun copy (Lio/github/artemidius/blowhard/core/api/MeetingNoteRecord;)Lio/github/artemidius/blowhard/core/application/ApprovedMeetingNoteRecovery$Committed;
+	public static synthetic fun copy$default (Lio/github/artemidius/blowhard/core/application/ApprovedMeetingNoteRecovery$Committed;Lio/github/artemidius/blowhard/core/api/MeetingNoteRecord;ILjava/lang/Object;)Lio/github/artemidius/blowhard/core/application/ApprovedMeetingNoteRecovery$Committed;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getNote ()Lio/github/artemidius/blowhard/core/api/MeetingNoteRecord;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class io/github/artemidius/blowhard/core/application/ApprovedMeetingNoteRecovery$NotApplied : io/github/artemidius/blowhard/core/application/ApprovedMeetingNoteRecovery {
+	public static final field INSTANCE Lio/github/artemidius/blowhard/core/application/ApprovedMeetingNoteRecovery$NotApplied;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class io/github/artemidius/blowhard/core/application/ApprovedMeetingNoteRecovery$Uncertain : io/github/artemidius/blowhard/core/application/ApprovedMeetingNoteRecovery {
+	public static final field INSTANCE Lio/github/artemidius/blowhard/core/application/ApprovedMeetingNoteRecovery$Uncertain;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class io/github/artemidius/blowhard/core/application/ApprovedMeetingNoteWriter {
+	public static final field Companion Lio/github/artemidius/blowhard/core/application/ApprovedMeetingNoteWriter$Companion;
+	public final fun approve-QXol-qQ (Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public final fun deny-QXol-qQ (Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public final fun prepare-JZyXvhA (Lio/github/artemidius/blowhard/core/api/MeetingNoteRecord;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;JLkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public final fun recover-uLEIwYA (Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public final fun write (Lio/github/artemidius/blowhard/core/application/ApprovedMeetingNoteProposal;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+}
+
+public final class io/github/artemidius/blowhard/core/application/ApprovedMeetingNoteWriter$Companion {
+	public final fun create (Lio/github/artemidius/blowhard/core/domain/MeetingNoteStore;Lio/github/artemidius/blowhard/core/application/ToolApprovalClock;)Lio/github/artemidius/blowhard/core/application/ApprovedMeetingNoteWriter;
+}
+
+public final class io/github/artemidius/blowhard/core/application/ApprovedToolRegistration {
+	public fun <init> (Lio/github/artemidius/blowhard/core/application/RegisteredTool;)V
+	public final fun component1 ()Lio/github/artemidius/blowhard/core/application/RegisteredTool;
+	public final fun copy (Lio/github/artemidius/blowhard/core/application/RegisteredTool;)Lio/github/artemidius/blowhard/core/application/ApprovedToolRegistration;
+	public static synthetic fun copy$default (Lio/github/artemidius/blowhard/core/application/ApprovedToolRegistration;Lio/github/artemidius/blowhard/core/application/RegisteredTool;ILjava/lang/Object;)Lio/github/artemidius/blowhard/core/application/ApprovedToolRegistration;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getTool ()Lio/github/artemidius/blowhard/core/application/RegisteredTool;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
 public final class io/github/artemidius/blowhard/core/application/BoundedToolOrchestrator {
 	public fun <init> (Lio/github/artemidius/blowhard/core/domain/ToolModelPort;Lio/github/artemidius/blowhard/core/application/ToolRegistry;Lio/github/artemidius/blowhard/core/application/ToolOrchestrationPolicy;)V
 	public synthetic fun <init> (Lio/github/artemidius/blowhard/core/domain/ToolModelPort;Lio/github/artemidius/blowhard/core/application/ToolRegistry;Lio/github/artemidius/blowhard/core/application/ToolOrchestrationPolicy;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
@@ -338,6 +437,109 @@ public final class io/github/artemidius/blowhard/core/application/SequentialRunI
 public final class io/github/artemidius/blowhard/core/application/SystemRunClock : io/github/artemidius/blowhard/core/application/RunClock {
 	public static final field INSTANCE Lio/github/artemidius/blowhard/core/application/SystemRunClock;
 	public fun now-Yj_JHEY ()J
+}
+
+public final class io/github/artemidius/blowhard/core/application/ToolApprovalBinding {
+	public synthetic fun <init> (Ljava/lang/String;Ljava/lang/String;Lio/github/artemidius/blowhard/core/domain/ToolCallProposal;Ljava/lang/String;JLkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1-vVtOQl8 ()Ljava/lang/String;
+	public final fun component2-GSfXGAg ()Ljava/lang/String;
+	public final fun component3 ()Lio/github/artemidius/blowhard/core/domain/ToolCallProposal;
+	public final fun component4-zdgjzVA ()Ljava/lang/String;
+	public final fun component5 ()J
+	public final fun copy-l73RLto (Ljava/lang/String;Ljava/lang/String;Lio/github/artemidius/blowhard/core/domain/ToolCallProposal;Ljava/lang/String;J)Lio/github/artemidius/blowhard/core/application/ToolApprovalBinding;
+	public static synthetic fun copy-l73RLto$default (Lio/github/artemidius/blowhard/core/application/ToolApprovalBinding;Ljava/lang/String;Ljava/lang/String;Lio/github/artemidius/blowhard/core/domain/ToolCallProposal;Ljava/lang/String;JILjava/lang/Object;)Lio/github/artemidius/blowhard/core/application/ToolApprovalBinding;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getDestination-zdgjzVA ()Ljava/lang/String;
+	public final fun getExpiresAtEpochMilliseconds ()J
+	public final fun getId-vVtOQl8 ()Ljava/lang/String;
+	public final fun getProposal ()Lio/github/artemidius/blowhard/core/domain/ToolCallProposal;
+	public final fun getRunId-GSfXGAg ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public abstract interface class io/github/artemidius/blowhard/core/application/ToolApprovalClock {
+	public abstract fun nowEpochMilliseconds ()J
+}
+
+public final class io/github/artemidius/blowhard/core/application/ToolApprovalDestination {
+	public static final synthetic fun box-impl (Ljava/lang/String;)Lio/github/artemidius/blowhard/core/application/ToolApprovalDestination;
+	public static fun constructor-impl (Ljava/lang/String;)Ljava/lang/String;
+	public fun equals (Ljava/lang/Object;)Z
+	public static fun equals-impl (Ljava/lang/String;Ljava/lang/Object;)Z
+	public static final fun equals-impl0 (Ljava/lang/String;Ljava/lang/String;)Z
+	public final fun getValue ()Ljava/lang/String;
+	public fun hashCode ()I
+	public static fun hashCode-impl (Ljava/lang/String;)I
+	public fun toString ()Ljava/lang/String;
+	public static fun toString-impl (Ljava/lang/String;)Ljava/lang/String;
+	public final synthetic fun unbox-impl ()Ljava/lang/String;
+}
+
+public final class io/github/artemidius/blowhard/core/application/ToolApprovalGate {
+	public static final field Companion Lio/github/artemidius/blowhard/core/application/ToolApprovalGate$Companion;
+	public final fun approve-QXol-qQ (Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public final fun deny-QXol-qQ (Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public final fun execute (Lio/github/artemidius/blowhard/core/application/ToolApprovalBinding;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public final fun request (Lio/github/artemidius/blowhard/core/application/ToolApprovalBinding;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public final fun status-QXol-qQ (Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+}
+
+public final class io/github/artemidius/blowhard/core/application/ToolApprovalGate$Companion {
+	public final fun create (Ljava/util/List;Lio/github/artemidius/blowhard/core/application/ToolApprovalClock;)Lio/github/artemidius/blowhard/core/application/ToolApprovalGate;
+}
+
+public final class io/github/artemidius/blowhard/core/application/ToolApprovalId {
+	public static final synthetic fun box-impl (Ljava/lang/String;)Lio/github/artemidius/blowhard/core/application/ToolApprovalId;
+	public static fun constructor-impl (Ljava/lang/String;)Ljava/lang/String;
+	public fun equals (Ljava/lang/Object;)Z
+	public static fun equals-impl (Ljava/lang/String;Ljava/lang/Object;)Z
+	public static final fun equals-impl0 (Ljava/lang/String;Ljava/lang/String;)Z
+	public final fun getValue ()Ljava/lang/String;
+	public fun hashCode ()I
+	public static fun hashCode-impl (Ljava/lang/String;)I
+	public fun toString ()Ljava/lang/String;
+	public static fun toString-impl (Ljava/lang/String;)Ljava/lang/String;
+	public final synthetic fun unbox-impl ()Ljava/lang/String;
+}
+
+public final class io/github/artemidius/blowhard/core/application/ToolApprovalOutcome : java/lang/Enum {
+	public static final field ACCEPTED Lio/github/artemidius/blowhard/core/application/ToolApprovalOutcome;
+	public static final field DUPLICATE_ID Lio/github/artemidius/blowhard/core/application/ToolApprovalOutcome;
+	public static final field EXPIRED Lio/github/artemidius/blowhard/core/application/ToolApprovalOutcome;
+	public static final field INVALID_ARGUMENTS Lio/github/artemidius/blowhard/core/application/ToolApprovalOutcome;
+	public static final field NOT_FOUND Lio/github/artemidius/blowhard/core/application/ToolApprovalOutcome;
+	public static final field NOT_MUTATING Lio/github/artemidius/blowhard/core/application/ToolApprovalOutcome;
+	public static final field NOT_PENDING Lio/github/artemidius/blowhard/core/application/ToolApprovalOutcome;
+	public static final field UNKNOWN_TOOL Lio/github/artemidius/blowhard/core/application/ToolApprovalOutcome;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public static fun valueOf (Ljava/lang/String;)Lio/github/artemidius/blowhard/core/application/ToolApprovalOutcome;
+	public static fun values ()[Lio/github/artemidius/blowhard/core/application/ToolApprovalOutcome;
+}
+
+public final class io/github/artemidius/blowhard/core/application/ToolApprovalRunId {
+	public static final synthetic fun box-impl (Ljava/lang/String;)Lio/github/artemidius/blowhard/core/application/ToolApprovalRunId;
+	public static fun constructor-impl (Ljava/lang/String;)Ljava/lang/String;
+	public fun equals (Ljava/lang/Object;)Z
+	public static fun equals-impl (Ljava/lang/String;Ljava/lang/Object;)Z
+	public static final fun equals-impl0 (Ljava/lang/String;Ljava/lang/String;)Z
+	public final fun getValue ()Ljava/lang/String;
+	public fun hashCode ()I
+	public static fun hashCode-impl (Ljava/lang/String;)I
+	public fun toString ()Ljava/lang/String;
+	public static fun toString-impl (Ljava/lang/String;)Ljava/lang/String;
+	public final synthetic fun unbox-impl ()Ljava/lang/String;
+}
+
+public final class io/github/artemidius/blowhard/core/application/ToolApprovalStatus : java/lang/Enum {
+	public static final field APPROVED Lio/github/artemidius/blowhard/core/application/ToolApprovalStatus;
+	public static final field CONSUMED Lio/github/artemidius/blowhard/core/application/ToolApprovalStatus;
+	public static final field DENIED Lio/github/artemidius/blowhard/core/application/ToolApprovalStatus;
+	public static final field EXPIRED Lio/github/artemidius/blowhard/core/application/ToolApprovalStatus;
+	public static final field PENDING Lio/github/artemidius/blowhard/core/application/ToolApprovalStatus;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public static fun valueOf (Ljava/lang/String;)Lio/github/artemidius/blowhard/core/application/ToolApprovalStatus;
+	public static fun values ()[Lio/github/artemidius/blowhard/core/application/ToolApprovalStatus;
 }
 
 public final class io/github/artemidius/blowhard/core/application/ToolOrchestrationFailure : java/lang/Enum {

@@ -14,6 +14,15 @@ CREATE TABLE meeting_note (
 CREATE INDEX meeting_note_by_source_creation
 ON meeting_note(document_id, created_at_epoch_ms DESC, id ASC);
 
+CREATE TABLE meeting_note_write_receipt (
+    operation_id TEXT NOT NULL PRIMARY KEY,
+    approval_id TEXT NOT NULL,
+    run_id TEXT NOT NULL,
+    call_id TEXT NOT NULL,
+    arguments_json TEXT NOT NULL CHECK(length(arguments_json) BETWEEN 1 AND 32768),
+    note_id TEXT NOT NULL UNIQUE REFERENCES meeting_note(id) ON DELETE CASCADE
+);
+
 insertMeetingNote:
 INSERT INTO meeting_note(
     id,
@@ -44,3 +53,13 @@ WHERE id = ? AND revision = ?;
 deleteMeetingNotesByDocument:
 DELETE FROM meeting_note
 WHERE document_id = ?;
+
+insertMeetingNoteWriteReceipt:
+INSERT INTO meeting_note_write_receipt(
+    operation_id, approval_id, run_id, call_id, arguments_json, note_id
+) VALUES (?, ?, ?, ?, ?, ?);
+
+findMeetingNoteWriteReceipt:
+SELECT approval_id, run_id, call_id, arguments_json, note_id
+FROM meeting_note_write_receipt
+WHERE operation_id = ?;
