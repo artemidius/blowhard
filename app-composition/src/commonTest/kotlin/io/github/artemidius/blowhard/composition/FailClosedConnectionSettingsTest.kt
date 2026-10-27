@@ -1,19 +1,22 @@
-package io.github.artemidius.blowhard.ios
+package io.github.artemidius.blowhard.composition
 
 import io.github.artemidius.blowhard.core.api.ConnectionTestFailureKind
 import io.github.artemidius.blowhard.core.api.ConnectionTestResult
 import io.github.artemidius.blowhard.core.api.CredentialStatus
 import io.github.artemidius.blowhard.core.api.CredentialUpdateResult
+import io.github.artemidius.blowhard.core.api.DocumentListResult
 import io.github.artemidius.blowhard.core.api.GenerationMode
 import io.github.artemidius.blowhard.core.api.GenerationParameters
 import io.github.artemidius.blowhard.core.api.ModeSelectionResult
 import io.github.artemidius.blowhard.core.api.ModelSelectionResult
+import io.github.artemidius.blowhard.ui.presentation.ClipboardWriteResult
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertSame
 
-class IosUnavailableConnectionSettingsTest {
-    private val settings = IosUnavailableConnectionSettings()
+class FailClosedConnectionSettingsTest {
+    private val settings = FailClosedConnectionSettings()
 
     @Test
     fun `credential and provider operations fail closed`() = runTest {
@@ -33,7 +36,18 @@ class IosUnavailableConnectionSettingsTest {
         val parameters = GenerationParameters(maxOutputTokens = 1_024, temperature = 0.2)
         settings.updateGenerationParameters(parameters)
         settings.acknowledgeLiveDataDisclosure()
+
         assertEquals(parameters, settings.state.value.generationParameters)
         assertEquals(true, settings.state.value.liveDataDisclosureAccepted)
+    }
+
+    @Test
+    fun `inactive dependency graph preserves the supplied boundary and rejects native work`() = runTest {
+        val dependencies = ApplicationRuntimeDependencies.failClosed(settings)
+
+        assertSame(settings, dependencies.connectionSettings)
+        assertEquals(ClipboardWriteResult.UNAVAILABLE, dependencies.clipboardWriter.write("not copied"))
+        assertEquals(DocumentListResult.StorageUnavailable, dependencies.documentLibrary.list())
+        assertEquals(null, dependencies.documentPicker.select())
     }
 }

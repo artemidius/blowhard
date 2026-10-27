@@ -191,8 +191,8 @@ tasks.matching { it.name == "koverXmlReport" || it.name == "koverVerify" }.confi
 
 private val allowedProjectDependencies = mapOf(
     ":app-composition" to setOf(":core:application", ":shared-ui"),
-    ":apps:android" to setOf(":core:api", ":shared-ui"),
-    ":apps:ios-shared" to setOf(":core:api", ":shared-ui"),
+    ":apps:android" to setOf(":app-composition", ":core:api", ":shared-ui"),
+    ":apps:ios-shared" to setOf(":app-composition", ":core:api", ":shared-ui"),
     ":adapters:documents" to setOf(":core:domain"),
     ":adapters:fixture" to setOf(":core:domain"),
     ":adapters:mistral" to setOf(":core:domain"),

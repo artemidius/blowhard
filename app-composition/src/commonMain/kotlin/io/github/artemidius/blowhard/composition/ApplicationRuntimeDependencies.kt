@@ -33,7 +33,14 @@ public class ApplicationRuntimeDependencies(
     public val meetingNoteApprovals: MeetingNoteApprovalPort,
     public val conversationStore: ConversationStore? = null,
     public val documentProcessingStore: DocumentProcessingStore? = null,
-)
+) {
+    /** Creates an explicit inactive graph for hosts that do not yet provide native capabilities. */
+    public companion object {
+        /** Uses [connectionSettings] and rejects every unavailable platform or provider operation. */
+        public fun failClosed(connectionSettings: ConnectionSettings): ApplicationRuntimeDependencies =
+            failClosedDependencies(connectionSettings)
+    }
+}
 
 /** Process-specific values controlling one portable application runtime. */
 public data class ApplicationRuntimeConfiguration(
