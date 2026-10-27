@@ -266,6 +266,7 @@ jobs:
       - name: Compile Apple shared code and run simulator tests
         run: >-
           ./gradlew --no-daemon
+          :apps:ios-shared:iosSimulatorArm64Test
           :shared-ui:compileKotlinIosArm64
           :shared-ui:compileKotlinIosSimulatorArm64
           :core:api:iosSimulatorArm64Test
@@ -285,12 +286,32 @@ jobs:
           :adapters:persistence:iosSimulatorArm64Test
           :shared-ui:iosSimulatorArm64Test
 
+      - name: Build iOS application
+        run: >-
+          xcodebuild
+          -project apps/ios/Blowhard.xcodeproj
+          -scheme Blowhard
+          -configuration Debug
+          -sdk iphonesimulator
+          -destination 'generic/platform=iOS Simulator'
+          -derivedDataPath apps/ios/build/DerivedData
+          CODE_SIGNING_ALLOWED=NO
+          build
+
+      - name: Install and launch iOS application
+        run: >-
+          ./tools/mobile/verify_ios_simulator.sh
+          apps/ios/build/DerivedData/Build/Products/Debug-iphonesimulator/Blowhard.app
+          io.github.artemidius.blowhard
+
       - name: Upload Apple evidence
         if: ${{ always() }}
         uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
           name: apple-shared-evidence
           path: |
+            apps/ios/build/DerivedData/Build/Products/Debug-iphonesimulator/Blowhard.app/
+            apps/ios-shared/build/test-results/iosSimulatorArm64Test/
             adapters/**/build/test-results/iosSimulatorArm64Test/
             core/**/build/test-results/iosSimulatorArm64Test/
             shared-ui/build/test-results/iosSimulatorArm64Test/

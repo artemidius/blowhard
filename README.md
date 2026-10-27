@@ -6,8 +6,9 @@ A desktop-first Kotlin Multiplatform client for Mistral AI and an inspectable AI
 
 The current milestone demonstrates an end-to-end document-to-meeting-note workflow: bounded local
 import, explicit provider processing, structured evidence-linked output, typed editing, measurable
-evaluation, scoped read tools, exact mutation approval, and crash-safe persistence. The shared
-presentation module also compiles for Android and iOS.
+evaluation, scoped read tools, exact mutation approval, and crash-safe persistence. Dedicated
+Android and iOS application shells render the shared connection workflow and fail closed until
+their native credential adapters are installed.
 
 If you are reviewing the repository, start with the
 [five-minute reviewer guide](docs/reviewer-guide.md), the
@@ -28,8 +29,8 @@ the shared architecture.
 ## Prerequisites
 
 - JDK 21
-- Android SDK 36 for Android compilation
-- Xcode for iOS compilation; the shared UI targets iOS 14 and newer
+- Android SDK 37 for Android compilation
+- Xcode 16 or newer for the iOS 15 application target
 - Gitleaks 8.30 or newer for the local security gate
 
 The toolchain is pinned in the Gradle version catalog and documented in
@@ -218,6 +219,19 @@ register tools, escape document scope, or authorize a mutation. See the
 [`ADR 0031`](docs/decisions/0031-bounded-tool-orchestration.md), and
 [`ADR 0032`](docs/decisions/0032-exact-consent-and-no-replay-writes.md).
 
+## Run the mobile shells
+
+Install the Android debug application on a connected API 26 or newer device or emulator:
+
+```shell
+./gradlew :apps:android:installDebug
+```
+
+Open `apps/ios/Blowhard.xcodeproj` in Xcode to run the iOS 15 or newer application on an Apple
+silicon simulator or device. The Xcode build invokes the narrow `apps:ios-shared` Kotlin framework
+automatically. These initial hosts expose the real shared connection UI but intentionally cannot
+store a credential or make a provider call yet.
+
 Reproduce the 12-case synthetic meeting-note evaluation without a credential or network call:
 
 ```shell
@@ -261,14 +275,14 @@ Generated API documentation is written to `build/dokka/html`, and the XML covera
 written to `build/reports/kover/report.xml`.
 
 GitHub Actions builds and tests the desktop JVM application on pinned Linux, Windows, and macOS
-runners. Separate jobs compile Android shared code with host tests and compile Apple device and
-simulator targets with simulator tests. The workflow uses read-only permissions and no provider
-credentials.
+runners. Separate jobs build and lint the Android application and compile, install, and launch the
+iOS application with shared simulator tests. The workflow uses read-only permissions
+and no provider credentials.
 
 On macOS, also verify the shared iOS target:
 
 ```shell
-./gradlew :shared-ui:compileKotlinIosSimulatorArm64
+./gradlew :apps:ios-shared:compileKotlinIosSimulatorArm64
 ```
 
 ## Native desktop packages
