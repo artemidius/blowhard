@@ -3,6 +3,20 @@
 The shared UI is a consumer of the public run contract. It never calls a provider adapter and never
 collects generation work directly.
 
+## Workspace interaction
+
+The dark workspace uses orange accents for primary actions and focus. Its orbital artwork is
+static, with no continuous motion. The welcome layout adapts to both width and height; starter
+cards populate an editable draft without submitting a request. The composer groups text, optional
+image attachment, and Send or Stop in one surface and retains the keyboard send shortcut.
+
+The header keeps the current model discoverable and moves deletion into a secondary menu, followed
+by the existing confirmation. Compact layouts place the model shortcut on its own row. History
+shows active and exceptional run states without repeating successful completion labels. Settings
+keep connection and model controls visible, with generation parameters behind a disclosure button.
+
+## State ownership
+
 ```mermaid
 flowchart LR
     UI[Compose screen] -->|ConversationAction| Presenter[ConversationPresenter]

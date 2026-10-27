@@ -17,6 +17,10 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
@@ -32,6 +36,7 @@ internal fun ConnectionSettingsScreen(
     onAction: (ConnectionSettingsAction) -> Unit,
     onBack: (() -> Unit)?,
 ) {
+    var showGenerationSettings by remember { mutableStateOf(false) }
     Box(
         modifier = Modifier.fillMaxSize().background(MaterialTheme.colorScheme.background),
         contentAlignment = Alignment.TopCenter,
@@ -48,7 +53,10 @@ internal fun ConnectionSettingsScreen(
             state.notice?.let { SettingsNotice(it, onAction) }
             CredentialSettingsSection(state.settings, onAction)
             ModelSettingsSection(state.settings, onAction)
-            GenerationParametersSection(state.settings, onAction)
+            TextButton(onClick = { showGenerationSettings = !showGenerationSettings }) {
+                Text(if (showGenerationSettings) "Hide generation settings −" else "Generation settings +")
+            }
+            if (showGenerationSettings) GenerationParametersSection(state.settings, onAction)
             LiveReadinessSection(state.settings)
         }
     }

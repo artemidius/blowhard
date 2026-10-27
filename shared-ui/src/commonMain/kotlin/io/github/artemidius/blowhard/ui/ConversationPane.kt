@@ -3,6 +3,7 @@
 package io.github.artemidius.blowhard.ui
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -11,18 +12,23 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import io.github.artemidius.blowhard.core.api.ConnectionSettingsState
-import io.github.artemidius.blowhard.core.api.GenerationMode
 import io.github.artemidius.blowhard.core.api.ImportedDocument
 import io.github.artemidius.blowhard.core.api.RunId
 import io.github.artemidius.blowhard.ui.presentation.ConversationAction
@@ -41,7 +47,7 @@ internal fun ConversationPane(
 ) {
     Column(Modifier.fillMaxSize(), horizontalAlignment = Alignment.CenterHorizontally) {
         if (compact) CompactConversationNavigation(state, onAction, onOpenSettings, onOpenDocuments)
-        ConversationHeader(state, connection, onAction, onOpenSettings)
+        ConversationHeader(state, connection, onAction, onOpenSettings, compact)
         HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
         MessageList(
             messages = state.selectedConversation.messages,
@@ -73,46 +79,64 @@ private fun ConversationHeader(
     connection: ConnectionSettingsState,
     onAction: (ConversationAction) -> Unit,
     onOpenSettings: () -> Unit,
+    compact: Boolean,
 ) {
-    Row(
+    Column(
         modifier = Modifier.fillMaxWidth().padding(horizontal = 24.dp, vertical = 18.dp),
-        horizontalArrangement = Arrangement.spacedBy(12.dp),
     ) {
-        Column(Modifier.weight(1f)) {
-            Text(
-                state.selectedConversation.title,
-                style = MaterialTheme.typography.titleMedium,
-                fontWeight = FontWeight.SemiBold,
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis,
-            )
-            Text(
-                "Next message • ${connection.currentTargetDescription()}",
-                style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
-            )
+        Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+            Column(Modifier.weight(1f)) {
+                Text(
+                    state.selectedConversation.title,
+                    style = MaterialTheme.typography.titleMedium,
+                    fontWeight = FontWeight.SemiBold,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
+                )
+                Text(
+                    if (state.selectedConversation.runState.isActive) {
+                        "Mistral is responding…"
+                    } else {
+                        "Your space to think"
+                    },
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                )
+            }
+            if (!compact) ModelShortcut(connection, onOpenSettings)
+            ConversationMenu(state, onAction)
         }
-        TextButton(
-            onClick = {
-                onAction(ConversationAction.DeleteConversationRequested(state.selectedConversationId))
-            },
-            enabled = !state.selectedConversation.runState.isActive,
-        ) {
-            Text("Delete")
-        }
-        TextButton(onClick = onOpenSettings, modifier = Modifier.widthIn(max = 240.dp)) {
-            Text(
-                connection.selectedModelId?.let { "Model: $it" } ?: "Choose model",
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis,
-            )
-        }
+        if (compact) ModelShortcut(connection, onOpenSettings)
     }
 }
 
-private fun ConnectionSettingsState.currentTargetDescription(): String = when (mode) {
-    GenerationMode.DEMO -> "Local demo · no API key needed"
-    GenerationMode.LIVE -> selectedModelId?.let { "Live Mistral • $it" } ?: "Live configuration unavailable"
+@Composable
+private fun ModelShortcut(connection: ConnectionSettingsState, onOpenSettings: () -> Unit) {
+    TextButton(onClick = onOpenSettings, modifier = Modifier.widthIn(max = 240.dp)) {
+        Text(
+            connection.selectedModelId?.let { "Model: $it" } ?: "Choose model",
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis,
+        )
+    }
+}
+
+@Composable
+private fun ConversationMenu(state: ConversationUiState, onAction: (ConversationAction) -> Unit) {
+    var expanded by remember { mutableStateOf(false) }
+    Box {
+        TextButton(onClick = { expanded = true }) { Text("More") }
+        DropdownMenu(expanded = expanded, onDismissRequest = { expanded = false }) {
+            DropdownMenuItem(
+                text = { Text("Delete conversation") },
+                enabled = !state.selectedConversation.runState.isActive,
+                onClick = {
+                    expanded = false
+                    onAction(ConversationAction.DeleteConversationRequested(state.selectedConversationId))
+                },
+            )
+        }
+    }
 }
 
 @Composable
