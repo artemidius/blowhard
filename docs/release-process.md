@@ -24,8 +24,8 @@ must continue to disclose the current ad hoc/unsigned status.
 From **Actions → Release candidate → Run workflow**:
 
 1. Select `main`.
-2. Enter the exact tag implied by `blowhardReleaseVersion`; for the foundation milestone this is
-   `v0.1.0`.
+2. Enter the exact tag implied by `blowhardReleaseVersion`; for the current milestone this is
+   `v0.2.0`.
 3. Review the validation, quality, Linux, Windows, and macOS jobs.
 4. Approve the waiting `release` environment only after all build evidence is green.
 
@@ -51,10 +51,10 @@ files.
 ## Review and publish
 
 Successful automation creates a draft targeting the reviewed source commit. Publishing the draft
-materializes tag `v0.1.0` and makes the prerelease public. Before publishing it in GitHub Releases:
+materializes tag `v0.2.0` and makes the prerelease public. Before publishing it in GitHub Releases:
 
 - compare the displayed tag commit with the workflow source revision;
-- review `docs/releases/v0.1.0.md` and every disclosed limitation;
+- review `docs/releases/v0.2.0.md` and every disclosed limitation;
 - confirm all expected assets are present and no duplicate or stale draft exists;
 - download at least the reference macOS package and verify its checksum and installation guide;
 - leave the release as a prerelease while packages lack trusted publisher signatures.

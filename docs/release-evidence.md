@@ -6,7 +6,7 @@ and checksum file beside the package artifact.
 
 ## Version identity
 
-The public foundation release is `0.1.0`. Gradle reads that value from
+The public showcase release is `0.2.0`. Gradle reads that value from
 `blowhardReleaseVersion` in `gradle.properties`, and all projects inherit it.
 
 Native package tools use the separate installer schema version `1.0.0`. The JDK's macOS packaging

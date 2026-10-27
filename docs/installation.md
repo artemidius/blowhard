@@ -1,12 +1,12 @@
 # Install a desktop package
 
 Blowhard does not publish a general-availability release yet. The reviewed
-[`v0.1.0` prerelease](https://github.com/artemidius/blowhard/releases/tag/v0.1.0) provides native
+[`v0.2.0` prerelease](https://github.com/artemidius/blowhard/releases/tag/v0.2.0) provides native
 packages for portfolio evaluation. Pull-request artifacts remain short-lived verification
 candidates. Use a package only when you trust the workflow and source revision that produced it.
 
 Each release target provides the installer, a manifest, `SHA256SUMS`, and a host-specific
-dependency/license report. The public product version is `0.1.0`; native filenames
+dependency/license report. The public product version is `0.2.0`; native filenames
 currently use installer schema `1.0.0` because the macOS packager requires a positive major version.
 
 ## Verify before installation
