@@ -1,5 +1,6 @@
 public final class io/github/artemidius/blowhard/ui/BlowhardAppKt {
 	public static final fun BlowhardApp (Lio/github/artemidius/blowhard/ui/presentation/ConversationPresenter;Lio/github/artemidius/blowhard/ui/presentation/ConnectionSettingsPresenter;Lio/github/artemidius/blowhard/ui/presentation/RunInspectorPresenter;Lio/github/artemidius/blowhard/ui/presentation/DocumentLibraryPresenter;Lio/github/artemidius/blowhard/ui/presentation/MeetingNotePresenter;ZLandroidx/compose/runtime/Composer;II)V
+	public static final fun BlowhardConnectionApp (Lio/github/artemidius/blowhard/ui/presentation/ConnectionSettingsPresenter;Landroidx/compose/runtime/Composer;I)V
 }
 
 public final class io/github/artemidius/blowhard/ui/ComposableSingletons$ComposerPanelKt {

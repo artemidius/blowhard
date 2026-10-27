@@ -1,7 +1,9 @@
 [versions]
 agp = "9.5.1"
-android-compile-sdk = "36"
+android-compile-sdk = "37"
 android-min-sdk = "26"
+android-target-sdk = "37"
+androidx-activity = "1.13.0"
 compose = "1.12.2"
 detekt = "2.0.0-alpha.6"
 dokka = "2.3.0"
@@ -17,6 +19,7 @@ spotless = "8.11.0"
 sqldelight = "2.4.1"
 
 [libraries]
+androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "androidx-activity" }
 compose-foundation = { module = "org.jetbrains.compose.foundation:foundation", version.ref = "compose" }
 compose-material3 = { module = "org.jetbrains.compose.material3:material3", version.ref = "material3" }
 compose-runtime = { module = "org.jetbrains.compose.runtime:runtime", version.ref = "compose" }
@@ -37,6 +40,7 @@ sqldelight-runtime = { module = "app.cash.sqldelight:runtime", version.ref = "sq
 sqldelight-sqlite-driver = { module = "app.cash.sqldelight:sqlite-driver", version.ref = "sqldelight" }
 
 [plugins]
+android-application = { id = "com.android.application", version.ref = "agp" }
 android-multiplatform-library = { id = "com.android.kotlin.multiplatform.library", version.ref = "agp" }
 compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 compose-multiplatform = { id = "org.jetbrains.compose", version.ref = "compose" }

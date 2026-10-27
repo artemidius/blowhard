@@ -7,6 +7,7 @@ private fun String.isArchitectureDependencyConfiguration(): Boolean = this == "a
     endsWith("Implementation")
 
 plugins {
+    alias(libs.plugins.android.application) apply false
     alias(libs.plugins.android.multiplatform.library) apply false
     alias(libs.plugins.compose.compiler) apply false
     alias(libs.plugins.compose.multiplatform) apply false
@@ -28,6 +29,7 @@ subprojects {
 }
 
 val documentedModules = listOf(
+    project(":apps:android"),
     project(":apps:evaluation"),
     project(":adapters:documents"),
     project(":adapters:fixture"),
@@ -182,6 +184,7 @@ tasks.matching { it.name == "koverXmlReport" || it.name == "koverVerify" }.confi
 }
 
 private val allowedProjectDependencies = mapOf(
+    ":apps:android" to setOf(":core:api", ":shared-ui"),
     ":adapters:documents" to setOf(":core:domain"),
     ":adapters:fixture" to setOf(":core:domain"),
     ":adapters:mistral" to setOf(":core:domain"),
@@ -249,6 +252,9 @@ tasks.register("qualityCheck") {
         "koverVerify",
         "koverXmlReport",
         secretScan,
+        ":apps:android:assembleDebug",
+        ":apps:android:lintDebug",
+        ":apps:android:testDebugUnitTest",
         ":core:api:checkKotlinAbi",
         ":core:api:desktopTest",
         ":core:application:checkKotlinAbi",
