@@ -29,6 +29,7 @@ subprojects {
 }
 
 val documentedModules = listOf(
+    project(":app-composition"),
     project(":apps:android"),
     project(":apps:ios-shared"),
     project(":apps:evaluation"),
@@ -102,6 +103,10 @@ detekt {
                 exclude("**/build/**")
             },
             fileTree("core") {
+                include("**/*.kt")
+                exclude("**/build/**")
+            },
+            fileTree("app-composition") {
                 include("**/*.kt")
                 exclude("**/build/**")
             },
@@ -185,6 +190,7 @@ tasks.matching { it.name == "koverXmlReport" || it.name == "koverVerify" }.confi
 }
 
 private val allowedProjectDependencies = mapOf(
+    ":app-composition" to setOf(":core:application", ":shared-ui"),
     ":apps:android" to setOf(":core:api", ":shared-ui"),
     ":apps:ios-shared" to setOf(":core:api", ":shared-ui"),
     ":adapters:documents" to setOf(":core:domain"),
@@ -193,6 +199,7 @@ private val allowedProjectDependencies = mapOf(
     ":adapters:platform" to setOf(":core:domain"),
     ":adapters:persistence" to setOf(":core:domain"),
     ":apps:desktop" to setOf(
+        ":app-composition",
         ":adapters:fixture",
         ":adapters:documents",
         ":adapters:mistral",
@@ -254,6 +261,8 @@ tasks.register("qualityCheck") {
         "koverVerify",
         "koverXmlReport",
         secretScan,
+        ":app-composition:checkKotlinAbi",
+        ":app-composition:desktopTest",
         ":apps:android:assembleDebug",
         ":apps:android:lintDebug",
         ":apps:android:testDebugUnitTest",

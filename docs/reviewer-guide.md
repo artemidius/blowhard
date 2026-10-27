@@ -7,14 +7,16 @@ creates an independently stored local copy.
 ## 1. Start with the boundaries
 
 The project keeps portable contracts in `core:api` and `core:domain`, application policy in `core:application`, and
-provider, persistence, and platform details in adapters and the desktop composition root. Gradle rejects forbidden
-module dependencies.
+provider, persistence, and platform details in adapters and platform composition roots. The portable
+`app-composition` module owns shared application services and presenters without selecting native implementations.
+Gradle rejects forbidden module dependencies.
 
 Read these representative files:
 
 - `core/application/.../DefaultMeetingNotes.kt` — application-owned generation and validation;
 - `core/application/.../BoundedToolOrchestrator.kt` — finite tool-loop state machine;
 - `core/application/.../ToolApprovalGate.kt` — consent bound to an exact run, call, arguments, target, and expiry;
+- `app-composition/.../ApplicationRuntime.kt` — shared service assembly and deterministic lifetime ownership;
 - `adapters/persistence/.../SqlDelightMeetingNoteStore.kt` — transactional note and receipt persistence;
 - `apps/desktop/.../DesktopMeetingNoteApprovalPort.kt` — desktop composition without leaking platform details into UI.
 

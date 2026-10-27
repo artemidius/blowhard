@@ -56,6 +56,7 @@ jobs:
         with:
           name: quality-evidence
           path: |
+            app-composition/build/test-results/
             apps/desktop/build/reports/dependency-license/
             build/reports/detekt/
             build/reports/kover/
@@ -208,6 +209,7 @@ jobs:
       - name: Build Android application and run host tests
         run: >-
           ./gradlew --no-daemon
+          :app-composition:testAndroidHostTest
           :apps:android:assembleDebug
           :apps:android:lintDebug
           :apps:android:testDebugUnitTest
@@ -248,6 +250,7 @@ jobs:
             apps/android/build/reports/androidTests/managedDevice/
             apps/android/build/outputs/androidTest-results/managedDevice/
             apps/android/build/test-results/testDebugUnitTest/
+            app-composition/build/test-results/testAndroidHostTest/
             adapters/**/build/test-results/testAndroidHostTest/
             core/**/build/test-results/testAndroidHostTest/
             shared-ui/build/test-results/testAndroidHostTest/
@@ -284,6 +287,8 @@ jobs:
       - name: Compile Apple shared code and run simulator tests
         run: >-
           ./gradlew --no-daemon
+          :app-composition:compileKotlinIosArm64
+          :app-composition:iosSimulatorArm64Test
           :apps:ios-shared:iosSimulatorArm64Test
           :shared-ui:compileKotlinIosArm64
           :shared-ui:compileKotlinIosSimulatorArm64
@@ -330,6 +335,7 @@ jobs:
           path: |
             apps/ios/build/DerivedData/Build/Products/Debug-iphonesimulator/Blowhard.app/
             apps/ios-shared/build/test-results/iosSimulatorArm64Test/
+            app-composition/build/test-results/iosSimulatorArm64Test/
             adapters/**/build/test-results/iosSimulatorArm64Test/
             core/**/build/test-results/iosSimulatorArm64Test/
             shared-ui/build/test-results/iosSimulatorArm64Test/

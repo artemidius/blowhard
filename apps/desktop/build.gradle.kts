@@ -62,6 +62,7 @@ val verifyLicenseInventory = tasks.register<Exec>("verifyLicenseInventory") {
 
 dependencies {
     implementation(compose.desktop.currentOs)
+    implementation(project(":app-composition"))
     implementation(project(":adapters:documents"))
     implementation(project(":adapters:fixture"))
     implementation(project(":adapters:mistral"))
