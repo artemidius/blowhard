@@ -23,7 +23,7 @@ Read these representative files:
 1. Import a PDF, PNG, or JPEG into app-owned storage.
 2. Open the document and, when needed, explicitly request OCR.
 3. Generate structured meeting notes with a verified Mistral model.
-4. Edit the typed summary, decisions, actions, and risks while retaining source references.
+4. Edit the typed title, decisions, and action items while retaining source references.
 5. Select **Approve local copy** and inspect the exact content and destination.
 6. Approve or deny the operation. Approval is single-use; denial writes nothing.
 
