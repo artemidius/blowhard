@@ -2,6 +2,9 @@
 
 package io.github.artemidius.blowhard.ui
 
+import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.interaction.collectIsFocusedAsState
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -17,6 +20,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
@@ -29,6 +33,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.key.Key
 import androidx.compose.ui.input.key.KeyEventType
 import androidx.compose.ui.input.key.isCtrlPressed
@@ -56,6 +61,8 @@ internal fun ComposerPanel(
     onAction: (ConversationAction) -> Unit,
 ) {
     val composerFocus = remember { FocusRequester() }
+    val inputInteraction = remember { MutableInteractionSource() }
+    val inputFocused by inputInteraction.collectIsFocusedAsState()
     LaunchedEffect(state.selectedConversationId, state.selectedConversation.runState.isActive) {
         if (!state.selectedConversation.runState.isActive) composerFocus.requestFocus()
     }
@@ -63,9 +70,25 @@ internal fun ComposerPanel(
         modifier = Modifier.widthIn(max = 920.dp).fillMaxWidth().padding(horizontal = 24.dp, vertical = 16.dp),
         verticalArrangement = Arrangement.spacedBy(10.dp),
     ) {
-        ImageAttachmentSelector(state, connection, availableImages, onOpenDocuments, onAction)
-        ComposerInput(state, connection, composerFocus, onAction)
-        ComposerActions(state = state, onAction = onAction)
+        Surface(
+            shape = MaterialTheme.shapes.large,
+            color = MaterialTheme.colorScheme.surfaceContainer,
+            border = BorderStroke(
+                1.dp,
+                if (inputFocused) {
+                    MaterialTheme.colorScheme.primary.copy(alpha = 0.5f)
+                } else {
+                    MaterialTheme.colorScheme.outlineVariant
+                },
+            ),
+            shadowElevation = 12.dp,
+        ) {
+            Column(Modifier.padding(12.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                ComposerInput(state, connection, composerFocus, inputInteraction, onAction)
+                ImageAttachmentSelector(state, connection, availableImages, onOpenDocuments, onAction)
+                ComposerActions(state = state, onAction = onAction)
+            }
+        }
         if (connection.mode == GenerationMode.DEMO) ScenarioSelector(state = state, onAction = onAction)
     }
 }
@@ -86,11 +109,7 @@ private fun ImageAttachmentSelector(
     when {
         state.selectedImage != null -> SelectedImageRow(state, enabled, onAction)
 
-        !modelSupportsVision -> Text(
-            "Image questions require a model that explicitly supports vision.",
-            style = MaterialTheme.typography.bodySmall,
-            color = MaterialTheme.colorScheme.onSurfaceVariant,
-        )
+        !modelSupportsVision -> Unit
 
         availableImages.isEmpty() -> TextButton(onClick = onOpenDocuments, enabled = enabled) {
             Text("+ Import an image")
@@ -156,6 +175,7 @@ private fun ComposerInput(
     state: ConversationUiState,
     connection: ConnectionSettingsState,
     focusRequester: FocusRequester,
+    interactionSource: MutableInteractionSource,
     onAction: (ConversationAction) -> Unit,
 ) {
     OutlinedTextField(
@@ -176,11 +196,12 @@ private fun ComposerInput(
                 }
             },
         shape = MaterialTheme.shapes.large,
+        interactionSource = interactionSource,
         colors = OutlinedTextFieldDefaults.colors(
             focusedContainerColor = MaterialTheme.colorScheme.surfaceContainer,
             unfocusedContainerColor = MaterialTheme.colorScheme.surfaceContainer,
-            focusedBorderColor = MaterialTheme.colorScheme.primary,
-            unfocusedBorderColor = MaterialTheme.colorScheme.outlineVariant,
+            focusedBorderColor = Color.Transparent,
+            unfocusedBorderColor = Color.Transparent,
         ),
         placeholder = { Text(connection.composerPlaceholder()) },
         minLines = 2,
@@ -192,7 +213,7 @@ private fun ComposerInput(
 private fun ConnectionSettingsState.composerPlaceholder(): String = if (mode == GenerationMode.DEMO) {
     "Try a message in the offline demo…"
 } else {
-    "Send a prompt to ${selectedModelId ?: "the live provider"}…"
+    "Ask anything. Start something."
 }
 
 @Composable

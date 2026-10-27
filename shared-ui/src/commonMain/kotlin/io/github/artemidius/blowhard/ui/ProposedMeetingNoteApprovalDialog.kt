@@ -59,11 +59,7 @@ internal fun ProposedMeetingNoteApprovalDialog(
             }
         },
         confirmButton = {
-            Button(
-                enabled = state.canApprove,
-                onClick = onApprove,
-                modifier = Modifier.semantics { contentDescription = NOTE_APPROVAL_CONFIRM_DESCRIPTION },
-            ) { Text(if (state.status == ProposedMeetingNoteStatus.WRITING) "Writing…" else "Approve write") }
+            ApprovalConfirmButton(state, onApprove, onDismiss)
         },
         dismissButton = {
             TextButton(
@@ -73,6 +69,19 @@ internal fun ProposedMeetingNoteApprovalDialog(
             ) { Text("Deny") }
         },
     )
+}
+
+@Composable
+private fun ApprovalConfirmButton(state: ProposedMeetingNoteUiState, onApprove: () -> Unit, onDismiss: () -> Unit) {
+    if (state.status != ProposedMeetingNoteStatus.PENDING && state.status != ProposedMeetingNoteStatus.WRITING) {
+        Button(onClick = onDismiss) { Text("Done") }
+    } else {
+        Button(
+            enabled = state.canApprove,
+            onClick = onApprove,
+            modifier = Modifier.semantics { contentDescription = NOTE_APPROVAL_CONFIRM_DESCRIPTION },
+        ) { Text(if (state.status == ProposedMeetingNoteStatus.WRITING) "Writing…" else "Approve write") }
+    }
 }
 
 @Composable
