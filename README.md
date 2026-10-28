@@ -239,8 +239,9 @@ disabled for app-owned data.
 
 Open `apps/ios/Blowhard.xcodeproj` in Xcode to run the iOS 15 or newer application on an Apple
 silicon simulator or device. The Xcode build invokes the narrow `apps:ios-shared` Kotlin framework
-automatically. The iOS shell has a device-bound Keychain adapter; provider composition is introduced
-separately so each platform increment remains independently reviewable.
+automatically. The iOS host stores its Mistral credential in the device-bound Keychain, starts in
+live-only mode, verifies any saved credential at launch, and discovers compatible models before
+enabling provider actions. Other provider operations remain inactive until their own increments.
 
 Reproduce the 12-case synthetic meeting-note evaluation without a credential or network call:
 

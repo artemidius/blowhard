@@ -4,11 +4,14 @@ package io.github.artemidius.blowhard.ios
 
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.ui.window.ComposeUIViewController
+import io.github.artemidius.blowhard.adapters.mistral.MistralModelCatalog
+import io.github.artemidius.blowhard.adapters.mistral.asMistralCredentialProvider
+import io.github.artemidius.blowhard.adapters.mobile.IosCredentialStores
 import io.github.artemidius.blowhard.composition.ApplicationRuntime
 import io.github.artemidius.blowhard.composition.ApplicationRuntimeConfiguration
 import io.github.artemidius.blowhard.composition.ApplicationRuntimeDependencies
-import io.github.artemidius.blowhard.composition.FailClosedConnectionSettings
 import io.github.artemidius.blowhard.core.api.ConversationId
+import io.github.artemidius.blowhard.core.application.DefaultConnectionSettings
 import io.github.artemidius.blowhard.core.application.SequentialRunIdFactory
 import io.github.artemidius.blowhard.ui.BlowhardConnectionApp
 import io.github.artemidius.blowhard.ui.presentation.ConversationUiModel
@@ -34,11 +37,13 @@ public fun BlowhardViewController(): UIViewController {
 
 private class IosApplicationRuntime {
     private val closeScope = CoroutineScope(SupervisorJob() + Dispatchers.Default)
+    private val providers = createProviderComposition()
     val runtime = ApplicationRuntime.create(
-        dependencies = ApplicationRuntimeDependencies.failClosed(FailClosedConnectionSettings()),
+        dependencies = ApplicationRuntimeDependencies.failClosed(providers.connectionSettings),
         configuration = ApplicationRuntimeConfiguration(
             initialState = initialConversationState(),
             runIdFactory = SequentialRunIdFactory("ios-${NSUUID().UUIDString}"),
+            autoVerifyCredential = true,
         ),
     )
 
@@ -47,10 +52,32 @@ private class IosApplicationRuntime {
             try {
                 runtime.close()
             } finally {
-                closeScope.cancel()
+                try {
+                    providers.close()
+                } finally {
+                    closeScope.cancel()
+                }
             }
         }
     }
+}
+
+private class IosProviderComposition(
+    val connectionSettings: DefaultConnectionSettings,
+    private val modelCatalog: MistralModelCatalog,
+) {
+    fun close(): Unit = modelCatalog.close()
+}
+
+private fun createProviderComposition(): IosProviderComposition {
+    val credentialStore = IosCredentialStores.mistralApiKey()
+    val modelCatalog = MistralModelCatalog.create(credentialStore.asMistralCredentialProvider())
+    val connectionSettings = DefaultConnectionSettings(
+        credentials = credentialStore,
+        catalog = modelCatalog,
+        startInLiveMode = true,
+    )
+    return IosProviderComposition(connectionSettings, modelCatalog)
 }
 
 private fun initialConversationState(): ConversationUiState {

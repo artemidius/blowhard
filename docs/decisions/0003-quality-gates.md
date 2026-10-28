@@ -16,7 +16,9 @@ Expose one Gradle entry point, `qualityCheck`, that runs the project checks requ
 - Spotless with ktlint for reproducible source and build-script formatting.
 - Detekt with strict KDoc and focused size limits for Kotlin static analysis.
 - desktop-hosted common tests and Kover verification for executable core rules.
-- Kotlin Gradle plugin ABI validation for public core and adapter contracts.
+- Kotlin Gradle plugin ABI validation for public core and adapter contracts. The iOS application
+  boundary is validated by the Apple CI job because its dependency graph includes native Apple
+  interop libraries that cannot be resolved reliably on Linux.
 - Dokka generation for aggregated core and adapter API documentation.
 - the existing project-dependency allowlist for module direction.
 - Gitleaks against Git history and the working tree, with narrow generated-state and ignored local
