@@ -140,7 +140,7 @@ private fun BrandHeader() {
 }
 
 @Composable
-private fun ConversationItem(conversation: ConversationUiModel, selected: Boolean, onClick: () -> Unit) {
+internal fun ConversationItem(conversation: ConversationUiModel, selected: Boolean, onClick: () -> Unit) {
     Card(
         modifier = Modifier
             .fillMaxWidth()

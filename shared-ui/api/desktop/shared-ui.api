@@ -3,6 +3,10 @@ public final class io/github/artemidius/blowhard/ui/BlowhardAppKt {
 	public static final fun BlowhardConnectionApp (Lio/github/artemidius/blowhard/ui/presentation/ConnectionSettingsPresenter;Landroidx/compose/runtime/Composer;I)V
 }
 
+public final class io/github/artemidius/blowhard/ui/BlowhardMobileAppKt {
+	public static final fun BlowhardMobileApp (Lio/github/artemidius/blowhard/ui/presentation/ConversationPresenter;Lio/github/artemidius/blowhard/ui/presentation/ConnectionSettingsPresenter;Lio/github/artemidius/blowhard/ui/presentation/RunInspectorPresenter;Lio/github/artemidius/blowhard/ui/presentation/DocumentLibraryPresenter;Lio/github/artemidius/blowhard/ui/presentation/MeetingNotePresenter;Landroidx/compose/runtime/Composer;I)V
+}
+
 public final class io/github/artemidius/blowhard/ui/ComposableSingletons$ComposerPanelKt {
 	public static final field INSTANCE Lio/github/artemidius/blowhard/ui/ComposableSingletons$ComposerPanelKt;
 	public fun <init> ()V
@@ -89,6 +93,13 @@ public final class io/github/artemidius/blowhard/ui/ComposableSingletons$Message
 	public final fun getLambda$-1154306072$Blowhard_shared_ui ()Lkotlin/jvm/functions/Function3;
 	public final fun getLambda$1945003664$Blowhard_shared_ui ()Lkotlin/jvm/functions/Function3;
 	public final fun getLambda$218654728$Blowhard_shared_ui ()Lkotlin/jvm/functions/Function3;
+}
+
+public final class io/github/artemidius/blowhard/ui/ComposableSingletons$MobileConversationListScreenKt {
+	public static final field INSTANCE Lio/github/artemidius/blowhard/ui/ComposableSingletons$MobileConversationListScreenKt;
+	public fun <init> ()V
+	public final fun getLambda$1283888091$Blowhard_shared_ui ()Lkotlin/jvm/functions/Function3;
+	public final fun getLambda$1856578842$Blowhard_shared_ui ()Lkotlin/jvm/functions/Function3;
 }
 
 public final class io/github/artemidius/blowhard/ui/ComposableSingletons$NoticePanelKt {
