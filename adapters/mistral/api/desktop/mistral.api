@@ -27,6 +27,15 @@ public final class io/github/artemidius/blowhard/adapters/mistral/MistralDocumen
 	public final fun create (Lio/github/artemidius/blowhard/adapters/mistral/MistralCredentialProvider;)Lio/github/artemidius/blowhard/adapters/mistral/MistralDocumentOcrPort;
 }
 
+public final class io/github/artemidius/blowhard/adapters/mistral/MistralLiveTextGenerationPort : io/github/artemidius/blowhard/core/domain/TextGenerationPort {
+	public static final field Companion Lio/github/artemidius/blowhard/adapters/mistral/MistralLiveTextGenerationPort$Companion;
+	public fun generate (Lio/github/artemidius/blowhard/core/domain/GenerationRequest;)Lkotlinx/coroutines/flow/Flow;
+}
+
+public final class io/github/artemidius/blowhard/adapters/mistral/MistralLiveTextGenerationPort$Companion {
+	public final fun create (Lio/github/artemidius/blowhard/adapters/mistral/MistralCredentialProvider;)Lio/github/artemidius/blowhard/adapters/mistral/MistralLiveTextGenerationPort;
+}
+
 public final class io/github/artemidius/blowhard/adapters/mistral/MistralMeetingNoteGenerationPort : io/github/artemidius/blowhard/core/domain/MeetingNoteGenerationPort {
 	public static final field Companion Lio/github/artemidius/blowhard/adapters/mistral/MistralMeetingNoteGenerationPort$Companion;
 	public final fun close ()V

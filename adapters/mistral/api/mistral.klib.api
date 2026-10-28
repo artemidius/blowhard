@@ -32,6 +32,14 @@ final class io.github.artemidius.blowhard.adapters.mistral/MistralDocumentOcrPor
     }
 }
 
+final class io.github.artemidius.blowhard.adapters.mistral/MistralLiveTextGenerationPort : io.github.artemidius.blowhard.core.domain/TextGenerationPort { // io.github.artemidius.blowhard.adapters.mistral/MistralLiveTextGenerationPort|null[0]
+    final fun generate(io.github.artemidius.blowhard.core.domain/GenerationRequest): kotlinx.coroutines.flow/Flow<io.github.artemidius.blowhard.core.domain/GenerationEvent> // io.github.artemidius.blowhard.adapters.mistral/MistralLiveTextGenerationPort.generate|generate(io.github.artemidius.blowhard.core.domain.GenerationRequest){}[0]
+
+    final object Companion { // io.github.artemidius.blowhard.adapters.mistral/MistralLiveTextGenerationPort.Companion|null[0]
+        final fun create(io.github.artemidius.blowhard.adapters.mistral/MistralCredentialProvider): io.github.artemidius.blowhard.adapters.mistral/MistralLiveTextGenerationPort // io.github.artemidius.blowhard.adapters.mistral/MistralLiveTextGenerationPort.Companion.create|create(io.github.artemidius.blowhard.adapters.mistral.MistralCredentialProvider){}[0]
+    }
+}
+
 final class io.github.artemidius.blowhard.adapters.mistral/MistralMeetingNoteGenerationPort : io.github.artemidius.blowhard.core.domain/MeetingNoteGenerationPort { // io.github.artemidius.blowhard.adapters.mistral/MistralMeetingNoteGenerationPort|null[0]
     final fun close() // io.github.artemidius.blowhard.adapters.mistral/MistralMeetingNoteGenerationPort.close|close(){}[0]
     final suspend fun generate(io.github.artemidius.blowhard.core.domain/MeetingNoteGenerationRequest): io.github.artemidius.blowhard.core.domain/MeetingNoteGenerationResult // io.github.artemidius.blowhard.adapters.mistral/MistralMeetingNoteGenerationPort.generate|generate(io.github.artemidius.blowhard.core.domain.MeetingNoteGenerationRequest){}[0]
