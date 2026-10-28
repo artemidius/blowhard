@@ -220,6 +220,7 @@ jobs:
           :adapters:documents:testAndroidHostTest
           :adapters:fixture:testAndroidHostTest
           :adapters:mistral:testAndroidHostTest
+          :adapters:mobile-platform:testAndroidHostTest
           :adapters:persistence:testAndroidHostTest
           :shared-ui:testAndroidHostTest
 
@@ -237,7 +238,10 @@ jobs:
           target: default
           arch: x86_64
           profile: pixel_2
-          script: ./gradlew --no-daemon :apps:android:connectedDebugAndroidTest
+          script: >-
+            ./gradlew --no-daemon
+            :adapters:mobile-platform:connectedAndroidDeviceTest
+            :apps:android:connectedDebugAndroidTest
 
       - name: Upload Android evidence
         if: ${{ always() }}
@@ -252,6 +256,8 @@ jobs:
             apps/android/build/test-results/testDebugUnitTest/
             app-composition/build/test-results/testAndroidHostTest/
             adapters/**/build/test-results/testAndroidHostTest/
+            adapters/mobile-platform/build/reports/androidTests/
+            adapters/mobile-platform/build/outputs/androidTest-results/
             core/**/build/test-results/testAndroidHostTest/
             shared-ui/build/test-results/testAndroidHostTest/
           if-no-files-found: warn
@@ -304,6 +310,8 @@ jobs:
           :adapters:mistral:compileKotlinIosArm64
           :adapters:mistral:compileKotlinIosSimulatorArm64
           :adapters:mistral:iosSimulatorArm64Test
+          :adapters:mobile-platform:compileKotlinIosArm64
+          :adapters:mobile-platform:iosSimulatorArm64Test
           :adapters:persistence:compileKotlinIosArm64
           :adapters:persistence:compileKotlinIosSimulatorArm64
           :adapters:persistence:iosSimulatorArm64Test
