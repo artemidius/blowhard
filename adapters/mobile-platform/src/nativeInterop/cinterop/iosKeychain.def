@@ -1,0 +1,4 @@
+package = io.github.artemidius.blowhard.adapters.mobile.keychain
+headers = BlowhardKeychain.h
+headerFilter = BlowhardKeychain.h
+linkerOpts = -framework Security -framework CoreFoundation
