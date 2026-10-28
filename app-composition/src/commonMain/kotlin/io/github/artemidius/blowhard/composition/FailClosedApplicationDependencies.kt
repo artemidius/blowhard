@@ -33,19 +33,21 @@ import io.github.artemidius.blowhard.ui.presentation.RunDiagnosticReportSaver
 import io.github.artemidius.blowhard.ui.presentation.UnavailableMeetingNoteApprovalPort
 import kotlinx.coroutines.flow.flowOf
 
-internal fun failClosedDependencies(connectionSettings: ConnectionSettings): ApplicationRuntimeDependencies =
-    ApplicationRuntimeDependencies(
-        connectionSettings = connectionSettings,
-        generation = FailClosedGeneration,
-        scenarioSelection = { _, _ -> },
-        clipboardWriter = UnavailableClipboard,
-        reportSaver = UnavailableReportSaver,
-        documentLibrary = UnavailableDocumentLibrary,
-        documentOcr = UnavailableDocumentOcr,
-        documentPicker = UnavailableDocumentPicker,
-        meetingNotes = UnavailableMeetingNotes,
-        meetingNoteApprovals = UnavailableMeetingNoteApprovalPort,
-    )
+internal fun failClosedDependencies(
+    connectionSettings: ConnectionSettings,
+    generation: TextGenerationPort = FailClosedGeneration,
+): ApplicationRuntimeDependencies = ApplicationRuntimeDependencies(
+    connectionSettings = connectionSettings,
+    generation = generation,
+    scenarioSelection = { _, _ -> },
+    clipboardWriter = UnavailableClipboard,
+    reportSaver = UnavailableReportSaver,
+    documentLibrary = UnavailableDocumentLibrary,
+    documentOcr = UnavailableDocumentOcr,
+    documentPicker = UnavailableDocumentPicker,
+    meetingNotes = UnavailableMeetingNotes,
+    meetingNoteApprovals = UnavailableMeetingNoteApprovalPort,
+)
 
 private object FailClosedGeneration : TextGenerationPort {
     override fun generate(request: io.github.artemidius.blowhard.core.domain.GenerationRequest) = flowOf(
