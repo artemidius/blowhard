@@ -59,15 +59,20 @@ internal fun ComposerPanel(
     availableImages: List<ImportedDocument>,
     onOpenDocuments: () -> Unit,
     onAction: (ConversationAction) -> Unit,
+    modifier: Modifier = Modifier,
+    mobile: Boolean = false,
 ) {
     val composerFocus = remember { FocusRequester() }
     val inputInteraction = remember { MutableInteractionSource() }
     val inputFocused by inputInteraction.collectIsFocusedAsState()
     LaunchedEffect(state.selectedConversationId, state.selectedConversation.runState.isActive) {
-        if (!state.selectedConversation.runState.isActive) composerFocus.requestFocus()
+        if (!mobile && !state.selectedConversation.runState.isActive) composerFocus.requestFocus()
     }
     Column(
-        modifier = Modifier.widthIn(max = 920.dp).fillMaxWidth().padding(horizontal = 24.dp, vertical = 16.dp),
+        modifier = modifier
+            .widthIn(max = 920.dp)
+            .fillMaxWidth()
+            .padding(horizontal = if (mobile) 12.dp else 24.dp, vertical = if (mobile) 10.dp else 16.dp),
         verticalArrangement = Arrangement.spacedBy(10.dp),
     ) {
         Surface(
@@ -86,7 +91,7 @@ internal fun ComposerPanel(
             Column(Modifier.padding(12.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
                 ComposerInput(state, connection, composerFocus, inputInteraction, onAction)
                 ImageAttachmentSelector(state, connection, availableImages, onOpenDocuments, onAction)
-                ComposerActions(state = state, onAction = onAction)
+                ComposerActions(state = state, onAction = onAction, showKeyboardShortcut = !mobile)
             }
         }
         if (connection.mode == GenerationMode.DEMO) ScenarioSelector(state = state, onAction = onAction)
@@ -244,7 +249,11 @@ private fun ScenarioSelector(state: ConversationUiState, onAction: (Conversation
 }
 
 @Composable
-private fun ComposerActions(state: ConversationUiState, onAction: (ConversationAction) -> Unit) {
+private fun ComposerActions(
+    state: ConversationUiState,
+    onAction: (ConversationAction) -> Unit,
+    showKeyboardShortcut: Boolean,
+) {
     Row(
         modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.spacedBy(8.dp),
@@ -253,8 +262,10 @@ private fun ComposerActions(state: ConversationUiState, onAction: (ConversationA
         Text(
             if (state.selectedConversation.runState.isActive) {
                 state.selectedConversation.runState.displayLabel()
-            } else {
+            } else if (showKeyboardShortcut) {
                 "⌘ / Ctrl + Enter to send"
+            } else {
+                "Ready"
             },
             modifier = Modifier
                 .semantics { liveRegion = LiveRegionMode.Polite },
