@@ -14,7 +14,7 @@ import io.github.artemidius.blowhard.composition.ApplicationRuntimeDependencies
 import io.github.artemidius.blowhard.core.api.ConversationId
 import io.github.artemidius.blowhard.core.application.DefaultConnectionSettings
 import io.github.artemidius.blowhard.core.application.SequentialRunIdFactory
-import io.github.artemidius.blowhard.ui.BlowhardConnectionApp
+import io.github.artemidius.blowhard.ui.BlowhardMobileApp
 import io.github.artemidius.blowhard.ui.presentation.ConversationUiModel
 import io.github.artemidius.blowhard.ui.presentation.ConversationUiState
 import kotlinx.coroutines.CoroutineScope
@@ -32,7 +32,14 @@ public fun BlowhardViewController(): UIViewController {
         DisposableEffect(owner) {
             onDispose(owner::close)
         }
-        BlowhardConnectionApp(owner.runtime.connectionSettingsPresenter)
+        val runtime = owner.runtime
+        BlowhardMobileApp(
+            conversationPresenter = runtime.conversationPresenter,
+            connectionSettingsPresenter = runtime.connectionSettingsPresenter,
+            runInspectorPresenter = runtime.runInspectorPresenter,
+            documentLibraryPresenter = runtime.documentLibraryPresenter,
+            meetingNotePresenter = runtime.meetingNotePresenter,
+        )
     }
 }
 
