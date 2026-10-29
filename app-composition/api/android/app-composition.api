@@ -55,6 +55,13 @@ public final class io/github/artemidius/blowhard/composition/ApplicationRuntimeD
 	public final fun failClosed (Lio/github/artemidius/blowhard/core/api/ConnectionSettings;)Lio/github/artemidius/blowhard/composition/ApplicationRuntimeDependencies;
 }
 
+public final class io/github/artemidius/blowhard/composition/ConversationHistoryPresentationKt {
+	public static final fun emptyConversationState (Lio/github/artemidius/blowhard/ui/presentation/UiNotice;)Lio/github/artemidius/blowhard/ui/presentation/ConversationUiState;
+	public static synthetic fun emptyConversationState$default (Lio/github/artemidius/blowhard/ui/presentation/UiNotice;ILjava/lang/Object;)Lio/github/artemidius/blowhard/ui/presentation/ConversationUiState;
+	public static final fun toConversationUiState (Lio/github/artemidius/blowhard/core/application/ConversationHistorySnapshot;)Lio/github/artemidius/blowhard/ui/presentation/ConversationUiState;
+	public static final fun unavailableConversationHistoryState ()Lio/github/artemidius/blowhard/ui/presentation/ConversationUiState;
+}
+
 public final class io/github/artemidius/blowhard/composition/FailClosedConnectionSettings : io/github/artemidius/blowhard/core/api/ConnectionSettings {
 	public fun <init> ()V
 	public fun acknowledgeLiveDataDisclosure (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;

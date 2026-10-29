@@ -1,4 +1,4 @@
-package io.github.artemidius.blowhard.desktop
+package io.github.artemidius.blowhard.composition
 
 import io.github.artemidius.blowhard.core.api.ConversationId
 import io.github.artemidius.blowhard.core.api.GenerationParameters
@@ -54,7 +54,7 @@ class ConversationHistoryPresentationTest {
     @Test
     fun `empty and unavailable history produce explicit deterministic workspaces`() {
         val empty = ConversationHistorySnapshot(emptyList(), 0).toConversationUiState()
-        val unavailable = unavailableHistoryState()
+        val unavailable = unavailableConversationHistoryState()
 
         assertEquals(ConversationId("conversation-1"), empty.selectedConversationId)
         assertEquals("New conversation", empty.selectedConversation.title)

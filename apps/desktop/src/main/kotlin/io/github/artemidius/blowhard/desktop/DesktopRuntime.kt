@@ -3,6 +3,7 @@ package io.github.artemidius.blowhard.desktop
 import io.github.artemidius.blowhard.composition.ApplicationRuntime
 import io.github.artemidius.blowhard.composition.ApplicationRuntimeConfiguration
 import io.github.artemidius.blowhard.composition.ApplicationRuntimeDependencies
+import io.github.artemidius.blowhard.composition.emptyConversationState
 import io.github.artemidius.blowhard.core.api.ConnectionSettings
 import io.github.artemidius.blowhard.core.api.DocumentLibrary
 import io.github.artemidius.blowhard.core.api.DocumentOcr
@@ -75,7 +76,7 @@ internal class DesktopRuntime private constructor(
             reportSaver: RunDiagnosticReportSaver = RunDiagnosticReportSaver {
                 RunDiagnosticReportSaveResult.UNAVAILABLE
             },
-            initialState: ConversationUiState = emptyDesktopConversationState(),
+            initialState: ConversationUiState = emptyConversationState(),
             conversationStore: ConversationStore? = null,
             closeHistoryResources: () -> Unit = {},
             closeProviderResources: () -> Unit = {},
