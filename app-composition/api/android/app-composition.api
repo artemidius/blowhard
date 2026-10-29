@@ -62,6 +62,21 @@ public final class io/github/artemidius/blowhard/composition/ConversationHistory
 	public static final fun unavailableConversationHistoryState ()Lio/github/artemidius/blowhard/ui/presentation/ConversationUiState;
 }
 
+public final class io/github/artemidius/blowhard/composition/ConversationHistorySession {
+	public static final field Companion Lio/github/artemidius/blowhard/composition/ConversationHistorySession$Companion;
+	public final fun close (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public final fun getAvailable ()Z
+	public final fun getConversationStore ()Lio/github/artemidius/blowhard/core/domain/ConversationStore;
+	public final fun getInitialState ()Lio/github/artemidius/blowhard/ui/presentation/ConversationUiState;
+	public final fun getRecoveredAttemptCount ()J
+}
+
+public final class io/github/artemidius/blowhard/composition/ConversationHistorySession$Companion {
+	public final fun open (Lio/github/artemidius/blowhard/core/application/RunClock;Lkotlin/jvm/functions/Function0;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public static synthetic fun open$default (Lio/github/artemidius/blowhard/composition/ConversationHistorySession$Companion;Lio/github/artemidius/blowhard/core/application/RunClock;Lkotlin/jvm/functions/Function0;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
+	public final fun unavailable ()Lio/github/artemidius/blowhard/composition/ConversationHistorySession;
+}
+
 public final class io/github/artemidius/blowhard/composition/FailClosedConnectionSettings : io/github/artemidius/blowhard/core/api/ConnectionSettings {
 	public fun <init> ()V
 	public fun acknowledgeLiveDataDisclosure (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
