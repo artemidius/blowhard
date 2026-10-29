@@ -21,6 +21,7 @@ import io.github.artemidius.blowhard.core.api.MeetingNoteId
 import io.github.artemidius.blowhard.core.api.MeetingNoteLookupOutcome
 import io.github.artemidius.blowhard.core.api.MeetingNoteUpdateOutcome
 import io.github.artemidius.blowhard.core.api.MeetingNotes
+import io.github.artemidius.blowhard.core.domain.ConversationStore
 import io.github.artemidius.blowhard.core.domain.GenerationEvent
 import io.github.artemidius.blowhard.core.domain.GenerationFailure
 import io.github.artemidius.blowhard.core.domain.GenerationFailureKind
@@ -36,6 +37,7 @@ import kotlinx.coroutines.flow.flowOf
 internal fun failClosedDependencies(
     connectionSettings: ConnectionSettings,
     generation: TextGenerationPort = FailClosedGeneration,
+    conversationStore: ConversationStore? = null,
 ): ApplicationRuntimeDependencies = ApplicationRuntimeDependencies(
     connectionSettings = connectionSettings,
     generation = generation,
@@ -47,6 +49,7 @@ internal fun failClosedDependencies(
     documentPicker = UnavailableDocumentPicker,
     meetingNotes = UnavailableMeetingNotes,
     meetingNoteApprovals = UnavailableMeetingNoteApprovalPort,
+    conversationStore = conversationStore,
 )
 
 private object FailClosedGeneration : TextGenerationPort {

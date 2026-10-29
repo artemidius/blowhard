@@ -44,7 +44,8 @@ public class ApplicationRuntimeDependencies(
         public fun conversationOnly(
             connectionSettings: ConnectionSettings,
             generation: TextGenerationPort,
-        ): ApplicationRuntimeDependencies = failClosedDependencies(connectionSettings, generation)
+            conversationStore: ConversationStore? = null,
+        ): ApplicationRuntimeDependencies = failClosedDependencies(connectionSettings, generation, conversationStore)
     }
 }
 
