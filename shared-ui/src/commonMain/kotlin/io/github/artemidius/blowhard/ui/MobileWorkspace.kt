@@ -14,6 +14,8 @@ import io.github.artemidius.blowhard.ui.presentation.ConversationPresenter
 import io.github.artemidius.blowhard.ui.presentation.ConversationUiState
 import io.github.artemidius.blowhard.ui.presentation.DocumentLibraryPresenter
 import io.github.artemidius.blowhard.ui.presentation.DocumentLibraryUiState
+import io.github.artemidius.blowhard.ui.presentation.LocalDataResetAction
+import io.github.artemidius.blowhard.ui.presentation.LocalDataResetUiState
 import io.github.artemidius.blowhard.ui.presentation.MeetingNotePresenter
 import io.github.artemidius.blowhard.ui.presentation.MeetingNoteUiState
 import io.github.artemidius.blowhard.ui.presentation.RunInspectorPresenter
@@ -32,10 +34,18 @@ internal fun MobileWorkspace(
     runInspectorPresenter: RunInspectorPresenter,
     documentLibraryPresenter: DocumentLibraryPresenter,
     meetingNotePresenter: MeetingNotePresenter,
+    localDataResetState: LocalDataResetUiState?,
+    onLocalDataResetAction: (LocalDataResetAction) -> Unit,
     navigate: (MobileNavigationState) -> Unit,
 ) {
     if (!settingsState.settings.canUseLiveMode) {
-        ConnectionSettingsScreen(settingsState, connectionSettingsPresenter::dispatch, onBack = null)
+        ConnectionSettingsScreen(
+            settingsState,
+            connectionSettingsPresenter::dispatch,
+            onBack = null,
+            localDataResetState = localDataResetState,
+            onLocalDataResetAction = onLocalDataResetAction,
+        )
         return
     }
     Scaffold(
@@ -58,6 +68,8 @@ internal fun MobileWorkspace(
             runInspectorPresenter,
             documentLibraryPresenter,
             meetingNotePresenter,
+            localDataResetState,
+            onLocalDataResetAction,
             navigate,
             Modifier.padding(padding),
         )
@@ -77,6 +89,8 @@ private fun MobileDestinationContent(
     runInspectorPresenter: RunInspectorPresenter,
     documentLibraryPresenter: DocumentLibraryPresenter,
     meetingNotePresenter: MeetingNotePresenter,
+    localDataResetState: LocalDataResetUiState?,
+    onLocalDataResetAction: (LocalDataResetAction) -> Unit,
     navigate: (MobileNavigationState) -> Unit,
     modifier: Modifier,
 ) {
@@ -102,12 +116,28 @@ private fun MobileDestinationContent(
                 navigate,
             )
 
-            MobileRootDestination.SETTINGS -> MobileSettingsDestination(settingsState, connectionSettingsPresenter)
+            MobileRootDestination.SETTINGS -> MobileSettingsDestination(
+                settingsState,
+                connectionSettingsPresenter,
+                localDataResetState,
+                onLocalDataResetAction,
+            )
         }
     }
 }
 
 @Composable
-private fun MobileSettingsDestination(state: ConnectionSettingsUiState, presenter: ConnectionSettingsPresenter) {
-    ConnectionSettingsScreen(state, presenter::dispatch, onBack = null)
+private fun MobileSettingsDestination(
+    state: ConnectionSettingsUiState,
+    presenter: ConnectionSettingsPresenter,
+    localDataResetState: LocalDataResetUiState?,
+    onLocalDataResetAction: (LocalDataResetAction) -> Unit,
+) {
+    ConnectionSettingsScreen(
+        state,
+        presenter::dispatch,
+        onBack = null,
+        localDataResetState = localDataResetState,
+        onLocalDataResetAction = onLocalDataResetAction,
+    )
 }

@@ -29,12 +29,16 @@ import io.github.artemidius.blowhard.core.api.ConnectionStatus
 import io.github.artemidius.blowhard.core.api.CredentialStatus
 import io.github.artemidius.blowhard.ui.presentation.ConnectionSettingsAction
 import io.github.artemidius.blowhard.ui.presentation.ConnectionSettingsUiState
+import io.github.artemidius.blowhard.ui.presentation.LocalDataResetAction
+import io.github.artemidius.blowhard.ui.presentation.LocalDataResetUiState
 
 @Composable
 internal fun ConnectionSettingsScreen(
     state: ConnectionSettingsUiState,
     onAction: (ConnectionSettingsAction) -> Unit,
     onBack: (() -> Unit)?,
+    localDataResetState: LocalDataResetUiState? = null,
+    onLocalDataResetAction: (LocalDataResetAction) -> Unit = {},
 ) {
     var showGenerationSettings by remember { mutableStateOf(false) }
     Box(
@@ -58,6 +62,7 @@ internal fun ConnectionSettingsScreen(
             }
             if (showGenerationSettings) GenerationParametersSection(state.settings, onAction)
             LiveReadinessSection(state.settings)
+            localDataResetState?.let { LocalDataResetSection(it, onLocalDataResetAction) }
         }
     }
 }
