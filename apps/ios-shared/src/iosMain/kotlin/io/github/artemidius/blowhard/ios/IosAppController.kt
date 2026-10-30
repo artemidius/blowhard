@@ -8,20 +8,20 @@ import io.github.artemidius.blowhard.adapters.mistral.MistralLiveTextGenerationP
 import io.github.artemidius.blowhard.adapters.mistral.MistralModelCatalog
 import io.github.artemidius.blowhard.adapters.mistral.asMistralCredentialProvider
 import io.github.artemidius.blowhard.adapters.mobile.IosCredentialStores
+import io.github.artemidius.blowhard.adapters.persistence.NativeConversationStores
 import io.github.artemidius.blowhard.composition.ApplicationRuntime
 import io.github.artemidius.blowhard.composition.ApplicationRuntimeConfiguration
 import io.github.artemidius.blowhard.composition.ApplicationRuntimeDependencies
-import io.github.artemidius.blowhard.core.api.ConversationId
+import io.github.artemidius.blowhard.composition.ConversationHistorySession
 import io.github.artemidius.blowhard.core.application.DefaultConnectionSettings
 import io.github.artemidius.blowhard.core.application.SequentialRunIdFactory
 import io.github.artemidius.blowhard.ui.BlowhardMobileApp
-import io.github.artemidius.blowhard.ui.presentation.ConversationUiModel
-import io.github.artemidius.blowhard.ui.presentation.ConversationUiState
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import platform.Foundation.NSUUID
 import platform.UIKit.UIViewController
 
@@ -46,13 +46,19 @@ public fun BlowhardViewController(): UIViewController {
 private class IosApplicationRuntime {
     private val closeScope = CoroutineScope(SupervisorJob() + Dispatchers.Default)
     private val providers = createProviderComposition()
+    private val history = runBlocking {
+        ConversationHistorySession.open {
+            NativeConversationStores.open(CONVERSATION_DATABASE_NAME)
+        }
+    }
     val runtime = ApplicationRuntime.create(
         dependencies = ApplicationRuntimeDependencies.conversationOnly(
             providers.connectionSettings,
             providers.generation,
+            history.conversationStore,
         ),
         configuration = ApplicationRuntimeConfiguration(
-            initialState = initialConversationState(),
+            initialState = history.initialState,
             runIdFactory = SequentialRunIdFactory("ios-${NSUUID().UUIDString}"),
             autoVerifyCredential = true,
         ),
@@ -64,9 +70,13 @@ private class IosApplicationRuntime {
                 runtime.close()
             } finally {
                 try {
-                    providers.close()
+                    history.close()
                 } finally {
-                    closeScope.cancel()
+                    try {
+                        providers.close()
+                    } finally {
+                        closeScope.cancel()
+                    }
                 }
             }
         }
@@ -97,10 +107,4 @@ private fun createProviderComposition(): IosProviderComposition {
     )
 }
 
-private fun initialConversationState(): ConversationUiState {
-    val id = ConversationId("conversation-1")
-    return ConversationUiState(
-        conversations = listOf(ConversationUiModel(id, "New conversation")),
-        selectedConversationId = id,
-    )
-}
+private const val CONVERSATION_DATABASE_NAME = "blowhard.db"
