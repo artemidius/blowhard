@@ -6,6 +6,18 @@
 // - Show declarations: true
 
 // Library unique name: <Blowhard.adapters:persistence>
+final enum class io.github.artemidius.blowhard.adapters.persistence/LocalDatabaseDeletionResult : kotlin/Enum<io.github.artemidius.blowhard.adapters.persistence/LocalDatabaseDeletionResult> { // io.github.artemidius.blowhard.adapters.persistence/LocalDatabaseDeletionResult|null[0]
+    enum entry DELETED // io.github.artemidius.blowhard.adapters.persistence/LocalDatabaseDeletionResult.DELETED|null[0]
+    enum entry FAILED // io.github.artemidius.blowhard.adapters.persistence/LocalDatabaseDeletionResult.FAILED|null[0]
+    enum entry NOT_FOUND // io.github.artemidius.blowhard.adapters.persistence/LocalDatabaseDeletionResult.NOT_FOUND|null[0]
+
+    final val entries // io.github.artemidius.blowhard.adapters.persistence/LocalDatabaseDeletionResult.entries|#static{}entries[0]
+        final fun <get-entries>(): kotlin.enums/EnumEntries<io.github.artemidius.blowhard.adapters.persistence/LocalDatabaseDeletionResult> // io.github.artemidius.blowhard.adapters.persistence/LocalDatabaseDeletionResult.entries.<get-entries>|<get-entries>#static(){}[0]
+
+    final fun valueOf(kotlin/String): io.github.artemidius.blowhard.adapters.persistence/LocalDatabaseDeletionResult // io.github.artemidius.blowhard.adapters.persistence/LocalDatabaseDeletionResult.valueOf|valueOf#static(kotlin.String){}[0]
+    final fun values(): kotlin/Array<io.github.artemidius.blowhard.adapters.persistence/LocalDatabaseDeletionResult> // io.github.artemidius.blowhard.adapters.persistence/LocalDatabaseDeletionResult.values|values#static(){}[0]
+}
+
 final object io.github.artemidius.blowhard.adapters.persistence/NativeConversationStores { // io.github.artemidius.blowhard.adapters.persistence/NativeConversationStores|null[0]
     final fun open(kotlin/String): io.github.artemidius.blowhard.core.domain/ConversationStore // io.github.artemidius.blowhard.adapters.persistence/NativeConversationStores.open|open(kotlin.String){}[0]
 }
@@ -16,6 +28,10 @@ final object io.github.artemidius.blowhard.adapters.persistence/NativeDocumentPr
 
 final object io.github.artemidius.blowhard.adapters.persistence/NativeDocumentStores { // io.github.artemidius.blowhard.adapters.persistence/NativeDocumentStores|null[0]
     final fun open(kotlin/String): io.github.artemidius.blowhard.core.domain/DocumentStore // io.github.artemidius.blowhard.adapters.persistence/NativeDocumentStores.open|open(kotlin.String){}[0]
+}
+
+final object io.github.artemidius.blowhard.adapters.persistence/NativeLocalDatabaseFiles { // io.github.artemidius.blowhard.adapters.persistence/NativeLocalDatabaseFiles|null[0]
+    final fun delete(kotlin/String): io.github.artemidius.blowhard.adapters.persistence/LocalDatabaseDeletionResult // io.github.artemidius.blowhard.adapters.persistence/NativeLocalDatabaseFiles.delete|delete(kotlin.String){}[0]
 }
 
 final object io.github.artemidius.blowhard.adapters.persistence/NativeMeetingNoteStores { // io.github.artemidius.blowhard.adapters.persistence/NativeMeetingNoteStores|null[0]
