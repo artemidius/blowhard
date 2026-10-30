@@ -4,6 +4,7 @@ import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.junit4.v2.createAndroidComposeRule
 import androidx.compose.ui.test.onAllNodesWithText
 import androidx.compose.ui.test.onNodeWithText
+import androidx.compose.ui.test.performScrollTo
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import org.junit.Rule
 import org.junit.Test
@@ -24,6 +25,7 @@ public class MainActivityDeviceTest {
         }
         if (onAllNodesWithText("Connect to Mistral").fetchSemanticsNodes().isNotEmpty()) {
             onNodeWithText("API credential").assertIsDisplayed()
+            onNodeWithText("Local data").performScrollTo().assertIsDisplayed()
         } else {
             onNodeWithText("Chats").assertIsDisplayed()
         }
