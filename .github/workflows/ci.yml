@@ -330,6 +330,9 @@ jobs:
           CODE_SIGNING_ALLOWED=NO
           build
 
+      - name: Verify iOS data-protection configuration
+        run: ./tools/mobile/verify_ios_data_protection.sh apps/ios
+
       - name: Install and launch iOS application
         run: >-
           ./tools/mobile/verify_ios_simulator.sh
