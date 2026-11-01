@@ -40,6 +40,7 @@ android {
 
 dependencies {
     implementation(project(":app-composition"))
+    implementation(project(":adapters:documents"))
     implementation(project(":adapters:mistral"))
     implementation(project(":adapters:mobile-platform"))
     implementation(project(":adapters:persistence"))

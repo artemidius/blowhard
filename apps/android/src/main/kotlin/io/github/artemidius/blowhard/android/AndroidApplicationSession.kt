@@ -20,6 +20,7 @@ import java.util.UUID
 internal class AndroidApplicationSession(
     val runtime: ApplicationRuntime,
     private val history: ConversationHistorySession,
+    private val documents: AndroidDocumentSession?,
     private val providers: AndroidProviderComposition,
 ) {
     suspend fun close() {
@@ -29,43 +30,84 @@ internal class AndroidApplicationSession(
             try {
                 history.close()
             } finally {
-                providers.close()
+                try {
+                    documents?.close()
+                } finally {
+                    providers.close()
+                }
             }
         }
     }
 }
 
 @Suppress("TooGenericExceptionCaught")
-internal suspend fun createAndroidApplicationSession(context: Context): AndroidApplicationSession {
+internal suspend fun createAndroidApplicationSession(
+    context: Context,
+    documentPicker: AndroidDocumentPicker,
+): AndroidApplicationSession {
     val providers = createProviderComposition(context)
     var history: ConversationHistorySession? = null
+    var documents: AndroidDocumentSession? = null
     return try {
-        val openedHistory = withContext(Dispatchers.IO) {
-            ConversationHistorySession.open {
-                AndroidConversationStores.open(context, CONVERSATION_DATABASE_NAME)
-            }
-        }
+        val openedHistory = openHistory(context)
         history = openedHistory
-        val runtime = ApplicationRuntime.create(
-            dependencies = ApplicationRuntimeDependencies.conversationOnly(
-                providers.connectionSettings,
-                providers.generation,
-                openedHistory.conversationStore,
-            ),
-            configuration = ApplicationRuntimeConfiguration(
-                initialState = openedHistory.initialState,
-                runIdFactory = SequentialRunIdFactory("android-${UUID.randomUUID()}"),
-                autoVerifyCredential = true,
-            ),
-        )
-        AndroidApplicationSession(runtime, openedHistory, providers)
+        documents = AndroidDocumentSession.openOrNull(context)
+        val dependencies = createDependencies(providers, openedHistory, documents, documentPicker)
+        val runtime = createRuntime(dependencies, openedHistory)
+        AndroidApplicationSession(runtime, openedHistory, documents, providers)
     } catch (failure: RuntimeException) {
+        closePartialSession(history, documents, providers)
+        throw failure
+    }
+}
+
+private suspend fun openHistory(context: Context): ConversationHistorySession = withContext(Dispatchers.IO) {
+    ConversationHistorySession.open {
+        AndroidConversationStores.open(context, CONVERSATION_DATABASE_NAME)
+    }
+}
+
+private fun createDependencies(
+    providers: AndroidProviderComposition,
+    history: ConversationHistorySession,
+    documents: AndroidDocumentSession?,
+    documentPicker: AndroidDocumentPicker,
+): ApplicationRuntimeDependencies {
+    val base = ApplicationRuntimeDependencies.conversationOnly(
+        providers.connectionSettings,
+        providers.generation,
+        history.conversationStore,
+    )
+    return documents?.let {
+        base.withDocuments(it.library, it.ocr, documentPicker, it.processingStore)
+    } ?: base
+}
+
+private fun createRuntime(
+    dependencies: ApplicationRuntimeDependencies,
+    history: ConversationHistorySession,
+): ApplicationRuntime = ApplicationRuntime.create(
+    dependencies = dependencies,
+    configuration = ApplicationRuntimeConfiguration(
+        initialState = history.initialState,
+        runIdFactory = SequentialRunIdFactory("android-${UUID.randomUUID()}"),
+        autoVerifyCredential = true,
+    ),
+)
+
+private suspend fun closePartialSession(
+    history: ConversationHistorySession?,
+    documents: AndroidDocumentSession?,
+    providers: AndroidProviderComposition,
+) {
+    try {
+        history?.close()
+    } finally {
         try {
-            history?.close()
+            documents?.close()
         } finally {
             providers.close()
         }
-        throw failure
     }
 }
 

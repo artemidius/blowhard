@@ -21,9 +21,10 @@ import kotlinx.coroutines.runBlocking
 internal class AndroidApplicationRuntime(application: Application) : AndroidViewModel(application) {
     private val closeScope = CoroutineScope(SupervisorJob() + Dispatchers.Default)
     private val applicationContext = application.applicationContext
+    val documentPicker = AndroidDocumentPicker(applicationContext.contentResolver)
     private val sessionOwner = ReplaceableApplicationSession(
-        initialSession = runBlocking { createAndroidApplicationSession(applicationContext) },
-        factory = ApplicationSessionFactory { createAndroidApplicationSession(applicationContext) },
+        initialSession = runBlocking { createAndroidApplicationSession(applicationContext, documentPicker) },
+        factory = ApplicationSessionFactory { createAndroidApplicationSession(applicationContext, documentPicker) },
         closer = ApplicationSessionCloser(AndroidApplicationSession::close),
         eraser = AndroidLocalDataEraser(
             context = applicationContext,
