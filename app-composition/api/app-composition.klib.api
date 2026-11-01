@@ -157,6 +157,22 @@ final class io.github.artemidius.blowhard.composition/FailClosedConnectionSettin
     final suspend fun updateGenerationParameters(io.github.artemidius.blowhard.core.api/GenerationParameters) // io.github.artemidius.blowhard.composition/FailClosedConnectionSettings.updateGenerationParameters|updateGenerationParameters(io.github.artemidius.blowhard.core.api.GenerationParameters){}[0]
 }
 
+final class io.github.artemidius.blowhard.composition/OwnedMeetingNoteGenerationPort { // io.github.artemidius.blowhard.composition/OwnedMeetingNoteGenerationPort|null[0]
+    constructor <init>(io.github.artemidius.blowhard.core.domain/MeetingNoteGenerationPort, kotlin/Function0<kotlin/Unit>) // io.github.artemidius.blowhard.composition/OwnedMeetingNoteGenerationPort.<init>|<init>(io.github.artemidius.blowhard.core.domain.MeetingNoteGenerationPort;kotlin.Function0<kotlin.Unit>){}[0]
+
+    final val generation // io.github.artemidius.blowhard.composition/OwnedMeetingNoteGenerationPort.generation|{}generation[0]
+        final fun <get-generation>(): io.github.artemidius.blowhard.core.domain/MeetingNoteGenerationPort // io.github.artemidius.blowhard.composition/OwnedMeetingNoteGenerationPort.generation.<get-generation>|<get-generation>(){}[0]
+
+    final fun close() // io.github.artemidius.blowhard.composition/OwnedMeetingNoteGenerationPort.close|close(){}[0]
+}
+
+final class io.github.artemidius.blowhard.composition/VerifiedModelMeetingNoteGenerationRouter : io.github.artemidius.blowhard.core.domain/MeetingNoteGenerationPort { // io.github.artemidius.blowhard.composition/VerifiedModelMeetingNoteGenerationRouter|null[0]
+    constructor <init>(io.github.artemidius.blowhard.core.api/ConnectionSettings, kotlin/Function1<kotlin/String, io.github.artemidius.blowhard.composition/OwnedMeetingNoteGenerationPort>) // io.github.artemidius.blowhard.composition/VerifiedModelMeetingNoteGenerationRouter.<init>|<init>(io.github.artemidius.blowhard.core.api.ConnectionSettings;kotlin.Function1<kotlin.String,io.github.artemidius.blowhard.composition.OwnedMeetingNoteGenerationPort>){}[0]
+
+    final suspend fun close() // io.github.artemidius.blowhard.composition/VerifiedModelMeetingNoteGenerationRouter.close|close(){}[0]
+    final suspend fun generate(io.github.artemidius.blowhard.core.domain/MeetingNoteGenerationRequest): io.github.artemidius.blowhard.core.domain/MeetingNoteGenerationResult // io.github.artemidius.blowhard.composition/VerifiedModelMeetingNoteGenerationRouter.generate|generate(io.github.artemidius.blowhard.core.domain.MeetingNoteGenerationRequest){}[0]
+}
+
 final fun (io.github.artemidius.blowhard.core.application/ConversationHistorySnapshot).io.github.artemidius.blowhard.composition/toConversationUiState(): io.github.artemidius.blowhard.ui.presentation/ConversationUiState // io.github.artemidius.blowhard.composition/toConversationUiState|toConversationUiState@io.github.artemidius.blowhard.core.application.ConversationHistorySnapshot(){}[0]
 final fun io.github.artemidius.blowhard.composition/emptyConversationState(io.github.artemidius.blowhard.ui.presentation/UiNotice? = ...): io.github.artemidius.blowhard.ui.presentation/ConversationUiState // io.github.artemidius.blowhard.composition/emptyConversationState|emptyConversationState(io.github.artemidius.blowhard.ui.presentation.UiNotice?){}[0]
 final fun io.github.artemidius.blowhard.composition/unavailableConversationHistoryState(): io.github.artemidius.blowhard.ui.presentation/ConversationUiState // io.github.artemidius.blowhard.composition/unavailableConversationHistoryState|unavailableConversationHistoryState(){}[0]
