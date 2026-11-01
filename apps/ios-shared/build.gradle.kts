@@ -14,6 +14,9 @@ kotlin {
         iosArm64(),
         iosSimulatorArm64(),
     ).forEach { target ->
+        target.binaries.all {
+            linkerOpts("-lsqlite3")
+        }
         target.binaries.framework {
             baseName = "BlowhardIos"
             isStatic = true
