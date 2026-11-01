@@ -12,9 +12,13 @@ import platform.UIKit.UIViewController
 /** Creates the single iOS host surface exported to Swift. */
 public fun BlowhardViewController(): UIViewController {
     val owner = IosApplicationRuntime()
-    return ComposeUIViewController {
+    lateinit var controller: UIViewController
+    controller = ComposeUIViewController {
         DisposableEffect(owner) {
-            onDispose(owner::close)
+            onDispose {
+                owner.documentPicker.unbind(controller)
+                owner.close()
+            }
         }
         val session by owner.session.collectAsState()
         val runtime = session.runtime
@@ -27,4 +31,6 @@ public fun BlowhardViewController(): UIViewController {
             localDataResetPresenter = owner.localDataResetPresenter,
         )
     }
+    owner.documentPicker.bind(controller)
+    return controller
 }
