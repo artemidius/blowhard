@@ -1,8 +1,10 @@
 package io.github.artemidius.blowhard.android
 
 import android.content.Context
+import io.github.artemidius.blowhard.adapters.mistral.MistralChatConfiguration
 import io.github.artemidius.blowhard.adapters.mistral.MistralDocumentOcrPort
 import io.github.artemidius.blowhard.adapters.mistral.MistralLiveTextGenerationPort
+import io.github.artemidius.blowhard.adapters.mistral.MistralMeetingNoteGenerationPort
 import io.github.artemidius.blowhard.adapters.mistral.MistralModelCatalog
 import io.github.artemidius.blowhard.adapters.mistral.asMistralCredentialProvider
 import io.github.artemidius.blowhard.adapters.mobile.AndroidCredentialStores
@@ -11,8 +13,11 @@ import io.github.artemidius.blowhard.composition.ApplicationRuntime
 import io.github.artemidius.blowhard.composition.ApplicationRuntimeConfiguration
 import io.github.artemidius.blowhard.composition.ApplicationRuntimeDependencies
 import io.github.artemidius.blowhard.composition.ConversationHistorySession
+import io.github.artemidius.blowhard.composition.OwnedMeetingNoteGenerationPort
+import io.github.artemidius.blowhard.composition.VerifiedModelMeetingNoteGenerationRouter
 import io.github.artemidius.blowhard.core.application.DefaultConnectionSettings
 import io.github.artemidius.blowhard.core.application.SequentialRunIdFactory
+import io.github.artemidius.blowhard.ui.presentation.UnavailableMeetingNoteApprovalPort
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.util.UUID
@@ -52,7 +57,11 @@ internal suspend fun createAndroidApplicationSession(
     return try {
         val openedHistory = openHistory(context)
         history = openedHistory
-        documents = AndroidDocumentSession.openOrNull(context, processor = providers.documentOcr)
+        documents = AndroidDocumentSession.openOrNull(
+            context = context,
+            processor = providers.documentOcr,
+            meetingNoteGeneration = providers.meetingNoteGeneration,
+        )
         val dependencies = createDependencies(providers, openedHistory, documents, documentPicker)
         val runtime = createRuntime(dependencies, openedHistory)
         AndroidApplicationSession(runtime, openedHistory, documents, providers)
@@ -81,6 +90,7 @@ private fun createDependencies(
     )
     return documents?.let {
         base.withDocuments(it.library, it.ocr, documentPicker, it.processingStore)
+            .withMeetingNotes(it.meetingNotes, UnavailableMeetingNoteApprovalPort)
     } ?: base
 }
 
@@ -116,13 +126,18 @@ internal class AndroidProviderComposition(
     val connectionSettings: DefaultConnectionSettings,
     val generation: MistralLiveTextGenerationPort,
     val documentOcr: MistralDocumentOcrPort,
+    val meetingNoteGeneration: VerifiedModelMeetingNoteGenerationRouter,
     private val modelCatalog: MistralModelCatalog,
 ) {
-    fun close() {
+    suspend fun close() {
         try {
-            documentOcr.close()
+            meetingNoteGeneration.close()
         } finally {
-            modelCatalog.close()
+            try {
+                documentOcr.close()
+            } finally {
+                modelCatalog.close()
+            }
         }
     }
 }
@@ -137,10 +152,18 @@ private fun createProviderComposition(context: Context): AndroidProviderComposit
         catalog = modelCatalog,
         startInLiveMode = true,
     )
+    val meetingNoteGeneration = VerifiedModelMeetingNoteGenerationRouter(connectionSettings) { modelId ->
+        val port = MistralMeetingNoteGenerationPort.create(
+            credentialProvider,
+            MistralChatConfiguration(modelId),
+        )
+        OwnedMeetingNoteGenerationPort(port) { port.close() }
+    }
     return AndroidProviderComposition(
         connectionSettings = connectionSettings,
         generation = MistralLiveTextGenerationPort.create(credentialProvider),
         documentOcr = documentOcr,
+        meetingNoteGeneration = meetingNoteGeneration,
         modelCatalog = modelCatalog,
     )
 }
