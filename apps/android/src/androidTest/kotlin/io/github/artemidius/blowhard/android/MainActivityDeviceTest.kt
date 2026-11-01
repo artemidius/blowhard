@@ -5,7 +5,9 @@ import androidx.compose.ui.test.junit4.v2.createAndroidComposeRule
 import androidx.compose.ui.test.onAllNodesWithText
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performScrollTo
+import androidx.lifecycle.ViewModelProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import org.junit.Assert.assertSame
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -28,6 +30,21 @@ public class MainActivityDeviceTest {
             onNodeWithText("Local data").performScrollTo().assertIsDisplayed()
         } else {
             onNodeWithText("Chats").assertIsDisplayed()
+        }
+    }
+
+    /** Verifies configuration recreation retains the application session instead of restarting work. */
+    @Test
+    public fun activityRecreationRetainsApplicationRuntime(): Unit = with(composeRule) {
+        lateinit var before: AndroidApplicationRuntime
+        activityRule.scenario.onActivity { activity ->
+            before = ViewModelProvider(activity)[AndroidApplicationRuntime::class.java]
+        }
+
+        activityRule.scenario.recreate()
+
+        activityRule.scenario.onActivity { activity ->
+            assertSame(before, ViewModelProvider(activity)[AndroidApplicationRuntime::class.java])
         }
     }
 }
