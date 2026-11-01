@@ -1,5 +1,6 @@
 package io.github.artemidius.blowhard.ios
 
+import io.github.artemidius.blowhard.adapters.mistral.MistralDocumentOcrPort
 import io.github.artemidius.blowhard.adapters.mistral.MistralLiveTextGenerationPort
 import io.github.artemidius.blowhard.adapters.mistral.MistralModelCatalog
 import io.github.artemidius.blowhard.adapters.mistral.asMistralCredentialProvider
@@ -47,7 +48,7 @@ internal suspend fun createIosApplicationSession(documentPicker: IosDocumentPick
             NativeConversationStores.open(CONVERSATION_DATABASE_NAME)
         }
         history = openedHistory
-        documents = IosDocumentSession.openOrNull()
+        documents = IosDocumentSession.openOrNull(processor = providers.documentOcr)
         val dependencies = createDependencies(providers, openedHistory, documents, documentPicker)
         val runtime = ApplicationRuntime.create(
             dependencies = dependencies,
@@ -91,15 +92,23 @@ private fun createDependencies(
 internal class IosProviderComposition(
     val connectionSettings: DefaultConnectionSettings,
     val generation: MistralLiveTextGenerationPort,
+    val documentOcr: MistralDocumentOcrPort,
     private val modelCatalog: MistralModelCatalog,
 ) {
-    fun close(): Unit = modelCatalog.close()
+    fun close() {
+        try {
+            documentOcr.close()
+        } finally {
+            modelCatalog.close()
+        }
+    }
 }
 
 private fun createProviderComposition(): IosProviderComposition {
     val credentialStore = IosCredentialStores.mistralApiKey()
     val credentialProvider = credentialStore.asMistralCredentialProvider()
     val modelCatalog = MistralModelCatalog.create(credentialProvider)
+    val documentOcr = MistralDocumentOcrPort.create(credentialProvider)
     val connectionSettings = DefaultConnectionSettings(
         credentials = credentialStore,
         catalog = modelCatalog,
@@ -108,6 +117,7 @@ private fun createProviderComposition(): IosProviderComposition {
     return IosProviderComposition(
         connectionSettings = connectionSettings,
         generation = MistralLiveTextGenerationPort.create(credentialProvider),
+        documentOcr = documentOcr,
         modelCatalog = modelCatalog,
     )
 }

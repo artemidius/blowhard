@@ -6,7 +6,12 @@ import io.github.artemidius.blowhard.adapters.persistence.AndroidLocalDatabaseFi
 import io.github.artemidius.blowhard.core.api.DocumentImportResult
 import io.github.artemidius.blowhard.core.api.DocumentImportSource
 import io.github.artemidius.blowhard.core.api.DocumentListResult
+import io.github.artemidius.blowhard.core.api.DocumentProcessingResult
 import io.github.artemidius.blowhard.core.api.DocumentReadResult
+import io.github.artemidius.blowhard.core.domain.DocumentOcrPage
+import io.github.artemidius.blowhard.core.domain.DocumentOcrPort
+import io.github.artemidius.blowhard.core.domain.DocumentOcrPortResult
+import io.github.artemidius.blowhard.core.domain.DocumentOcrRequest
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
@@ -23,19 +28,32 @@ public class AndroidDocumentSessionDeviceTest {
         val context = InstrumentationRegistry.getInstrumentation().targetContext
         val databaseName = "documents-${UUID.randomUUID()}.db"
         val source = ByteDocumentSource("scan.png", PNG)
+        val processor = RecordingDocumentOcrPort()
 
         try {
-            val first = requireNotNull(AndroidDocumentSession.openOrNull(context, databaseName))
-            assertTrue(first.library.import(source) is DocumentImportResult.Imported)
+            val first = requireNotNull(AndroidDocumentSession.openOrNull(context, databaseName, processor))
+            val imported = first.library.import(source) as DocumentImportResult.Imported
+            assertTrue(first.ocr.process(imported.document.id) is DocumentProcessingResult.Processed)
+            assertEquals(1, processor.requests)
             first.close()
 
-            val second = requireNotNull(AndroidDocumentSession.openOrNull(context, databaseName))
+            val second = requireNotNull(AndroidDocumentSession.openOrNull(context, databaseName, processor))
             val stored = second.library.list() as DocumentListResult.Available
             assertEquals(listOf("scan.png"), stored.documents.map { it.displayName })
             second.close()
         } finally {
             AndroidLocalDatabaseFiles.delete(context, databaseName)
         }
+    }
+}
+
+private class RecordingDocumentOcrPort : DocumentOcrPort {
+    var requests: Int = 0
+        private set
+
+    override suspend fun process(request: DocumentOcrRequest): DocumentOcrPortResult {
+        requests += 1
+        return DocumentOcrPortResult.Processed("mobile-test-ocr", listOf(DocumentOcrPage(0, "# Scan")))
     }
 }
 
