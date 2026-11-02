@@ -16,10 +16,17 @@ public class MainActivity : ComponentActivity() {
     private val documentSelection = registerForActivityResult(ActivityResultContracts.OpenDocument()) { uri ->
         applicationRuntime.documentPicker.complete(uri)
     }
+    private val diagnosticExport =
+        registerForActivityResult(ActivityResultContracts.CreateDocument("application/json")) { uri ->
+            applicationRuntime.diagnosticReportSaver.complete(uri)
+        }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         applicationRuntime.documentPicker.bind(documentSelection)
+        applicationRuntime.diagnosticReportSaver.bind(diagnosticExport) { fileName ->
+            diagnosticExport.launch(fileName)
+        }
         enableEdgeToEdge()
         setContent {
             val session by applicationRuntime.session.collectAsState()
@@ -37,6 +44,7 @@ public class MainActivity : ComponentActivity() {
 
     override fun onDestroy() {
         applicationRuntime.documentPicker.unbind(documentSelection)
+        applicationRuntime.diagnosticReportSaver.unbind(diagnosticExport)
         super.onDestroy()
     }
 }

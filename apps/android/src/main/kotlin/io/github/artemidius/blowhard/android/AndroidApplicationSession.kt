@@ -50,6 +50,7 @@ internal class AndroidApplicationSession(
 internal suspend fun createAndroidApplicationSession(
     context: Context,
     documentPicker: AndroidDocumentPicker,
+    reportSaver: AndroidRunDiagnosticReportSaver,
 ): AndroidApplicationSession {
     val providers = createProviderComposition(context)
     var history: ConversationHistorySession? = null
@@ -62,7 +63,7 @@ internal suspend fun createAndroidApplicationSession(
             processor = providers.documentOcr,
             meetingNoteGeneration = providers.meetingNoteGeneration,
         )
-        val dependencies = createDependencies(providers, openedHistory, documents, documentPicker)
+        val dependencies = createDependencies(providers, openedHistory, documents, documentPicker, reportSaver)
         val runtime = createRuntime(dependencies, openedHistory)
         AndroidApplicationSession(runtime, openedHistory, documents, providers)
     } catch (failure: RuntimeException) {
@@ -82,13 +83,14 @@ private fun createDependencies(
     history: ConversationHistorySession,
     documents: AndroidDocumentSession?,
     documentPicker: AndroidDocumentPicker,
+    reportSaver: AndroidRunDiagnosticReportSaver,
 ): ApplicationRuntimeDependencies {
     val base = ApplicationRuntimeDependencies.conversationOnly(
         providers.connectionSettings,
         providers.generation,
         history.conversationStore,
     )
-    return documents?.let {
+    val configured = documents?.let {
         val approvals = LocalMeetingNoteApprovalPort.create(
             store = it.meetingNoteStore,
             now = System::currentTimeMillis,
@@ -97,6 +99,7 @@ private fun createDependencies(
         base.withDocuments(it.library, it.ocr, documentPicker, it.processingStore)
             .withMeetingNotes(it.meetingNotes, approvals)
     } ?: base
+    return configured.withReportSaver(reportSaver)
 }
 
 private fun createRuntime(
