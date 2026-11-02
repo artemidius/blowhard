@@ -67,9 +67,11 @@ None of those paths automatically repeats the write.
 | Mistral calls map exactly and reject malformed responses | `MistralToolModelPortTest` |
 | Reads cannot escape attached document scope | `ScopedDocumentReadToolsTest` |
 | Consent is exact, expiring, and single-use | `ToolApprovalGateTest` |
-| Approved writes are idempotent and recoverable | `ApprovedMeetingNoteWriterTest`, `DesktopMeetingNoteStoreTest` |
-| UI exposes exact preview, denial, success, interruption, and uncertainty | `MeetingNotePresenterTest`, `DesktopMeetingNoteApprovalPortTest` |
+| Approved writes are idempotent and recoverable | `ApprovedMeetingNoteWriterTest`, `DesktopMeetingNoteStoreTest`, `AndroidDocumentSessionDeviceTest` |
+| UI exposes exact preview, denial, success, interruption, and uncertainty | `MeetingNotePresenterTest`, `DesktopMeetingNoteApprovalPortTest`, `IosDocumentSessionTest` |
 | Evaluation output is deterministic | `FixtureEvaluationRunnerTest` |
 
-The same application and presentation contracts compile for desktop, Android, and iOS-facing shared targets. Native
-file selection, secure credential storage, and database construction remain platform adapters.
+The same application and presentation contracts run on desktop, Android, and iOS. Native file
+selection, secure credential storage, database construction, and diagnostic export remain injected
+platform adapters; Android device tests and iOS simulator tests exercise durable note and approval
+recovery through the real native SQLite drivers.

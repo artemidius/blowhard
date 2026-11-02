@@ -5,8 +5,8 @@ Blowhard treats security claims as testable boundaries, not as a promise that a 
 ## Implemented controls
 
 - API credentials never enter observable UI state, logs, evaluation reports, diagnostics, or repository files.
-- macOS stores the Mistral credential in Keychain. Windows and Linux fail closed because equivalent secure adapters
-  are not implemented yet.
+- macOS and iOS store the Mistral credential in Keychain. Android wraps it with a non-exportable
+  Android Keystore key. Windows and Linux fail closed because equivalent secure adapters are not implemented yet.
 - Provider traffic uses a fixed HTTPS host; imported content is sent only after an explicit action.
 - Local imports are structurally inspected and bounded before entering app-owned storage.
 - Provider responses, tool calls, and stored payloads have explicit size and shape limits.
@@ -15,6 +15,8 @@ Blowhard treats security claims as testable boundaries, not as a promise that a 
 - Read tools are limited to attached document identities and label returned content as untrusted evidence.
 - Mutations require an exact, expiring, single-use approval and show content plus destination before consent.
 - Approved writes use atomic note-and-receipt persistence for deterministic, no-replay recovery.
+- Android and iOS can erase the credential and app-owned SQLite database through one
+  confirmed operation; partial failure is reported rather than claimed as success.
 - Diagnostics and run inspection omit prompts, responses, credentials, headers, native paths, and provider references
   by construction.
 - CI runs with read-only repository permissions and no provider credentials. The quality gate scans Git history and
@@ -34,18 +36,21 @@ credential to its report.
 
 - Native packages are not signed by a trusted publisher. The macOS package is ad hoc signed and not notarized;
   Windows and Linux packages are unsigned.
-- Live Mistral use is currently supported only on macOS. Windows and Linux packages are useful for deterministic UI,
-  packaging, and architecture review but cannot configure a live credential.
-- Android and iOS have installable, CI launch-tested connection shells, but neither has a native credential adapter or
-  live provider path yet. They are unsigned development builds, not distributed applications.
+- Live Mistral use is supported on macOS, Android, and iOS. Windows and Linux packages are useful for deterministic
+  UI, packaging, and architecture review but cannot configure a live credential.
+- Android and iOS are installable, CI launch-tested development builds with native secure
+  credential storage and live Mistral routing. They are not Play Store or TestFlight deliveries.
 - The tool protocol is intentionally narrow. It is not a general-purpose agent sandbox and never executes arbitrary
   commands.
 - Local database encryption at rest is not implemented. Operating-system account and disk protections remain part of
   the threat model.
 - A passing synthetic benchmark does not establish factual correctness on arbitrary private documents or future
   model versions.
-- Publisher signing, notarization, telemetry, automatic update delivery, accessibility certification, penetration
-  testing, and an external security audit are outside this preview.
+- Play Store and TestFlight delivery, production mobile certificates and signing, publisher
+  notarization, telemetry, automatic update delivery, accessibility certification, penetration testing, and an
+  external security audit are outside this preview.
+- Mobile validation covers Android emulators and iOS simulators in CI. A physical iPhone hardware
+  pass has not been claimed.
 
 Report suspected vulnerabilities privately through GitHub's security advisory interface. Do not place credentials,
 private documents, or exploitable details in a public issue.

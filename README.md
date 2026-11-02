@@ -2,18 +2,19 @@
 
 [![CI](https://github.com/artemidius/blowhard/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/artemidius/blowhard/actions/workflows/ci.yml)
 
-A desktop-first Kotlin Multiplatform client for Mistral AI and an inspectable AI-engineering portfolio project.
+A Kotlin Multiplatform client for Mistral AI across macOS, Windows, Linux, Android, and iOS—and an
+inspectable AI-engineering portfolio project.
 
 The current milestone demonstrates an end-to-end document-to-meeting-note workflow: bounded local
 import, explicit provider processing, structured evidence-linked output, typed editing, measurable
 evaluation, scoped read tools, exact mutation approval, and crash-safe persistence. Dedicated
-Android and iOS application shells render the shared connection workflow and fail closed until
-their native credential adapters are wired into host composition.
+Android and iOS hosts compose that same portable runtime with native credential vaults, SQLite
+storage, document pickers, diagnostic export, restart recovery, and local-data reset.
 
 If you are reviewing the repository, start with the
 [five-minute reviewer guide](docs/reviewer-guide.md), the
 [showcase architecture](docs/architecture/meeting-note-showcase.md), and the
-[security disclosure](docs/security.md).
+[mobile verification guide](docs/mobile-verification.md), and the [security disclosure](docs/security.md).
 
 ## Technical direction
 
@@ -24,8 +25,8 @@ If you are reviewing the repository, start with the
 - Security-conscious design, automated testing, static analysis, and documented APIs.
 - Reproducible synthetic evaluation with deterministic machine- and human-readable reports.
 
-The desktop application is the initial focus, with Android and iOS compatibility guiding
-the shared architecture.
+Desktop and mobile hosts share application and presentation policy while keeping operating-system
+integration at explicit composition boundaries.
 
 ## Prerequisites
 
@@ -224,7 +225,7 @@ register tools, escape document scope, or authorize a mutation. See the
 [`ADR 0031`](docs/decisions/0031-bounded-tool-orchestration.md), and
 [`ADR 0032`](docs/decisions/0032-exact-consent-and-no-replay-writes.md).
 
-## Run the mobile shells
+## Run the mobile applications
 
 Install the Android debug application on a connected API 26 or newer device or emulator:
 
@@ -235,13 +236,20 @@ Install the Android debug application on a connected API 26 or newer device or e
 The Android host stores its Mistral credential with an app-scoped Android Keystore key, starts in
 live-only mode, and verifies any saved credential against Mistral's model catalog on launch. Until
 verification succeeds, provider actions remain inactive. Cloud backup and device transfer stay
-disabled for app-owned data.
+disabled for app-owned data. Conversation recovery, document import and OCR, structured meeting
+notes, exact-consent local copies, diagnostic export, and complete local-data reset are wired to
+native Android adapters.
 
 Open `apps/ios/Blowhard.xcodeproj` in Xcode to run the iOS 15 or newer application on an Apple
 silicon simulator or device. The Xcode build invokes the narrow `apps:ios-shared` Kotlin framework
 automatically. The iOS host stores its Mistral credential in the device-bound Keychain, starts in
 live-only mode, verifies any saved credential at launch, and discovers compatible models before
-enabling provider actions. Other provider operations remain inactive until their own increments.
+enabling provider actions. It supplies the same application capabilities through iOS Keychain,
+SQLite, security-scoped document URLs, the system export picker, and default data protection.
+
+See the [mobile verification guide](docs/mobile-verification.md) for focused build, test, launch,
+and architecture-review commands. Mobile artifacts are local debug/CI evidence only; Play Store,
+TestFlight, production certificates, and production signing are intentionally outside this milestone.
 
 Reproduce the 12-case synthetic meeting-note evaluation without a credential or network call:
 

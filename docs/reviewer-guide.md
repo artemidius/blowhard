@@ -19,7 +19,9 @@ Read these representative files:
 - `core/application/.../ToolApprovalGate.kt` — consent bound to an exact run, call, arguments, target, and expiry;
 - `app-composition/.../ApplicationRuntime.kt` — shared service assembly and deterministic lifetime ownership;
 - `adapters/persistence/.../SqlDelightMeetingNoteStore.kt` — transactional note and receipt persistence;
-- `apps/desktop/.../DesktopMeetingNoteApprovalPort.kt` — desktop composition without leaking platform details into UI.
+- `app-composition/.../LocalMeetingNoteApprovalPort.kt` — exact-consent policy shared without leaking storage details;
+- `apps/android/.../AndroidApplicationSession.kt` and `apps/ios-shared/.../IosApplicationSession.kt` — native
+  composition roots that inject the same portable capabilities.
 
 ## 2. Follow one user journey
 
@@ -63,3 +65,8 @@ credentials. Desktop packages and both mobile application shells are built, inst
 artifacts are also inventoried and bound to their source revision by SHA-256 evidence. Signing and mobile capability
 limitations are disclosed in the
 [security and limitations](security.md) document rather than hidden behind a successful build badge.
+
+The [mobile verification guide](mobile-verification.md) maps Android and iOS capabilities to their
+native adapters and executable evidence. Android CI also records an allowlisted cold-start timing
+report; iOS CI reports build, install, launch, and process-survival evidence without inventing a
+timing metric that `simctl` does not provide.
