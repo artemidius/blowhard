@@ -19,24 +19,35 @@ If you are reviewing the repository, start with the
 
 ## Product preview
 
+![Blowhard desktop and Android apps showing real conversations with Mistral](docs/media/blowhard-showcase.png)
+
+Live conversations captured on macOS and Android with `mistral-small-latest`: code generation on
+desktop and a concise planning exchange on mobile. Both use the shared Kotlin application runtime.
+
+[Desktop PNG](docs/media/desktop-chat.png) · [Android PNG](docs/media/android-chat.png)
+
+<details>
+<summary>Watch the desktop and mobile conversations (GIF)</summary>
+
 <table>
   <tr>
-    <th>Desktop — deterministic package verification</th>
-    <th>Android — secure provider setup</th>
+    <th>Desktop · from prompt to code</th>
+    <th>Android · ideas on the go</th>
   </tr>
   <tr>
-    <td width="68%">
-      <img src="docs/media/blowhard-desktop-verification.png" alt="Blowhard desktop conversation workspace running the deterministic offline package verification flow">
+    <td width="68%" valign="top">
+      <img src="docs/media/desktop-chat.gif" alt="A live Mistral request producing a Kotlin streaming interface in the desktop app">
     </td>
-    <td width="32%">
-      <img src="docs/media/blowhard-android-connect.png" alt="Blowhard Android connection screen with credential, model, and external-processing controls">
+    <td width="32%" valign="top">
+      <img src="docs/media/android-chat.gif" alt="The Android app sending a planning prompt and displaying the streamed Mistral response">
     </td>
   </tr>
 </table>
 
-The desktop capture uses the built-in network-free packaging fixture. The Android capture shows the
-fail-closed provider setup shared by the mobile presentation layer. No production credential or
-personal data is present in either image.
+</details>
+
+The previews use public sample prompts and real provider responses. See the
+[capture notes](docs/media/README.md) for provenance and formats.
 
 ## Technical direction
 
