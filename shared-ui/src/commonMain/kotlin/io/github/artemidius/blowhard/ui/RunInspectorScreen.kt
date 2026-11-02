@@ -20,6 +20,10 @@ import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.semantics.LiveRegionMode
+import androidx.compose.ui.semantics.heading
+import androidx.compose.ui.semantics.liveRegion
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import io.github.artemidius.blowhard.core.api.RunInspection
@@ -49,14 +53,7 @@ private fun InspectorHeader(state: RunInspectorUiState, onAction: (RunInspectorA
         verticalAlignment = Alignment.CenterVertically,
     ) {
         TextButton(onClick = onBack) { Text("Back") }
-        Column(Modifier.weight(1f)) {
-            Text("Run inspector", style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.SemiBold)
-            Text(
-                "Bounded, content-free operational metadata",
-                style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
-            )
-        }
+        InspectorTitle(Modifier.weight(1f))
         TextButton(
             onClick = { onAction(RunInspectorAction.Refresh) },
             enabled = state.runId != null && state !is RunInspectorUiState.Loading,
@@ -76,6 +73,23 @@ private fun InspectorHeader(state: RunInspectorUiState, onAction: (RunInspectorA
                 },
             )
         }
+    }
+}
+
+@Composable
+private fun InspectorTitle(modifier: Modifier) {
+    Column(modifier) {
+        Text(
+            "Run inspector",
+            modifier = Modifier.semantics { heading() },
+            style = MaterialTheme.typography.titleLarge,
+            fontWeight = FontWeight.SemiBold,
+        )
+        Text(
+            "Bounded, content-free operational metadata",
+            style = MaterialTheme.typography.bodySmall,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+        )
     }
 }
 
@@ -140,7 +154,7 @@ private fun ReadyInspection(
 private fun ExportStatus(message: String) {
     Text(
         text = message,
-        modifier = Modifier.fillMaxWidth(),
+        modifier = Modifier.fillMaxWidth().semantics { liveRegion = LiveRegionMode.Polite },
         color = MaterialTheme.colorScheme.onSurfaceVariant,
         style = MaterialTheme.typography.bodyMedium,
     )
