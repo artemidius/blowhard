@@ -1,11 +1,20 @@
 package io.github.artemidius.blowhard.desktop
 
+import io.github.artemidius.blowhard.composition.LocalMeetingNoteApprovalPort
 import io.github.artemidius.blowhard.core.api.MeetingNoteId
 import io.github.artemidius.blowhard.core.api.MeetingNotes
 import io.github.artemidius.blowhard.core.application.DefaultMeetingNotes
 import io.github.artemidius.blowhard.core.application.MeetingNoteClock
 import io.github.artemidius.blowhard.core.application.MeetingNoteIdFactory
+import io.github.artemidius.blowhard.ui.presentation.MeetingNoteApprovalPort
 import java.util.UUID
+
+internal fun createMeetingNoteApprovals(documents: DesktopDocumentSession): MeetingNoteApprovalPort =
+    LocalMeetingNoteApprovalPort.create(
+        documents.meetingNoteStore,
+        now = System::currentTimeMillis,
+        identity = { UUID.randomUUID().toString() },
+    )
 
 internal fun createMeetingNotes(
     documents: DesktopDocumentSession,

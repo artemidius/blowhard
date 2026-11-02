@@ -3,19 +3,24 @@ package io.github.artemidius.blowhard.android
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
 import io.github.artemidius.blowhard.adapters.persistence.AndroidLocalDatabaseFiles
+import io.github.artemidius.blowhard.composition.LocalMeetingNoteApprovalPort
 import io.github.artemidius.blowhard.core.api.DocumentImportResult
 import io.github.artemidius.blowhard.core.api.DocumentImportSource
 import io.github.artemidius.blowhard.core.api.DocumentListResult
 import io.github.artemidius.blowhard.core.api.DocumentProcessingResult
 import io.github.artemidius.blowhard.core.api.DocumentReadResult
 import io.github.artemidius.blowhard.core.api.MeetingNoteGenerationOutcome
+import io.github.artemidius.blowhard.core.api.MeetingNoteId
 import io.github.artemidius.blowhard.core.api.MeetingNoteLookupOutcome
+import io.github.artemidius.blowhard.core.api.MeetingNoteRecord
 import io.github.artemidius.blowhard.core.domain.DocumentOcrPage
 import io.github.artemidius.blowhard.core.domain.DocumentOcrPort
 import io.github.artemidius.blowhard.core.domain.DocumentOcrPortResult
 import io.github.artemidius.blowhard.core.domain.DocumentOcrRequest
 import io.github.artemidius.blowhard.core.domain.MeetingNoteGenerationPort
 import io.github.artemidius.blowhard.core.domain.MeetingNoteGenerationResult
+import io.github.artemidius.blowhard.ui.presentation.MeetingNoteApprovalProposalResult
+import io.github.artemidius.blowhard.ui.presentation.ProposedMeetingNoteStatus
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
@@ -45,6 +50,7 @@ public class AndroidDocumentSessionDeviceTest {
             assertTrue(first.ocr.process(imported.document.id) is DocumentProcessingResult.Processed)
             assertEquals(1, processor.requests)
             val generated = first.meetingNotes.generate(imported.document.id) as MeetingNoteGenerationOutcome.Generated
+            val approvedNoteId = approveCopy(first, generated.note)
             first.close()
 
             val second = requireNotNull(
@@ -53,11 +59,28 @@ public class AndroidDocumentSessionDeviceTest {
             val stored = second.library.list() as DocumentListResult.Available
             assertEquals(listOf("scan.png"), stored.documents.map { it.displayName })
             assertTrue(second.meetingNotes.find(generated.note.id) is MeetingNoteLookupOutcome.Found)
+            assertTrue(second.meetingNotes.find(approvedNoteId) is MeetingNoteLookupOutcome.Found)
             second.close()
         } finally {
             AndroidLocalDatabaseFiles.delete(context, databaseName)
         }
     }
+}
+
+private suspend fun approveCopy(session: AndroidDocumentSession, note: MeetingNoteRecord): MeetingNoteId {
+    var nextIdentity = 0
+    val approvals = LocalMeetingNoteApprovalPort.create(
+        session.meetingNoteStore,
+        now = { 100 },
+        identity = {
+            val value = "android-approval-$nextIdentity"
+            nextIdentity += 1
+            value
+        },
+    )
+    val proposed = approvals.propose(note) as MeetingNoteApprovalProposalResult.Proposed
+    assertEquals(ProposedMeetingNoteStatus.COMMITTED, approvals.approve())
+    return proposed.state.note.id
 }
 
 private class RecordingDocumentOcrPort : DocumentOcrPort {

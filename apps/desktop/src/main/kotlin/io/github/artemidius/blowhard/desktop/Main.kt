@@ -131,7 +131,7 @@ private fun createDesktopRuntime(environment: DesktopEnvironment, configurationD
         providers.credentialProvider,
     )
     val meetingNotes = createMeetingNotes(documents, meetingNoteGeneration)
-    val meetingNoteApprovals = DesktopMeetingNoteApprovalPort.create(documents.meetingNoteStore)
+    val meetingNoteApprovals = createMeetingNoteApprovals(documents)
     val runtime = DesktopRuntime.create(
         clipboardWriter = AwtClipboardWriter(sessionAvailable = { environment.hasClipboardSession }),
         connectionSettings = providers.connectionSettings,

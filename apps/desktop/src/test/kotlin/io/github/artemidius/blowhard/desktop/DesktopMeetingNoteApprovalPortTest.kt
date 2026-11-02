@@ -1,5 +1,6 @@
 package io.github.artemidius.blowhard.desktop
 
+import io.github.artemidius.blowhard.composition.LocalMeetingNoteApprovalPort
 import io.github.artemidius.blowhard.core.api.DocumentId
 import io.github.artemidius.blowhard.core.api.MeetingDecision
 import io.github.artemidius.blowhard.core.api.MeetingNoteContent
@@ -69,13 +70,13 @@ class DesktopMeetingNoteApprovalPortTest {
         assertEquals(ProposedMeetingNoteStatus.FAILED, port.approve())
         assertEquals(ProposedMeetingNoteStatus.FAILED, port.deny())
 
-        val unavailable = DesktopMeetingNoteApprovalPort.create(null)
+        val unavailable = LocalMeetingNoteApprovalPort.create(null, now = { 100 }, identity = { "identity" })
         assertEquals(MeetingNoteApprovalProposalResult.Unavailable, unavailable.propose(note()))
     }
 
     private fun port(store: MeetingNoteStore): io.github.artemidius.blowhard.ui.presentation.MeetingNoteApprovalPort {
         var nextIdentity = 0
-        return DesktopMeetingNoteApprovalPort.create(store, now = { 100 }) { "identity-${nextIdentity++}" }
+        return LocalMeetingNoteApprovalPort.create(store, now = { 100 }) { "identity-${nextIdentity++}" }
     }
 }
 
