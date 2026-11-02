@@ -20,6 +20,7 @@ import io.github.artemidius.blowhard.core.api.MeetingNoteLookupOutcome
 import io.github.artemidius.blowhard.core.api.MeetingNoteRecord
 import io.github.artemidius.blowhard.core.api.MeetingNoteUpdateOutcome
 import io.github.artemidius.blowhard.core.api.MeetingNotes
+import io.github.artemidius.blowhard.core.api.RunDiagnosticReport
 import io.github.artemidius.blowhard.core.domain.DocumentExtractionSaveResult
 import io.github.artemidius.blowhard.core.domain.DocumentExtractionStoreLookupResult
 import io.github.artemidius.blowhard.core.domain.DocumentProcessingStore
@@ -31,6 +32,8 @@ import io.github.artemidius.blowhard.ui.presentation.DocumentPicker
 import io.github.artemidius.blowhard.ui.presentation.MeetingNoteApprovalPort
 import io.github.artemidius.blowhard.ui.presentation.MeetingNoteApprovalProposalResult
 import io.github.artemidius.blowhard.ui.presentation.ProposedMeetingNoteStatus
+import io.github.artemidius.blowhard.ui.presentation.RunDiagnosticReportSaveResult
+import io.github.artemidius.blowhard.ui.presentation.RunDiagnosticReportSaver
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
@@ -102,6 +105,28 @@ class ApplicationRuntimeDependenciesTest {
         assertSame(base.documentOcr, configured.documentOcr)
         assertSame(base.documentProcessingStore, configured.documentProcessingStore)
     }
+
+    @Test
+    fun `report saver replacement preserves every application service`() {
+        val base = ApplicationRuntimeDependencies.conversationOnly(
+            FailClosedConnectionSettings(),
+            TextGenerationPort { flowOf(GenerationEvent.Completed) },
+        ).withDocuments(
+            RecordingDocumentLibrary,
+            RecordingDocumentOcr,
+            RecordingDocumentPicker,
+            RecordingDocumentProcessingStore,
+        ).withMeetingNotes(RecordingMeetingNotes, RecordingMeetingNoteApprovals)
+
+        val configured = base.withReportSaver(RecordingReportSaver)
+
+        assertSame(RecordingReportSaver, configured.reportSaver)
+        assertSame(base.connectionSettings, configured.connectionSettings)
+        assertSame(base.generation, configured.generation)
+        assertSame(base.documentLibrary, configured.documentLibrary)
+        assertSame(base.meetingNotes, configured.meetingNotes)
+        assertSame(base.meetingNoteApprovals, configured.meetingNoteApprovals)
+    }
 }
 
 private object RecordingDocumentLibrary : DocumentLibrary {
@@ -147,4 +172,8 @@ private object RecordingMeetingNoteApprovals : MeetingNoteApprovalPort {
     override suspend fun propose(note: MeetingNoteRecord): MeetingNoteApprovalProposalResult = error("not called")
     override suspend fun approve(): ProposedMeetingNoteStatus = error("not called")
     override suspend fun deny(): ProposedMeetingNoteStatus = error("not called")
+}
+
+private object RecordingReportSaver : RunDiagnosticReportSaver {
+    override suspend fun save(report: RunDiagnosticReport): RunDiagnosticReportSaveResult = error("not called")
 }

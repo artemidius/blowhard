@@ -74,6 +74,23 @@ public class ApplicationRuntimeDependencies(
         documentProcessingStore = documentProcessingStore,
     )
 
+    /** Returns an equivalent graph with a native, explicitly user-directed diagnostic exporter. */
+    public fun withReportSaver(saver: RunDiagnosticReportSaver): ApplicationRuntimeDependencies =
+        ApplicationRuntimeDependencies(
+            connectionSettings = connectionSettings,
+            generation = generation,
+            scenarioSelection = scenarioSelection,
+            clipboardWriter = clipboardWriter,
+            reportSaver = saver,
+            documentLibrary = documentLibrary,
+            documentOcr = documentOcr,
+            documentPicker = documentPicker,
+            meetingNotes = meetingNotes,
+            meetingNoteApprovals = meetingNoteApprovals,
+            conversationStore = conversationStore,
+            documentProcessingStore = documentProcessingStore,
+        )
+
     /** Creates an explicit inactive graph for hosts that do not yet provide native capabilities. */
     public companion object {
         /** Uses [connectionSettings] and rejects every unavailable platform or provider operation. */
