@@ -19,9 +19,10 @@ import kotlinx.coroutines.runBlocking
 internal class IosApplicationRuntime {
     private val closeScope = CoroutineScope(SupervisorJob() + Dispatchers.Default)
     val documentPicker = IosDocumentPicker()
+    val diagnosticReportSaver = IosRunDiagnosticReportSaver()
     private val sessionOwner = ReplaceableApplicationSession(
-        initialSession = runBlocking { createIosApplicationSession(documentPicker) },
-        factory = ApplicationSessionFactory { createIosApplicationSession(documentPicker) },
+        initialSession = runBlocking { createIosApplicationSession(documentPicker, diagnosticReportSaver) },
+        factory = ApplicationSessionFactory { createIosApplicationSession(documentPicker, diagnosticReportSaver) },
         closer = ApplicationSessionCloser(IosApplicationSession::close),
         eraser = IosLocalDataEraser(
             credentialStore = IosCredentialStores.mistralApiKey(),
