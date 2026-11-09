@@ -25,6 +25,9 @@ the shared architecture.
 The toolchain is pinned in the Gradle version catalog and documented in
 [`ADR 0001`](docs/decisions/0001-toolchain-and-project-shape.md).
 
+The shared client contract and enforced module direction are documented in
+[`ADR 0002`](docs/decisions/0002-core-api-and-dependency-boundaries.md).
+
 ## Run the desktop application
 
 ```shell
@@ -35,6 +38,7 @@ The toolchain is pinned in the Gradle version catalog and documented in
 
 ```shell
 ./gradlew :apps:desktop:build :shared-ui:compileAndroidMain
+./gradlew checkModuleBoundaries
 ```
 
 On macOS, also verify the shared iOS target:
