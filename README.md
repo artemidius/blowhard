@@ -69,6 +69,12 @@ boundary and its limitations are documented in
 [`ADR 0011`](docs/decisions/0011-macos-keychain-credentials.md) and the
 [credential storage guide](docs/architecture/credential-storage.md).
 
+Live-provider configuration is coordinated through a shared, secret-free settings contract. It
+requires a verified compatible model and explicit external-processing acknowledgement before live
+mode can be selected. The policy is documented in
+[`ADR 0012`](docs/decisions/0012-explicit-live-provider-settings.md) and the
+[live-provider settings guide](docs/architecture/live-provider-settings.md).
+
 ## Run the desktop application
 
 ```shell
