@@ -18,4 +18,11 @@ class IdentifierTest {
             RunId("  ")
         }
     }
+
+    @Test
+    fun `run timestamp rejects negative epoch values`() {
+        assertFailsWith<IllegalArgumentException> {
+            RunTimestamp(-1)
+        }
+    }
 }

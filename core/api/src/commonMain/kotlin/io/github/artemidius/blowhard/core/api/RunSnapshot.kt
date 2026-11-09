@@ -8,13 +8,21 @@ public sealed interface RunSnapshot {
     /** Conversation that owns the attempt. */
     public val conversationId: ConversationId
 
+    /** UTC time at which this immutable snapshot became current. */
+    public val updatedAt: RunTimestamp
+
     /** The attempt exists but provider execution has not started. */
-    public data class Queued(override val runId: RunId, override val conversationId: ConversationId) : RunSnapshot
+    public data class Queued(
+        override val runId: RunId,
+        override val conversationId: ConversationId,
+        override val updatedAt: RunTimestamp,
+    ) : RunSnapshot
 
     /** The attempt is active and [output] contains the text produced so far. */
     public data class Running(
         override val runId: RunId,
         override val conversationId: ConversationId,
+        override val updatedAt: RunTimestamp,
         public val output: String,
     ) : RunSnapshot
 
@@ -22,6 +30,7 @@ public sealed interface RunSnapshot {
     public data class Succeeded(
         override val runId: RunId,
         override val conversationId: ConversationId,
+        override val updatedAt: RunTimestamp,
         public val output: String,
     ) : RunSnapshot
 
@@ -29,6 +38,7 @@ public sealed interface RunSnapshot {
     public data class Failed(
         override val runId: RunId,
         override val conversationId: ConversationId,
+        override val updatedAt: RunTimestamp,
         public val partialOutput: String,
         public val failure: RunFailure,
     ) : RunSnapshot
@@ -37,6 +47,7 @@ public sealed interface RunSnapshot {
     public data class Cancelled(
         override val runId: RunId,
         override val conversationId: ConversationId,
+        override val updatedAt: RunTimestamp,
         public val partialOutput: String,
     ) : RunSnapshot
 }
