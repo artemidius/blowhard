@@ -71,6 +71,7 @@ jobs:
             build/reports/kover/
             build/dokka/html/
             adapters/**/build/test-results/
+            apps/desktop/build/test-results/
             core/**/build/test-results/
             shared-ui/build/test-results/
           if-no-files-found: warn
@@ -152,6 +153,7 @@ jobs:
             apps/desktop/build/compose/binaries/main/deb/*.deb
             apps/desktop/build/compose/binaries/main/dmg/*.dmg
             apps/desktop/build/compose/binaries/main/msi/*.msi
+            apps/desktop/build/test-results/test/
             adapters/**/build/test-results/desktopTest/
             core/**/build/test-results/desktopTest/
             shared-ui/build/test-results/desktopTest/
