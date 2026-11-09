@@ -20,9 +20,9 @@ import io.ktor.http.contentType
 import io.ktor.http.isSuccess
 import io.ktor.utils.io.charsets.TooLongLineException
 import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.channels.SendChannel
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.FlowCollector
-import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.channelFlow
 import kotlinx.io.IOException
 import kotlinx.serialization.json.Json
 
@@ -32,15 +32,15 @@ public class MistralTextGenerationPort private constructor(
     private val configuration: MistralChatConfiguration,
     private val client: HttpClient,
 ) : TextGenerationPort {
-    override fun generate(request: GenerationRequest): Flow<GenerationEvent> = flow {
+    override fun generate(request: GenerationRequest): Flow<GenerationEvent> = channelFlow {
         if (request.prompt.value.length > MAX_PROMPT_CHARACTERS) {
             emitFailure(GenerationFailure(GenerationFailureKind.INVALID_REQUEST))
-            return@flow
+            return@channelFlow
         }
         val apiKey = credentials.readSafeApiKey()
         if (apiKey == null) {
             emitFailure(GenerationFailure(GenerationFailureKind.CREDENTIAL_UNAVAILABLE))
-            return@flow
+            return@channelFlow
         }
         stream(request, apiKey)
     }
@@ -48,8 +48,8 @@ public class MistralTextGenerationPort private constructor(
     /** Releases network resources owned by this adapter. */
     public fun close(): Unit = client.close()
 
-    private suspend fun FlowCollector<GenerationEvent>.stream(request: GenerationRequest, apiKey: String) {
-        val batcher = TextDeltaBatcher(this)
+    private suspend fun SendChannel<GenerationEvent>.stream(request: GenerationRequest, apiKey: String) {
+        val batcher = TextDeltaBatcher { send(it) }
         try {
             executeRequest(request, apiKey, batcher)
         } catch (cancellation: CancellationException) {
@@ -72,7 +72,7 @@ public class MistralTextGenerationPort private constructor(
         }
     }
 
-    private suspend fun FlowCollector<GenerationEvent>.executeRequest(
+    private suspend fun SendChannel<GenerationEvent>.executeRequest(
         request: GenerationRequest,
         apiKey: String,
         batcher: TextDeltaBatcher,
@@ -98,7 +98,7 @@ public class MistralTextGenerationPort private constructor(
         }
     }
 
-    private suspend fun FlowCollector<GenerationEvent>.consumeSuccessfulResponse(
+    private suspend fun SendChannel<GenerationEvent>.consumeSuccessfulResponse(
         channel: io.ktor.utils.io.ByteReadChannel,
         batcher: TextDeltaBatcher,
     ) {
@@ -118,7 +118,7 @@ public class MistralTextGenerationPort private constructor(
         }
         batcher.flush()
         when {
-            result == SseReadResult.DONE && sawChoice -> emit(GenerationEvent.Completed)
+            result == SseReadResult.DONE && sawChoice -> send(GenerationEvent.Completed)
             result == SseReadResult.DONE -> emitFailure(invalidResponseFailure())
             else -> emitFailure(unavailableFailure())
         }
@@ -148,8 +148,8 @@ public class MistralTextGenerationPort private constructor(
     }
 }
 
-private suspend fun FlowCollector<GenerationEvent>.emitFailure(failure: GenerationFailure) {
-    emit(GenerationEvent.Failed(failure))
+private suspend fun SendChannel<GenerationEvent>.emitFailure(failure: GenerationFailure) {
+    send(GenerationEvent.Failed(failure))
 }
 
 private fun invalidResponseFailure(): GenerationFailure = GenerationFailure(
