@@ -4,9 +4,9 @@
 
 A desktop-first Kotlin Multiplatform client for Mistral AI.
 
-Blowhard is in early development. The current foundation provides a shared Compose presentation
-module for desktop, Android, and iOS, a dedicated desktop entry point, and a platform-neutral core
-API with an application-owned run lifecycle and a deterministic offline generation adapter.
+Blowhard is in early development. The current application demonstrates a shared Compose
+conversation workflow on desktop, backed by a platform-neutral run lifecycle and a deterministic
+offline generation adapter. The shared presentation module also compiles for Android and iOS.
 
 ## Technical direction
 
@@ -44,11 +44,19 @@ Run ownership, concurrency, and deterministic fixture behavior are documented in
 [`ADR 0006`](docs/decisions/0006-run-lifecycle-and-fixtures.md) and the
 [run lifecycle guide](docs/architecture/run-lifecycle.md).
 
+The unidirectional presentation model, safe Markdown subset, and desktop composition root are
+documented in [`ADR 0007`](docs/decisions/0007-shared-conversation-presentation.md) and the
+[conversation presentation guide](docs/architecture/conversation-presentation.md).
+
 ## Run the desktop application
 
 ```shell
 ./gradlew :apps:desktop:run
 ```
+
+The runnable application is an explicitly labeled offline demo. Choose a bundled success, failure,
+rate-limit, or interrupted-stream scenario, enter any non-blank prompt, then use **Send** or
+**Stop** to exercise the real shared lifecycle. No API key or network request is required.
 
 ## Verify the foundation
 
@@ -98,8 +106,9 @@ to the macOS app, but it is not Developer ID signed or notarized. The Windows pa
 publisher-signed. These packages are therefore intended only for build verification; trusted
 signing and release distribution are intentionally deferred.
 
-The application currently displays only the runnable project foundation. AI functionality and
-public release artifacts are not available yet.
+The application currently uses synthetic fixture output rather than a live Mistral connection.
+Provider credentials, network transport, persistence, and public release artifacts are not
+available yet.
 
 See [`CONTRIBUTING.md`](CONTRIBUTING.md) for the review and verification workflow.
 

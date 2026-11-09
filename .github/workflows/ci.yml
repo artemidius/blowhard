@@ -72,6 +72,7 @@ jobs:
             build/dokka/html/
             adapters/**/build/test-results/
             core/**/build/test-results/
+            shared-ui/build/test-results/
           if-no-files-found: warn
           retention-days: 7
 
@@ -121,6 +122,7 @@ jobs:
           :core:application:desktopTest
           :core:domain:desktopTest
           :adapters:fixture:desktopTest
+          :shared-ui:desktopTest
 
       - name: Build native package
         run: >-
@@ -152,6 +154,7 @@ jobs:
             apps/desktop/build/compose/binaries/main/msi/*.msi
             adapters/**/build/test-results/desktopTest/
             core/**/build/test-results/desktopTest/
+            shared-ui/build/test-results/desktopTest/
           if-no-files-found: warn
           retention-days: 7
 
@@ -185,6 +188,7 @@ jobs:
           :core:application:testAndroidHostTest
           :core:domain:testAndroidHostTest
           :adapters:fixture:testAndroidHostTest
+          :shared-ui:testAndroidHostTest
 
       - name: Upload Android evidence
         if: ${{ always() }}
@@ -194,6 +198,7 @@ jobs:
           path: |
             adapters/**/build/test-results/testAndroidHostTest/
             core/**/build/test-results/testAndroidHostTest/
+            shared-ui/build/test-results/testAndroidHostTest/
           if-no-files-found: warn
           retention-days: 7
 
@@ -235,6 +240,7 @@ jobs:
           :adapters:fixture:compileKotlinIosArm64
           :adapters:fixture:compileKotlinIosSimulatorArm64
           :adapters:fixture:iosSimulatorArm64Test
+          :shared-ui:iosSimulatorArm64Test
 
       - name: Upload Apple evidence
         if: ${{ always() }}
@@ -244,5 +250,6 @@ jobs:
           path: |
             adapters/**/build/test-results/iosSimulatorArm64Test/
             core/**/build/test-results/iosSimulatorArm64Test/
+            shared-ui/build/test-results/iosSimulatorArm64Test/
           if-no-files-found: warn
           retention-days: 7
