@@ -22,6 +22,7 @@ plugins {
 val documentedModules = listOf(
     project(":adapters:fixture"),
     project(":adapters:mistral"),
+    project(":adapters:platform"),
     project(":core:api"),
     project(":core:application"),
     project(":core:domain"),
@@ -165,6 +166,7 @@ tasks.matching { it.name == "koverXmlReport" || it.name == "koverVerify" }.confi
 private val allowedProjectDependencies = mapOf(
     ":adapters:fixture" to setOf(":core:domain"),
     ":adapters:mistral" to setOf(":core:domain"),
+    ":adapters:platform" to setOf(":core:domain"),
     ":apps:desktop" to setOf(":adapters:fixture", ":core:application", ":shared-ui"),
     ":core:api" to emptySet(),
     ":core:application" to setOf(":core:api", ":core:domain"),
@@ -222,6 +224,8 @@ tasks.register("qualityCheck") {
         ":adapters:fixture:desktopTest",
         ":adapters:mistral:checkKotlinAbi",
         ":adapters:mistral:desktopTest",
+        ":adapters:platform:checkKotlinAbi",
+        ":adapters:platform:test",
         ":shared-ui:checkKotlinAbi",
         ":shared-ui:desktopTest",
     )
