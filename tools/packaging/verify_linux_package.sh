@@ -22,6 +22,10 @@ cleanup() {
 }
 trap cleanup EXIT
 
+# GitHub's headless image omits the menu directories present on desktop Debian systems.
+sudo install --directory --mode=0755 \
+  /usr/local/share/applications \
+  /usr/local/share/desktop-directories
 sudo dpkg --install "$package_file"
 launcher="$(dpkg-query --listfiles blowhard | awk '/\/bin\// && !/\/runtime\// { print; exit }')"
 test -x "$launcher"
