@@ -19,6 +19,7 @@ rootProject.name = "Blowhard"
 include(":apps:desktop")
 include(":adapters:fixture")
 include(":adapters:mistral")
+include(":adapters:platform")
 include(":core:api")
 include(":core:application")
 include(":core:domain")
