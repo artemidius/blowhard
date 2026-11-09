@@ -58,6 +58,11 @@ hardened, fixed-host Ktor adapter. Its security and mapping decisions are docume
 [`ADR 0009`](docs/decisions/0009-mistral-model-catalog-boundary.md) and the
 [Mistral provider boundary guide](docs/architecture/mistral-provider-boundary.md).
 
+The same adapter module implements bounded, cancellation-aware Mistral chat streaming without
+automatic POST replay. Its framing, terminal-state, and retry decisions are documented in
+[`ADR 0010`](docs/decisions/0010-mistral-streaming-chat.md) and the
+[streaming chat guide](docs/architecture/mistral-streaming-chat.md).
+
 ## Run the desktop application
 
 ```shell
@@ -121,9 +126,9 @@ publisher-signed. These packages are therefore intended only for build verificat
 signing and release distribution are intentionally deferred.
 
 The runnable application still uses synthetic fixture output rather than live Mistral generation.
-The repository now includes an isolated, tested model-catalog transport boundary, but it does not
-yet store provider credentials or expose that boundary in the UI. Public release artifacts are not
-available yet.
+The repository includes isolated, tested model-catalog and streaming-chat transport boundaries, but
+it does not yet store provider credentials or expose those boundaries in the UI. Public release
+artifacts are not available yet.
 
 See [`CONTRIBUTING.md`](CONTRIBUTING.md) for the review and verification workflow.
 

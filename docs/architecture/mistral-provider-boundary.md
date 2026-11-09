@@ -1,7 +1,7 @@
 # Mistral provider boundary
 
-Model discovery is the first live-provider capability. It is isolated from presentation and
-application policy by a core-owned port.
+Model discovery and streaming chat are isolated from presentation and application policy by
+core-owned ports.
 
 ```mermaid
 flowchart LR
@@ -9,6 +9,9 @@ flowchart LR
     Adapter[MistralModelCatalog] --> Domain
     Adapter -->|read immediately before request| Credentials[MistralCredentialProvider]
     Adapter -->|GET /v1/models| API[api.mistral.ai]
+    Stream[MistralTextGenerationPort] -->|TextGenerationPort| Domain
+    Stream -->|POST /v1/chat/completions| API
+    Stream --> Credentials
     Ktor[Ktor client policy] --> Adapter
     CIO[CIO: desktop] --> Ktor
     OkHttp[OkHttp: Android] --> Ktor
@@ -16,8 +19,10 @@ flowchart LR
 ```
 
 `core:domain` owns the stable vocabulary: model identifiers, aliases, optional context windows,
-availability, understood capabilities, and safe failure categories. `adapters:mistral` owns the
-wire DTOs and maps them at the boundary. Provider JSON and Ktor types do not escape the adapter.
+availability, understood capabilities, ordered generation events, retry advice, and safe failure
+categories. `adapters:mistral` owns the wire DTOs and maps them at the boundary. Provider JSON and
+Ktor types do not escape the adapter. Streaming details are documented in the
+[streaming chat guide](mistral-streaming-chat.md).
 
 ## Conservative mapping
 
