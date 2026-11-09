@@ -5,14 +5,14 @@ import kotlin.jvm.JvmInline
 /** Validated user-authored input for a generation request. */
 @JvmInline
 public value class PromptText private constructor(public val value: String) {
+    /** Creates validated prompt values from untrusted text. */
     public companion object {
         /** Validates [raw] without modifying its whitespace or contents. */
-        public fun from(raw: String): PromptTextResult =
-            if (raw.isBlank()) {
-                PromptTextResult.Rejected(PromptRejection.BLANK)
-            } else {
-                PromptTextResult.Accepted(PromptText(raw))
-            }
+        public fun from(raw: String): PromptTextResult = if (raw.isBlank()) {
+            PromptTextResult.Rejected(PromptRejection.BLANK)
+        } else {
+            PromptTextResult.Accepted(PromptText(raw))
+        }
     }
 }
 
