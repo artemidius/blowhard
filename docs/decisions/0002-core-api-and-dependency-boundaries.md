@@ -14,12 +14,12 @@ boundary that does not grant them ownership of application policy or run lifecyc
 Use three initial core modules with one-way dependencies:
 
 ```text
-clients ---------> core:api
-                       ^
-                       |
-core:application ------+------> core:domain
-                                   |
-                                   +------> core:api
+clients ---> shared-ui ---> core:api
+   |                          ^
+   |                          |
+   +------> core:application -+----> core:domain
+   |                                    |
+   +------> adapters:fixture ---------->+
 
 adapters:fixture ----------------> core:domain
 ```
@@ -30,6 +30,10 @@ adapters:fixture ----------------> core:domain
   text-generation port. It depends on API identifiers but is not exposed to presentation clients.
 - `core:application` owns validation, policy, orchestration, and run lifecycle implementation.
 - Presentation consumes only `core:api` when application behavior is introduced.
+- `shared-ui` owns platform-neutral screen state, user actions, presenter logic, and Compose UI. It
+  has no dependency on application implementations or provider adapters.
+- Client composition roots select concrete application and adapter implementations, wire them to
+  `shared-ui`, and close their owned resources.
 - Provider, persistence, and operating-system adapters implement core-owned ports and remain outside
   all core modules.
 - `adapters:fixture` is the first provider adapter. It depends only on the domain-owned generation

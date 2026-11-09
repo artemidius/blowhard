@@ -23,6 +23,7 @@ val documentedModules = listOf(
     project(":core:api"),
     project(":core:application"),
     project(":core:domain"),
+    project(":shared-ui"),
 )
 
 documentedModules.forEach { module ->
@@ -93,6 +94,7 @@ kover {
                     classes(
                         "io.github.artemidius.blowhard.core.application.*",
                         "io.github.artemidius.blowhard.core.domain.PromptText*",
+                        "io.github.artemidius.blowhard.ui.presentation.*",
                     )
                 }
             }
@@ -155,11 +157,11 @@ tasks.matching { it.name == "koverXmlReport" || it.name == "koverVerify" }.confi
 
 private val allowedProjectDependencies = mapOf(
     ":adapters:fixture" to setOf(":core:domain"),
-    ":apps:desktop" to setOf(":shared-ui"),
+    ":apps:desktop" to setOf(":adapters:fixture", ":core:application", ":shared-ui"),
     ":core:api" to emptySet(),
     ":core:application" to setOf(":core:api", ":core:domain"),
     ":core:domain" to setOf(":core:api"),
-    ":shared-ui" to emptySet(),
+    ":shared-ui" to setOf(":core:api"),
 )
 
 val checkModuleBoundaries = tasks.register("checkModuleBoundaries") {
@@ -210,5 +212,7 @@ tasks.register("qualityCheck") {
         ":core:domain:desktopTest",
         ":adapters:fixture:checkKotlinAbi",
         ":adapters:fixture:desktopTest",
+        ":shared-ui:checkKotlinAbi",
+        ":shared-ui:desktopTest",
     )
 }
