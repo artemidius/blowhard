@@ -16,7 +16,21 @@ import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.input.key.Key
+import androidx.compose.ui.input.key.KeyEventType
+import androidx.compose.ui.input.key.isCtrlPressed
+import androidx.compose.ui.input.key.isMetaPressed
+import androidx.compose.ui.input.key.key
+import androidx.compose.ui.input.key.onPreviewKeyEvent
+import androidx.compose.ui.input.key.type
+import androidx.compose.ui.semantics.LiveRegionMode
+import androidx.compose.ui.semantics.liveRegion
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import io.github.artemidius.blowhard.ui.presentation.ConversationAction
 import io.github.artemidius.blowhard.ui.presentation.ConversationUiState
@@ -24,6 +38,10 @@ import io.github.artemidius.blowhard.ui.presentation.DemoScenario
 
 @Composable
 internal fun ComposerPanel(state: ConversationUiState, onAction: (ConversationAction) -> Unit) {
+    val composerFocus = remember { FocusRequester() }
+    LaunchedEffect(state.selectedConversationId, state.selectedConversation.runState.isActive) {
+        if (!state.selectedConversation.runState.isActive) composerFocus.requestFocus()
+    }
     Column(
         modifier = Modifier.fillMaxWidth().padding(24.dp),
         verticalArrangement = Arrangement.spacedBy(10.dp),
@@ -32,7 +50,21 @@ internal fun ComposerPanel(state: ConversationUiState, onAction: (ConversationAc
         OutlinedTextField(
             value = state.composer,
             onValueChange = { onAction(ConversationAction.ComposerChanged(it)) },
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier
+                .fillMaxWidth()
+                .focusRequester(composerFocus)
+                .onPreviewKeyEvent { event ->
+                    val sendShortcut = event.type == KeyEventType.KeyDown &&
+                        event.key == Key.Enter &&
+                        (event.isCtrlPressed || event.isMetaPressed)
+                    if (sendShortcut && state.canSend) {
+                        onAction(ConversationAction.Send)
+                        true
+                    } else {
+                        false
+                    }
+                },
+            label = { Text("Message") },
             placeholder = { Text("Ask the offline fixture anything…") },
             minLines = 2,
             maxLines = 6,
@@ -76,7 +108,9 @@ private fun ComposerActions(state: ConversationUiState, onAction: (ConversationA
         }
         Text(
             state.selectedConversation.runState.displayLabel(),
-            modifier = Modifier.padding(start = 8.dp, top = 12.dp),
+            modifier = Modifier
+                .padding(start = 8.dp, top = 12.dp)
+                .semantics { liveRegion = LiveRegionMode.Polite },
             style = MaterialTheme.typography.labelMedium,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
         )

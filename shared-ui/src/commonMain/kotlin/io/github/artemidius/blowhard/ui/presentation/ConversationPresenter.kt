@@ -31,6 +31,7 @@ import kotlin.coroutines.CoroutineContext
 public class ConversationPresenter(
     private val runs: ConversationRuns,
     private val scenarioSelection: DemoScenarioSelection,
+    clipboardWriter: ClipboardWriter,
     coroutineContext: CoroutineContext,
 ) {
     private val scope = CoroutineScope(coroutineContext + SupervisorJob())
@@ -38,6 +39,7 @@ public class ConversationPresenter(
     private val mutableState = MutableStateFlow(initialConversationState())
     private val activeRuns = mutableMapOf<ConversationId, ActiveRun>()
     private val observers = mutableMapOf<ConversationId, Job>()
+    private val messageClipboard = MessageClipboard(clipboardWriter)
     private val conversationIds = PresentationIdSequence("conversation", initialValue = 1L)
     private val messageIds = PresentationIdSequence("message")
 
@@ -89,6 +91,10 @@ public class ConversationPresenter(
             ConversationAction.Send -> send()
 
             ConversationAction.Stop -> stop()
+
+            is ConversationAction.CopyMessage -> {
+                mutableState.value = messageClipboard.copy(mutableState.value, action.messageId)
+            }
 
             ConversationAction.NoticeDismissed -> mutableState.value = mutableState.value.withSelectedNotice(null)
         }
