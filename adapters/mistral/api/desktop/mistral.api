@@ -1,3 +1,17 @@
+public final class io/github/artemidius/blowhard/adapters/mistral/MistralChatConfiguration {
+	public fun <init> (Ljava/lang/String;Ljava/lang/Integer;)V
+	public synthetic fun <init> (Ljava/lang/String;Ljava/lang/Integer;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun component2 ()Ljava/lang/Integer;
+	public final fun copy (Ljava/lang/String;Ljava/lang/Integer;)Lio/github/artemidius/blowhard/adapters/mistral/MistralChatConfiguration;
+	public static synthetic fun copy$default (Lio/github/artemidius/blowhard/adapters/mistral/MistralChatConfiguration;Ljava/lang/String;Ljava/lang/Integer;ILjava/lang/Object;)Lio/github/artemidius/blowhard/adapters/mistral/MistralChatConfiguration;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getMaxOutputTokens ()Ljava/lang/Integer;
+	public final fun getModelId ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
 public abstract interface class io/github/artemidius/blowhard/adapters/mistral/MistralCredentialProvider {
 	public abstract fun apiKey (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 }
@@ -10,5 +24,15 @@ public final class io/github/artemidius/blowhard/adapters/mistral/MistralModelCa
 
 public final class io/github/artemidius/blowhard/adapters/mistral/MistralModelCatalog$Companion {
 	public final fun create (Lio/github/artemidius/blowhard/adapters/mistral/MistralCredentialProvider;)Lio/github/artemidius/blowhard/adapters/mistral/MistralModelCatalog;
+}
+
+public final class io/github/artemidius/blowhard/adapters/mistral/MistralTextGenerationPort : io/github/artemidius/blowhard/core/domain/TextGenerationPort {
+	public static final field Companion Lio/github/artemidius/blowhard/adapters/mistral/MistralTextGenerationPort$Companion;
+	public final fun close ()V
+	public fun generate (Lio/github/artemidius/blowhard/core/domain/GenerationRequest;)Lkotlinx/coroutines/flow/Flow;
+}
+
+public final class io/github/artemidius/blowhard/adapters/mistral/MistralTextGenerationPort$Companion {
+	public final fun create (Lio/github/artemidius/blowhard/adapters/mistral/MistralCredentialProvider;Lio/github/artemidius/blowhard/adapters/mistral/MistralChatConfiguration;)Lio/github/artemidius/blowhard/adapters/mistral/MistralTextGenerationPort;
 }
 

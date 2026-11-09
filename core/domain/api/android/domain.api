@@ -59,21 +59,27 @@ public final class io/github/artemidius/blowhard/core/domain/GenerationEvent$Tex
 }
 
 public final class io/github/artemidius/blowhard/core/domain/GenerationFailure {
-	public fun <init> (Lio/github/artemidius/blowhard/core/domain/GenerationFailureKind;Ljava/lang/String;)V
-	public synthetic fun <init> (Lio/github/artemidius/blowhard/core/domain/GenerationFailureKind;Ljava/lang/String;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public fun <init> (Lio/github/artemidius/blowhard/core/domain/GenerationFailureKind;Ljava/lang/String;Lio/github/artemidius/blowhard/core/domain/GenerationRetryAdvice;Ljava/lang/Long;)V
+	public synthetic fun <init> (Lio/github/artemidius/blowhard/core/domain/GenerationFailureKind;Ljava/lang/String;Lio/github/artemidius/blowhard/core/domain/GenerationRetryAdvice;Ljava/lang/Long;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
 	public final fun component1 ()Lio/github/artemidius/blowhard/core/domain/GenerationFailureKind;
 	public final fun component2 ()Ljava/lang/String;
-	public final fun copy (Lio/github/artemidius/blowhard/core/domain/GenerationFailureKind;Ljava/lang/String;)Lio/github/artemidius/blowhard/core/domain/GenerationFailure;
-	public static synthetic fun copy$default (Lio/github/artemidius/blowhard/core/domain/GenerationFailure;Lio/github/artemidius/blowhard/core/domain/GenerationFailureKind;Ljava/lang/String;ILjava/lang/Object;)Lio/github/artemidius/blowhard/core/domain/GenerationFailure;
+	public final fun component3 ()Lio/github/artemidius/blowhard/core/domain/GenerationRetryAdvice;
+	public final fun component4 ()Ljava/lang/Long;
+	public final fun copy (Lio/github/artemidius/blowhard/core/domain/GenerationFailureKind;Ljava/lang/String;Lio/github/artemidius/blowhard/core/domain/GenerationRetryAdvice;Ljava/lang/Long;)Lio/github/artemidius/blowhard/core/domain/GenerationFailure;
+	public static synthetic fun copy$default (Lio/github/artemidius/blowhard/core/domain/GenerationFailure;Lio/github/artemidius/blowhard/core/domain/GenerationFailureKind;Ljava/lang/String;Lio/github/artemidius/blowhard/core/domain/GenerationRetryAdvice;Ljava/lang/Long;ILjava/lang/Object;)Lio/github/artemidius/blowhard/core/domain/GenerationFailure;
 	public fun equals (Ljava/lang/Object;)Z
 	public final fun getKind ()Lio/github/artemidius/blowhard/core/domain/GenerationFailureKind;
 	public final fun getReference ()Ljava/lang/String;
+	public final fun getRetryAdvice ()Lio/github/artemidius/blowhard/core/domain/GenerationRetryAdvice;
+	public final fun getRetryAfterSeconds ()Ljava/lang/Long;
 	public fun hashCode ()I
 	public fun toString ()Ljava/lang/String;
 }
 
 public final class io/github/artemidius/blowhard/core/domain/GenerationFailureKind : java/lang/Enum {
+	public static final field CREDENTIAL_UNAVAILABLE Lio/github/artemidius/blowhard/core/domain/GenerationFailureKind;
 	public static final field INVALID_REQUEST Lio/github/artemidius/blowhard/core/domain/GenerationFailureKind;
+	public static final field INVALID_RESPONSE Lio/github/artemidius/blowhard/core/domain/GenerationFailureKind;
 	public static final field RATE_LIMITED Lio/github/artemidius/blowhard/core/domain/GenerationFailureKind;
 	public static final field UNAUTHORIZED Lio/github/artemidius/blowhard/core/domain/GenerationFailureKind;
 	public static final field UNAVAILABLE Lio/github/artemidius/blowhard/core/domain/GenerationFailureKind;
@@ -96,6 +102,15 @@ public final class io/github/artemidius/blowhard/core/domain/GenerationRequest {
 	public final fun getRunId-oS5FZMg ()Ljava/lang/String;
 	public fun hashCode ()I
 	public fun toString ()Ljava/lang/String;
+}
+
+public final class io/github/artemidius/blowhard/core/domain/GenerationRetryAdvice : java/lang/Enum {
+	public static final field DO_NOT_RETRY Lio/github/artemidius/blowhard/core/domain/GenerationRetryAdvice;
+	public static final field EXPLICIT_NEW_ATTEMPT Lio/github/artemidius/blowhard/core/domain/GenerationRetryAdvice;
+	public static final field RETRY_AFTER_DELAY Lio/github/artemidius/blowhard/core/domain/GenerationRetryAdvice;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public static fun valueOf (Ljava/lang/String;)Lio/github/artemidius/blowhard/core/domain/GenerationRetryAdvice;
+	public static fun values ()[Lio/github/artemidius/blowhard/core/domain/GenerationRetryAdvice;
 }
 
 public final class io/github/artemidius/blowhard/core/domain/ModelAvailability : java/lang/Enum {

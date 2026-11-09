@@ -53,10 +53,37 @@ public sealed interface RunSnapshot {
 }
 
 /** Client-safe failure details that contain no provider response body or sensitive request data. */
-public data class RunFailure(public val kind: RunFailureKind, public val reference: String? = null)
+public data class RunFailure(
+    public val kind: RunFailureKind,
+    public val reference: String? = null,
+    public val retryAdvice: RunRetryAdvice = RunRetryAdvice.DO_NOT_RETRY,
+    public val retryAfterSeconds: Long? = null,
+) {
+    init {
+        require(retryAfterSeconds == null || retryAfterSeconds >= 0) { "Retry delay must not be negative" }
+        require(retryAfterSeconds == null || retryAdvice == RunRetryAdvice.RETRY_AFTER_DELAY) {
+            "Retry delay requires delayed retry advice"
+        }
+    }
+}
+
+/** Conservative client guidance for starting a distinct attempt after failure. */
+public enum class RunRetryAdvice {
+    /** Repeating the same input cannot resolve the failure safely. */
+    DO_NOT_RETRY,
+
+    /** The user may explicitly start a new attempt; automatic replay is forbidden. */
+    EXPLICIT_NEW_ATTEMPT,
+
+    /** A distinct attempt may be started after [RunFailure.retryAfterSeconds]. */
+    RETRY_AFTER_DELAY,
+}
 
 /** Stable failure categories exposed to clients. */
 public enum class RunFailureKind {
+    /** A usable provider credential was unavailable. */
+    CREDENTIAL_UNAVAILABLE,
+
     /** The configured credential was rejected. */
     UNAUTHORIZED,
 
@@ -68,6 +95,9 @@ public enum class RunFailureKind {
 
     /** The provider or network was temporarily unavailable. */
     UNAVAILABLE,
+
+    /** A successful provider response violated the expected streaming contract. */
+    INVALID_RESPONSE,
 
     /** An unexpected, safely redacted failure occurred. */
     UNEXPECTED,

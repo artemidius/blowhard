@@ -19,7 +19,9 @@ final enum class io.github.artemidius.blowhard.core.api/CancelRunResult : kotlin
 }
 
 final enum class io.github.artemidius.blowhard.core.api/RunFailureKind : kotlin/Enum<io.github.artemidius.blowhard.core.api/RunFailureKind> { // io.github.artemidius.blowhard.core.api/RunFailureKind|null[0]
+    enum entry CREDENTIAL_UNAVAILABLE // io.github.artemidius.blowhard.core.api/RunFailureKind.CREDENTIAL_UNAVAILABLE|null[0]
     enum entry INVALID_REQUEST // io.github.artemidius.blowhard.core.api/RunFailureKind.INVALID_REQUEST|null[0]
+    enum entry INVALID_RESPONSE // io.github.artemidius.blowhard.core.api/RunFailureKind.INVALID_RESPONSE|null[0]
     enum entry RATE_LIMITED // io.github.artemidius.blowhard.core.api/RunFailureKind.RATE_LIMITED|null[0]
     enum entry UNAUTHORIZED // io.github.artemidius.blowhard.core.api/RunFailureKind.UNAUTHORIZED|null[0]
     enum entry UNAVAILABLE // io.github.artemidius.blowhard.core.api/RunFailureKind.UNAVAILABLE|null[0]
@@ -30,6 +32,18 @@ final enum class io.github.artemidius.blowhard.core.api/RunFailureKind : kotlin/
 
     final fun valueOf(kotlin/String): io.github.artemidius.blowhard.core.api/RunFailureKind // io.github.artemidius.blowhard.core.api/RunFailureKind.valueOf|valueOf#static(kotlin.String){}[0]
     final fun values(): kotlin/Array<io.github.artemidius.blowhard.core.api/RunFailureKind> // io.github.artemidius.blowhard.core.api/RunFailureKind.values|values#static(){}[0]
+}
+
+final enum class io.github.artemidius.blowhard.core.api/RunRetryAdvice : kotlin/Enum<io.github.artemidius.blowhard.core.api/RunRetryAdvice> { // io.github.artemidius.blowhard.core.api/RunRetryAdvice|null[0]
+    enum entry DO_NOT_RETRY // io.github.artemidius.blowhard.core.api/RunRetryAdvice.DO_NOT_RETRY|null[0]
+    enum entry EXPLICIT_NEW_ATTEMPT // io.github.artemidius.blowhard.core.api/RunRetryAdvice.EXPLICIT_NEW_ATTEMPT|null[0]
+    enum entry RETRY_AFTER_DELAY // io.github.artemidius.blowhard.core.api/RunRetryAdvice.RETRY_AFTER_DELAY|null[0]
+
+    final val entries // io.github.artemidius.blowhard.core.api/RunRetryAdvice.entries|#static{}entries[0]
+        final fun <get-entries>(): kotlin.enums/EnumEntries<io.github.artemidius.blowhard.core.api/RunRetryAdvice> // io.github.artemidius.blowhard.core.api/RunRetryAdvice.entries.<get-entries>|<get-entries>#static(){}[0]
+
+    final fun valueOf(kotlin/String): io.github.artemidius.blowhard.core.api/RunRetryAdvice // io.github.artemidius.blowhard.core.api/RunRetryAdvice.valueOf|valueOf#static(kotlin.String){}[0]
+    final fun values(): kotlin/Array<io.github.artemidius.blowhard.core.api/RunRetryAdvice> // io.github.artemidius.blowhard.core.api/RunRetryAdvice.values|values#static(){}[0]
 }
 
 final enum class io.github.artemidius.blowhard.core.api/StartRunRejection : kotlin/Enum<io.github.artemidius.blowhard.core.api/StartRunRejection> { // io.github.artemidius.blowhard.core.api/StartRunRejection|null[0]
@@ -213,16 +227,22 @@ sealed interface io.github.artemidius.blowhard.core.api/StartRunResult { // io.g
 }
 
 final class io.github.artemidius.blowhard.core.api/RunFailure { // io.github.artemidius.blowhard.core.api/RunFailure|null[0]
-    constructor <init>(io.github.artemidius.blowhard.core.api/RunFailureKind, kotlin/String? = ...) // io.github.artemidius.blowhard.core.api/RunFailure.<init>|<init>(io.github.artemidius.blowhard.core.api.RunFailureKind;kotlin.String?){}[0]
+    constructor <init>(io.github.artemidius.blowhard.core.api/RunFailureKind, kotlin/String? = ..., io.github.artemidius.blowhard.core.api/RunRetryAdvice = ..., kotlin/Long? = ...) // io.github.artemidius.blowhard.core.api/RunFailure.<init>|<init>(io.github.artemidius.blowhard.core.api.RunFailureKind;kotlin.String?;io.github.artemidius.blowhard.core.api.RunRetryAdvice;kotlin.Long?){}[0]
 
     final val kind // io.github.artemidius.blowhard.core.api/RunFailure.kind|{}kind[0]
         final fun <get-kind>(): io.github.artemidius.blowhard.core.api/RunFailureKind // io.github.artemidius.blowhard.core.api/RunFailure.kind.<get-kind>|<get-kind>(){}[0]
     final val reference // io.github.artemidius.blowhard.core.api/RunFailure.reference|{}reference[0]
         final fun <get-reference>(): kotlin/String? // io.github.artemidius.blowhard.core.api/RunFailure.reference.<get-reference>|<get-reference>(){}[0]
+    final val retryAdvice // io.github.artemidius.blowhard.core.api/RunFailure.retryAdvice|{}retryAdvice[0]
+        final fun <get-retryAdvice>(): io.github.artemidius.blowhard.core.api/RunRetryAdvice // io.github.artemidius.blowhard.core.api/RunFailure.retryAdvice.<get-retryAdvice>|<get-retryAdvice>(){}[0]
+    final val retryAfterSeconds // io.github.artemidius.blowhard.core.api/RunFailure.retryAfterSeconds|{}retryAfterSeconds[0]
+        final fun <get-retryAfterSeconds>(): kotlin/Long? // io.github.artemidius.blowhard.core.api/RunFailure.retryAfterSeconds.<get-retryAfterSeconds>|<get-retryAfterSeconds>(){}[0]
 
     final fun component1(): io.github.artemidius.blowhard.core.api/RunFailureKind // io.github.artemidius.blowhard.core.api/RunFailure.component1|component1(){}[0]
     final fun component2(): kotlin/String? // io.github.artemidius.blowhard.core.api/RunFailure.component2|component2(){}[0]
-    final fun copy(io.github.artemidius.blowhard.core.api/RunFailureKind = ..., kotlin/String? = ...): io.github.artemidius.blowhard.core.api/RunFailure // io.github.artemidius.blowhard.core.api/RunFailure.copy|copy(io.github.artemidius.blowhard.core.api.RunFailureKind;kotlin.String?){}[0]
+    final fun component3(): io.github.artemidius.blowhard.core.api/RunRetryAdvice // io.github.artemidius.blowhard.core.api/RunFailure.component3|component3(){}[0]
+    final fun component4(): kotlin/Long? // io.github.artemidius.blowhard.core.api/RunFailure.component4|component4(){}[0]
+    final fun copy(io.github.artemidius.blowhard.core.api/RunFailureKind = ..., kotlin/String? = ..., io.github.artemidius.blowhard.core.api/RunRetryAdvice = ..., kotlin/Long? = ...): io.github.artemidius.blowhard.core.api/RunFailure // io.github.artemidius.blowhard.core.api/RunFailure.copy|copy(io.github.artemidius.blowhard.core.api.RunFailureKind;kotlin.String?;io.github.artemidius.blowhard.core.api.RunRetryAdvice;kotlin.Long?){}[0]
     final fun equals(kotlin/Any?): kotlin/Boolean // io.github.artemidius.blowhard.core.api/RunFailure.equals|equals(kotlin.Any?){}[0]
     final fun hashCode(): kotlin/Int // io.github.artemidius.blowhard.core.api/RunFailure.hashCode|hashCode(){}[0]
     final fun toString(): kotlin/String // io.github.artemidius.blowhard.core.api/RunFailure.toString|toString(){}[0]
