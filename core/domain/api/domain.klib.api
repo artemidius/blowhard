@@ -18,6 +18,19 @@ final enum class io.github.artemidius.blowhard.core.domain/CapabilitySupport : k
     final fun values(): kotlin/Array<io.github.artemidius.blowhard.core.domain/CapabilitySupport> // io.github.artemidius.blowhard.core.domain/CapabilitySupport.values|values#static(){}[0]
 }
 
+final enum class io.github.artemidius.blowhard.core.domain/CredentialAccessFailure : kotlin/Enum<io.github.artemidius.blowhard.core.domain/CredentialAccessFailure> { // io.github.artemidius.blowhard.core.domain/CredentialAccessFailure|null[0]
+    enum entry ACCESS_DENIED // io.github.artemidius.blowhard.core.domain/CredentialAccessFailure.ACCESS_DENIED|null[0]
+    enum entry INTERACTION_REQUIRED // io.github.artemidius.blowhard.core.domain/CredentialAccessFailure.INTERACTION_REQUIRED|null[0]
+    enum entry PLATFORM_UNAVAILABLE // io.github.artemidius.blowhard.core.domain/CredentialAccessFailure.PLATFORM_UNAVAILABLE|null[0]
+    enum entry UNEXPECTED // io.github.artemidius.blowhard.core.domain/CredentialAccessFailure.UNEXPECTED|null[0]
+
+    final val entries // io.github.artemidius.blowhard.core.domain/CredentialAccessFailure.entries|#static{}entries[0]
+        final fun <get-entries>(): kotlin.enums/EnumEntries<io.github.artemidius.blowhard.core.domain/CredentialAccessFailure> // io.github.artemidius.blowhard.core.domain/CredentialAccessFailure.entries.<get-entries>|<get-entries>#static(){}[0]
+
+    final fun valueOf(kotlin/String): io.github.artemidius.blowhard.core.domain/CredentialAccessFailure // io.github.artemidius.blowhard.core.domain/CredentialAccessFailure.valueOf|valueOf#static(kotlin.String){}[0]
+    final fun values(): kotlin/Array<io.github.artemidius.blowhard.core.domain/CredentialAccessFailure> // io.github.artemidius.blowhard.core.domain/CredentialAccessFailure.values|values#static(){}[0]
+}
+
 final enum class io.github.artemidius.blowhard.core.domain/GenerationFailureKind : kotlin/Enum<io.github.artemidius.blowhard.core.domain/GenerationFailureKind> { // io.github.artemidius.blowhard.core.domain/GenerationFailureKind|null[0]
     enum entry CREDENTIAL_UNAVAILABLE // io.github.artemidius.blowhard.core.domain/GenerationFailureKind.CREDENTIAL_UNAVAILABLE|null[0]
     enum entry INVALID_REQUEST // io.github.artemidius.blowhard.core.domain/GenerationFailureKind.INVALID_REQUEST|null[0]
@@ -94,6 +107,69 @@ abstract fun interface io.github.artemidius.blowhard.core.domain/ModelCatalogPor
 
 abstract fun interface io.github.artemidius.blowhard.core.domain/TextGenerationPort { // io.github.artemidius.blowhard.core.domain/TextGenerationPort|null[0]
     abstract fun generate(io.github.artemidius.blowhard.core.domain/GenerationRequest): kotlinx.coroutines.flow/Flow<io.github.artemidius.blowhard.core.domain/GenerationEvent> // io.github.artemidius.blowhard.core.domain/TextGenerationPort.generate|generate(io.github.artemidius.blowhard.core.domain.GenerationRequest){}[0]
+}
+
+abstract interface io.github.artemidius.blowhard.core.domain/CredentialStore { // io.github.artemidius.blowhard.core.domain/CredentialStore|null[0]
+    abstract suspend fun delete(): io.github.artemidius.blowhard.core.domain/CredentialMutationResult // io.github.artemidius.blowhard.core.domain/CredentialStore.delete|delete(){}[0]
+    abstract suspend fun read(): io.github.artemidius.blowhard.core.domain/CredentialReadResult // io.github.artemidius.blowhard.core.domain/CredentialStore.read|read(){}[0]
+    abstract suspend fun replace(kotlin/String): io.github.artemidius.blowhard.core.domain/CredentialMutationResult // io.github.artemidius.blowhard.core.domain/CredentialStore.replace|replace(kotlin.String){}[0]
+}
+
+sealed interface io.github.artemidius.blowhard.core.domain/CredentialMutationResult { // io.github.artemidius.blowhard.core.domain/CredentialMutationResult|null[0]
+    final class Unavailable : io.github.artemidius.blowhard.core.domain/CredentialMutationResult { // io.github.artemidius.blowhard.core.domain/CredentialMutationResult.Unavailable|null[0]
+        constructor <init>(io.github.artemidius.blowhard.core.domain/CredentialAccessFailure) // io.github.artemidius.blowhard.core.domain/CredentialMutationResult.Unavailable.<init>|<init>(io.github.artemidius.blowhard.core.domain.CredentialAccessFailure){}[0]
+
+        final val reason // io.github.artemidius.blowhard.core.domain/CredentialMutationResult.Unavailable.reason|{}reason[0]
+            final fun <get-reason>(): io.github.artemidius.blowhard.core.domain/CredentialAccessFailure // io.github.artemidius.blowhard.core.domain/CredentialMutationResult.Unavailable.reason.<get-reason>|<get-reason>(){}[0]
+
+        final fun component1(): io.github.artemidius.blowhard.core.domain/CredentialAccessFailure // io.github.artemidius.blowhard.core.domain/CredentialMutationResult.Unavailable.component1|component1(){}[0]
+        final fun copy(io.github.artemidius.blowhard.core.domain/CredentialAccessFailure = ...): io.github.artemidius.blowhard.core.domain/CredentialMutationResult.Unavailable // io.github.artemidius.blowhard.core.domain/CredentialMutationResult.Unavailable.copy|copy(io.github.artemidius.blowhard.core.domain.CredentialAccessFailure){}[0]
+        final fun equals(kotlin/Any?): kotlin/Boolean // io.github.artemidius.blowhard.core.domain/CredentialMutationResult.Unavailable.equals|equals(kotlin.Any?){}[0]
+        final fun hashCode(): kotlin/Int // io.github.artemidius.blowhard.core.domain/CredentialMutationResult.Unavailable.hashCode|hashCode(){}[0]
+        final fun toString(): kotlin/String // io.github.artemidius.blowhard.core.domain/CredentialMutationResult.Unavailable.toString|toString(){}[0]
+    }
+
+    final object Rejected : io.github.artemidius.blowhard.core.domain/CredentialMutationResult { // io.github.artemidius.blowhard.core.domain/CredentialMutationResult.Rejected|null[0]
+        final fun equals(kotlin/Any?): kotlin/Boolean // io.github.artemidius.blowhard.core.domain/CredentialMutationResult.Rejected.equals|equals(kotlin.Any?){}[0]
+        final fun hashCode(): kotlin/Int // io.github.artemidius.blowhard.core.domain/CredentialMutationResult.Rejected.hashCode|hashCode(){}[0]
+        final fun toString(): kotlin/String // io.github.artemidius.blowhard.core.domain/CredentialMutationResult.Rejected.toString|toString(){}[0]
+    }
+
+    final object Success : io.github.artemidius.blowhard.core.domain/CredentialMutationResult { // io.github.artemidius.blowhard.core.domain/CredentialMutationResult.Success|null[0]
+        final fun equals(kotlin/Any?): kotlin/Boolean // io.github.artemidius.blowhard.core.domain/CredentialMutationResult.Success.equals|equals(kotlin.Any?){}[0]
+        final fun hashCode(): kotlin/Int // io.github.artemidius.blowhard.core.domain/CredentialMutationResult.Success.hashCode|hashCode(){}[0]
+        final fun toString(): kotlin/String // io.github.artemidius.blowhard.core.domain/CredentialMutationResult.Success.toString|toString(){}[0]
+    }
+}
+
+sealed interface io.github.artemidius.blowhard.core.domain/CredentialReadResult { // io.github.artemidius.blowhard.core.domain/CredentialReadResult|null[0]
+    final class Available : io.github.artemidius.blowhard.core.domain/CredentialReadResult { // io.github.artemidius.blowhard.core.domain/CredentialReadResult.Available|null[0]
+        constructor <init>(kotlin/String) // io.github.artemidius.blowhard.core.domain/CredentialReadResult.Available.<init>|<init>(kotlin.String){}[0]
+
+        final val secret // io.github.artemidius.blowhard.core.domain/CredentialReadResult.Available.secret|{}secret[0]
+            final fun <get-secret>(): kotlin/String // io.github.artemidius.blowhard.core.domain/CredentialReadResult.Available.secret.<get-secret>|<get-secret>(){}[0]
+
+        final fun toString(): kotlin/String // io.github.artemidius.blowhard.core.domain/CredentialReadResult.Available.toString|toString(){}[0]
+    }
+
+    final class Unavailable : io.github.artemidius.blowhard.core.domain/CredentialReadResult { // io.github.artemidius.blowhard.core.domain/CredentialReadResult.Unavailable|null[0]
+        constructor <init>(io.github.artemidius.blowhard.core.domain/CredentialAccessFailure) // io.github.artemidius.blowhard.core.domain/CredentialReadResult.Unavailable.<init>|<init>(io.github.artemidius.blowhard.core.domain.CredentialAccessFailure){}[0]
+
+        final val reason // io.github.artemidius.blowhard.core.domain/CredentialReadResult.Unavailable.reason|{}reason[0]
+            final fun <get-reason>(): io.github.artemidius.blowhard.core.domain/CredentialAccessFailure // io.github.artemidius.blowhard.core.domain/CredentialReadResult.Unavailable.reason.<get-reason>|<get-reason>(){}[0]
+
+        final fun component1(): io.github.artemidius.blowhard.core.domain/CredentialAccessFailure // io.github.artemidius.blowhard.core.domain/CredentialReadResult.Unavailable.component1|component1(){}[0]
+        final fun copy(io.github.artemidius.blowhard.core.domain/CredentialAccessFailure = ...): io.github.artemidius.blowhard.core.domain/CredentialReadResult.Unavailable // io.github.artemidius.blowhard.core.domain/CredentialReadResult.Unavailable.copy|copy(io.github.artemidius.blowhard.core.domain.CredentialAccessFailure){}[0]
+        final fun equals(kotlin/Any?): kotlin/Boolean // io.github.artemidius.blowhard.core.domain/CredentialReadResult.Unavailable.equals|equals(kotlin.Any?){}[0]
+        final fun hashCode(): kotlin/Int // io.github.artemidius.blowhard.core.domain/CredentialReadResult.Unavailable.hashCode|hashCode(){}[0]
+        final fun toString(): kotlin/String // io.github.artemidius.blowhard.core.domain/CredentialReadResult.Unavailable.toString|toString(){}[0]
+    }
+
+    final object Missing : io.github.artemidius.blowhard.core.domain/CredentialReadResult { // io.github.artemidius.blowhard.core.domain/CredentialReadResult.Missing|null[0]
+        final fun equals(kotlin/Any?): kotlin/Boolean // io.github.artemidius.blowhard.core.domain/CredentialReadResult.Missing.equals|equals(kotlin.Any?){}[0]
+        final fun hashCode(): kotlin/Int // io.github.artemidius.blowhard.core.domain/CredentialReadResult.Missing.hashCode|hashCode(){}[0]
+        final fun toString(): kotlin/String // io.github.artemidius.blowhard.core.domain/CredentialReadResult.Missing.toString|toString(){}[0]
+    }
 }
 
 sealed interface io.github.artemidius.blowhard.core.domain/GenerationEvent { // io.github.artemidius.blowhard.core.domain/GenerationEvent|null[0]
