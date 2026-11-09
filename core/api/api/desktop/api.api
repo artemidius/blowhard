@@ -7,6 +7,91 @@ public final class io/github/artemidius/blowhard/core/api/CancelRunResult : java
 	public static fun values ()[Lio/github/artemidius/blowhard/core/api/CancelRunResult;
 }
 
+public abstract interface class io/github/artemidius/blowhard/core/api/ConnectionSettings {
+	public abstract fun acknowledgeLiveDataDisclosure (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public abstract fun deleteCredential (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public abstract fun getState ()Lkotlinx/coroutines/flow/StateFlow;
+	public abstract fun refreshCredentialStatus (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public abstract fun replaceCredential (Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public abstract fun selectMode (Lio/github/artemidius/blowhard/core/api/GenerationMode;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public abstract fun selectModel (Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public abstract fun testConnection (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+}
+
+public final class io/github/artemidius/blowhard/core/api/ConnectionSettingsState {
+	public fun <init> ()V
+	public fun <init> (Lio/github/artemidius/blowhard/core/api/GenerationMode;Lio/github/artemidius/blowhard/core/api/CredentialStatus;Lio/github/artemidius/blowhard/core/api/ConnectionStatus;Ljava/util/List;Ljava/lang/String;Z)V
+	public synthetic fun <init> (Lio/github/artemidius/blowhard/core/api/GenerationMode;Lio/github/artemidius/blowhard/core/api/CredentialStatus;Lio/github/artemidius/blowhard/core/api/ConnectionStatus;Ljava/util/List;Ljava/lang/String;ZILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()Lio/github/artemidius/blowhard/core/api/GenerationMode;
+	public final fun component2 ()Lio/github/artemidius/blowhard/core/api/CredentialStatus;
+	public final fun component3 ()Lio/github/artemidius/blowhard/core/api/ConnectionStatus;
+	public final fun component4 ()Ljava/util/List;
+	public final fun component5 ()Ljava/lang/String;
+	public final fun component6 ()Z
+	public final fun copy (Lio/github/artemidius/blowhard/core/api/GenerationMode;Lio/github/artemidius/blowhard/core/api/CredentialStatus;Lio/github/artemidius/blowhard/core/api/ConnectionStatus;Ljava/util/List;Ljava/lang/String;Z)Lio/github/artemidius/blowhard/core/api/ConnectionSettingsState;
+	public static synthetic fun copy$default (Lio/github/artemidius/blowhard/core/api/ConnectionSettingsState;Lio/github/artemidius/blowhard/core/api/GenerationMode;Lio/github/artemidius/blowhard/core/api/CredentialStatus;Lio/github/artemidius/blowhard/core/api/ConnectionStatus;Ljava/util/List;Ljava/lang/String;ZILjava/lang/Object;)Lio/github/artemidius/blowhard/core/api/ConnectionSettingsState;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getCanUseLiveMode ()Z
+	public final fun getConnectionStatus ()Lio/github/artemidius/blowhard/core/api/ConnectionStatus;
+	public final fun getCredentialStatus ()Lio/github/artemidius/blowhard/core/api/CredentialStatus;
+	public final fun getLiveDataDisclosureAccepted ()Z
+	public final fun getMode ()Lio/github/artemidius/blowhard/core/api/GenerationMode;
+	public final fun getModels ()Ljava/util/List;
+	public final fun getSelectedModelId ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class io/github/artemidius/blowhard/core/api/ConnectionStatus : java/lang/Enum {
+	public static final field FAILED Lio/github/artemidius/blowhard/core/api/ConnectionStatus;
+	public static final field NOT_TESTED Lio/github/artemidius/blowhard/core/api/ConnectionStatus;
+	public static final field READY Lio/github/artemidius/blowhard/core/api/ConnectionStatus;
+	public static final field TESTING Lio/github/artemidius/blowhard/core/api/ConnectionStatus;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public static fun valueOf (Ljava/lang/String;)Lio/github/artemidius/blowhard/core/api/ConnectionStatus;
+	public static fun values ()[Lio/github/artemidius/blowhard/core/api/ConnectionStatus;
+}
+
+public final class io/github/artemidius/blowhard/core/api/ConnectionTestFailureKind : java/lang/Enum {
+	public static final field CREDENTIAL_UNAVAILABLE Lio/github/artemidius/blowhard/core/api/ConnectionTestFailureKind;
+	public static final field FORBIDDEN Lio/github/artemidius/blowhard/core/api/ConnectionTestFailureKind;
+	public static final field INVALID_RESPONSE Lio/github/artemidius/blowhard/core/api/ConnectionTestFailureKind;
+	public static final field NO_COMPATIBLE_MODELS Lio/github/artemidius/blowhard/core/api/ConnectionTestFailureKind;
+	public static final field PAYMENT_REQUIRED Lio/github/artemidius/blowhard/core/api/ConnectionTestFailureKind;
+	public static final field PROVIDER_UNAVAILABLE Lio/github/artemidius/blowhard/core/api/ConnectionTestFailureKind;
+	public static final field RATE_LIMITED Lio/github/artemidius/blowhard/core/api/ConnectionTestFailureKind;
+	public static final field UNAUTHORIZED Lio/github/artemidius/blowhard/core/api/ConnectionTestFailureKind;
+	public static final field UNEXPECTED Lio/github/artemidius/blowhard/core/api/ConnectionTestFailureKind;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public static fun valueOf (Ljava/lang/String;)Lio/github/artemidius/blowhard/core/api/ConnectionTestFailureKind;
+	public static fun values ()[Lio/github/artemidius/blowhard/core/api/ConnectionTestFailureKind;
+}
+
+public abstract interface class io/github/artemidius/blowhard/core/api/ConnectionTestResult {
+}
+
+public final class io/github/artemidius/blowhard/core/api/ConnectionTestResult$Failure : io/github/artemidius/blowhard/core/api/ConnectionTestResult {
+	public fun <init> (Lio/github/artemidius/blowhard/core/api/ConnectionTestFailureKind;)V
+	public final fun component1 ()Lio/github/artemidius/blowhard/core/api/ConnectionTestFailureKind;
+	public final fun copy (Lio/github/artemidius/blowhard/core/api/ConnectionTestFailureKind;)Lio/github/artemidius/blowhard/core/api/ConnectionTestResult$Failure;
+	public static synthetic fun copy$default (Lio/github/artemidius/blowhard/core/api/ConnectionTestResult$Failure;Lio/github/artemidius/blowhard/core/api/ConnectionTestFailureKind;ILjava/lang/Object;)Lio/github/artemidius/blowhard/core/api/ConnectionTestResult$Failure;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getKind ()Lio/github/artemidius/blowhard/core/api/ConnectionTestFailureKind;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class io/github/artemidius/blowhard/core/api/ConnectionTestResult$Success : io/github/artemidius/blowhard/core/api/ConnectionTestResult {
+	public fun <init> (Ljava/util/List;)V
+	public final fun component1 ()Ljava/util/List;
+	public final fun copy (Ljava/util/List;)Lio/github/artemidius/blowhard/core/api/ConnectionTestResult$Success;
+	public static synthetic fun copy$default (Lio/github/artemidius/blowhard/core/api/ConnectionTestResult$Success;Ljava/util/List;ILjava/lang/Object;)Lio/github/artemidius/blowhard/core/api/ConnectionTestResult$Success;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getModels ()Ljava/util/List;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
 public final class io/github/artemidius/blowhard/core/api/ConversationId {
 	public static final synthetic fun box-impl (Ljava/lang/String;)Lio/github/artemidius/blowhard/core/api/ConversationId;
 	public static fun constructor-impl (Ljava/lang/String;)Ljava/lang/String;
@@ -25,6 +110,50 @@ public abstract interface class io/github/artemidius/blowhard/core/api/Conversat
 	public abstract fun cancel-Mzzv5v0 (Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public abstract fun observe-Mzzv5v0 (Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public abstract fun start (Lio/github/artemidius/blowhard/core/api/StartRunRequest;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+}
+
+public final class io/github/artemidius/blowhard/core/api/CredentialStatus : java/lang/Enum {
+	public static final field CONFIGURED Lio/github/artemidius/blowhard/core/api/CredentialStatus;
+	public static final field MISSING Lio/github/artemidius/blowhard/core/api/CredentialStatus;
+	public static final field UNAVAILABLE Lio/github/artemidius/blowhard/core/api/CredentialStatus;
+	public static final field UNKNOWN Lio/github/artemidius/blowhard/core/api/CredentialStatus;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public static fun valueOf (Ljava/lang/String;)Lio/github/artemidius/blowhard/core/api/CredentialStatus;
+	public static fun values ()[Lio/github/artemidius/blowhard/core/api/CredentialStatus;
+}
+
+public final class io/github/artemidius/blowhard/core/api/CredentialUpdateResult : java/lang/Enum {
+	public static final field REJECTED Lio/github/artemidius/blowhard/core/api/CredentialUpdateResult;
+	public static final field SUCCESS Lio/github/artemidius/blowhard/core/api/CredentialUpdateResult;
+	public static final field UNAVAILABLE Lio/github/artemidius/blowhard/core/api/CredentialUpdateResult;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public static fun valueOf (Ljava/lang/String;)Lio/github/artemidius/blowhard/core/api/CredentialUpdateResult;
+	public static fun values ()[Lio/github/artemidius/blowhard/core/api/CredentialUpdateResult;
+}
+
+public final class io/github/artemidius/blowhard/core/api/GenerationMode : java/lang/Enum {
+	public static final field DEMO Lio/github/artemidius/blowhard/core/api/GenerationMode;
+	public static final field LIVE Lio/github/artemidius/blowhard/core/api/GenerationMode;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public static fun valueOf (Ljava/lang/String;)Lio/github/artemidius/blowhard/core/api/GenerationMode;
+	public static fun values ()[Lio/github/artemidius/blowhard/core/api/GenerationMode;
+}
+
+public final class io/github/artemidius/blowhard/core/api/ModeSelectionResult : java/lang/Enum {
+	public static final field DISCLOSURE_REQUIRED Lio/github/artemidius/blowhard/core/api/ModeSelectionResult;
+	public static final field LIVE_NOT_READY Lio/github/artemidius/blowhard/core/api/ModeSelectionResult;
+	public static final field UPDATED Lio/github/artemidius/blowhard/core/api/ModeSelectionResult;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public static fun valueOf (Ljava/lang/String;)Lio/github/artemidius/blowhard/core/api/ModeSelectionResult;
+	public static fun values ()[Lio/github/artemidius/blowhard/core/api/ModeSelectionResult;
+}
+
+public final class io/github/artemidius/blowhard/core/api/ModelSelectionResult : java/lang/Enum {
+	public static final field NOT_AVAILABLE Lio/github/artemidius/blowhard/core/api/ModelSelectionResult;
+	public static final field UPDATED Lio/github/artemidius/blowhard/core/api/ModelSelectionResult;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public static fun valueOf (Ljava/lang/String;)Lio/github/artemidius/blowhard/core/api/ModelSelectionResult;
+	public static fun values ()[Lio/github/artemidius/blowhard/core/api/ModelSelectionResult;
 }
 
 public abstract interface class io/github/artemidius/blowhard/core/api/ObserveRunResult {
@@ -199,6 +328,19 @@ public final class io/github/artemidius/blowhard/core/api/RunTimestamp {
 	public fun toString ()Ljava/lang/String;
 	public static fun toString-impl (J)Ljava/lang/String;
 	public final synthetic fun unbox-impl ()J
+}
+
+public final class io/github/artemidius/blowhard/core/api/SelectableModel {
+	public fun <init> (Ljava/lang/String;Ljava/lang/Long;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun component2 ()Ljava/lang/Long;
+	public final fun copy (Ljava/lang/String;Ljava/lang/Long;)Lio/github/artemidius/blowhard/core/api/SelectableModel;
+	public static synthetic fun copy$default (Lio/github/artemidius/blowhard/core/api/SelectableModel;Ljava/lang/String;Ljava/lang/Long;ILjava/lang/Object;)Lio/github/artemidius/blowhard/core/api/SelectableModel;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getContextWindowTokens ()Ljava/lang/Long;
+	public final fun getId ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
 }
 
 public final class io/github/artemidius/blowhard/core/api/StartRunRejection : java/lang/Enum {

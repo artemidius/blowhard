@@ -18,6 +18,96 @@ final enum class io.github.artemidius.blowhard.core.api/CancelRunResult : kotlin
     final fun values(): kotlin/Array<io.github.artemidius.blowhard.core.api/CancelRunResult> // io.github.artemidius.blowhard.core.api/CancelRunResult.values|values#static(){}[0]
 }
 
+final enum class io.github.artemidius.blowhard.core.api/ConnectionStatus : kotlin/Enum<io.github.artemidius.blowhard.core.api/ConnectionStatus> { // io.github.artemidius.blowhard.core.api/ConnectionStatus|null[0]
+    enum entry FAILED // io.github.artemidius.blowhard.core.api/ConnectionStatus.FAILED|null[0]
+    enum entry NOT_TESTED // io.github.artemidius.blowhard.core.api/ConnectionStatus.NOT_TESTED|null[0]
+    enum entry READY // io.github.artemidius.blowhard.core.api/ConnectionStatus.READY|null[0]
+    enum entry TESTING // io.github.artemidius.blowhard.core.api/ConnectionStatus.TESTING|null[0]
+
+    final val entries // io.github.artemidius.blowhard.core.api/ConnectionStatus.entries|#static{}entries[0]
+        final fun <get-entries>(): kotlin.enums/EnumEntries<io.github.artemidius.blowhard.core.api/ConnectionStatus> // io.github.artemidius.blowhard.core.api/ConnectionStatus.entries.<get-entries>|<get-entries>#static(){}[0]
+
+    final fun valueOf(kotlin/String): io.github.artemidius.blowhard.core.api/ConnectionStatus // io.github.artemidius.blowhard.core.api/ConnectionStatus.valueOf|valueOf#static(kotlin.String){}[0]
+    final fun values(): kotlin/Array<io.github.artemidius.blowhard.core.api/ConnectionStatus> // io.github.artemidius.blowhard.core.api/ConnectionStatus.values|values#static(){}[0]
+}
+
+final enum class io.github.artemidius.blowhard.core.api/ConnectionTestFailureKind : kotlin/Enum<io.github.artemidius.blowhard.core.api/ConnectionTestFailureKind> { // io.github.artemidius.blowhard.core.api/ConnectionTestFailureKind|null[0]
+    enum entry CREDENTIAL_UNAVAILABLE // io.github.artemidius.blowhard.core.api/ConnectionTestFailureKind.CREDENTIAL_UNAVAILABLE|null[0]
+    enum entry FORBIDDEN // io.github.artemidius.blowhard.core.api/ConnectionTestFailureKind.FORBIDDEN|null[0]
+    enum entry INVALID_RESPONSE // io.github.artemidius.blowhard.core.api/ConnectionTestFailureKind.INVALID_RESPONSE|null[0]
+    enum entry NO_COMPATIBLE_MODELS // io.github.artemidius.blowhard.core.api/ConnectionTestFailureKind.NO_COMPATIBLE_MODELS|null[0]
+    enum entry PAYMENT_REQUIRED // io.github.artemidius.blowhard.core.api/ConnectionTestFailureKind.PAYMENT_REQUIRED|null[0]
+    enum entry PROVIDER_UNAVAILABLE // io.github.artemidius.blowhard.core.api/ConnectionTestFailureKind.PROVIDER_UNAVAILABLE|null[0]
+    enum entry RATE_LIMITED // io.github.artemidius.blowhard.core.api/ConnectionTestFailureKind.RATE_LIMITED|null[0]
+    enum entry UNAUTHORIZED // io.github.artemidius.blowhard.core.api/ConnectionTestFailureKind.UNAUTHORIZED|null[0]
+    enum entry UNEXPECTED // io.github.artemidius.blowhard.core.api/ConnectionTestFailureKind.UNEXPECTED|null[0]
+
+    final val entries // io.github.artemidius.blowhard.core.api/ConnectionTestFailureKind.entries|#static{}entries[0]
+        final fun <get-entries>(): kotlin.enums/EnumEntries<io.github.artemidius.blowhard.core.api/ConnectionTestFailureKind> // io.github.artemidius.blowhard.core.api/ConnectionTestFailureKind.entries.<get-entries>|<get-entries>#static(){}[0]
+
+    final fun valueOf(kotlin/String): io.github.artemidius.blowhard.core.api/ConnectionTestFailureKind // io.github.artemidius.blowhard.core.api/ConnectionTestFailureKind.valueOf|valueOf#static(kotlin.String){}[0]
+    final fun values(): kotlin/Array<io.github.artemidius.blowhard.core.api/ConnectionTestFailureKind> // io.github.artemidius.blowhard.core.api/ConnectionTestFailureKind.values|values#static(){}[0]
+}
+
+final enum class io.github.artemidius.blowhard.core.api/CredentialStatus : kotlin/Enum<io.github.artemidius.blowhard.core.api/CredentialStatus> { // io.github.artemidius.blowhard.core.api/CredentialStatus|null[0]
+    enum entry CONFIGURED // io.github.artemidius.blowhard.core.api/CredentialStatus.CONFIGURED|null[0]
+    enum entry MISSING // io.github.artemidius.blowhard.core.api/CredentialStatus.MISSING|null[0]
+    enum entry UNAVAILABLE // io.github.artemidius.blowhard.core.api/CredentialStatus.UNAVAILABLE|null[0]
+    enum entry UNKNOWN // io.github.artemidius.blowhard.core.api/CredentialStatus.UNKNOWN|null[0]
+
+    final val entries // io.github.artemidius.blowhard.core.api/CredentialStatus.entries|#static{}entries[0]
+        final fun <get-entries>(): kotlin.enums/EnumEntries<io.github.artemidius.blowhard.core.api/CredentialStatus> // io.github.artemidius.blowhard.core.api/CredentialStatus.entries.<get-entries>|<get-entries>#static(){}[0]
+
+    final fun valueOf(kotlin/String): io.github.artemidius.blowhard.core.api/CredentialStatus // io.github.artemidius.blowhard.core.api/CredentialStatus.valueOf|valueOf#static(kotlin.String){}[0]
+    final fun values(): kotlin/Array<io.github.artemidius.blowhard.core.api/CredentialStatus> // io.github.artemidius.blowhard.core.api/CredentialStatus.values|values#static(){}[0]
+}
+
+final enum class io.github.artemidius.blowhard.core.api/CredentialUpdateResult : kotlin/Enum<io.github.artemidius.blowhard.core.api/CredentialUpdateResult> { // io.github.artemidius.blowhard.core.api/CredentialUpdateResult|null[0]
+    enum entry REJECTED // io.github.artemidius.blowhard.core.api/CredentialUpdateResult.REJECTED|null[0]
+    enum entry SUCCESS // io.github.artemidius.blowhard.core.api/CredentialUpdateResult.SUCCESS|null[0]
+    enum entry UNAVAILABLE // io.github.artemidius.blowhard.core.api/CredentialUpdateResult.UNAVAILABLE|null[0]
+
+    final val entries // io.github.artemidius.blowhard.core.api/CredentialUpdateResult.entries|#static{}entries[0]
+        final fun <get-entries>(): kotlin.enums/EnumEntries<io.github.artemidius.blowhard.core.api/CredentialUpdateResult> // io.github.artemidius.blowhard.core.api/CredentialUpdateResult.entries.<get-entries>|<get-entries>#static(){}[0]
+
+    final fun valueOf(kotlin/String): io.github.artemidius.blowhard.core.api/CredentialUpdateResult // io.github.artemidius.blowhard.core.api/CredentialUpdateResult.valueOf|valueOf#static(kotlin.String){}[0]
+    final fun values(): kotlin/Array<io.github.artemidius.blowhard.core.api/CredentialUpdateResult> // io.github.artemidius.blowhard.core.api/CredentialUpdateResult.values|values#static(){}[0]
+}
+
+final enum class io.github.artemidius.blowhard.core.api/GenerationMode : kotlin/Enum<io.github.artemidius.blowhard.core.api/GenerationMode> { // io.github.artemidius.blowhard.core.api/GenerationMode|null[0]
+    enum entry DEMO // io.github.artemidius.blowhard.core.api/GenerationMode.DEMO|null[0]
+    enum entry LIVE // io.github.artemidius.blowhard.core.api/GenerationMode.LIVE|null[0]
+
+    final val entries // io.github.artemidius.blowhard.core.api/GenerationMode.entries|#static{}entries[0]
+        final fun <get-entries>(): kotlin.enums/EnumEntries<io.github.artemidius.blowhard.core.api/GenerationMode> // io.github.artemidius.blowhard.core.api/GenerationMode.entries.<get-entries>|<get-entries>#static(){}[0]
+
+    final fun valueOf(kotlin/String): io.github.artemidius.blowhard.core.api/GenerationMode // io.github.artemidius.blowhard.core.api/GenerationMode.valueOf|valueOf#static(kotlin.String){}[0]
+    final fun values(): kotlin/Array<io.github.artemidius.blowhard.core.api/GenerationMode> // io.github.artemidius.blowhard.core.api/GenerationMode.values|values#static(){}[0]
+}
+
+final enum class io.github.artemidius.blowhard.core.api/ModeSelectionResult : kotlin/Enum<io.github.artemidius.blowhard.core.api/ModeSelectionResult> { // io.github.artemidius.blowhard.core.api/ModeSelectionResult|null[0]
+    enum entry DISCLOSURE_REQUIRED // io.github.artemidius.blowhard.core.api/ModeSelectionResult.DISCLOSURE_REQUIRED|null[0]
+    enum entry LIVE_NOT_READY // io.github.artemidius.blowhard.core.api/ModeSelectionResult.LIVE_NOT_READY|null[0]
+    enum entry UPDATED // io.github.artemidius.blowhard.core.api/ModeSelectionResult.UPDATED|null[0]
+
+    final val entries // io.github.artemidius.blowhard.core.api/ModeSelectionResult.entries|#static{}entries[0]
+        final fun <get-entries>(): kotlin.enums/EnumEntries<io.github.artemidius.blowhard.core.api/ModeSelectionResult> // io.github.artemidius.blowhard.core.api/ModeSelectionResult.entries.<get-entries>|<get-entries>#static(){}[0]
+
+    final fun valueOf(kotlin/String): io.github.artemidius.blowhard.core.api/ModeSelectionResult // io.github.artemidius.blowhard.core.api/ModeSelectionResult.valueOf|valueOf#static(kotlin.String){}[0]
+    final fun values(): kotlin/Array<io.github.artemidius.blowhard.core.api/ModeSelectionResult> // io.github.artemidius.blowhard.core.api/ModeSelectionResult.values|values#static(){}[0]
+}
+
+final enum class io.github.artemidius.blowhard.core.api/ModelSelectionResult : kotlin/Enum<io.github.artemidius.blowhard.core.api/ModelSelectionResult> { // io.github.artemidius.blowhard.core.api/ModelSelectionResult|null[0]
+    enum entry NOT_AVAILABLE // io.github.artemidius.blowhard.core.api/ModelSelectionResult.NOT_AVAILABLE|null[0]
+    enum entry UPDATED // io.github.artemidius.blowhard.core.api/ModelSelectionResult.UPDATED|null[0]
+
+    final val entries // io.github.artemidius.blowhard.core.api/ModelSelectionResult.entries|#static{}entries[0]
+        final fun <get-entries>(): kotlin.enums/EnumEntries<io.github.artemidius.blowhard.core.api/ModelSelectionResult> // io.github.artemidius.blowhard.core.api/ModelSelectionResult.entries.<get-entries>|<get-entries>#static(){}[0]
+
+    final fun valueOf(kotlin/String): io.github.artemidius.blowhard.core.api/ModelSelectionResult // io.github.artemidius.blowhard.core.api/ModelSelectionResult.valueOf|valueOf#static(kotlin.String){}[0]
+    final fun values(): kotlin/Array<io.github.artemidius.blowhard.core.api/ModelSelectionResult> // io.github.artemidius.blowhard.core.api/ModelSelectionResult.values|values#static(){}[0]
+}
+
 final enum class io.github.artemidius.blowhard.core.api/RunFailureKind : kotlin/Enum<io.github.artemidius.blowhard.core.api/RunFailureKind> { // io.github.artemidius.blowhard.core.api/RunFailureKind|null[0]
     enum entry CREDENTIAL_UNAVAILABLE // io.github.artemidius.blowhard.core.api/RunFailureKind.CREDENTIAL_UNAVAILABLE|null[0]
     enum entry INVALID_REQUEST // io.github.artemidius.blowhard.core.api/RunFailureKind.INVALID_REQUEST|null[0]
@@ -58,10 +148,51 @@ final enum class io.github.artemidius.blowhard.core.api/StartRunRejection : kotl
     final fun values(): kotlin/Array<io.github.artemidius.blowhard.core.api/StartRunRejection> // io.github.artemidius.blowhard.core.api/StartRunRejection.values|values#static(){}[0]
 }
 
+abstract interface io.github.artemidius.blowhard.core.api/ConnectionSettings { // io.github.artemidius.blowhard.core.api/ConnectionSettings|null[0]
+    abstract val state // io.github.artemidius.blowhard.core.api/ConnectionSettings.state|{}state[0]
+        abstract fun <get-state>(): kotlinx.coroutines.flow/StateFlow<io.github.artemidius.blowhard.core.api/ConnectionSettingsState> // io.github.artemidius.blowhard.core.api/ConnectionSettings.state.<get-state>|<get-state>(){}[0]
+
+    abstract suspend fun acknowledgeLiveDataDisclosure() // io.github.artemidius.blowhard.core.api/ConnectionSettings.acknowledgeLiveDataDisclosure|acknowledgeLiveDataDisclosure(){}[0]
+    abstract suspend fun deleteCredential(): io.github.artemidius.blowhard.core.api/CredentialUpdateResult // io.github.artemidius.blowhard.core.api/ConnectionSettings.deleteCredential|deleteCredential(){}[0]
+    abstract suspend fun refreshCredentialStatus() // io.github.artemidius.blowhard.core.api/ConnectionSettings.refreshCredentialStatus|refreshCredentialStatus(){}[0]
+    abstract suspend fun replaceCredential(kotlin/String): io.github.artemidius.blowhard.core.api/CredentialUpdateResult // io.github.artemidius.blowhard.core.api/ConnectionSettings.replaceCredential|replaceCredential(kotlin.String){}[0]
+    abstract suspend fun selectMode(io.github.artemidius.blowhard.core.api/GenerationMode): io.github.artemidius.blowhard.core.api/ModeSelectionResult // io.github.artemidius.blowhard.core.api/ConnectionSettings.selectMode|selectMode(io.github.artemidius.blowhard.core.api.GenerationMode){}[0]
+    abstract suspend fun selectModel(kotlin/String): io.github.artemidius.blowhard.core.api/ModelSelectionResult // io.github.artemidius.blowhard.core.api/ConnectionSettings.selectModel|selectModel(kotlin.String){}[0]
+    abstract suspend fun testConnection(): io.github.artemidius.blowhard.core.api/ConnectionTestResult // io.github.artemidius.blowhard.core.api/ConnectionSettings.testConnection|testConnection(){}[0]
+}
+
 abstract interface io.github.artemidius.blowhard.core.api/ConversationRuns { // io.github.artemidius.blowhard.core.api/ConversationRuns|null[0]
     abstract suspend fun cancel(io.github.artemidius.blowhard.core.api/RunId): io.github.artemidius.blowhard.core.api/CancelRunResult // io.github.artemidius.blowhard.core.api/ConversationRuns.cancel|cancel(io.github.artemidius.blowhard.core.api.RunId){}[0]
     abstract suspend fun observe(io.github.artemidius.blowhard.core.api/RunId): io.github.artemidius.blowhard.core.api/ObserveRunResult // io.github.artemidius.blowhard.core.api/ConversationRuns.observe|observe(io.github.artemidius.blowhard.core.api.RunId){}[0]
     abstract suspend fun start(io.github.artemidius.blowhard.core.api/StartRunRequest): io.github.artemidius.blowhard.core.api/StartRunResult // io.github.artemidius.blowhard.core.api/ConversationRuns.start|start(io.github.artemidius.blowhard.core.api.StartRunRequest){}[0]
+}
+
+sealed interface io.github.artemidius.blowhard.core.api/ConnectionTestResult { // io.github.artemidius.blowhard.core.api/ConnectionTestResult|null[0]
+    final class Failure : io.github.artemidius.blowhard.core.api/ConnectionTestResult { // io.github.artemidius.blowhard.core.api/ConnectionTestResult.Failure|null[0]
+        constructor <init>(io.github.artemidius.blowhard.core.api/ConnectionTestFailureKind) // io.github.artemidius.blowhard.core.api/ConnectionTestResult.Failure.<init>|<init>(io.github.artemidius.blowhard.core.api.ConnectionTestFailureKind){}[0]
+
+        final val kind // io.github.artemidius.blowhard.core.api/ConnectionTestResult.Failure.kind|{}kind[0]
+            final fun <get-kind>(): io.github.artemidius.blowhard.core.api/ConnectionTestFailureKind // io.github.artemidius.blowhard.core.api/ConnectionTestResult.Failure.kind.<get-kind>|<get-kind>(){}[0]
+
+        final fun component1(): io.github.artemidius.blowhard.core.api/ConnectionTestFailureKind // io.github.artemidius.blowhard.core.api/ConnectionTestResult.Failure.component1|component1(){}[0]
+        final fun copy(io.github.artemidius.blowhard.core.api/ConnectionTestFailureKind = ...): io.github.artemidius.blowhard.core.api/ConnectionTestResult.Failure // io.github.artemidius.blowhard.core.api/ConnectionTestResult.Failure.copy|copy(io.github.artemidius.blowhard.core.api.ConnectionTestFailureKind){}[0]
+        final fun equals(kotlin/Any?): kotlin/Boolean // io.github.artemidius.blowhard.core.api/ConnectionTestResult.Failure.equals|equals(kotlin.Any?){}[0]
+        final fun hashCode(): kotlin/Int // io.github.artemidius.blowhard.core.api/ConnectionTestResult.Failure.hashCode|hashCode(){}[0]
+        final fun toString(): kotlin/String // io.github.artemidius.blowhard.core.api/ConnectionTestResult.Failure.toString|toString(){}[0]
+    }
+
+    final class Success : io.github.artemidius.blowhard.core.api/ConnectionTestResult { // io.github.artemidius.blowhard.core.api/ConnectionTestResult.Success|null[0]
+        constructor <init>(kotlin.collections/List<io.github.artemidius.blowhard.core.api/SelectableModel>) // io.github.artemidius.blowhard.core.api/ConnectionTestResult.Success.<init>|<init>(kotlin.collections.List<io.github.artemidius.blowhard.core.api.SelectableModel>){}[0]
+
+        final val models // io.github.artemidius.blowhard.core.api/ConnectionTestResult.Success.models|{}models[0]
+            final fun <get-models>(): kotlin.collections/List<io.github.artemidius.blowhard.core.api/SelectableModel> // io.github.artemidius.blowhard.core.api/ConnectionTestResult.Success.models.<get-models>|<get-models>(){}[0]
+
+        final fun component1(): kotlin.collections/List<io.github.artemidius.blowhard.core.api/SelectableModel> // io.github.artemidius.blowhard.core.api/ConnectionTestResult.Success.component1|component1(){}[0]
+        final fun copy(kotlin.collections/List<io.github.artemidius.blowhard.core.api/SelectableModel> = ...): io.github.artemidius.blowhard.core.api/ConnectionTestResult.Success // io.github.artemidius.blowhard.core.api/ConnectionTestResult.Success.copy|copy(kotlin.collections.List<io.github.artemidius.blowhard.core.api.SelectableModel>){}[0]
+        final fun equals(kotlin/Any?): kotlin/Boolean // io.github.artemidius.blowhard.core.api/ConnectionTestResult.Success.equals|equals(kotlin.Any?){}[0]
+        final fun hashCode(): kotlin/Int // io.github.artemidius.blowhard.core.api/ConnectionTestResult.Success.hashCode|hashCode(){}[0]
+        final fun toString(): kotlin/String // io.github.artemidius.blowhard.core.api/ConnectionTestResult.Success.toString|toString(){}[0]
+    }
 }
 
 sealed interface io.github.artemidius.blowhard.core.api/ObserveRunResult { // io.github.artemidius.blowhard.core.api/ObserveRunResult|null[0]
@@ -226,6 +357,36 @@ sealed interface io.github.artemidius.blowhard.core.api/StartRunResult { // io.g
     }
 }
 
+final class io.github.artemidius.blowhard.core.api/ConnectionSettingsState { // io.github.artemidius.blowhard.core.api/ConnectionSettingsState|null[0]
+    constructor <init>(io.github.artemidius.blowhard.core.api/GenerationMode = ..., io.github.artemidius.blowhard.core.api/CredentialStatus = ..., io.github.artemidius.blowhard.core.api/ConnectionStatus = ..., kotlin.collections/List<io.github.artemidius.blowhard.core.api/SelectableModel> = ..., kotlin/String? = ..., kotlin/Boolean = ...) // io.github.artemidius.blowhard.core.api/ConnectionSettingsState.<init>|<init>(io.github.artemidius.blowhard.core.api.GenerationMode;io.github.artemidius.blowhard.core.api.CredentialStatus;io.github.artemidius.blowhard.core.api.ConnectionStatus;kotlin.collections.List<io.github.artemidius.blowhard.core.api.SelectableModel>;kotlin.String?;kotlin.Boolean){}[0]
+
+    final val canUseLiveMode // io.github.artemidius.blowhard.core.api/ConnectionSettingsState.canUseLiveMode|{}canUseLiveMode[0]
+        final fun <get-canUseLiveMode>(): kotlin/Boolean // io.github.artemidius.blowhard.core.api/ConnectionSettingsState.canUseLiveMode.<get-canUseLiveMode>|<get-canUseLiveMode>(){}[0]
+    final val connectionStatus // io.github.artemidius.blowhard.core.api/ConnectionSettingsState.connectionStatus|{}connectionStatus[0]
+        final fun <get-connectionStatus>(): io.github.artemidius.blowhard.core.api/ConnectionStatus // io.github.artemidius.blowhard.core.api/ConnectionSettingsState.connectionStatus.<get-connectionStatus>|<get-connectionStatus>(){}[0]
+    final val credentialStatus // io.github.artemidius.blowhard.core.api/ConnectionSettingsState.credentialStatus|{}credentialStatus[0]
+        final fun <get-credentialStatus>(): io.github.artemidius.blowhard.core.api/CredentialStatus // io.github.artemidius.blowhard.core.api/ConnectionSettingsState.credentialStatus.<get-credentialStatus>|<get-credentialStatus>(){}[0]
+    final val liveDataDisclosureAccepted // io.github.artemidius.blowhard.core.api/ConnectionSettingsState.liveDataDisclosureAccepted|{}liveDataDisclosureAccepted[0]
+        final fun <get-liveDataDisclosureAccepted>(): kotlin/Boolean // io.github.artemidius.blowhard.core.api/ConnectionSettingsState.liveDataDisclosureAccepted.<get-liveDataDisclosureAccepted>|<get-liveDataDisclosureAccepted>(){}[0]
+    final val mode // io.github.artemidius.blowhard.core.api/ConnectionSettingsState.mode|{}mode[0]
+        final fun <get-mode>(): io.github.artemidius.blowhard.core.api/GenerationMode // io.github.artemidius.blowhard.core.api/ConnectionSettingsState.mode.<get-mode>|<get-mode>(){}[0]
+    final val models // io.github.artemidius.blowhard.core.api/ConnectionSettingsState.models|{}models[0]
+        final fun <get-models>(): kotlin.collections/List<io.github.artemidius.blowhard.core.api/SelectableModel> // io.github.artemidius.blowhard.core.api/ConnectionSettingsState.models.<get-models>|<get-models>(){}[0]
+    final val selectedModelId // io.github.artemidius.blowhard.core.api/ConnectionSettingsState.selectedModelId|{}selectedModelId[0]
+        final fun <get-selectedModelId>(): kotlin/String? // io.github.artemidius.blowhard.core.api/ConnectionSettingsState.selectedModelId.<get-selectedModelId>|<get-selectedModelId>(){}[0]
+
+    final fun component1(): io.github.artemidius.blowhard.core.api/GenerationMode // io.github.artemidius.blowhard.core.api/ConnectionSettingsState.component1|component1(){}[0]
+    final fun component2(): io.github.artemidius.blowhard.core.api/CredentialStatus // io.github.artemidius.blowhard.core.api/ConnectionSettingsState.component2|component2(){}[0]
+    final fun component3(): io.github.artemidius.blowhard.core.api/ConnectionStatus // io.github.artemidius.blowhard.core.api/ConnectionSettingsState.component3|component3(){}[0]
+    final fun component4(): kotlin.collections/List<io.github.artemidius.blowhard.core.api/SelectableModel> // io.github.artemidius.blowhard.core.api/ConnectionSettingsState.component4|component4(){}[0]
+    final fun component5(): kotlin/String? // io.github.artemidius.blowhard.core.api/ConnectionSettingsState.component5|component5(){}[0]
+    final fun component6(): kotlin/Boolean // io.github.artemidius.blowhard.core.api/ConnectionSettingsState.component6|component6(){}[0]
+    final fun copy(io.github.artemidius.blowhard.core.api/GenerationMode = ..., io.github.artemidius.blowhard.core.api/CredentialStatus = ..., io.github.artemidius.blowhard.core.api/ConnectionStatus = ..., kotlin.collections/List<io.github.artemidius.blowhard.core.api/SelectableModel> = ..., kotlin/String? = ..., kotlin/Boolean = ...): io.github.artemidius.blowhard.core.api/ConnectionSettingsState // io.github.artemidius.blowhard.core.api/ConnectionSettingsState.copy|copy(io.github.artemidius.blowhard.core.api.GenerationMode;io.github.artemidius.blowhard.core.api.CredentialStatus;io.github.artemidius.blowhard.core.api.ConnectionStatus;kotlin.collections.List<io.github.artemidius.blowhard.core.api.SelectableModel>;kotlin.String?;kotlin.Boolean){}[0]
+    final fun equals(kotlin/Any?): kotlin/Boolean // io.github.artemidius.blowhard.core.api/ConnectionSettingsState.equals|equals(kotlin.Any?){}[0]
+    final fun hashCode(): kotlin/Int // io.github.artemidius.blowhard.core.api/ConnectionSettingsState.hashCode|hashCode(){}[0]
+    final fun toString(): kotlin/String // io.github.artemidius.blowhard.core.api/ConnectionSettingsState.toString|toString(){}[0]
+}
+
 final class io.github.artemidius.blowhard.core.api/RunFailure { // io.github.artemidius.blowhard.core.api/RunFailure|null[0]
     constructor <init>(io.github.artemidius.blowhard.core.api/RunFailureKind, kotlin/String? = ..., io.github.artemidius.blowhard.core.api/RunRetryAdvice = ..., kotlin/Long? = ...) // io.github.artemidius.blowhard.core.api/RunFailure.<init>|<init>(io.github.artemidius.blowhard.core.api.RunFailureKind;kotlin.String?;io.github.artemidius.blowhard.core.api.RunRetryAdvice;kotlin.Long?){}[0]
 
@@ -246,6 +407,22 @@ final class io.github.artemidius.blowhard.core.api/RunFailure { // io.github.art
     final fun equals(kotlin/Any?): kotlin/Boolean // io.github.artemidius.blowhard.core.api/RunFailure.equals|equals(kotlin.Any?){}[0]
     final fun hashCode(): kotlin/Int // io.github.artemidius.blowhard.core.api/RunFailure.hashCode|hashCode(){}[0]
     final fun toString(): kotlin/String // io.github.artemidius.blowhard.core.api/RunFailure.toString|toString(){}[0]
+}
+
+final class io.github.artemidius.blowhard.core.api/SelectableModel { // io.github.artemidius.blowhard.core.api/SelectableModel|null[0]
+    constructor <init>(kotlin/String, kotlin/Long?) // io.github.artemidius.blowhard.core.api/SelectableModel.<init>|<init>(kotlin.String;kotlin.Long?){}[0]
+
+    final val contextWindowTokens // io.github.artemidius.blowhard.core.api/SelectableModel.contextWindowTokens|{}contextWindowTokens[0]
+        final fun <get-contextWindowTokens>(): kotlin/Long? // io.github.artemidius.blowhard.core.api/SelectableModel.contextWindowTokens.<get-contextWindowTokens>|<get-contextWindowTokens>(){}[0]
+    final val id // io.github.artemidius.blowhard.core.api/SelectableModel.id|{}id[0]
+        final fun <get-id>(): kotlin/String // io.github.artemidius.blowhard.core.api/SelectableModel.id.<get-id>|<get-id>(){}[0]
+
+    final fun component1(): kotlin/String // io.github.artemidius.blowhard.core.api/SelectableModel.component1|component1(){}[0]
+    final fun component2(): kotlin/Long? // io.github.artemidius.blowhard.core.api/SelectableModel.component2|component2(){}[0]
+    final fun copy(kotlin/String = ..., kotlin/Long? = ...): io.github.artemidius.blowhard.core.api/SelectableModel // io.github.artemidius.blowhard.core.api/SelectableModel.copy|copy(kotlin.String;kotlin.Long?){}[0]
+    final fun equals(kotlin/Any?): kotlin/Boolean // io.github.artemidius.blowhard.core.api/SelectableModel.equals|equals(kotlin.Any?){}[0]
+    final fun hashCode(): kotlin/Int // io.github.artemidius.blowhard.core.api/SelectableModel.hashCode|hashCode(){}[0]
+    final fun toString(): kotlin/String // io.github.artemidius.blowhard.core.api/SelectableModel.toString|toString(){}[0]
 }
 
 final class io.github.artemidius.blowhard.core.api/StartRunRequest { // io.github.artemidius.blowhard.core.api/StartRunRequest|null[0]
