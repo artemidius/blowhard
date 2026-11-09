@@ -1,0 +1,88 @@
+// Klib ABI Dump
+// Targets: [iosArm64, iosSimulatorArm64]
+// Rendering settings:
+// - Signature version: 2
+// - Show manifest properties: true
+// - Show declarations: true
+
+// Library unique name: <Blowhard.adapters:fixture>
+sealed interface io.github.artemidius.blowhard.adapters.fixture/FixtureScenario { // io.github.artemidius.blowhard.adapters.fixture/FixtureScenario|null[0]
+    final class Failure : io.github.artemidius.blowhard.adapters.fixture/FixtureScenario { // io.github.artemidius.blowhard.adapters.fixture/FixtureScenario.Failure|null[0]
+        constructor <init>(kotlin.collections/List<kotlin/String> = ..., io.github.artemidius.blowhard.core.domain/GenerationFailureKind = ..., kotlin/String? = ..., kotlin.time/Duration = ...) // io.github.artemidius.blowhard.adapters.fixture/FixtureScenario.Failure.<init>|<init>(kotlin.collections.List<kotlin.String>;io.github.artemidius.blowhard.core.domain.GenerationFailureKind;kotlin.String?;kotlin.time.Duration){}[0]
+
+        final val chunks // io.github.artemidius.blowhard.adapters.fixture/FixtureScenario.Failure.chunks|{}chunks[0]
+            final fun <get-chunks>(): kotlin.collections/List<kotlin/String> // io.github.artemidius.blowhard.adapters.fixture/FixtureScenario.Failure.chunks.<get-chunks>|<get-chunks>(){}[0]
+        final val delayBetweenChunks // io.github.artemidius.blowhard.adapters.fixture/FixtureScenario.Failure.delayBetweenChunks|{}delayBetweenChunks[0]
+            final fun <get-delayBetweenChunks>(): kotlin.time/Duration // io.github.artemidius.blowhard.adapters.fixture/FixtureScenario.Failure.delayBetweenChunks.<get-delayBetweenChunks>|<get-delayBetweenChunks>(){}[0]
+        final val kind // io.github.artemidius.blowhard.adapters.fixture/FixtureScenario.Failure.kind|{}kind[0]
+            final fun <get-kind>(): io.github.artemidius.blowhard.core.domain/GenerationFailureKind // io.github.artemidius.blowhard.adapters.fixture/FixtureScenario.Failure.kind.<get-kind>|<get-kind>(){}[0]
+        final val reference // io.github.artemidius.blowhard.adapters.fixture/FixtureScenario.Failure.reference|{}reference[0]
+            final fun <get-reference>(): kotlin/String? // io.github.artemidius.blowhard.adapters.fixture/FixtureScenario.Failure.reference.<get-reference>|<get-reference>(){}[0]
+
+        final fun component1(): kotlin.collections/List<kotlin/String> // io.github.artemidius.blowhard.adapters.fixture/FixtureScenario.Failure.component1|component1(){}[0]
+        final fun component2(): io.github.artemidius.blowhard.core.domain/GenerationFailureKind // io.github.artemidius.blowhard.adapters.fixture/FixtureScenario.Failure.component2|component2(){}[0]
+        final fun component3(): kotlin/String? // io.github.artemidius.blowhard.adapters.fixture/FixtureScenario.Failure.component3|component3(){}[0]
+        final fun component4(): kotlin.time/Duration // io.github.artemidius.blowhard.adapters.fixture/FixtureScenario.Failure.component4|component4(){}[0]
+        final fun copy(kotlin.collections/List<kotlin/String> = ..., io.github.artemidius.blowhard.core.domain/GenerationFailureKind = ..., kotlin/String? = ..., kotlin.time/Duration = ...): io.github.artemidius.blowhard.adapters.fixture/FixtureScenario.Failure // io.github.artemidius.blowhard.adapters.fixture/FixtureScenario.Failure.copy|copy(kotlin.collections.List<kotlin.String>;io.github.artemidius.blowhard.core.domain.GenerationFailureKind;kotlin.String?;kotlin.time.Duration){}[0]
+        final fun equals(kotlin/Any?): kotlin/Boolean // io.github.artemidius.blowhard.adapters.fixture/FixtureScenario.Failure.equals|equals(kotlin.Any?){}[0]
+        final fun hashCode(): kotlin/Int // io.github.artemidius.blowhard.adapters.fixture/FixtureScenario.Failure.hashCode|hashCode(){}[0]
+        final fun toString(): kotlin/String // io.github.artemidius.blowhard.adapters.fixture/FixtureScenario.Failure.toString|toString(){}[0]
+    }
+
+    final class Interrupted : io.github.artemidius.blowhard.adapters.fixture/FixtureScenario { // io.github.artemidius.blowhard.adapters.fixture/FixtureScenario.Interrupted|null[0]
+        constructor <init>(kotlin.collections/List<kotlin/String> = ..., kotlin.time/Duration = ...) // io.github.artemidius.blowhard.adapters.fixture/FixtureScenario.Interrupted.<init>|<init>(kotlin.collections.List<kotlin.String>;kotlin.time.Duration){}[0]
+
+        final val chunks // io.github.artemidius.blowhard.adapters.fixture/FixtureScenario.Interrupted.chunks|{}chunks[0]
+            final fun <get-chunks>(): kotlin.collections/List<kotlin/String> // io.github.artemidius.blowhard.adapters.fixture/FixtureScenario.Interrupted.chunks.<get-chunks>|<get-chunks>(){}[0]
+        final val delayBetweenChunks // io.github.artemidius.blowhard.adapters.fixture/FixtureScenario.Interrupted.delayBetweenChunks|{}delayBetweenChunks[0]
+            final fun <get-delayBetweenChunks>(): kotlin.time/Duration // io.github.artemidius.blowhard.adapters.fixture/FixtureScenario.Interrupted.delayBetweenChunks.<get-delayBetweenChunks>|<get-delayBetweenChunks>(){}[0]
+
+        final fun component1(): kotlin.collections/List<kotlin/String> // io.github.artemidius.blowhard.adapters.fixture/FixtureScenario.Interrupted.component1|component1(){}[0]
+        final fun component2(): kotlin.time/Duration // io.github.artemidius.blowhard.adapters.fixture/FixtureScenario.Interrupted.component2|component2(){}[0]
+        final fun copy(kotlin.collections/List<kotlin/String> = ..., kotlin.time/Duration = ...): io.github.artemidius.blowhard.adapters.fixture/FixtureScenario.Interrupted // io.github.artemidius.blowhard.adapters.fixture/FixtureScenario.Interrupted.copy|copy(kotlin.collections.List<kotlin.String>;kotlin.time.Duration){}[0]
+        final fun equals(kotlin/Any?): kotlin/Boolean // io.github.artemidius.blowhard.adapters.fixture/FixtureScenario.Interrupted.equals|equals(kotlin.Any?){}[0]
+        final fun hashCode(): kotlin/Int // io.github.artemidius.blowhard.adapters.fixture/FixtureScenario.Interrupted.hashCode|hashCode(){}[0]
+        final fun toString(): kotlin/String // io.github.artemidius.blowhard.adapters.fixture/FixtureScenario.Interrupted.toString|toString(){}[0]
+    }
+
+    final class RateLimited : io.github.artemidius.blowhard.adapters.fixture/FixtureScenario { // io.github.artemidius.blowhard.adapters.fixture/FixtureScenario.RateLimited|null[0]
+        constructor <init>(kotlin.collections/List<kotlin/String> = ..., kotlin/String? = ..., kotlin.time/Duration = ...) // io.github.artemidius.blowhard.adapters.fixture/FixtureScenario.RateLimited.<init>|<init>(kotlin.collections.List<kotlin.String>;kotlin.String?;kotlin.time.Duration){}[0]
+
+        final val chunks // io.github.artemidius.blowhard.adapters.fixture/FixtureScenario.RateLimited.chunks|{}chunks[0]
+            final fun <get-chunks>(): kotlin.collections/List<kotlin/String> // io.github.artemidius.blowhard.adapters.fixture/FixtureScenario.RateLimited.chunks.<get-chunks>|<get-chunks>(){}[0]
+        final val delayBetweenChunks // io.github.artemidius.blowhard.adapters.fixture/FixtureScenario.RateLimited.delayBetweenChunks|{}delayBetweenChunks[0]
+            final fun <get-delayBetweenChunks>(): kotlin.time/Duration // io.github.artemidius.blowhard.adapters.fixture/FixtureScenario.RateLimited.delayBetweenChunks.<get-delayBetweenChunks>|<get-delayBetweenChunks>(){}[0]
+        final val reference // io.github.artemidius.blowhard.adapters.fixture/FixtureScenario.RateLimited.reference|{}reference[0]
+            final fun <get-reference>(): kotlin/String? // io.github.artemidius.blowhard.adapters.fixture/FixtureScenario.RateLimited.reference.<get-reference>|<get-reference>(){}[0]
+
+        final fun component1(): kotlin.collections/List<kotlin/String> // io.github.artemidius.blowhard.adapters.fixture/FixtureScenario.RateLimited.component1|component1(){}[0]
+        final fun component2(): kotlin/String? // io.github.artemidius.blowhard.adapters.fixture/FixtureScenario.RateLimited.component2|component2(){}[0]
+        final fun component3(): kotlin.time/Duration // io.github.artemidius.blowhard.adapters.fixture/FixtureScenario.RateLimited.component3|component3(){}[0]
+        final fun copy(kotlin.collections/List<kotlin/String> = ..., kotlin/String? = ..., kotlin.time/Duration = ...): io.github.artemidius.blowhard.adapters.fixture/FixtureScenario.RateLimited // io.github.artemidius.blowhard.adapters.fixture/FixtureScenario.RateLimited.copy|copy(kotlin.collections.List<kotlin.String>;kotlin.String?;kotlin.time.Duration){}[0]
+        final fun equals(kotlin/Any?): kotlin/Boolean // io.github.artemidius.blowhard.adapters.fixture/FixtureScenario.RateLimited.equals|equals(kotlin.Any?){}[0]
+        final fun hashCode(): kotlin/Int // io.github.artemidius.blowhard.adapters.fixture/FixtureScenario.RateLimited.hashCode|hashCode(){}[0]
+        final fun toString(): kotlin/String // io.github.artemidius.blowhard.adapters.fixture/FixtureScenario.RateLimited.toString|toString(){}[0]
+    }
+
+    final class Success : io.github.artemidius.blowhard.adapters.fixture/FixtureScenario { // io.github.artemidius.blowhard.adapters.fixture/FixtureScenario.Success|null[0]
+        constructor <init>(kotlin.collections/List<kotlin/String>, kotlin.time/Duration = ...) // io.github.artemidius.blowhard.adapters.fixture/FixtureScenario.Success.<init>|<init>(kotlin.collections.List<kotlin.String>;kotlin.time.Duration){}[0]
+
+        final val chunks // io.github.artemidius.blowhard.adapters.fixture/FixtureScenario.Success.chunks|{}chunks[0]
+            final fun <get-chunks>(): kotlin.collections/List<kotlin/String> // io.github.artemidius.blowhard.adapters.fixture/FixtureScenario.Success.chunks.<get-chunks>|<get-chunks>(){}[0]
+        final val delayBetweenChunks // io.github.artemidius.blowhard.adapters.fixture/FixtureScenario.Success.delayBetweenChunks|{}delayBetweenChunks[0]
+            final fun <get-delayBetweenChunks>(): kotlin.time/Duration // io.github.artemidius.blowhard.adapters.fixture/FixtureScenario.Success.delayBetweenChunks.<get-delayBetweenChunks>|<get-delayBetweenChunks>(){}[0]
+
+        final fun component1(): kotlin.collections/List<kotlin/String> // io.github.artemidius.blowhard.adapters.fixture/FixtureScenario.Success.component1|component1(){}[0]
+        final fun component2(): kotlin.time/Duration // io.github.artemidius.blowhard.adapters.fixture/FixtureScenario.Success.component2|component2(){}[0]
+        final fun copy(kotlin.collections/List<kotlin/String> = ..., kotlin.time/Duration = ...): io.github.artemidius.blowhard.adapters.fixture/FixtureScenario.Success // io.github.artemidius.blowhard.adapters.fixture/FixtureScenario.Success.copy|copy(kotlin.collections.List<kotlin.String>;kotlin.time.Duration){}[0]
+        final fun equals(kotlin/Any?): kotlin/Boolean // io.github.artemidius.blowhard.adapters.fixture/FixtureScenario.Success.equals|equals(kotlin.Any?){}[0]
+        final fun hashCode(): kotlin/Int // io.github.artemidius.blowhard.adapters.fixture/FixtureScenario.Success.hashCode|hashCode(){}[0]
+        final fun toString(): kotlin/String // io.github.artemidius.blowhard.adapters.fixture/FixtureScenario.Success.toString|toString(){}[0]
+    }
+}
+
+final class io.github.artemidius.blowhard.adapters.fixture/FixtureTextGenerationPort : io.github.artemidius.blowhard.core.domain/TextGenerationPort { // io.github.artemidius.blowhard.adapters.fixture/FixtureTextGenerationPort|null[0]
+    constructor <init>(kotlin/Function1<io.github.artemidius.blowhard.core.domain/GenerationRequest, io.github.artemidius.blowhard.adapters.fixture/FixtureScenario>) // io.github.artemidius.blowhard.adapters.fixture/FixtureTextGenerationPort.<init>|<init>(kotlin.Function1<io.github.artemidius.blowhard.core.domain.GenerationRequest,io.github.artemidius.blowhard.adapters.fixture.FixtureScenario>){}[0]
+
+    final fun generate(io.github.artemidius.blowhard.core.domain/GenerationRequest): kotlinx.coroutines.flow/Flow<io.github.artemidius.blowhard.core.domain/GenerationEvent> // io.github.artemidius.blowhard.adapters.fixture/FixtureTextGenerationPort.generate|generate(io.github.artemidius.blowhard.core.domain.GenerationRequest){}[0]
+}

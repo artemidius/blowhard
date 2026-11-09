@@ -6,7 +6,7 @@ A desktop-first Kotlin Multiplatform client for Mistral AI.
 
 Blowhard is in early development. The current foundation provides a shared Compose presentation
 module for desktop, Android, and iOS, a dedicated desktop entry point, and a platform-neutral core
-API for starting, observing, and cancelling generation runs.
+API with an application-owned run lifecycle and a deterministic offline generation adapter.
 
 ## Technical direction
 
@@ -39,6 +39,10 @@ The cross-platform CI matrix and security model are documented in
 
 Native package identity and verification are documented in
 [`ADR 0005`](docs/decisions/0005-native-desktop-packaging.md).
+
+Run ownership, concurrency, and deterministic fixture behavior are documented in
+[`ADR 0006`](docs/decisions/0006-run-lifecycle-and-fixtures.md) and the
+[run lifecycle guide](docs/architecture/run-lifecycle.md).
 
 ## Run the desktop application
 

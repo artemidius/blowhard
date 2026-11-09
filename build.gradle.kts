@@ -18,21 +18,22 @@ plugins {
     alias(libs.plugins.spotless)
 }
 
-val documentedCoreModules = listOf(
+val documentedModules = listOf(
+    project(":adapters:fixture"),
     project(":core:api"),
     project(":core:application"),
     project(":core:domain"),
 )
 
-documentedCoreModules.forEach { coreModule ->
-    coreModule.pluginManager.apply("org.jetbrains.dokka")
-    coreModule.pluginManager.apply("org.jetbrains.kotlinx.kover")
+documentedModules.forEach { module ->
+    module.pluginManager.apply("org.jetbrains.dokka")
+    module.pluginManager.apply("org.jetbrains.kotlinx.kover")
 }
 
 dependencies {
-    documentedCoreModules.forEach { coreModule ->
-        add("dokka", coreModule)
-        add("kover", coreModule)
+    documentedModules.forEach { module ->
+        add("dokka", module)
+        add("kover", module)
     }
 }
 
@@ -153,6 +154,7 @@ tasks.matching { it.name == "koverXmlReport" || it.name == "koverVerify" }.confi
 }
 
 private val allowedProjectDependencies = mapOf(
+    ":adapters:fixture" to setOf(":core:domain"),
     ":apps:desktop" to setOf(":shared-ui"),
     ":core:api" to emptySet(),
     ":core:application" to setOf(":core:api", ":core:domain"),
@@ -206,5 +208,7 @@ tasks.register("qualityCheck") {
         ":core:application:desktopTest",
         ":core:domain:checkKotlinAbi",
         ":core:domain:desktopTest",
+        ":adapters:fixture:checkKotlinAbi",
+        ":adapters:fixture:desktopTest",
     )
 }

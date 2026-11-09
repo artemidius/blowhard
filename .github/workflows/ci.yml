@@ -70,6 +70,7 @@ jobs:
             build/reports/detekt/
             build/reports/kover/
             build/dokka/html/
+            adapters/**/build/test-results/
             core/**/build/test-results/
           if-no-files-found: warn
           retention-days: 7
@@ -119,6 +120,7 @@ jobs:
           :core:api:desktopTest
           :core:application:desktopTest
           :core:domain:desktopTest
+          :adapters:fixture:desktopTest
 
       - name: Build native package
         run: >-
@@ -148,6 +150,7 @@ jobs:
             apps/desktop/build/compose/binaries/main/deb/*.deb
             apps/desktop/build/compose/binaries/main/dmg/*.dmg
             apps/desktop/build/compose/binaries/main/msi/*.msi
+            adapters/**/build/test-results/desktopTest/
             core/**/build/test-results/desktopTest/
           if-no-files-found: warn
           retention-days: 7
@@ -181,13 +184,16 @@ jobs:
           :core:api:testAndroidHostTest
           :core:application:testAndroidHostTest
           :core:domain:testAndroidHostTest
+          :adapters:fixture:testAndroidHostTest
 
       - name: Upload Android evidence
         if: ${{ always() }}
         uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
           name: android-shared-evidence
-          path: core/**/build/test-results/testAndroidHostTest/
+          path: |
+            adapters/**/build/test-results/testAndroidHostTest/
+            core/**/build/test-results/testAndroidHostTest/
           if-no-files-found: warn
           retention-days: 7
 
@@ -226,12 +232,17 @@ jobs:
           :core:api:iosSimulatorArm64Test
           :core:application:iosSimulatorArm64Test
           :core:domain:iosSimulatorArm64Test
+          :adapters:fixture:compileKotlinIosArm64
+          :adapters:fixture:compileKotlinIosSimulatorArm64
+          :adapters:fixture:iosSimulatorArm64Test
 
       - name: Upload Apple evidence
         if: ${{ always() }}
         uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
           name: apple-shared-evidence
-          path: core/**/build/test-results/iosSimulatorArm64Test/
+          path: |
+            adapters/**/build/test-results/iosSimulatorArm64Test/
+            core/**/build/test-results/iosSimulatorArm64Test/
           if-no-files-found: warn
           retention-days: 7
