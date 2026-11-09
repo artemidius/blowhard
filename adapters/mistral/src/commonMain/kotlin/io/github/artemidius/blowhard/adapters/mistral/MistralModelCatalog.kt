@@ -20,20 +20,12 @@ public class MistralModelCatalog private constructor(
     private val client: HttpClient,
 ) : ModelCatalogPort {
     override suspend fun listModels(): ModelCatalogResult {
-        val apiKey = readCredential() ?: return failure(ModelCatalogFailureKind.CREDENTIAL_UNAVAILABLE)
+        val apiKey = credentials.readSafeApiKey() ?: return failure(ModelCatalogFailureKind.CREDENTIAL_UNAVAILABLE)
         return requestModels(apiKey)
     }
 
     /** Releases network resources owned by this adapter. */
     public fun close(): Unit = client.close()
-
-    private suspend fun readCredential(): String? = try {
-        credentials.apiKey()?.takeIf(String::isSafeBearerToken)
-    } catch (cancellation: CancellationException) {
-        throw cancellation
-    } catch (_: Exception) {
-        null
-    }
 
     private suspend fun requestModels(apiKey: String): ModelCatalogResult = try {
         val response = client.get(MISTRAL_MODELS_ENDPOINT) {
@@ -71,9 +63,4 @@ public class MistralModelCatalog private constructor(
             MistralModelCatalog(credentials, client)
     }
 }
-
-private fun String.isSafeBearerToken(): Boolean =
-    isNotBlank() && length <= MAX_BEARER_TOKEN_LENGTH && none { it.isWhitespace() || it.isISOControl() }
-
-private const val MAX_BEARER_TOKEN_LENGTH = 4_096
 private const val MISTRAL_MODELS_ENDPOINT = "https://api.mistral.ai/v1/models"
