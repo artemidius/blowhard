@@ -5,12 +5,14 @@ import io.github.artemidius.blowhard.core.api.ConversationId
 import io.github.artemidius.blowhard.core.api.ObserveRunResult
 import io.github.artemidius.blowhard.core.api.RunFailureKind
 import io.github.artemidius.blowhard.core.api.RunId
+import io.github.artemidius.blowhard.core.api.RunRetryAdvice
 import io.github.artemidius.blowhard.core.api.RunSnapshot
 import io.github.artemidius.blowhard.core.api.StartRunRequest
 import io.github.artemidius.blowhard.core.api.StartRunResult
 import io.github.artemidius.blowhard.core.domain.GenerationEvent
 import io.github.artemidius.blowhard.core.domain.GenerationFailure
 import io.github.artemidius.blowhard.core.domain.GenerationFailureKind
+import io.github.artemidius.blowhard.core.domain.GenerationRetryAdvice
 import io.github.artemidius.blowhard.core.domain.TextGenerationPort
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -97,6 +99,30 @@ class RunConcurrencyTest {
         runIds.forEach {
             assertEquals("safe-reference", assertIs<RunSnapshot.Failed>(runs.current(it)).failure.reference)
         }
+    }
+
+    @Test
+    fun `retry guidance is preserved across the application boundary`() = runTest {
+        val runs = controller(
+            TextGenerationPort {
+                flowOf(
+                    GenerationEvent.Failed(
+                        GenerationFailure(
+                            GenerationFailureKind.RATE_LIMITED,
+                            retryAdvice = GenerationRetryAdvice.RETRY_AFTER_DELAY,
+                            retryAfterSeconds = 17,
+                        ),
+                    ),
+                )
+            },
+        )
+
+        val runId = runs.startRun("conversation-1")
+        advanceUntilIdle()
+
+        val failure = assertIs<RunSnapshot.Failed>(runs.current(runId)).failure
+        assertEquals(RunRetryAdvice.RETRY_AFTER_DELAY, failure.retryAdvice)
+        assertEquals(17, failure.retryAfterSeconds)
     }
 
     @Test
