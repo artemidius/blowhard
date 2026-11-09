@@ -14,12 +14,14 @@ plugins {
     alias(libs.plugins.dokka)
     alias(libs.plugins.kotlin.jvm) apply false
     alias(libs.plugins.kotlin.multiplatform) apply false
+    alias(libs.plugins.kotlin.serialization) apply false
     alias(libs.plugins.kover)
     alias(libs.plugins.spotless)
 }
 
 val documentedModules = listOf(
     project(":adapters:fixture"),
+    project(":adapters:mistral"),
     project(":core:api"),
     project(":core:application"),
     project(":core:domain"),
@@ -74,6 +76,10 @@ detekt {
                 include("**/*.kt")
                 exclude("**/build/**")
             },
+            fileTree("adapters") {
+                include("**/*.kt")
+                exclude("**/build/**")
+            },
             fileTree("core") {
                 include("**/*.kt")
                 exclude("**/build/**")
@@ -94,6 +100,7 @@ kover {
                     classes(
                         "io.github.artemidius.blowhard.core.application.*",
                         "io.github.artemidius.blowhard.core.domain.PromptText*",
+                        "io.github.artemidius.blowhard.adapters.mistral.*",
                         "io.github.artemidius.blowhard.ui.presentation.*",
                     )
                 }
@@ -157,6 +164,7 @@ tasks.matching { it.name == "koverXmlReport" || it.name == "koverVerify" }.confi
 
 private val allowedProjectDependencies = mapOf(
     ":adapters:fixture" to setOf(":core:domain"),
+    ":adapters:mistral" to setOf(":core:domain"),
     ":apps:desktop" to setOf(":adapters:fixture", ":core:application", ":shared-ui"),
     ":core:api" to emptySet(),
     ":core:application" to setOf(":core:api", ":core:domain"),
@@ -212,6 +220,8 @@ tasks.register("qualityCheck") {
         ":core:domain:desktopTest",
         ":adapters:fixture:checkKotlinAbi",
         ":adapters:fixture:desktopTest",
+        ":adapters:mistral:checkKotlinAbi",
+        ":adapters:mistral:desktopTest",
         ":shared-ui:checkKotlinAbi",
         ":shared-ui:desktopTest",
     )

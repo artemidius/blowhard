@@ -1,0 +1,14 @@
+public abstract interface class io/github/artemidius/blowhard/adapters/mistral/MistralCredentialProvider {
+	public abstract fun apiKey (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+}
+
+public final class io/github/artemidius/blowhard/adapters/mistral/MistralModelCatalog : io/github/artemidius/blowhard/core/domain/ModelCatalogPort {
+	public static final field Companion Lio/github/artemidius/blowhard/adapters/mistral/MistralModelCatalog$Companion;
+	public final fun close ()V
+	public fun listModels (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+}
+
+public final class io/github/artemidius/blowhard/adapters/mistral/MistralModelCatalog$Companion {
+	public final fun create (Lio/github/artemidius/blowhard/adapters/mistral/MistralCredentialProvider;)Lio/github/artemidius/blowhard/adapters/mistral/MistralModelCatalog;
+}
+
