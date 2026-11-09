@@ -53,6 +53,11 @@ the verified desktop support matrix are documented in
 [`ADR 0008`](docs/decisions/0008-desktop-platform-integration.md) and the
 [desktop platform support guide](docs/architecture/desktop-platform-support.md).
 
+The first live-provider boundary discovers Mistral models through a provider-neutral catalog and a
+hardened, fixed-host Ktor adapter. Its security and mapping decisions are documented in
+[`ADR 0009`](docs/decisions/0009-mistral-model-catalog-boundary.md) and the
+[Mistral provider boundary guide](docs/architecture/mistral-provider-boundary.md).
+
 ## Run the desktop application
 
 ```shell
@@ -115,8 +120,9 @@ to the macOS app, but it is not Developer ID signed or notarized. The Windows pa
 publisher-signed. These packages are therefore intended only for build verification; trusted
 signing and release distribution are intentionally deferred.
 
-The application currently uses synthetic fixture output rather than a live Mistral connection.
-Provider credentials, network transport, persistence, and public release artifacts are not
+The runnable application still uses synthetic fixture output rather than live Mistral generation.
+The repository now includes an isolated, tested model-catalog transport boundary, but it does not
+yet store provider credentials or expose that boundary in the UI. Public release artifacts are not
 available yet.
 
 See [`CONTRIBUTING.md`](CONTRIBUTING.md) for the review and verification workflow.

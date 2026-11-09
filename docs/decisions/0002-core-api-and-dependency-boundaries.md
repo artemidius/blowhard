@@ -22,6 +22,7 @@ clients ---> shared-ui ---> core:api
    +------> adapters:fixture ---------->+
 
 adapters:fixture ----------------> core:domain
+adapters:mistral ----------------> core:domain
 ```
 
 - `core:api` owns client-facing identifiers, the start, observe, and cancel capability, and
@@ -38,6 +39,8 @@ adapters:fixture ----------------> core:domain
   all core modules.
 - `adapters:fixture` is the first provider adapter. It depends only on the domain-owned generation
   port and contains no application policy.
+- `adapters:mistral` implements provider-backed model discovery. It maps Mistral transport types
+  into the domain-owned catalog contract without exposing Ktor or provider payloads to clients.
 
 The public observation contract is passive: collecting state never starts or repeats generation.
 Cancelling one observer does not cancel the run; cancellation is an explicit capability operation.
