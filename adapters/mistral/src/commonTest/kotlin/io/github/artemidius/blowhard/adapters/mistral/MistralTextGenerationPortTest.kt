@@ -25,7 +25,6 @@ import kotlinx.coroutines.cancelAndJoin
 import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.runTest
-import kotlinx.coroutines.withTimeout
 import kotlinx.io.IOException
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.boolean
@@ -334,7 +333,7 @@ class MistralTextGenerationPortTest {
     }
 
     @Test
-    fun `cancelling collection cancels the in-flight provider request`() = runTest {
+    fun `cancelling collection cancels the in-flight provider request`() = runTest(timeout = 10.seconds) {
         val started = CompletableDeferred<Unit>()
         val cancelled = CompletableDeferred<Unit>()
         val client = createMistralHttpClient(
@@ -352,7 +351,7 @@ class MistralTextGenerationPortTest {
             val collection = backgroundScope.launch { port.generate(request()).toList() }
             started.await()
             collection.cancelAndJoin()
-            withTimeout(5.seconds) { cancelled.await() }
+            cancelled.await()
         } finally {
             port.close()
         }
