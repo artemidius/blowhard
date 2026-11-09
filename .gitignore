@@ -1,0 +1,43 @@
+# Local workspace data
+/.local/
+
+# Gradle and Kotlin generated files
+.gradle/
+.kotlin/
+**/build/
+local.properties
+
+# IDE configuration
+.idea/
+*.iml
+*.ipr
+*.iws
+.vscode/
+
+# Apple tooling and user state
+DerivedData/
+xcuserdata/
+*.xcuserstate
+.swiftpm/
+.build/
+Pods/
+
+# Local environment and signing material
+.env
+.env.*
+!.env.example
+*.jks
+*.keystore
+*.p12
+*.pfx
+*.pem
+*.key
+*.mobileprovision
+*.provisionprofile
+
+# Diagnostics and operating-system files
+*.log
+*.hprof
+.DS_Store
+Thumbs.db
+Desktop.ini
