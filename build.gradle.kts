@@ -1,11 +1,150 @@
 import org.gradle.api.artifacts.ProjectDependency
+import org.gradle.api.tasks.Exec
 
 plugins {
     alias(libs.plugins.android.multiplatform.library) apply false
     alias(libs.plugins.compose.compiler) apply false
     alias(libs.plugins.compose.multiplatform) apply false
+    alias(libs.plugins.detekt)
+    alias(libs.plugins.dokka)
     alias(libs.plugins.kotlin.jvm) apply false
     alias(libs.plugins.kotlin.multiplatform) apply false
+    alias(libs.plugins.kover)
+    alias(libs.plugins.spotless)
+}
+
+val documentedCoreModules = listOf(
+    project(":core:api"),
+    project(":core:application"),
+    project(":core:domain"),
+)
+
+documentedCoreModules.forEach { coreModule ->
+    coreModule.pluginManager.apply("org.jetbrains.dokka")
+    coreModule.pluginManager.apply("org.jetbrains.kotlinx.kover")
+}
+
+dependencies {
+    documentedCoreModules.forEach { coreModule ->
+        add("dokka", coreModule)
+        add("kover", coreModule)
+    }
+}
+
+spotless {
+    kotlin {
+        target("**/*.kt")
+        targetExclude("**/build/**")
+        ktlint()
+        trimTrailingWhitespace()
+        endWithNewline()
+    }
+
+    kotlinGradle {
+        target("**/*.gradle.kts")
+        targetExclude("**/build/**")
+        ktlint()
+        trimTrailingWhitespace()
+        endWithNewline()
+    }
+
+    format("projectFiles") {
+        target("**/*.md", "**/*.toml", "**/*.yml", "**/*.yaml")
+        targetExclude("**/build/**", "gradle/verification-metadata.xml")
+        trimTrailingWhitespace()
+        endWithNewline()
+    }
+}
+
+detekt {
+    buildUponDefaultConfig = true
+    parallel = true
+    config.setFrom(files("config/detekt/detekt.yml"))
+    basePath = rootDir
+    source.setFrom(
+        files(
+            fileTree("apps") {
+                include("**/*.kt")
+                exclude("**/build/**")
+            },
+            fileTree("core") {
+                include("**/*.kt")
+                exclude("**/build/**")
+            },
+            fileTree("shared-ui") {
+                include("**/*.kt")
+                exclude("**/build/**")
+            },
+        ),
+    )
+}
+
+kover {
+    reports {
+        total {
+            filters {
+                includes {
+                    classes(
+                        "io.github.artemidius.blowhard.core.application.*",
+                        "io.github.artemidius.blowhard.core.domain.PromptText*",
+                    )
+                }
+            }
+
+            verify {
+                rule {
+                    minBound(85)
+                    minBound(75, kotlinx.kover.gradle.plugin.dsl.CoverageUnit.BRANCH)
+                }
+            }
+        }
+    }
+}
+
+val secretScanHistory = tasks.register<Exec>("secretScanHistory") {
+    group = "verification"
+    description = "Scans the complete Git history for secrets with Gitleaks."
+    workingDir(rootDir)
+    commandLine(
+        "gitleaks",
+        "git",
+        ".",
+        "--config",
+        file(".gitleaks.toml").absolutePath,
+        "--redact",
+        "--no-banner",
+    )
+}
+
+val secretScanWorkingTree = tasks.register<Exec>("secretScanWorkingTree") {
+    group = "verification"
+    description = "Scans the working tree, including untracked files, for secrets with Gitleaks."
+    workingDir(rootDir)
+    commandLine(
+        "gitleaks",
+        "dir",
+        ".",
+        "--config",
+        file(".gitleaks.toml").absolutePath,
+        "--redact",
+        "--no-banner",
+    )
+}
+
+val secretScan = tasks.register("secretScan") {
+    group = "verification"
+    description = "Scans Git history and the working tree for secrets."
+    dependsOn(secretScanHistory, secretScanWorkingTree)
+}
+
+tasks.named("koverVerify") {
+    mustRunAfter("koverXmlReport")
+}
+
+tasks.matching { it.name == "koverXmlReport" || it.name == "koverVerify" }.configureEach {
+    outputs.doNotCacheIf("Coverage filters must always be evaluated from the current build configuration") {
+        true
+    }
 }
 
 private val allowedProjectDependencies = mapOf(
@@ -43,4 +182,24 @@ subprojects {
     tasks.matching { it.name == "check" }.configureEach {
         dependsOn(checkModuleBoundaries)
     }
+}
+
+tasks.register("qualityCheck") {
+    group = "verification"
+    description = "Runs the complete local quality and security gate."
+    dependsOn(
+        "spotlessCheck",
+        "detekt",
+        "checkModuleBoundaries",
+        "dokkaGenerate",
+        "koverVerify",
+        "koverXmlReport",
+        secretScan,
+        ":core:api:checkKotlinAbi",
+        ":core:api:desktopTest",
+        ":core:application:checkKotlinAbi",
+        ":core:application:desktopTest",
+        ":core:domain:checkKotlinAbi",
+        ":core:domain:desktopTest",
+    )
 }

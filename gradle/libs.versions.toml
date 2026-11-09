@@ -3,9 +3,13 @@ agp = "9.3.1"
 android-compile-sdk = "36"
 android-min-sdk = "26"
 compose = "1.12.2"
+detekt = "2.0.0-alpha.6"
+dokka = "2.2.0"
 kotlin = "2.4.21"
+kover = "0.9.8"
 kotlinx-coroutines = "1.11.0"
 material3 = "1.9.0"
+spotless = "8.10.4"
 
 [libraries]
 compose-foundation = { module = "org.jetbrains.compose.foundation:foundation", version.ref = "compose" }
@@ -18,5 +22,9 @@ kotlinx-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-t
 android-multiplatform-library = { id = "com.android.kotlin.multiplatform.library", version.ref = "agp" }
 compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 compose-multiplatform = { id = "org.jetbrains.compose", version.ref = "compose" }
+detekt = { id = "dev.detekt", version.ref = "detekt" }
+dokka = { id = "org.jetbrains.dokka", version.ref = "dokka" }
 kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 kotlin-multiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
+kover = { id = "org.jetbrains.kotlinx.kover", version.ref = "kover" }
+spotless = { id = "com.diffplug.spotless", version.ref = "spotless" }

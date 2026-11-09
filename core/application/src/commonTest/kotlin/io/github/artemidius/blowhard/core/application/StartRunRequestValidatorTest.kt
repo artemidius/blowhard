@@ -1,8 +1,8 @@
 package io.github.artemidius.blowhard.core.application
 
+import io.github.artemidius.blowhard.core.api.ConversationId
 import io.github.artemidius.blowhard.core.api.StartRunRejection
 import io.github.artemidius.blowhard.core.api.StartRunRequest
-import io.github.artemidius.blowhard.core.api.ConversationId
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertIs

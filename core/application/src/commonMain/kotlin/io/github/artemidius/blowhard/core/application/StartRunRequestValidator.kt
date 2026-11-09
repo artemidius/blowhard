@@ -7,15 +7,15 @@ import io.github.artemidius.blowhard.core.domain.PromptText
 import io.github.artemidius.blowhard.core.domain.PromptTextResult
 
 internal class StartRunRequestValidator {
-    fun validate(request: StartRunRequest): StartRunValidation =
-        when (val prompt = PromptText.from(request.prompt)) {
-            is PromptTextResult.Accepted -> StartRunValidation.Accepted(prompt.prompt)
-            is PromptTextResult.Rejected ->
-                when (prompt.reason) {
-                    PromptRejection.BLANK ->
-                        StartRunValidation.Rejected(StartRunRejection.BLANK_PROMPT)
-                }
-        }
+    fun validate(request: StartRunRequest): StartRunValidation = when (val prompt = PromptText.from(request.prompt)) {
+        is PromptTextResult.Accepted -> StartRunValidation.Accepted(prompt.prompt)
+
+        is PromptTextResult.Rejected ->
+            when (prompt.reason) {
+                PromptRejection.BLANK ->
+                    StartRunValidation.Rejected(StartRunRejection.BLANK_PROMPT)
+            }
+    }
 }
 
 internal sealed interface StartRunValidation {

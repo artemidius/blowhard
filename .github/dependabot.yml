@@ -1,0 +1,24 @@
+version: 2
+updates:
+  - package-ecosystem: gradle
+    directory: /
+    schedule:
+      interval: weekly
+    groups:
+      kotlin-toolchain:
+        patterns:
+          - org.jetbrains.kotlin.*
+          - org.jetbrains.compose
+          - org.jetbrains.compose.*
+          - com.android.*
+      quality-tooling:
+        patterns:
+          - dev.detekt
+          - org.jetbrains.dokka
+          - org.jetbrains.kotlinx.kover
+          - com.diffplug.spotless
+
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
