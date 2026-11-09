@@ -23,7 +23,8 @@ cross-packaging. Package verification therefore has to execute on each target op
 - Extend the existing required desktop CI checks so each host builds, inspects, installs, and
   launches its native package.
 - Launch the real installed application with `BLOWHARD_PACKAGING_SMOKE_TEST=1`. This mode opens
-  the Compose window and exits after the first frame, making installation checks deterministic.
+  the Compose window, completes a deterministic offline conversation through the production
+  composition root, and exits after validating the terminal state.
 - Inspect the packaged tree for private build paths, internal planning names, credentials, key
   material, broken or external symlinks, and the presence of a bundled Java runtime.
 - Retain CI packages for seven days as verification evidence. Do not treat them as releases.
@@ -41,9 +42,10 @@ workspace metadata, internal plans, and signing files are not packaging resource
 
 ## Consequences
 
-The required desktop checks now prove that the application is self-contained and launchable from
-all three native package formats. The supported package architectures are explicit instead of
-being inferred from generic operating-system names.
+The required desktop checks now prove that the application is self-contained, launchable, and able
+to complete its shared presentation and run lifecycle from all three native package formats. The
+supported package architectures are explicit instead of being inferred from generic
+operating-system names.
 
 Packaging tasks run without Gradle's configuration cache because the current Compose packaging
 tasks are not configuration-cache compatible. CI time increases, and macOS verification remains

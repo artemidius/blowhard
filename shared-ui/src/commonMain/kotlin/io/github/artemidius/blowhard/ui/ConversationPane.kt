@@ -30,6 +30,7 @@ internal fun ConversationPane(state: ConversationUiState, onAction: (Conversatio
         HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
         MessageList(
             messages = state.selectedConversation.messages,
+            onAction = onAction,
             modifier = Modifier.weight(1f).fillMaxWidth(),
         )
         state.notice?.let { notice ->

@@ -19,7 +19,7 @@ internal fun ConversationScreen(state: ConversationUiState, onAction: (Conversat
     BoxWithConstraints(
         modifier = Modifier.fillMaxSize().background(MaterialTheme.colorScheme.background),
     ) {
-        if (maxWidth >= WIDE_LAYOUT_THRESHOLD) {
+        if (conversationLayoutFor(maxWidth) == ConversationLayout.WIDE) {
             Row(Modifier.fillMaxSize()) {
                 ConversationSidebar(
                     state = state,
@@ -34,5 +34,4 @@ internal fun ConversationScreen(state: ConversationUiState, onAction: (Conversat
     }
 }
 
-private val WIDE_LAYOUT_THRESHOLD = 760.dp
 private val SIDEBAR_WIDTH = 264.dp

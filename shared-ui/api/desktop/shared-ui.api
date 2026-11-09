@@ -5,6 +5,7 @@ public final class io/github/artemidius/blowhard/ui/BlowhardAppKt {
 public final class io/github/artemidius/blowhard/ui/ComposableSingletons$ComposerPanelKt {
 	public static final field INSTANCE Lio/github/artemidius/blowhard/ui/ComposableSingletons$ComposerPanelKt;
 	public fun <init> ()V
+	public final fun getLambda$-1721158824$Blowhard_shared_ui ()Lkotlin/jvm/functions/Function2;
 	public final fun getLambda$-176302635$Blowhard_shared_ui ()Lkotlin/jvm/functions/Function3;
 	public final fun getLambda$-716526633$Blowhard_shared_ui ()Lkotlin/jvm/functions/Function3;
 	public final fun getLambda$1536691895$Blowhard_shared_ui ()Lkotlin/jvm/functions/Function2;
@@ -55,6 +56,18 @@ public final class io/github/artemidius/blowhard/ui/presentation/ChatRole : java
 	public static fun values ()[Lio/github/artemidius/blowhard/ui/presentation/ChatRole;
 }
 
+public final class io/github/artemidius/blowhard/ui/presentation/ClipboardWriteResult : java/lang/Enum {
+	public static final field COPIED Lio/github/artemidius/blowhard/ui/presentation/ClipboardWriteResult;
+	public static final field UNAVAILABLE Lio/github/artemidius/blowhard/ui/presentation/ClipboardWriteResult;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public static fun valueOf (Ljava/lang/String;)Lio/github/artemidius/blowhard/ui/presentation/ClipboardWriteResult;
+	public static fun values ()[Lio/github/artemidius/blowhard/ui/presentation/ClipboardWriteResult;
+}
+
+public abstract interface class io/github/artemidius/blowhard/ui/presentation/ClipboardWriter {
+	public abstract fun write (Ljava/lang/String;)Lio/github/artemidius/blowhard/ui/presentation/ClipboardWriteResult;
+}
+
 public abstract interface class io/github/artemidius/blowhard/ui/presentation/ConversationAction {
 }
 
@@ -78,6 +91,18 @@ public final class io/github/artemidius/blowhard/ui/presentation/ConversationAct
 	public static synthetic fun copy-8Ha89eo$default (Lio/github/artemidius/blowhard/ui/presentation/ConversationAction$ConversationSelected;Ljava/lang/String;ILjava/lang/Object;)Lio/github/artemidius/blowhard/ui/presentation/ConversationAction$ConversationSelected;
 	public fun equals (Ljava/lang/Object;)Z
 	public final fun getId-j0uiRXY ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class io/github/artemidius/blowhard/ui/presentation/ConversationAction$CopyMessage : io/github/artemidius/blowhard/ui/presentation/ConversationAction {
+	public static final field $stable I
+	public fun <init> (Ljava/lang/String;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun copy (Ljava/lang/String;)Lio/github/artemidius/blowhard/ui/presentation/ConversationAction$CopyMessage;
+	public static synthetic fun copy$default (Lio/github/artemidius/blowhard/ui/presentation/ConversationAction$CopyMessage;Ljava/lang/String;ILjava/lang/Object;)Lio/github/artemidius/blowhard/ui/presentation/ConversationAction$CopyMessage;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getMessageId ()Ljava/lang/String;
 	public fun hashCode ()I
 	public fun toString ()Ljava/lang/String;
 }
@@ -128,7 +153,7 @@ public final class io/github/artemidius/blowhard/ui/presentation/ConversationAct
 
 public final class io/github/artemidius/blowhard/ui/presentation/ConversationPresenter {
 	public static final field $stable I
-	public fun <init> (Lio/github/artemidius/blowhard/core/api/ConversationRuns;Lio/github/artemidius/blowhard/ui/presentation/DemoScenarioSelection;Lkotlin/coroutines/CoroutineContext;)V
+	public fun <init> (Lio/github/artemidius/blowhard/core/api/ConversationRuns;Lio/github/artemidius/blowhard/ui/presentation/DemoScenarioSelection;Lio/github/artemidius/blowhard/ui/presentation/ClipboardWriter;Lkotlin/coroutines/CoroutineContext;)V
 	public final fun close ()V
 	public final fun dispatch (Lio/github/artemidius/blowhard/ui/presentation/ConversationAction;)V
 	public final fun getState ()Lkotlinx/coroutines/flow/StateFlow;
