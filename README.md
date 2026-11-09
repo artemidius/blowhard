@@ -37,6 +37,9 @@ The local quality and security gate is documented in
 The cross-platform CI matrix and security model are documented in
 [`ADR 0004`](docs/decisions/0004-continuous-integration.md).
 
+Native package identity and verification are documented in
+[`ADR 0005`](docs/decisions/0005-native-desktop-packaging.md).
+
 ## Run the desktop application
 
 ```shell
@@ -67,11 +70,32 @@ On macOS, also verify the shared iOS target:
 ./gradlew :shared-ui:compileKotlinIosSimulatorArm64
 ```
 
-Native desktop installers are built on their corresponding operating systems; cross-packaging is
-not supported.
+## Native desktop packages
+
+Native installers are built only on their corresponding operating systems because Compose does
+not support cross-packaging:
+
+| Host | Package | Architecture | Gradle task |
+| --- | --- | --- | --- |
+| macOS | `.dmg` | Apple silicon (`arm64`) | `:apps:desktop:packageDmg` |
+| Windows | `.msi` | `x64` | `:apps:desktop:packageMsi` |
+| Linux | `.deb` | `amd64` | `:apps:desktop:packageDeb` |
+
+Run packaging tasks with `--no-configuration-cache`; the Compose packaging plugin does not yet
+support Gradle's configuration cache for these tasks. Each package contains a minimized Java
+runtime and does not require a separately installed JDK.
+
+CI builds each native format, inspects its contents, installs it, and launches the installed
+Compose application in a deterministic smoke mode. The package archives are retained with the CI
+run for seven days; they are not published releases.
+
+The current packages have no trusted publisher signature. `jpackage` applies an ad hoc signature
+to the macOS app, but it is not Developer ID signed or notarized. The Windows package is not
+publisher-signed. These packages are therefore intended only for build verification; trusted
+signing and release distribution are intentionally deferred.
 
 The application currently displays only the runnable project foundation. AI functionality and
-release artifacts are not available yet.
+public release artifacts are not available yet.
 
 See [`CONTRIBUTING.md`](CONTRIBUTING.md) for the review and verification workflow.
 

@@ -36,6 +36,8 @@ Pods/
 *.provisionprofile
 
 # Diagnostics and operating-system files
+__pycache__/
+*.py[cod]
 *.log
 *.hprof
 .DS_Store
