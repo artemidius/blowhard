@@ -1,13 +1,20 @@
 package io.github.artemidius.blowhard.desktop
 
+import io.github.artemidius.blowhard.adapters.fixture.FixtureTextGenerationPort
 import io.github.artemidius.blowhard.core.api.ConnectionSettings
 import io.github.artemidius.blowhard.core.api.ConnectionSettingsState
+import io.github.artemidius.blowhard.core.api.ConnectionStatus
 import io.github.artemidius.blowhard.core.api.ConnectionTestFailureKind
 import io.github.artemidius.blowhard.core.api.ConnectionTestResult
+import io.github.artemidius.blowhard.core.api.CredentialStatus
 import io.github.artemidius.blowhard.core.api.CredentialUpdateResult
 import io.github.artemidius.blowhard.core.api.GenerationMode
+import io.github.artemidius.blowhard.core.api.GenerationTarget
 import io.github.artemidius.blowhard.core.api.ModeSelectionResult
 import io.github.artemidius.blowhard.core.api.ModelSelectionResult
+import io.github.artemidius.blowhard.core.api.SelectableModel
+import io.github.artemidius.blowhard.core.domain.GenerationEvent
+import io.github.artemidius.blowhard.core.domain.TextGenerationPort
 import io.github.artemidius.blowhard.ui.presentation.ClipboardWriteResult
 import io.github.artemidius.blowhard.ui.presentation.ClipboardWriter
 import io.github.artemidius.blowhard.ui.presentation.ConversationAction
@@ -15,6 +22,7 @@ import io.github.artemidius.blowhard.ui.presentation.ConversationRunState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withTimeout
 import kotlin.test.Test
@@ -22,10 +30,10 @@ import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 import kotlin.time.Duration.Companion.seconds
 
-class DesktopDemoRuntimeTest {
+class DesktopRuntimeTest {
     @Test
     fun `real desktop runtime completes the bundled offline conversation`() = runBlocking {
-        val runtime = DesktopDemoRuntime.create(testClipboard, FakeDesktopConnectionSettings())
+        val runtime = createDesktopRuntime()
         try {
             runtime.presenter.dispatch(ConversationAction.ComposerChanged("Show the demo"))
             runtime.presenter.dispatch(ConversationAction.Send)
@@ -42,7 +50,7 @@ class DesktopDemoRuntimeTest {
 
     @Test
     fun `real desktop runtime cancels streaming fixture output`() = runBlocking {
-        val runtime = DesktopDemoRuntime.create(testClipboard, FakeDesktopConnectionSettings())
+        val runtime = createDesktopRuntime()
         try {
             runtime.presenter.dispatch(ConversationAction.ComposerChanged("Cancel the demo"))
             runtime.presenter.dispatch(ConversationAction.Send)
@@ -64,21 +72,56 @@ class DesktopDemoRuntimeTest {
     @Test
     fun `runtime closes provider resources exactly once`() {
         var closeCalls = 0
-        val runtime = DesktopDemoRuntime.create(
-            testClipboard,
-            FakeDesktopConnectionSettings(),
-            closeProviderResources = { closeCalls += 1 },
-        )
+        val runtime = createDesktopRuntime { closeCalls += 1 }
 
         runtime.close()
         runtime.close()
 
         assertEquals(1, closeCalls)
     }
+
+    @Test
+    fun `runtime sends a verified live target through the shared conversation workflow`() = runBlocking {
+        var target: GenerationTarget? = null
+        val runtime = DesktopRuntime.create(
+            clipboardWriter = testClipboard,
+            connectionSettings = FakeDesktopConnectionSettings(readyLiveState()),
+            generation = TextGenerationPort { request ->
+                target = request.target
+                flowOf(GenerationEvent.TextDelta("Live response"), GenerationEvent.Completed)
+            },
+            scenarioSelection = { _, _ -> },
+        )
+        try {
+            runtime.presenter.dispatch(ConversationAction.ComposerChanged("Use Mistral"))
+            runtime.presenter.dispatch(ConversationAction.Send)
+
+            val state = withTimeout(5.seconds) {
+                runtime.presenter.state.first { it.selectedConversation.runState == ConversationRunState.SUCCEEDED }
+            }
+            assertEquals(GenerationTarget.Live("verified-model"), target)
+            assertEquals(target, state.selectedConversation.latestTarget)
+            assertEquals("Live response", state.selectedConversation.messages.last().text)
+        } finally {
+            runtime.close()
+        }
+    }
 }
 
-private class FakeDesktopConnectionSettings : ConnectionSettings {
-    private val mutableState = MutableStateFlow(ConnectionSettingsState())
+private fun createDesktopRuntime(closeProviderResources: () -> Unit = {}): DesktopRuntime {
+    val scenarios = FixtureScenarioRouter()
+    return DesktopRuntime.create(
+        clipboardWriter = testClipboard,
+        connectionSettings = FakeDesktopConnectionSettings(),
+        generation = FixtureTextGenerationPort(scenarios::scenarioFor),
+        scenarioSelection = scenarios,
+        closeProviderResources = closeProviderResources,
+    )
+}
+
+private class FakeDesktopConnectionSettings(initialState: ConnectionSettingsState = ConnectionSettingsState()) :
+    ConnectionSettings {
+    private val mutableState = MutableStateFlow(initialState)
     override val state: StateFlow<ConnectionSettingsState> = mutableState
 
     override suspend fun refreshCredentialStatus() = Unit
@@ -97,5 +140,14 @@ private class FakeDesktopConnectionSettings : ConnectionSettings {
 
     override suspend fun selectMode(mode: GenerationMode): ModeSelectionResult = ModeSelectionResult.LIVE_NOT_READY
 }
+
+private fun readyLiveState(): ConnectionSettingsState = ConnectionSettingsState(
+    mode = GenerationMode.LIVE,
+    credentialStatus = CredentialStatus.CONFIGURED,
+    connectionStatus = ConnectionStatus.READY,
+    models = listOf(SelectableModel("verified-model", 32_000)),
+    selectedModelId = "verified-model",
+    liveDataDisclosureAccepted = true,
+)
 
 private val testClipboard = ClipboardWriter { ClipboardWriteResult.COPIED }
