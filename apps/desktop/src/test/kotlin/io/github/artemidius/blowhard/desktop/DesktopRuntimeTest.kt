@@ -49,6 +49,37 @@ class DesktopRuntimeTest {
     }
 
     @Test
+    fun `real desktop runtime regenerates through a fresh application attempt`() = runBlocking {
+        val runtime = createDesktopRuntime()
+        try {
+            runtime.presenter.dispatch(ConversationAction.ComposerChanged("Regenerate the demo"))
+            runtime.presenter.dispatch(ConversationAction.Send)
+            val first = withTimeout(5.seconds) {
+                runtime.presenter.state.first { it.selectedConversation.runState == ConversationRunState.SUCCEEDED }
+            }
+            val firstMessages = first.selectedConversation.messages
+            val firstAttempt = firstMessages.last().attemptId
+
+            runtime.presenter.dispatch(ConversationAction.Regenerate(firstMessages.last().id))
+            val second = withTimeout(5.seconds) {
+                runtime.presenter.state.first {
+                    it.selectedConversation.runState == ConversationRunState.SUCCEEDED &&
+                        it.selectedConversation.messages.size == 4
+                }
+            }
+            val messages = second.selectedConversation.messages
+
+            assertEquals(firstMessages[1], messages[1])
+            assertEquals(messages[0].text, messages[2].text)
+            assertEquals(firstAttempt, messages[0].attemptId)
+            assertEquals(messages[2].attemptId, messages[3].attemptId)
+            assertTrue(messages[2].attemptId != firstAttempt)
+        } finally {
+            runtime.close()
+        }
+    }
+
+    @Test
     fun `real desktop runtime cancels streaming fixture output`() = runBlocking {
         val runtime = createDesktopRuntime()
         try {

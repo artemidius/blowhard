@@ -39,6 +39,7 @@ internal fun ConversationPane(
         HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
         MessageList(
             messages = state.selectedConversation.messages,
+            regenerationEnabled = !state.selectedConversation.runState.isActive,
             onAction = onAction,
             modifier = Modifier.weight(1f).fillMaxWidth(),
         )

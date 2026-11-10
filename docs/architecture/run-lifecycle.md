@@ -22,6 +22,11 @@ Terminal snapshots are immutable. Completion stops collection immediately, so a 
 or future adapter cannot append a late chunk. Cancelling an observer has no effect on execution;
 clients use `ConversationRuns.cancel` explicitly.
 
+Regeneration does not reopen or recollect a terminal run. It is an explicit client action that
+submits the prior prompt through `start` and receives a fresh attempt ID. Both attempts remain
+independently observable, and the provider adapter still executes at most once for each accepted
+run. See [`ADR 0015`](../decisions/0015-explicit-regeneration-attempts.md).
+
 ## Headless fixture example
 
 The fixture adapter runs through the production lifecycle boundary and requires neither a key nor a

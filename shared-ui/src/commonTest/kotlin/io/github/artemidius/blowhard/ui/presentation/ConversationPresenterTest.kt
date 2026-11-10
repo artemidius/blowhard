@@ -8,6 +8,7 @@ import io.github.artemidius.blowhard.core.api.ObserveRunResult
 import io.github.artemidius.blowhard.core.api.RunFailure
 import io.github.artemidius.blowhard.core.api.RunFailureKind
 import io.github.artemidius.blowhard.core.api.RunId
+import io.github.artemidius.blowhard.core.api.RunRetryAdvice
 import io.github.artemidius.blowhard.core.api.RunSnapshot
 import io.github.artemidius.blowhard.core.api.RunTimestamp
 import io.github.artemidius.blowhard.core.api.StartRunRejection
@@ -76,6 +77,7 @@ class ConversationPresenterTest {
             listOf(GenerationTarget.Live("verified-model"), GenerationTarget.Live("verified-model")),
             conversation.messages.map { it.target },
         )
+        assertEquals(listOf(RunId("fake-run-1"), RunId("fake-run-1")), conversation.messages.map { it.attemptId })
         fixture.close()
     }
 
@@ -96,6 +98,142 @@ class ConversationPresenterTest {
         assertEquals("complete", completed.selectedConversation.messages.last().text)
         assertEquals(MessageDelivery.COMPLETE, completed.selectedConversation.messages.last().delivery)
         assertFalse(completed.canStop)
+        fixture.close()
+    }
+
+    @Test
+    fun `regeneration preserves the prior result and starts a distinct attempt with current routing`() = runTest {
+        val fixture = PresenterFixture(this)
+        fixture.start("Explain immutable attempts")
+        val firstRun = fixture.runs.startedRun()
+        fixture.runs.emit(RunSnapshot.Succeeded(firstRun, DEFAULT_CONVERSATION, NOW, "first result"))
+        runCurrent()
+        val firstResponse = fixture.presenter.state.value.selectedConversation.messages.last()
+
+        fixture.presenter.dispatch(ConversationAction.ComposerChanged("draft stays here"))
+        fixture.runs.startTarget = GenerationTarget.Live("current-model")
+        fixture.presenter.dispatch(ConversationAction.Regenerate(firstResponse.id))
+        runCurrent()
+
+        val messages = fixture.presenter.state.value.selectedConversation.messages
+        assertEquals(
+            listOf("Explain immutable attempts", "Explain immutable attempts"),
+            fixture.runs.startRequests.map {
+                it.prompt
+            },
+        )
+        assertEquals(4, messages.size)
+        assertEquals("first result", messages[1].text)
+        assertEquals("", messages[3].text)
+        assertEquals(
+            listOf(firstRun, firstRun, RunId("fake-run-2"), RunId("fake-run-2")),
+            messages.map { it.attemptId },
+        )
+        assertEquals(
+            listOf(
+                GenerationTarget.Demo,
+                GenerationTarget.Demo,
+                GenerationTarget.Live("current-model"),
+                GenerationTarget.Live("current-model"),
+            ),
+            messages.map { it.target },
+        )
+        assertEquals("draft stays here", fixture.presenter.state.value.composer)
+        assertEquals(2, fixture.runs.observeCalls)
+        fixture.close()
+    }
+
+    @Test
+    fun `regeneration is serialized and cannot duplicate an active attempt`() = runTest {
+        val fixture = PresenterFixture(this)
+        fixture.start("Only once")
+        val firstRun = fixture.runs.startedRun()
+        fixture.runs.emit(RunSnapshot.Succeeded(firstRun, DEFAULT_CONVERSATION, NOW, "ready"))
+        runCurrent()
+        val responseId = fixture.presenter.state.value.selectedConversation.messages.last().id
+
+        fixture.presenter.dispatch(ConversationAction.Regenerate(responseId))
+        fixture.presenter.dispatch(ConversationAction.Regenerate(responseId))
+        runCurrent()
+
+        assertEquals(2, fixture.runs.startRequests.size)
+        assertEquals(4, fixture.presenter.state.value.selectedConversation.messages.size)
+        fixture.close()
+    }
+
+    @Test
+    fun `retry-safe terminal failure exposes regeneration`() = runTest {
+        val fixture = PresenterFixture(this)
+        fixture.start("Try safely")
+        val firstRun = fixture.runs.startedRun()
+        fixture.runs.emit(
+            RunSnapshot.Failed(
+                runId = firstRun,
+                conversationId = DEFAULT_CONVERSATION,
+                updatedAt = NOW,
+                partialOutput = "kept",
+                failure = RunFailure(
+                    kind = RunFailureKind.UNAVAILABLE,
+                    retryAdvice = RunRetryAdvice.EXPLICIT_NEW_ATTEMPT,
+                ),
+            ),
+        )
+        runCurrent()
+        val retryableResponse = fixture.presenter.state.value.selectedConversation.messages.last()
+        assertTrue(retryableResponse.canRegenerate)
+
+        fixture.presenter.dispatch(ConversationAction.Regenerate(retryableResponse.id))
+        runCurrent()
+        assertEquals(2, fixture.runs.startRequests.size)
+        fixture.close()
+    }
+
+    @Test
+    fun `unsafe terminal failure does not expose regeneration`() = runTest {
+        val unsafeFixture = PresenterFixture(this)
+        unsafeFixture.start("Do not repeat")
+        val unsafeRun = unsafeFixture.runs.startedRun()
+        unsafeFixture.runs.emit(
+            RunSnapshot.Failed(
+                runId = unsafeRun,
+                conversationId = DEFAULT_CONVERSATION,
+                updatedAt = NOW,
+                partialOutput = "kept",
+                failure = RunFailure(RunFailureKind.UNEXPECTED),
+            ),
+        )
+        runCurrent()
+        val unsafeResponse = unsafeFixture.presenter.state.value.selectedConversation.messages.last()
+        assertFalse(unsafeResponse.canRegenerate)
+
+        unsafeFixture.presenter.dispatch(ConversationAction.Regenerate(unsafeResponse.id))
+        runCurrent()
+        assertEquals(1, unsafeFixture.runs.startRequests.size)
+        unsafeFixture.close()
+    }
+
+    @Test
+    fun `rejected regeneration preserves history and composer draft`() = runTest {
+        val fixture = PresenterFixture(this)
+        fixture.start("Preserve me")
+        val firstRun = fixture.runs.startedRun()
+        fixture.runs.emit(RunSnapshot.Succeeded(firstRun, DEFAULT_CONVERSATION, NOW, "original"))
+        runCurrent()
+        val before = fixture.presenter.state.value.selectedConversation.messages
+        val responseId = before.last().id
+        fixture.presenter.dispatch(ConversationAction.ComposerChanged("unrelated draft"))
+        fixture.runs.startResult = StartRunResult.Rejected(StartRunRejection.LIVE_CONFIGURATION_NOT_READY)
+
+        fixture.presenter.dispatch(ConversationAction.Regenerate(responseId))
+        runCurrent()
+
+        val state = fixture.presenter.state.value
+        assertEquals(before, state.selectedConversation.messages)
+        assertEquals("unrelated draft", state.composer)
+        assertEquals(
+            "Live configuration is not ready. Reverify the credential and selected model.",
+            state.notice?.message,
+        )
         fixture.close()
     }
 
