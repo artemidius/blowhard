@@ -21,19 +21,7 @@ internal class SqlDelightConversationStore(private val driver: SqlDriver) : Conv
 
     override suspend fun save(conversation: StoredConversation): Unit = access.withLock {
         requireOpen()
-        queries.transaction {
-            queries.insertConversation(
-                id = conversation.id.value,
-                title = conversation.title,
-                created_at_epoch_ms = conversation.createdAtEpochMilliseconds,
-                updated_at_epoch_ms = conversation.updatedAtEpochMilliseconds,
-            )
-            queries.updateConversation(
-                title = conversation.title,
-                updated_at_epoch_ms = conversation.updatedAtEpochMilliseconds,
-                id = conversation.id.value,
-            )
-        }
+        queries.transaction { queries.upsert(conversation) }
     }
 
     override suspend fun find(id: ConversationId): StoredConversation? = access.withLock {
@@ -45,6 +33,18 @@ internal class SqlDelightConversationStore(private val driver: SqlDriver) : Conv
         requireOpen()
         queries.listConversations().executeAsList().map(Conversation::toStoredConversation)
     }
+
+    override suspend fun saveCheckpoint(conversation: StoredConversation, transcript: StoredTranscript): Unit =
+        access.withLock {
+            requireOpen()
+            require(conversation.id == transcript.conversationId) {
+                "Checkpoint conversation and transcript identities must match"
+            }
+            queries.transaction {
+                queries.upsert(conversation)
+                database.transcriptQueries.replace(transcript)
+            }
+        }
 
     override suspend fun saveTranscript(transcript: StoredTranscript): TranscriptSaveResult = access.withLock {
         requireOpen()
@@ -92,6 +92,22 @@ internal class SqlDelightConversationStore(private val driver: SqlDriver) : Conv
     private fun requireOpen() {
         check(!closed) { "Conversation store is closed" }
     }
+}
+
+private fun io.github.artemidius.blowhard.adapters.persistence.db.ConversationQueries.upsert(
+    conversation: StoredConversation,
+) {
+    insertConversation(
+        id = conversation.id.value,
+        title = conversation.title,
+        created_at_epoch_ms = conversation.createdAtEpochMilliseconds,
+        updated_at_epoch_ms = conversation.updatedAtEpochMilliseconds,
+    )
+    updateConversation(
+        title = conversation.title,
+        updated_at_epoch_ms = conversation.updatedAtEpochMilliseconds,
+        id = conversation.id.value,
+    )
 }
 
 private fun Conversation.toStoredConversation(): StoredConversation = StoredConversation(

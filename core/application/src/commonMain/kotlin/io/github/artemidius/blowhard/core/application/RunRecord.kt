@@ -20,6 +20,7 @@ internal class RunRecord(
     val snapshots = MutableStateFlow(initialSnapshot)
     var job: Job? = null
     var cancellationRequested: Boolean = false
+    var durableCheckpoint: DurableRunCheckpoint? = null
 }
 
 internal fun RunSnapshot.isTerminal(): Boolean =

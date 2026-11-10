@@ -108,8 +108,10 @@ internal fun ConversationUiState.withSelectedNotice(notice: UiNotice?): Conversa
     updateConversation(selectedConversationId) { it.copy(notice = notice) }
 
 private fun String.toConversationTitle(): String {
-    val firstLine = lineSequence().firstOrNull().orEmpty().trim()
-    return if (firstLine.length <= TITLE_LIMIT) firstLine else firstLine.take(TITLE_LIMIT) + "…"
+    val firstContentLine = lineSequence().map(String::trim).firstOrNull(String::isNotEmpty).orEmpty()
+    val title = firstContentLine.ifEmpty { DEFAULT_CONVERSATION_TITLE }
+    return if (title.length <= TITLE_LIMIT) title else title.take(TITLE_LIMIT) + "…"
 }
 
 private const val TITLE_LIMIT = 36
+private const val DEFAULT_CONVERSATION_TITLE = "Conversation"

@@ -267,6 +267,9 @@ private fun StartRunRejection.safeMessage(): String = when (this) {
     StartRunRejection.LIVE_CONFIGURATION_NOT_READY ->
         "Live configuration is not ready. Reverify the credential and selected model."
 
+    StartRunRejection.STORAGE_UNAVAILABLE ->
+        "Local conversation history is unavailable. Generation was not started."
+
     StartRunRejection.LIFECYCLE_CLOSED -> "The application is shutting down and cannot start another run."
 }
 

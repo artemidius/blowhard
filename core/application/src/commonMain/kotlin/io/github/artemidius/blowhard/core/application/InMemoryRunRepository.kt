@@ -31,6 +31,18 @@ internal class InMemoryRunRepository(private val clock: RunClock) {
 
     suspend fun find(runId: RunId): RunRecord? = mutex.withLock { runs[runId] }
 
+    suspend fun discard(record: RunRecord): Boolean = mutex.withLock {
+        if (record.snapshots.value !is RunSnapshot.Queued || record.job != null) {
+            false
+        } else if (runs[record.runId] !== record) {
+            false
+        } else {
+            activeConversations -= record.conversationId
+            runs.remove(record.runId)
+            true
+        }
+    }
+
     suspend fun markRunning(record: RunRecord): Boolean = updateActive(record) { current ->
         RunSnapshot.Running(record.runId, record.conversationId, clock.now(), current.output())
     }
@@ -39,13 +51,18 @@ internal class InMemoryRunRepository(private val clock: RunClock) {
         RunSnapshot.Running(record.runId, record.conversationId, clock.now(), current.output() + text)
     }
 
-    suspend fun finish(record: RunRecord, terminal: RunTerminal): Boolean = mutex.withLock {
+    suspend fun finish(record: RunRecord, terminalSnapshot: RunSnapshot): Boolean = mutex.withLock {
+        require(terminalSnapshot.isTerminal()) { "Run finish requires a terminal snapshot" }
+        require(terminalSnapshot.runId == record.runId) { "Terminal snapshot run identity must match" }
+        require(terminalSnapshot.conversationId == record.conversationId) {
+            "Terminal snapshot conversation identity must match"
+        }
         val current = record.snapshots.value
         if (current.isTerminal()) {
             false
         } else {
             activeConversations -= record.conversationId
-            record.snapshots.value = terminal.snapshot(record, current, clock)
+            record.snapshots.value = terminalSnapshot
             true
         }
     }
@@ -91,7 +108,7 @@ internal sealed interface RunTerminal {
     data object Unexpected : RunTerminal
 }
 
-private fun RunTerminal.snapshot(record: RunRecord, current: RunSnapshot, clock: RunClock): RunSnapshot = when (this) {
+internal fun RunTerminal.snapshot(record: RunRecord, current: RunSnapshot, clock: RunClock): RunSnapshot = when (this) {
     RunTerminal.Succeeded ->
         RunSnapshot.Succeeded(record.runId, record.conversationId, clock.now(), current.output())
 

@@ -113,6 +113,7 @@ final enum class io.github.artemidius.blowhard.core.api/RunFailureKind : kotlin/
     enum entry INVALID_REQUEST // io.github.artemidius.blowhard.core.api/RunFailureKind.INVALID_REQUEST|null[0]
     enum entry INVALID_RESPONSE // io.github.artemidius.blowhard.core.api/RunFailureKind.INVALID_RESPONSE|null[0]
     enum entry RATE_LIMITED // io.github.artemidius.blowhard.core.api/RunFailureKind.RATE_LIMITED|null[0]
+    enum entry STORAGE_UNAVAILABLE // io.github.artemidius.blowhard.core.api/RunFailureKind.STORAGE_UNAVAILABLE|null[0]
     enum entry UNAUTHORIZED // io.github.artemidius.blowhard.core.api/RunFailureKind.UNAUTHORIZED|null[0]
     enum entry UNAVAILABLE // io.github.artemidius.blowhard.core.api/RunFailureKind.UNAVAILABLE|null[0]
     enum entry UNEXPECTED // io.github.artemidius.blowhard.core.api/RunFailureKind.UNEXPECTED|null[0]
@@ -141,6 +142,7 @@ final enum class io.github.artemidius.blowhard.core.api/StartRunRejection : kotl
     enum entry CONVERSATION_BUSY // io.github.artemidius.blowhard.core.api/StartRunRejection.CONVERSATION_BUSY|null[0]
     enum entry LIFECYCLE_CLOSED // io.github.artemidius.blowhard.core.api/StartRunRejection.LIFECYCLE_CLOSED|null[0]
     enum entry LIVE_CONFIGURATION_NOT_READY // io.github.artemidius.blowhard.core.api/StartRunRejection.LIVE_CONFIGURATION_NOT_READY|null[0]
+    enum entry STORAGE_UNAVAILABLE // io.github.artemidius.blowhard.core.api/StartRunRejection.STORAGE_UNAVAILABLE|null[0]
 
     final val entries // io.github.artemidius.blowhard.core.api/StartRunRejection.entries|#static{}entries[0]
         final fun <get-entries>(): kotlin.enums/EnumEntries<io.github.artemidius.blowhard.core.api/StartRunRejection> // io.github.artemidius.blowhard.core.api/StartRunRejection.entries.<get-entries>|<get-entries>#static(){}[0]

@@ -24,6 +24,9 @@ public enum class StartRunRejection {
     /** Live mode is selected, but its credential, model, or verification is stale. */
     LIVE_CONFIGURATION_NOT_READY,
 
+    /** Durable storage rejected the attempt before provider work began. */
+    STORAGE_UNAVAILABLE,
+
     /** The owning lifecycle has shut down and cannot accept more work. */
     LIFECYCLE_CLOSED,
 }

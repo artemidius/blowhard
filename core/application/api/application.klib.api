@@ -69,12 +69,28 @@ final class io.github.artemidius.blowhard.core.application/DefaultConnectionSett
 }
 
 final class io.github.artemidius.blowhard.core.application/DefaultConversationRuns : io.github.artemidius.blowhard.core.api/ConversationRuns { // io.github.artemidius.blowhard.core.application/DefaultConversationRuns|null[0]
-    constructor <init>(io.github.artemidius.blowhard.core.domain/TextGenerationPort, io.github.artemidius.blowhard.core.application/RunIdFactory, io.github.artemidius.blowhard.core.application/RunClock, kotlin.coroutines/CoroutineContext, io.github.artemidius.blowhard.core.application/RunExecutionPolicy = ..., io.github.artemidius.blowhard.core.api/ConnectionSettings? = ...) // io.github.artemidius.blowhard.core.application/DefaultConversationRuns.<init>|<init>(io.github.artemidius.blowhard.core.domain.TextGenerationPort;io.github.artemidius.blowhard.core.application.RunIdFactory;io.github.artemidius.blowhard.core.application.RunClock;kotlin.coroutines.CoroutineContext;io.github.artemidius.blowhard.core.application.RunExecutionPolicy;io.github.artemidius.blowhard.core.api.ConnectionSettings?){}[0]
+    constructor <init>(io.github.artemidius.blowhard.core.domain/TextGenerationPort, io.github.artemidius.blowhard.core.application/RunIdFactory, io.github.artemidius.blowhard.core.application/RunClock, kotlin.coroutines/CoroutineContext, io.github.artemidius.blowhard.core.application/RunExecutionPolicy = ..., io.github.artemidius.blowhard.core.api/ConnectionSettings? = ..., io.github.artemidius.blowhard.core.domain/ConversationStore? = ..., io.github.artemidius.blowhard.core.application/RunCheckpointPolicy = ...) // io.github.artemidius.blowhard.core.application/DefaultConversationRuns.<init>|<init>(io.github.artemidius.blowhard.core.domain.TextGenerationPort;io.github.artemidius.blowhard.core.application.RunIdFactory;io.github.artemidius.blowhard.core.application.RunClock;kotlin.coroutines.CoroutineContext;io.github.artemidius.blowhard.core.application.RunExecutionPolicy;io.github.artemidius.blowhard.core.api.ConnectionSettings?;io.github.artemidius.blowhard.core.domain.ConversationStore?;io.github.artemidius.blowhard.core.application.RunCheckpointPolicy){}[0]
 
     final suspend fun cancel(io.github.artemidius.blowhard.core.api/RunId): io.github.artemidius.blowhard.core.api/CancelRunResult // io.github.artemidius.blowhard.core.application/DefaultConversationRuns.cancel|cancel(io.github.artemidius.blowhard.core.api.RunId){}[0]
     final suspend fun close() // io.github.artemidius.blowhard.core.application/DefaultConversationRuns.close|close(){}[0]
     final suspend fun observe(io.github.artemidius.blowhard.core.api/RunId): io.github.artemidius.blowhard.core.api/ObserveRunResult // io.github.artemidius.blowhard.core.application/DefaultConversationRuns.observe|observe(io.github.artemidius.blowhard.core.api.RunId){}[0]
     final suspend fun start(io.github.artemidius.blowhard.core.api/StartRunRequest): io.github.artemidius.blowhard.core.api/StartRunResult // io.github.artemidius.blowhard.core.application/DefaultConversationRuns.start|start(io.github.artemidius.blowhard.core.api.StartRunRequest){}[0]
+}
+
+final class io.github.artemidius.blowhard.core.application/RunCheckpointPolicy { // io.github.artemidius.blowhard.core.application/RunCheckpointPolicy|null[0]
+    constructor <init>(kotlin/Int = ..., kotlin/Long = ...) // io.github.artemidius.blowhard.core.application/RunCheckpointPolicy.<init>|<init>(kotlin.Int;kotlin.Long){}[0]
+
+    final val maximumIntervalMilliseconds // io.github.artemidius.blowhard.core.application/RunCheckpointPolicy.maximumIntervalMilliseconds|{}maximumIntervalMilliseconds[0]
+        final fun <get-maximumIntervalMilliseconds>(): kotlin/Long // io.github.artemidius.blowhard.core.application/RunCheckpointPolicy.maximumIntervalMilliseconds.<get-maximumIntervalMilliseconds>|<get-maximumIntervalMilliseconds>(){}[0]
+    final val minimumOutputCharacters // io.github.artemidius.blowhard.core.application/RunCheckpointPolicy.minimumOutputCharacters|{}minimumOutputCharacters[0]
+        final fun <get-minimumOutputCharacters>(): kotlin/Int // io.github.artemidius.blowhard.core.application/RunCheckpointPolicy.minimumOutputCharacters.<get-minimumOutputCharacters>|<get-minimumOutputCharacters>(){}[0]
+
+    final fun component1(): kotlin/Int // io.github.artemidius.blowhard.core.application/RunCheckpointPolicy.component1|component1(){}[0]
+    final fun component2(): kotlin/Long // io.github.artemidius.blowhard.core.application/RunCheckpointPolicy.component2|component2(){}[0]
+    final fun copy(kotlin/Int = ..., kotlin/Long = ...): io.github.artemidius.blowhard.core.application/RunCheckpointPolicy // io.github.artemidius.blowhard.core.application/RunCheckpointPolicy.copy|copy(kotlin.Int;kotlin.Long){}[0]
+    final fun equals(kotlin/Any?): kotlin/Boolean // io.github.artemidius.blowhard.core.application/RunCheckpointPolicy.equals|equals(kotlin.Any?){}[0]
+    final fun hashCode(): kotlin/Int // io.github.artemidius.blowhard.core.application/RunCheckpointPolicy.hashCode|hashCode(){}[0]
+    final fun toString(): kotlin/String // io.github.artemidius.blowhard.core.application/RunCheckpointPolicy.toString|toString(){}[0]
 }
 
 final class io.github.artemidius.blowhard.core.application/RunExecutionPolicy { // io.github.artemidius.blowhard.core.application/RunExecutionPolicy|null[0]

@@ -95,7 +95,7 @@ class RunConcurrencyTest {
         advanceUntilIdle()
 
         val mappedKinds = runIds.map { assertIs<RunSnapshot.Failed>(runs.current(it)).failure.kind }
-        assertEquals(RunFailureKind.entries, mappedKinds)
+        assertEquals(RunFailureKind.entries.filterNot { it == RunFailureKind.STORAGE_UNAVAILABLE }, mappedKinds)
         runIds.forEach {
             assertEquals("safe-reference", assertIs<RunSnapshot.Failed>(runs.current(it)).failure.reference)
         }

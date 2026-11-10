@@ -79,6 +79,8 @@ private class RecordingConversationStore(
 
     override suspend fun find(id: ConversationId): StoredConversation? = unsupported()
 
+    override suspend fun saveCheckpoint(conversation: StoredConversation, transcript: StoredTranscript) = unsupported()
+
     override suspend fun saveTranscript(transcript: StoredTranscript): TranscriptSaveResult = unsupported()
 
     override suspend fun delete(id: ConversationId): Boolean = unsupported()

@@ -55,8 +55,9 @@ Recovery marks them interrupted before any history becomes visible.
 
 ### Add checkpoint writes in the same change
 
-Rejected because checkpoint cadence, write-failure policy, and presentation synchronization are
-separate lifecycle decisions. This increment proves read/recovery ownership first.
+Rejected because checkpoint cadence and write-failure policy were separate lifecycle decisions.
+This increment proved read/recovery ownership first; bounded writes were subsequently adopted in
+[`ADR 0021`](0021-bounded-run-checkpoints.md).
 
 ## Consequences
 
@@ -64,4 +65,5 @@ separate lifecycle decisions. This increment proves read/recovery ownership firs
 - SQLite ownership and cleanup are explicit and independently tested.
 - Shared presentation remains reusable by future mobile composition roots.
 - Corrupt or unavailable storage is visible without exposing sensitive diagnostics.
-- New messages and attempts remain process-local until a separate checkpoint-writing increment.
+- Runtime checkpoint writing remains a separate application-lifecycle responsibility documented in
+  [`ADR 0021`](0021-bounded-run-checkpoints.md).
