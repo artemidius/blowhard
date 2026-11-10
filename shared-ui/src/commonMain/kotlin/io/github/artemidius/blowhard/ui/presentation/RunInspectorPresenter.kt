@@ -1,5 +1,7 @@
 package io.github.artemidius.blowhard.ui.presentation
 
+import io.github.artemidius.blowhard.core.api.RunDiagnosticReportGenerator
+import io.github.artemidius.blowhard.core.api.RunDiagnosticReportResult
 import io.github.artemidius.blowhard.core.api.RunId
 import io.github.artemidius.blowhard.core.api.RunInspectionResult
 import io.github.artemidius.blowhard.core.api.RunInspector
@@ -21,13 +23,19 @@ import kotlin.coroutines.CoroutineContext
  * Lookups are passive, replace older requests, and convert unexpected failures into a generic
  * presentation state. Call [close] when the owning client shuts down.
  */
-public class RunInspectorPresenter(private val inspector: RunInspector, coroutineContext: CoroutineContext) {
+public class RunInspectorPresenter(
+    private val inspector: RunInspector,
+    private val reportGenerator: RunDiagnosticReportGenerator,
+    private val reportSaver: RunDiagnosticReportSaver,
+    coroutineContext: CoroutineContext,
+) {
     private val scope = CoroutineScope(coroutineContext + SupervisorJob())
     private val events = Channel<InspectorPresenterEvent>(Channel.UNLIMITED)
     private val mutableState = MutableStateFlow<RunInspectorUiState>(RunInspectorUiState.Empty)
     private var requestSequence: Long = 0
     private var activeRequest: Long = 0
     private var lookup: Job? = null
+    private var export: Job? = null
 
     /** Current immutable inspector state. */
     public val state: StateFlow<RunInspectorUiState> = mutableState.asStateFlow()
@@ -55,6 +63,13 @@ public class RunInspectorPresenter(private val inspector: RunInspector, coroutin
                 is InspectorPresenterEvent.Loaded -> if (event.request == activeRequest) {
                     mutableState.value = event.state
                 }
+
+                is InspectorPresenterEvent.Exported -> if (event.request == activeRequest) {
+                    val ready = mutableState.value as? RunInspectorUiState.Ready
+                    if (ready?.runId == event.runId) {
+                        mutableState.value = ready.copy(exportStatus = event.status)
+                    }
+                }
             }
         }
     }
@@ -63,11 +78,13 @@ public class RunInspectorPresenter(private val inspector: RunInspector, coroutin
         when (action) {
             is RunInspectorAction.Open -> beginLookup(action.runId)
             RunInspectorAction.Refresh -> mutableState.value.runId?.let(::beginLookup)
+            RunInspectorAction.Export -> beginExport()
         }
     }
 
     private fun beginLookup(runId: RunId) {
         lookup?.cancel()
+        export?.cancel()
         requestSequence += 1
         activeRequest = requestSequence
         mutableState.value = RunInspectorUiState.Loading(runId)
@@ -76,6 +93,35 @@ public class RunInspectorPresenter(private val inspector: RunInspector, coroutin
             val loaded = load(runId)
             events.send(InspectorPresenterEvent.Loaded(request, loaded))
         }
+    }
+
+    private fun beginExport() {
+        val ready = mutableState.value as? RunInspectorUiState.Ready ?: return
+        if (ready.exportStatus == RunDiagnosticExportStatus.SAVING) return
+        mutableState.value = ready.copy(exportStatus = RunDiagnosticExportStatus.SAVING)
+        val request = activeRequest
+        export = scope.launch {
+            val status = export(ready.runId)
+            events.send(InspectorPresenterEvent.Exported(request, ready.runId, status))
+        }
+    }
+
+    private suspend fun export(runId: RunId): RunDiagnosticExportStatus = try {
+        when (val generated = reportGenerator.generate(runId)) {
+            is RunDiagnosticReportResult.Generated -> when (reportSaver.save(generated.report)) {
+                RunDiagnosticReportSaveResult.SAVED -> RunDiagnosticExportStatus.SAVED
+                RunDiagnosticReportSaveResult.CANCELLED -> RunDiagnosticExportStatus.CANCELLED
+                RunDiagnosticReportSaveResult.UNAVAILABLE -> RunDiagnosticExportStatus.FAILED
+            }
+
+            RunDiagnosticReportResult.NotFound,
+            RunDiagnosticReportResult.Unavailable,
+            -> RunDiagnosticExportStatus.FAILED
+        }
+    } catch (cancelled: CancellationException) {
+        throw cancelled
+    } catch (_: Throwable) {
+        RunDiagnosticExportStatus.FAILED
     }
 
     private suspend fun load(runId: RunId): RunInspectorUiState = try {
@@ -94,4 +140,7 @@ private sealed interface InspectorPresenterEvent {
     data class Action(val action: RunInspectorAction) : InspectorPresenterEvent
 
     data class Loaded(val request: Long, val state: RunInspectorUiState) : InspectorPresenterEvent
+
+    data class Exported(val request: Long, val runId: RunId, val status: RunDiagnosticExportStatus) :
+        InspectorPresenterEvent
 }

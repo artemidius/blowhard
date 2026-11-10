@@ -24,6 +24,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import io.github.artemidius.blowhard.core.api.RunInspection
 import io.github.artemidius.blowhard.core.api.RunInspectionEvent
+import io.github.artemidius.blowhard.ui.presentation.RunDiagnosticExportStatus
 import io.github.artemidius.blowhard.ui.presentation.RunInspectorAction
 import io.github.artemidius.blowhard.ui.presentation.RunInspectorUiState
 
@@ -62,6 +63,19 @@ private fun InspectorHeader(state: RunInspectorUiState, onAction: (RunInspectorA
         ) {
             Text("Refresh")
         }
+        TextButton(
+            onClick = { onAction(RunInspectorAction.Export) },
+            enabled = state is RunInspectorUiState.Ready &&
+                state.exportStatus != RunDiagnosticExportStatus.SAVING,
+        ) {
+            Text(
+                if ((state as? RunInspectorUiState.Ready)?.exportStatus == RunDiagnosticExportStatus.SAVING) {
+                    "Saving…"
+                } else {
+                    "Export JSON"
+                },
+            )
+        }
     }
 }
 
@@ -72,7 +86,7 @@ private fun InspectorContent(state: RunInspectorUiState) {
 
         is RunInspectorUiState.Loading -> InspectorLoading()
 
-        is RunInspectorUiState.Ready -> ReadyInspection(state.inspection)
+        is RunInspectorUiState.Ready -> ReadyInspection(state.inspection, state.exportStatus)
 
         is RunInspectorUiState.NotFound -> InspectorMessage(
             "This run is not available in the current process. Restored history is not inspectable yet.",
@@ -102,13 +116,17 @@ private fun InspectorMessage(message: String) {
 }
 
 @Composable
-private fun ReadyInspection(inspection: RunInspection) {
+private fun ReadyInspection(
+    inspection: RunInspection,
+    exportStatus: RunDiagnosticExportStatus = RunDiagnosticExportStatus.IDLE,
+) {
     LazyColumn(
         modifier = Modifier.fillMaxSize().padding(horizontal = 24.dp),
         contentPadding = androidx.compose.foundation.layout.PaddingValues(vertical = 24.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
+        exportMessage(exportStatus)?.let { message -> item { ExportStatus(message) } }
         item { IdentitySection(inspection) }
         item { ParametersSection(inspection) }
         item { UsageSection(inspection.usage) }
@@ -116,4 +134,22 @@ private fun ReadyInspection(inspection: RunInspection) {
         item { SectionTitle("Lifecycle timeline") }
         itemsIndexed(inspection.events) { index, event -> TimelineEvent(index + 1, event) }
     }
+}
+
+@Composable
+private fun ExportStatus(message: String) {
+    Text(
+        text = message,
+        modifier = Modifier.fillMaxWidth(),
+        color = MaterialTheme.colorScheme.onSurfaceVariant,
+        style = MaterialTheme.typography.bodyMedium,
+    )
+}
+
+private fun exportMessage(status: RunDiagnosticExportStatus): String? = when (status) {
+    RunDiagnosticExportStatus.IDLE -> null
+    RunDiagnosticExportStatus.SAVING -> "Choose where to save the sanitized report."
+    RunDiagnosticExportStatus.SAVED -> "The sanitized report was saved."
+    RunDiagnosticExportStatus.CANCELLED -> "Export cancelled. No file was written."
+    RunDiagnosticExportStatus.FAILED -> "The report could not be saved safely."
 }

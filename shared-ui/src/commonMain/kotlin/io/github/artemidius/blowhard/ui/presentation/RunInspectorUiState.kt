@@ -17,7 +17,10 @@ public sealed interface RunInspectorUiState {
     public data class Loading(override val runId: RunId) : RunInspectorUiState
 
     /** The selected run and its allowlisted operational metadata. */
-    public data class Ready(public val inspection: RunInspection) : RunInspectorUiState {
+    public data class Ready(
+        public val inspection: RunInspection,
+        public val exportStatus: RunDiagnosticExportStatus = RunDiagnosticExportStatus.IDLE,
+    ) : RunInspectorUiState {
         override val runId: RunId = inspection.runId
     }
 
@@ -26,4 +29,22 @@ public sealed interface RunInspectorUiState {
 
     /** The lookup failed without exposing exception or provider details. */
     public data class Failed(override val runId: RunId) : RunInspectorUiState
+}
+
+/** Current user-visible state of one explicit diagnostic export attempt. */
+public enum class RunDiagnosticExportStatus {
+    /** No export has been requested for the current inspection. */
+    IDLE,
+
+    /** Report generation or platform saving is in progress. */
+    SAVING,
+
+    /** The report was saved successfully. */
+    SAVED,
+
+    /** Destination selection was dismissed without writing a file. */
+    CANCELLED,
+
+    /** The report could not be generated or saved safely. */
+    FAILED,
 }

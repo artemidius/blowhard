@@ -9,4 +9,7 @@ public sealed interface RunInspectorAction {
 
     /** Reloads the currently selected inspection without starting provider work. */
     public data object Refresh : RunInspectorAction
+
+    /** Generates and saves an allowlisted JSON report after explicit destination selection. */
+    public data object Export : RunInspectorAction
 }
