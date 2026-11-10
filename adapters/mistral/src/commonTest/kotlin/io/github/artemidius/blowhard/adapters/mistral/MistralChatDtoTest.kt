@@ -27,13 +27,15 @@ class MistralChatDtoTest {
             messages = listOf(MistralChatMessageDto("user", "prompt")),
             stream = true,
         )
-        val requestWithLimit = requestWithoutLimit.copy(maxTokens = 1)
+        val requestWithControls = requestWithoutLimit.copy(maxTokens = 1, temperature = 0.2)
 
         assertNull(deltaAbsent.content)
         assertNull(choiceAbsent.finishReason)
         assertTrue(chunks.first().choices.isEmpty())
         assertEquals(usage, chunks.last().usage)
         assertNull(requestWithoutLimit.maxTokens)
-        assertEquals(1, requestWithLimit.maxTokens)
+        assertNull(requestWithoutLimit.temperature)
+        assertEquals(1, requestWithControls.maxTokens)
+        assertEquals(0.2, requestWithControls.temperature)
     }
 }

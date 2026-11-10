@@ -46,6 +46,7 @@ internal fun ConnectionSettingsScreen(
             state.notice?.let { SettingsNotice(it, onAction) }
             CredentialSettingsSection(state.settings, onAction)
             ModelSettingsSection(state.settings, onAction)
+            GenerationParametersSection(state.settings, onAction)
             LiveReadinessSection(state.settings, onAction)
         }
     }

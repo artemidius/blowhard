@@ -1,6 +1,7 @@
 package io.github.artemidius.blowhard.adapters.mistral
 
 import io.github.artemidius.blowhard.core.api.ConversationId
+import io.github.artemidius.blowhard.core.api.GenerationParameters
 import io.github.artemidius.blowhard.core.api.RunId
 import io.github.artemidius.blowhard.core.domain.GenerationEvent
 import io.github.artemidius.blowhard.core.domain.GenerationFailureKind
@@ -28,6 +29,7 @@ import kotlinx.coroutines.test.runTest
 import kotlinx.io.IOException
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.boolean
+import kotlinx.serialization.json.double
 import kotlinx.serialization.json.int
 import kotlinx.serialization.json.jsonArray
 import kotlinx.serialization.json.jsonObject
@@ -60,11 +62,27 @@ class MistralTextGenerationPortTest {
             assertEquals("mistral-small-latest", json.getValue("model").jsonPrimitive.content)
             assertTrue(json.getValue("stream").jsonPrimitive.boolean)
             assertEquals(64, json.getValue("max_tokens").jsonPrimitive.int)
+            assertEquals(0.2, json.getValue("temperature").jsonPrimitive.double)
             val message = json.getValue("messages").jsonArray.single().jsonObject
             assertEquals("user", message.getValue("role").jsonPrimitive.content)
             assertEquals("private prompt", message.getValue("content").jsonPrimitive.content)
             assertFalse("runId" in json)
             assertFalse("conversationId" in json)
+        } finally {
+            fixture.port.close()
+        }
+    }
+
+    @Test
+    fun `model defaults omit optional generation controls`() = runTest {
+        val fixture = generationResponding(successStream("Hello"))
+        try {
+            fixture.port.generate(request(parameters = GenerationParameters())).toList()
+
+            val sent = fixture.requests.single()
+            val json = Json.parseToJsonElement(sent.body.toByteArray().decodeToString()).jsonObject
+            assertFalse("max_tokens" in json)
+            assertFalse("temperature" in json)
         } finally {
             fixture.port.close()
         }
@@ -415,9 +433,17 @@ private fun assertFailure(expected: GenerationFailureKind, events: List<Generati
     assertEquals(expected, assertIs<GenerationEvent.Failed>(events.single()).failure.kind)
 }
 
-private fun request(prompt: String = "hello"): GenerationRequest {
+private fun request(
+    prompt: String = "hello",
+    parameters: GenerationParameters = GenerationParameters(maxOutputTokens = 64, temperature = 0.2),
+): GenerationRequest {
     val accepted = assertIs<PromptTextResult.Accepted>(PromptText.from(prompt))
-    return GenerationRequest(RunId("run-1"), ConversationId("conversation-1"), accepted.prompt)
+    return GenerationRequest(
+        RunId("run-1"),
+        ConversationId("conversation-1"),
+        accepted.prompt,
+        parameters = parameters,
+    )
 }
 
 private fun successStream(text: String): String = sse(
@@ -433,4 +459,4 @@ private fun chatChunk(content: String = "null", finishReason: String? = null, in
 private fun sse(vararg data: String): String = data.joinToString(separator = "") { "data: $it\r\n\r\n" }
 
 private val validCredentials = MistralCredentialProvider { "synthetic-token" }
-private val CONFIGURATION = MistralChatConfiguration("mistral-small-latest", maxOutputTokens = 64)
+private val CONFIGURATION = MistralChatConfiguration("mistral-small-latest")

@@ -10,6 +10,7 @@ import io.github.artemidius.blowhard.core.api.ConversationId
 import io.github.artemidius.blowhard.core.api.CredentialStatus
 import io.github.artemidius.blowhard.core.api.CredentialUpdateResult
 import io.github.artemidius.blowhard.core.api.GenerationMode
+import io.github.artemidius.blowhard.core.api.GenerationParameters
 import io.github.artemidius.blowhard.core.api.GenerationTarget
 import io.github.artemidius.blowhard.core.api.ModeSelectionResult
 import io.github.artemidius.blowhard.core.api.ModelSelectionResult
@@ -160,6 +161,30 @@ class DefaultConversationRunsTest {
     }
 
     @Test
+    fun `accepted run keeps its generation parameters when settings change before execution`() = runTest {
+        val acceptedParameters = GenerationParameters(maxOutputTokens = 1_024, temperature = 0.2)
+        val settings = FakeRunConnectionSettings(
+            readyLiveState().copy(generationParameters = acceptedParameters),
+        )
+        var observedParameters: GenerationParameters? = null
+        val runs = controller(
+            generation = TextGenerationPort { request ->
+                observedParameters = request.parameters
+                flowOf(GenerationEvent.Completed)
+            },
+            connectionSettings = settings,
+        )
+
+        runs.start(StartRunRequest(ConversationId("live-conversation"), "Hello"))
+        settings.mutableState.value = settings.mutableState.value.copy(
+            generationParameters = GenerationParameters(maxOutputTokens = 256, temperature = 0.7),
+        )
+        advanceUntilIdle()
+
+        assertEquals(acceptedParameters, observedParameters)
+    }
+
+    @Test
     fun `stale live selection fails closed before provider execution`() = runTest {
         var executions = 0
         val settings = FakeRunConnectionSettings(
@@ -249,6 +274,8 @@ private class FakeRunConnectionSettings(initial: ConnectionSettingsState) : Conn
     )
 
     override suspend fun selectModel(modelId: String): ModelSelectionResult = ModelSelectionResult.UPDATED
+
+    override suspend fun updateGenerationParameters(parameters: GenerationParameters) = Unit
 
     override suspend fun acknowledgeLiveDataDisclosure() = Unit
 

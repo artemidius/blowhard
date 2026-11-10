@@ -11,16 +11,13 @@ abstract fun interface io.github.artemidius.blowhard.adapters.mistral/MistralCre
 }
 
 final class io.github.artemidius.blowhard.adapters.mistral/MistralChatConfiguration { // io.github.artemidius.blowhard.adapters.mistral/MistralChatConfiguration|null[0]
-    constructor <init>(kotlin/String, kotlin/Int? = ...) // io.github.artemidius.blowhard.adapters.mistral/MistralChatConfiguration.<init>|<init>(kotlin.String;kotlin.Int?){}[0]
+    constructor <init>(kotlin/String) // io.github.artemidius.blowhard.adapters.mistral/MistralChatConfiguration.<init>|<init>(kotlin.String){}[0]
 
-    final val maxOutputTokens // io.github.artemidius.blowhard.adapters.mistral/MistralChatConfiguration.maxOutputTokens|{}maxOutputTokens[0]
-        final fun <get-maxOutputTokens>(): kotlin/Int? // io.github.artemidius.blowhard.adapters.mistral/MistralChatConfiguration.maxOutputTokens.<get-maxOutputTokens>|<get-maxOutputTokens>(){}[0]
     final val modelId // io.github.artemidius.blowhard.adapters.mistral/MistralChatConfiguration.modelId|{}modelId[0]
         final fun <get-modelId>(): kotlin/String // io.github.artemidius.blowhard.adapters.mistral/MistralChatConfiguration.modelId.<get-modelId>|<get-modelId>(){}[0]
 
     final fun component1(): kotlin/String // io.github.artemidius.blowhard.adapters.mistral/MistralChatConfiguration.component1|component1(){}[0]
-    final fun component2(): kotlin/Int? // io.github.artemidius.blowhard.adapters.mistral/MistralChatConfiguration.component2|component2(){}[0]
-    final fun copy(kotlin/String = ..., kotlin/Int? = ...): io.github.artemidius.blowhard.adapters.mistral/MistralChatConfiguration // io.github.artemidius.blowhard.adapters.mistral/MistralChatConfiguration.copy|copy(kotlin.String;kotlin.Int?){}[0]
+    final fun copy(kotlin/String = ...): io.github.artemidius.blowhard.adapters.mistral/MistralChatConfiguration // io.github.artemidius.blowhard.adapters.mistral/MistralChatConfiguration.copy|copy(kotlin.String){}[0]
     final fun equals(kotlin/Any?): kotlin/Boolean // io.github.artemidius.blowhard.adapters.mistral/MistralChatConfiguration.equals|equals(kotlin.Any?){}[0]
     final fun hashCode(): kotlin/Int // io.github.artemidius.blowhard.adapters.mistral/MistralChatConfiguration.hashCode|hashCode(){}[0]
     final fun toString(): kotlin/String // io.github.artemidius.blowhard.adapters.mistral/MistralChatConfiguration.toString|toString(){}[0]

@@ -9,6 +9,7 @@ import io.github.artemidius.blowhard.core.api.ConnectionTestResult
 import io.github.artemidius.blowhard.core.api.CredentialStatus
 import io.github.artemidius.blowhard.core.api.CredentialUpdateResult
 import io.github.artemidius.blowhard.core.api.GenerationMode
+import io.github.artemidius.blowhard.core.api.GenerationParameters
 import io.github.artemidius.blowhard.core.api.GenerationTarget
 import io.github.artemidius.blowhard.core.api.ModeSelectionResult
 import io.github.artemidius.blowhard.core.api.ModelSelectionResult
@@ -166,6 +167,8 @@ private class FakeDesktopConnectionSettings(initialState: ConnectionSettingsStat
     )
 
     override suspend fun selectModel(modelId: String): ModelSelectionResult = ModelSelectionResult.NOT_AVAILABLE
+
+    override suspend fun updateGenerationParameters(parameters: GenerationParameters) = Unit
 
     override suspend fun acknowledgeLiveDataDisclosure() = Unit
 

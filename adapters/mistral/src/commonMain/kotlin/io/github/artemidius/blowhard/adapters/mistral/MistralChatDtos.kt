@@ -15,6 +15,7 @@ internal data class MistralChatRequestDto(
     val messages: List<MistralChatMessageDto>,
     val stream: Boolean,
     @SerialName("max_tokens") val maxTokens: Int? = null,
+    val temperature: Double? = null,
 )
 
 @Serializable

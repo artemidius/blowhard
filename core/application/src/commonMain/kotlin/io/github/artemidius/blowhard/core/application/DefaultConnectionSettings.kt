@@ -8,6 +8,7 @@ import io.github.artemidius.blowhard.core.api.ConnectionTestResult
 import io.github.artemidius.blowhard.core.api.CredentialStatus
 import io.github.artemidius.blowhard.core.api.CredentialUpdateResult
 import io.github.artemidius.blowhard.core.api.GenerationMode
+import io.github.artemidius.blowhard.core.api.GenerationParameters
 import io.github.artemidius.blowhard.core.api.ModeSelectionResult
 import io.github.artemidius.blowhard.core.api.ModelSelectionResult
 import io.github.artemidius.blowhard.core.api.SelectableModel
@@ -46,16 +47,14 @@ public class DefaultConnectionSettings(
         val status = credentials.readStatus()
         mutableState.value = when (status) {
             CredentialStatus.CONFIGURED -> mutableState.value.copy(credentialStatus = status)
-            else -> ConnectionSettingsState(credentialStatus = status)
+            else -> mutableState.value.resetConnectionEvidence(status)
         }
     }
 
     override suspend fun replaceCredential(secret: String): CredentialUpdateResult = operations.withLock {
         when (mutateCredential { credentials.replace(secret) }) {
             CredentialUpdateResult.SUCCESS -> {
-                mutableState.value = ConnectionSettingsState(
-                    credentialStatus = CredentialStatus.CONFIGURED,
-                )
+                mutableState.value = mutableState.value.resetConnectionEvidence(CredentialStatus.CONFIGURED)
                 CredentialUpdateResult.SUCCESS
             }
 
@@ -68,9 +67,7 @@ public class DefaultConnectionSettings(
     override suspend fun deleteCredential(): CredentialUpdateResult = operations.withLock {
         when (mutateCredential(credentials::delete)) {
             CredentialUpdateResult.SUCCESS -> {
-                mutableState.value = ConnectionSettingsState(
-                    credentialStatus = CredentialStatus.MISSING,
-                )
+                mutableState.value = mutableState.value.resetConnectionEvidence(CredentialStatus.MISSING)
                 CredentialUpdateResult.SUCCESS
             }
 
@@ -111,6 +108,10 @@ public class DefaultConnectionSettings(
         ModelSelectionResult.UPDATED
     }
 
+    override suspend fun updateGenerationParameters(parameters: GenerationParameters): Unit = operations.withLock {
+        mutableState.value = mutableState.value.copy(generationParameters = parameters)
+    }
+
     override suspend fun acknowledgeLiveDataDisclosure(): Unit = operations.withLock {
         mutableState.value = mutableState.value.copy(liveDataDisclosureAccepted = true)
     }
@@ -136,19 +137,6 @@ public class DefaultConnectionSettings(
             }
         }
     }
-
-    private suspend fun mutateCredential(mutation: suspend () -> CredentialMutationResult): CredentialUpdateResult =
-        try {
-            when (mutation()) {
-                CredentialMutationResult.Success -> CredentialUpdateResult.SUCCESS
-                CredentialMutationResult.Rejected -> CredentialUpdateResult.REJECTED
-                is CredentialMutationResult.Unavailable -> CredentialUpdateResult.UNAVAILABLE
-            }
-        } catch (cancellation: CancellationException) {
-            throw cancellation
-        } catch (_: Exception) {
-            CredentialUpdateResult.UNAVAILABLE
-        }
 
     private fun applyCatalogResult(
         previous: ConnectionSettingsState,
@@ -194,6 +182,25 @@ public class DefaultConnectionSettings(
         return ConnectionTestResult.Success(compatible)
     }
 }
+
+private suspend fun mutateCredential(mutation: suspend () -> CredentialMutationResult): CredentialUpdateResult = try {
+    when (mutation()) {
+        CredentialMutationResult.Success -> CredentialUpdateResult.SUCCESS
+        CredentialMutationResult.Rejected -> CredentialUpdateResult.REJECTED
+        is CredentialMutationResult.Unavailable -> CredentialUpdateResult.UNAVAILABLE
+    }
+} catch (cancellation: CancellationException) {
+    throw cancellation
+} catch (_: Exception) {
+    CredentialUpdateResult.UNAVAILABLE
+}
+
+private fun ConnectionSettingsState.resetConnectionEvidence(
+    credentialStatus: CredentialStatus,
+): ConnectionSettingsState = ConnectionSettingsState(
+    credentialStatus = credentialStatus,
+    generationParameters = generationParameters,
+)
 
 private suspend fun CredentialStore.readStatus(): CredentialStatus = try {
     when (read()) {

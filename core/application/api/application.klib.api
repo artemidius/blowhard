@@ -27,6 +27,7 @@ final class io.github.artemidius.blowhard.core.application/DefaultConnectionSett
     final suspend fun selectMode(io.github.artemidius.blowhard.core.api/GenerationMode): io.github.artemidius.blowhard.core.api/ModeSelectionResult // io.github.artemidius.blowhard.core.application/DefaultConnectionSettings.selectMode|selectMode(io.github.artemidius.blowhard.core.api.GenerationMode){}[0]
     final suspend fun selectModel(kotlin/String): io.github.artemidius.blowhard.core.api/ModelSelectionResult // io.github.artemidius.blowhard.core.application/DefaultConnectionSettings.selectModel|selectModel(kotlin.String){}[0]
     final suspend fun testConnection(): io.github.artemidius.blowhard.core.api/ConnectionTestResult // io.github.artemidius.blowhard.core.application/DefaultConnectionSettings.testConnection|testConnection(){}[0]
+    final suspend fun updateGenerationParameters(io.github.artemidius.blowhard.core.api/GenerationParameters) // io.github.artemidius.blowhard.core.application/DefaultConnectionSettings.updateGenerationParameters|updateGenerationParameters(io.github.artemidius.blowhard.core.api.GenerationParameters){}[0]
 }
 
 final class io.github.artemidius.blowhard.core.application/DefaultConversationRuns : io.github.artemidius.blowhard.core.api/ConversationRuns { // io.github.artemidius.blowhard.core.application/DefaultConversationRuns|null[0]
