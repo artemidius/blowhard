@@ -11,6 +11,7 @@ import io.github.artemidius.blowhard.ui.presentation.ConnectionSettingsPresenter
 import io.github.artemidius.blowhard.ui.presentation.ConversationPresenter
 import io.github.artemidius.blowhard.ui.presentation.ConversationUiState
 import io.github.artemidius.blowhard.ui.presentation.DemoScenarioSelection
+import io.github.artemidius.blowhard.ui.presentation.RunInspectorPresenter
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
 import java.util.UUID
@@ -19,6 +20,7 @@ import java.util.concurrent.atomic.AtomicBoolean
 internal class DesktopRuntime private constructor(
     val presenter: ConversationPresenter,
     val connectionSettingsPresenter: ConnectionSettingsPresenter,
+    val runInspectorPresenter: RunInspectorPresenter,
     private val runs: DefaultConversationRuns,
     private val closeHistoryResources: () -> Unit,
     private val closeProviderResources: () -> Unit,
@@ -28,6 +30,7 @@ internal class DesktopRuntime private constructor(
     override fun close() {
         if (!closed.compareAndSet(false, true)) return
         try {
+            runInspectorPresenter.close()
             connectionSettingsPresenter.close()
             presenter.close()
             runBlocking { runs.close() }
@@ -71,9 +74,14 @@ internal class DesktopRuntime private constructor(
                 connectionSettings = connectionSettings,
                 coroutineContext = Dispatchers.Default,
             )
+            val runInspectorPresenter = RunInspectorPresenter(
+                inspector = runs,
+                coroutineContext = Dispatchers.Default,
+            )
             return DesktopRuntime(
                 presenter,
                 connectionSettingsPresenter,
+                runInspectorPresenter,
                 runs,
                 closeHistoryResources,
                 closeProviderResources,

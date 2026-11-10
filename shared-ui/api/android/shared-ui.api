@@ -1,5 +1,5 @@
 public final class io/github/artemidius/blowhard/ui/BlowhardAppKt {
-	public static final fun BlowhardApp (Lio/github/artemidius/blowhard/ui/presentation/ConversationPresenter;Lio/github/artemidius/blowhard/ui/presentation/ConnectionSettingsPresenter;Landroidx/compose/runtime/Composer;I)V
+	public static final fun BlowhardApp (Lio/github/artemidius/blowhard/ui/presentation/ConversationPresenter;Lio/github/artemidius/blowhard/ui/presentation/ConnectionSettingsPresenter;Lio/github/artemidius/blowhard/ui/presentation/RunInspectorPresenter;Landroidx/compose/runtime/Composer;I)V
 }
 
 public final class io/github/artemidius/blowhard/ui/ComposableSingletons$ComposerPanelKt {
@@ -49,13 +49,22 @@ public final class io/github/artemidius/blowhard/ui/ComposableSingletons$Credent
 public final class io/github/artemidius/blowhard/ui/ComposableSingletons$MessageListKt {
 	public static final field INSTANCE Lio/github/artemidius/blowhard/ui/ComposableSingletons$MessageListKt;
 	public fun <init> ()V
-	public final fun getLambda$-2146461610$Blowhard_shared_ui ()Lkotlin/jvm/functions/Function3;
+	public final fun getLambda$-2098704700$Blowhard_shared_ui ()Lkotlin/jvm/functions/Function3;
+	public final fun getLambda$-736141596$Blowhard_shared_ui ()Lkotlin/jvm/functions/Function3;
 }
 
 public final class io/github/artemidius/blowhard/ui/ComposableSingletons$NoticePanelKt {
 	public static final field INSTANCE Lio/github/artemidius/blowhard/ui/ComposableSingletons$NoticePanelKt;
 	public fun <init> ()V
 	public final fun getLambda$1645596550$Blowhard_shared_ui ()Lkotlin/jvm/functions/Function3;
+}
+
+public final class io/github/artemidius/blowhard/ui/ComposableSingletons$RunInspectorScreenKt {
+	public static final field INSTANCE Lio/github/artemidius/blowhard/ui/ComposableSingletons$RunInspectorScreenKt;
+	public fun <init> ()V
+	public final fun getLambda$-1955507002$Blowhard_shared_ui ()Lkotlin/jvm/functions/Function3;
+	public final fun getLambda$146715856$Blowhard_shared_ui ()Lkotlin/jvm/functions/Function3;
+	public final fun getLambda$1821415343$Blowhard_shared_ui ()Lkotlin/jvm/functions/Function3;
 }
 
 public final class io/github/artemidius/blowhard/ui/presentation/ChatMessageUi {
@@ -346,6 +355,103 @@ public final class io/github/artemidius/blowhard/ui/presentation/MessageDelivery
 	public static fun getEntries ()Lkotlin/enums/EnumEntries;
 	public static fun valueOf (Ljava/lang/String;)Lio/github/artemidius/blowhard/ui/presentation/MessageDelivery;
 	public static fun values ()[Lio/github/artemidius/blowhard/ui/presentation/MessageDelivery;
+}
+
+public abstract interface class io/github/artemidius/blowhard/ui/presentation/RunInspectorAction {
+}
+
+public final class io/github/artemidius/blowhard/ui/presentation/RunInspectorAction$Open : io/github/artemidius/blowhard/ui/presentation/RunInspectorAction {
+	public static final field $stable I
+	public synthetic fun <init> (Ljava/lang/String;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1-oS5FZMg ()Ljava/lang/String;
+	public final fun copy-VwbcTx8 (Ljava/lang/String;)Lio/github/artemidius/blowhard/ui/presentation/RunInspectorAction$Open;
+	public static synthetic fun copy-VwbcTx8$default (Lio/github/artemidius/blowhard/ui/presentation/RunInspectorAction$Open;Ljava/lang/String;ILjava/lang/Object;)Lio/github/artemidius/blowhard/ui/presentation/RunInspectorAction$Open;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getRunId-oS5FZMg ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class io/github/artemidius/blowhard/ui/presentation/RunInspectorAction$Refresh : io/github/artemidius/blowhard/ui/presentation/RunInspectorAction {
+	public static final field $stable I
+	public static final field INSTANCE Lio/github/artemidius/blowhard/ui/presentation/RunInspectorAction$Refresh;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class io/github/artemidius/blowhard/ui/presentation/RunInspectorPresenter {
+	public static final field $stable I
+	public fun <init> (Lio/github/artemidius/blowhard/core/api/RunInspector;Lkotlin/coroutines/CoroutineContext;)V
+	public final fun close ()V
+	public final fun dispatch (Lio/github/artemidius/blowhard/ui/presentation/RunInspectorAction;)V
+	public final fun getState ()Lkotlinx/coroutines/flow/StateFlow;
+}
+
+public abstract interface class io/github/artemidius/blowhard/ui/presentation/RunInspectorUiState {
+	public abstract fun getRunId-RHtvxuk ()Ljava/lang/String;
+}
+
+public final class io/github/artemidius/blowhard/ui/presentation/RunInspectorUiState$Empty : io/github/artemidius/blowhard/ui/presentation/RunInspectorUiState {
+	public static final field $stable I
+	public static final field INSTANCE Lio/github/artemidius/blowhard/ui/presentation/RunInspectorUiState$Empty;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun getRunId-RHtvxuk ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class io/github/artemidius/blowhard/ui/presentation/RunInspectorUiState$Failed : io/github/artemidius/blowhard/ui/presentation/RunInspectorUiState {
+	public static final field $stable I
+	public synthetic fun <init> (Ljava/lang/String;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1-oS5FZMg ()Ljava/lang/String;
+	public final fun copy-VwbcTx8 (Ljava/lang/String;)Lio/github/artemidius/blowhard/ui/presentation/RunInspectorUiState$Failed;
+	public static synthetic fun copy-VwbcTx8$default (Lio/github/artemidius/blowhard/ui/presentation/RunInspectorUiState$Failed;Ljava/lang/String;ILjava/lang/Object;)Lio/github/artemidius/blowhard/ui/presentation/RunInspectorUiState$Failed;
+	public fun equals (Ljava/lang/Object;)Z
+	public synthetic fun getRunId-RHtvxuk ()Ljava/lang/String;
+	public fun getRunId-oS5FZMg ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class io/github/artemidius/blowhard/ui/presentation/RunInspectorUiState$Loading : io/github/artemidius/blowhard/ui/presentation/RunInspectorUiState {
+	public static final field $stable I
+	public synthetic fun <init> (Ljava/lang/String;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1-oS5FZMg ()Ljava/lang/String;
+	public final fun copy-VwbcTx8 (Ljava/lang/String;)Lio/github/artemidius/blowhard/ui/presentation/RunInspectorUiState$Loading;
+	public static synthetic fun copy-VwbcTx8$default (Lio/github/artemidius/blowhard/ui/presentation/RunInspectorUiState$Loading;Ljava/lang/String;ILjava/lang/Object;)Lio/github/artemidius/blowhard/ui/presentation/RunInspectorUiState$Loading;
+	public fun equals (Ljava/lang/Object;)Z
+	public synthetic fun getRunId-RHtvxuk ()Ljava/lang/String;
+	public fun getRunId-oS5FZMg ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class io/github/artemidius/blowhard/ui/presentation/RunInspectorUiState$NotFound : io/github/artemidius/blowhard/ui/presentation/RunInspectorUiState {
+	public static final field $stable I
+	public synthetic fun <init> (Ljava/lang/String;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1-oS5FZMg ()Ljava/lang/String;
+	public final fun copy-VwbcTx8 (Ljava/lang/String;)Lio/github/artemidius/blowhard/ui/presentation/RunInspectorUiState$NotFound;
+	public static synthetic fun copy-VwbcTx8$default (Lio/github/artemidius/blowhard/ui/presentation/RunInspectorUiState$NotFound;Ljava/lang/String;ILjava/lang/Object;)Lio/github/artemidius/blowhard/ui/presentation/RunInspectorUiState$NotFound;
+	public fun equals (Ljava/lang/Object;)Z
+	public synthetic fun getRunId-RHtvxuk ()Ljava/lang/String;
+	public fun getRunId-oS5FZMg ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class io/github/artemidius/blowhard/ui/presentation/RunInspectorUiState$Ready : io/github/artemidius/blowhard/ui/presentation/RunInspectorUiState {
+	public static final field $stable I
+	public fun <init> (Lio/github/artemidius/blowhard/core/api/RunInspection;)V
+	public final fun component1 ()Lio/github/artemidius/blowhard/core/api/RunInspection;
+	public final fun copy (Lio/github/artemidius/blowhard/core/api/RunInspection;)Lio/github/artemidius/blowhard/ui/presentation/RunInspectorUiState$Ready;
+	public static synthetic fun copy$default (Lio/github/artemidius/blowhard/ui/presentation/RunInspectorUiState$Ready;Lio/github/artemidius/blowhard/core/api/RunInspection;ILjava/lang/Object;)Lio/github/artemidius/blowhard/ui/presentation/RunInspectorUiState$Ready;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getInspection ()Lio/github/artemidius/blowhard/core/api/RunInspection;
+	public synthetic fun getRunId-RHtvxuk ()Ljava/lang/String;
+	public fun getRunId-oS5FZMg ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
 }
 
 public final class io/github/artemidius/blowhard/ui/presentation/UiNotice {
