@@ -15,13 +15,13 @@ internal class DesktopHistorySession private constructor(
     val initialState: ConversationUiState,
     val available: Boolean,
     val recoveredAttemptCount: Long,
-    private val store: ConversationStore?,
+    val conversationStore: ConversationStore?,
 ) : AutoCloseable {
     private val closed = AtomicBoolean(false)
 
     override fun close() {
         if (!closed.compareAndSet(false, true)) return
-        store.closeSafely()
+        conversationStore.closeSafely()
     }
 
     companion object {
@@ -40,7 +40,7 @@ internal class DesktopHistorySession private constructor(
                     initialState = snapshot.toConversationUiState(),
                     available = true,
                     recoveredAttemptCount = snapshot.recoveredAttemptCount,
-                    store = openedStore,
+                    conversationStore = openedStore,
                 )
             } catch (_: Exception) {
                 store.closeSafely()
@@ -48,7 +48,7 @@ internal class DesktopHistorySession private constructor(
                     initialState = unavailableHistoryState(),
                     available = false,
                     recoveredAttemptCount = 0,
-                    store = null,
+                    conversationStore = null,
                 )
             }
         }
