@@ -36,8 +36,8 @@ internal fun ConnectionSettingsScreen(
     ) {
         Column(
             modifier = Modifier
-                .fillMaxWidth()
                 .widthIn(max = 760.dp)
+                .fillMaxWidth()
                 .verticalScroll(rememberScrollState())
                 .padding(24.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp),
@@ -63,7 +63,7 @@ private fun SettingsHeader(onBack: () -> Unit) {
         Column {
             Text("Provider settings", style = MaterialTheme.typography.headlineSmall, fontWeight = FontWeight.Bold)
             Text(
-                "Configure live access without exposing credentials to presentation state.",
+                "Your models, your key. Make this space yours.",
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
             )

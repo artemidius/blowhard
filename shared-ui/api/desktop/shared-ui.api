@@ -5,9 +5,8 @@ public final class io/github/artemidius/blowhard/ui/BlowhardAppKt {
 public final class io/github/artemidius/blowhard/ui/ComposableSingletons$ComposerPanelKt {
 	public static final field INSTANCE Lio/github/artemidius/blowhard/ui/ComposableSingletons$ComposerPanelKt;
 	public fun <init> ()V
-	public final fun getLambda$-176302635$Blowhard_shared_ui ()Lkotlin/jvm/functions/Function3;
-	public final fun getLambda$-716526633$Blowhard_shared_ui ()Lkotlin/jvm/functions/Function3;
-	public final fun getLambda$110026564$Blowhard_shared_ui ()Lkotlin/jvm/functions/Function2;
+	public final fun getLambda$-611097614$Blowhard_shared_ui ()Lkotlin/jvm/functions/Function3;
+	public final fun getLambda$230215033$Blowhard_shared_ui ()Lkotlin/jvm/functions/Function3;
 }
 
 public final class io/github/artemidius/blowhard/ui/ComposableSingletons$ConnectionSettingsScreenKt {
@@ -49,8 +48,9 @@ public final class io/github/artemidius/blowhard/ui/ComposableSingletons$Credent
 public final class io/github/artemidius/blowhard/ui/ComposableSingletons$MessageListKt {
 	public static final field INSTANCE Lio/github/artemidius/blowhard/ui/ComposableSingletons$MessageListKt;
 	public fun <init> ()V
-	public final fun getLambda$-2098704700$Blowhard_shared_ui ()Lkotlin/jvm/functions/Function3;
-	public final fun getLambda$-736141596$Blowhard_shared_ui ()Lkotlin/jvm/functions/Function3;
+	public final fun getLambda$-1154306072$Blowhard_shared_ui ()Lkotlin/jvm/functions/Function3;
+	public final fun getLambda$1945003664$Blowhard_shared_ui ()Lkotlin/jvm/functions/Function3;
+	public final fun getLambda$218654728$Blowhard_shared_ui ()Lkotlin/jvm/functions/Function3;
 }
 
 public final class io/github/artemidius/blowhard/ui/ComposableSingletons$NoticePanelKt {
@@ -65,6 +65,12 @@ public final class io/github/artemidius/blowhard/ui/ComposableSingletons$RunInsp
 	public final fun getLambda$-1955507002$Blowhard_shared_ui ()Lkotlin/jvm/functions/Function3;
 	public final fun getLambda$1821415343$Blowhard_shared_ui ()Lkotlin/jvm/functions/Function3;
 	public final fun getLambda$718731620$Blowhard_shared_ui ()Lkotlin/jvm/functions/Function3;
+}
+
+public final class io/github/artemidius/blowhard/ui/ComposableSingletons$WelcomeConversationKt {
+	public static final field INSTANCE Lio/github/artemidius/blowhard/ui/ComposableSingletons$WelcomeConversationKt;
+	public fun <init> ()V
+	public final fun getLambda$1739167024$Blowhard_shared_ui ()Lkotlin/jvm/functions/Function2;
 }
 
 public final class io/github/artemidius/blowhard/ui/presentation/ChatMessageUi {
