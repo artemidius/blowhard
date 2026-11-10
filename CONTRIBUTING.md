@@ -22,7 +22,7 @@ Format the project and run the complete local gate:
 
 ```shell
 ./gradlew spotlessApply
-./gradlew qualityCheck
+./gradlew --no-configuration-cache qualityCheck
 ```
 
 Public API changes must be intentional. If a reviewed contract change makes
