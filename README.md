@@ -215,7 +215,11 @@ runtime and does not require a separately installed JDK.
 
 CI builds each native format, inspects its contents, installs it, and launches the installed
 Compose application in a deterministic smoke mode. The package archives are retained with the CI
-run for seven days; they are not published releases.
+run for seven days; they are not published releases. Each archive is accompanied by a deterministic
+manifest and `SHA256SUMS` that bind its bytes to release `0.1.0`, installer schema `1.0.0`, the exact
+source revision, target architecture, and disclosed signing status. See the
+[release-evidence guide](docs/release-evidence.md) and
+[`ADR 0025`](docs/decisions/0025-deterministic-release-evidence.md).
 
 The current packages have no trusted publisher signature. `jpackage` applies an ad hoc signature
 to the macOS app, but it is not Developer ID signed or notarized. The Windows package is not

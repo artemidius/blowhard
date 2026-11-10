@@ -20,6 +20,12 @@ plugins {
     alias(libs.plugins.sqldelight) apply false
 }
 
+version = providers.gradleProperty("blowhardReleaseVersion").get()
+
+subprojects {
+    version = rootProject.version
+}
+
 val documentedModules = listOf(
     project(":adapters:fixture"),
     project(":adapters:mistral"),
