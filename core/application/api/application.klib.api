@@ -79,6 +79,12 @@ final class io.github.artemidius.blowhard.core.application/DefaultConversationRu
     final suspend fun start(io.github.artemidius.blowhard.core.api/StartRunRequest): io.github.artemidius.blowhard.core.api/StartRunResult // io.github.artemidius.blowhard.core.application/DefaultConversationRuns.start|start(io.github.artemidius.blowhard.core.api.StartRunRequest){}[0]
 }
 
+final class io.github.artemidius.blowhard.core.application/DefaultRunDiagnosticReportGenerator : io.github.artemidius.blowhard.core.api/RunDiagnosticReportGenerator { // io.github.artemidius.blowhard.core.application/DefaultRunDiagnosticReportGenerator|null[0]
+    constructor <init>(io.github.artemidius.blowhard.core.api/RunInspector) // io.github.artemidius.blowhard.core.application/DefaultRunDiagnosticReportGenerator.<init>|<init>(io.github.artemidius.blowhard.core.api.RunInspector){}[0]
+
+    final suspend fun generate(io.github.artemidius.blowhard.core.api/RunId): io.github.artemidius.blowhard.core.api/RunDiagnosticReportResult // io.github.artemidius.blowhard.core.application/DefaultRunDiagnosticReportGenerator.generate|generate(io.github.artemidius.blowhard.core.api.RunId){}[0]
+}
+
 final class io.github.artemidius.blowhard.core.application/RunCheckpointPolicy { // io.github.artemidius.blowhard.core.application/RunCheckpointPolicy|null[0]
     constructor <init>(kotlin/Int = ..., kotlin/Long = ...) // io.github.artemidius.blowhard.core.application/RunCheckpointPolicy.<init>|<init>(kotlin.Int;kotlin.Long){}[0]
 
