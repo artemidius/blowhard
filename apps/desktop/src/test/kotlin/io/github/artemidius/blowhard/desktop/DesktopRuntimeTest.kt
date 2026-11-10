@@ -13,6 +13,7 @@ import io.github.artemidius.blowhard.core.api.GenerationParameters
 import io.github.artemidius.blowhard.core.api.GenerationTarget
 import io.github.artemidius.blowhard.core.api.ModeSelectionResult
 import io.github.artemidius.blowhard.core.api.ModelSelectionResult
+import io.github.artemidius.blowhard.core.api.RunId
 import io.github.artemidius.blowhard.core.api.SelectableModel
 import io.github.artemidius.blowhard.core.domain.GenerationEvent
 import io.github.artemidius.blowhard.core.domain.TextGenerationPort
@@ -28,6 +29,7 @@ import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withTimeout
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertFailsWith
 import kotlin.test.assertTrue
 import kotlin.time.Duration.Companion.seconds
 
@@ -81,6 +83,21 @@ class DesktopRuntimeTest {
     }
 
     @Test
+    fun `separate desktop runtimes issue distinct attempt identities`() = runBlocking {
+        val first = createDesktopRuntime()
+        val second = createDesktopRuntime()
+        try {
+            val firstAttempt = first.completeAttempt("First runtime")
+            val secondAttempt = second.completeAttempt("Second runtime")
+
+            assertTrue(firstAttempt != secondAttempt)
+        } finally {
+            first.close()
+            second.close()
+        }
+    }
+
+    @Test
     fun `real desktop runtime cancels streaming fixture output`() = runBlocking {
         val runtime = createDesktopRuntime()
         try {
@@ -104,12 +121,59 @@ class DesktopRuntimeTest {
     @Test
     fun `runtime closes provider resources exactly once`() {
         var closeCalls = 0
-        val runtime = createDesktopRuntime { closeCalls += 1 }
+        var historyCloseCalls = 0
+        val runtime = createDesktopRuntime(
+            closeHistoryResources = { historyCloseCalls += 1 },
+            closeProviderResources = { closeCalls += 1 },
+        )
 
         runtime.close()
         runtime.close()
 
         assertEquals(1, closeCalls)
+        assertEquals(1, historyCloseCalls)
+    }
+
+    @Test
+    fun `provider resources close when history closure fails`() {
+        var providerCloseCalls = 0
+        val runtime = createDesktopRuntime(
+            closeHistoryResources = { error("history close failure") },
+            closeProviderResources = { providerCloseCalls += 1 },
+        )
+
+        assertFailsWith<IllegalStateException> { runtime.close() }
+        assertEquals(1, providerCloseCalls)
+        runtime.close()
+        assertEquals(1, providerCloseCalls)
+    }
+
+    @Test
+    fun `restored startup state does not invoke generation`() {
+        var generationCalls = 0
+        val initialState = emptyDesktopConversationState().copy(
+            conversations = listOf(
+                io.github.artemidius.blowhard.ui.presentation.ConversationUiModel(
+                    id = io.github.artemidius.blowhard.core.api.ConversationId("stored"),
+                    title = "Stored history",
+                ),
+            ),
+            selectedConversationId = io.github.artemidius.blowhard.core.api.ConversationId("stored"),
+        )
+        val runtime = DesktopRuntime.create(
+            clipboardWriter = testClipboard,
+            connectionSettings = FakeDesktopConnectionSettings(),
+            generation = TextGenerationPort {
+                generationCalls += 1
+                flowOf(GenerationEvent.Completed)
+            },
+            scenarioSelection = { _, _ -> },
+            initialState = initialState,
+        )
+
+        assertEquals(initialState, runtime.presenter.state.value)
+        assertEquals(0, generationCalls)
+        runtime.close()
     }
 
     @Test
@@ -140,13 +204,26 @@ class DesktopRuntimeTest {
     }
 }
 
-private fun createDesktopRuntime(closeProviderResources: () -> Unit = {}): DesktopRuntime {
+private suspend fun DesktopRuntime.completeAttempt(prompt: String): RunId? {
+    presenter.dispatch(ConversationAction.ComposerChanged(prompt))
+    presenter.dispatch(ConversationAction.Send)
+    val state = withTimeout(5.seconds) {
+        presenter.state.first { it.selectedConversation.runState == ConversationRunState.SUCCEEDED }
+    }
+    return state.selectedConversation.messages.last().attemptId
+}
+
+private fun createDesktopRuntime(
+    closeHistoryResources: () -> Unit = {},
+    closeProviderResources: () -> Unit = {},
+): DesktopRuntime {
     val scenarios = FixtureScenarioRouter()
     return DesktopRuntime.create(
         clipboardWriter = testClipboard,
         connectionSettings = FakeDesktopConnectionSettings(),
         generation = FixtureTextGenerationPort(scenarios::scenarioFor),
         scenarioSelection = scenarios,
+        closeHistoryResources = closeHistoryResources,
         closeProviderResources = closeProviderResources,
     )
 }
