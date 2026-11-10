@@ -247,6 +247,7 @@ public final class io/github/artemidius/blowhard/core/api/RunFailureKind : java/
 	public static final field INVALID_REQUEST Lio/github/artemidius/blowhard/core/api/RunFailureKind;
 	public static final field INVALID_RESPONSE Lio/github/artemidius/blowhard/core/api/RunFailureKind;
 	public static final field RATE_LIMITED Lio/github/artemidius/blowhard/core/api/RunFailureKind;
+	public static final field STORAGE_UNAVAILABLE Lio/github/artemidius/blowhard/core/api/RunFailureKind;
 	public static final field UNAUTHORIZED Lio/github/artemidius/blowhard/core/api/RunFailureKind;
 	public static final field UNAVAILABLE Lio/github/artemidius/blowhard/core/api/RunFailureKind;
 	public static final field UNEXPECTED Lio/github/artemidius/blowhard/core/api/RunFailureKind;
@@ -401,6 +402,7 @@ public final class io/github/artemidius/blowhard/core/api/StartRunRejection : ja
 	public static final field CONVERSATION_BUSY Lio/github/artemidius/blowhard/core/api/StartRunRejection;
 	public static final field LIFECYCLE_CLOSED Lio/github/artemidius/blowhard/core/api/StartRunRejection;
 	public static final field LIVE_CONFIGURATION_NOT_READY Lio/github/artemidius/blowhard/core/api/StartRunRejection;
+	public static final field STORAGE_UNAVAILABLE Lio/github/artemidius/blowhard/core/api/StartRunRejection;
 	public static fun getEntries ()Lkotlin/enums/EnumEntries;
 	public static fun valueOf (Ljava/lang/String;)Lio/github/artemidius/blowhard/core/api/StartRunRejection;
 	public static fun values ()[Lio/github/artemidius/blowhard/core/api/StartRunRejection;

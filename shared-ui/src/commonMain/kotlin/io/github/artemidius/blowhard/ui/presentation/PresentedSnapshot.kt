@@ -61,5 +61,6 @@ private fun RunFailureKind.safeMessage(): String = when (this) {
     RunFailureKind.RATE_LIMITED -> "The provider is rate limiting requests. Try again later."
     RunFailureKind.UNAVAILABLE -> "The provider is temporarily unavailable."
     RunFailureKind.INVALID_RESPONSE -> "The provider returned an invalid streaming response."
+    RunFailureKind.STORAGE_UNAVAILABLE -> "Local history could not be updated safely. Generation stopped."
     RunFailureKind.UNEXPECTED -> "Generation stopped unexpectedly. No sensitive details were exposed."
 }
