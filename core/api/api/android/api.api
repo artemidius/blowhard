@@ -285,6 +285,104 @@ public final class io/github/artemidius/blowhard/core/api/RunId {
 	public final synthetic fun unbox-impl ()Ljava/lang/String;
 }
 
+public final class io/github/artemidius/blowhard/core/api/RunInspection {
+	public static final field Companion Lio/github/artemidius/blowhard/core/api/RunInspection$Companion;
+	public static final field MAX_EVENTS I
+	public synthetic fun <init> (Ljava/lang/String;Ljava/lang/String;Lio/github/artemidius/blowhard/core/api/GenerationTarget;Lio/github/artemidius/blowhard/core/api/GenerationParameters;Ljava/util/List;Lio/github/artemidius/blowhard/core/api/TokenUsage;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public synthetic fun <init> (Ljava/lang/String;Ljava/lang/String;Lio/github/artemidius/blowhard/core/api/GenerationTarget;Lio/github/artemidius/blowhard/core/api/GenerationParameters;Ljava/util/List;Lio/github/artemidius/blowhard/core/api/TokenUsage;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1-oS5FZMg ()Ljava/lang/String;
+	public final fun component2-j0uiRXY ()Ljava/lang/String;
+	public final fun component3 ()Lio/github/artemidius/blowhard/core/api/GenerationTarget;
+	public final fun component4 ()Lio/github/artemidius/blowhard/core/api/GenerationParameters;
+	public final fun component5 ()Ljava/util/List;
+	public final fun component6 ()Lio/github/artemidius/blowhard/core/api/TokenUsage;
+	public final fun copy-sj_cIQk (Ljava/lang/String;Ljava/lang/String;Lio/github/artemidius/blowhard/core/api/GenerationTarget;Lio/github/artemidius/blowhard/core/api/GenerationParameters;Ljava/util/List;Lio/github/artemidius/blowhard/core/api/TokenUsage;)Lio/github/artemidius/blowhard/core/api/RunInspection;
+	public static synthetic fun copy-sj_cIQk$default (Lio/github/artemidius/blowhard/core/api/RunInspection;Ljava/lang/String;Ljava/lang/String;Lio/github/artemidius/blowhard/core/api/GenerationTarget;Lio/github/artemidius/blowhard/core/api/GenerationParameters;Ljava/util/List;Lio/github/artemidius/blowhard/core/api/TokenUsage;ILjava/lang/Object;)Lio/github/artemidius/blowhard/core/api/RunInspection;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getConversationId-j0uiRXY ()Ljava/lang/String;
+	public final fun getEvents ()Ljava/util/List;
+	public final fun getParameters ()Lio/github/artemidius/blowhard/core/api/GenerationParameters;
+	public final fun getRunId-oS5FZMg ()Ljava/lang/String;
+	public final fun getTarget ()Lio/github/artemidius/blowhard/core/api/GenerationTarget;
+	public final fun getUsage ()Lio/github/artemidius/blowhard/core/api/TokenUsage;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class io/github/artemidius/blowhard/core/api/RunInspection$Companion {
+}
+
+public abstract interface class io/github/artemidius/blowhard/core/api/RunInspectionEvent {
+	public abstract fun getAt-Yj_JHEY ()J
+}
+
+public final class io/github/artemidius/blowhard/core/api/RunInspectionEvent$Accepted : io/github/artemidius/blowhard/core/api/RunInspectionEvent {
+	public synthetic fun <init> (JLkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1-Yj_JHEY ()J
+	public final fun copy-i7Tr0AI (J)Lio/github/artemidius/blowhard/core/api/RunInspectionEvent$Accepted;
+	public static synthetic fun copy-i7Tr0AI$default (Lio/github/artemidius/blowhard/core/api/RunInspectionEvent$Accepted;JILjava/lang/Object;)Lio/github/artemidius/blowhard/core/api/RunInspectionEvent$Accepted;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun getAt-Yj_JHEY ()J
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class io/github/artemidius/blowhard/core/api/RunInspectionEvent$Finished : io/github/artemidius/blowhard/core/api/RunInspectionEvent {
+	public synthetic fun <init> (JLio/github/artemidius/blowhard/core/api/RunTerminalStatus;Lio/github/artemidius/blowhard/core/api/RunFailureKind;Lio/github/artemidius/blowhard/core/api/RunRetryAdvice;Ljava/lang/Long;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public synthetic fun <init> (JLio/github/artemidius/blowhard/core/api/RunTerminalStatus;Lio/github/artemidius/blowhard/core/api/RunFailureKind;Lio/github/artemidius/blowhard/core/api/RunRetryAdvice;Ljava/lang/Long;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1-Yj_JHEY ()J
+	public final fun component2 ()Lio/github/artemidius/blowhard/core/api/RunTerminalStatus;
+	public final fun component3 ()Lio/github/artemidius/blowhard/core/api/RunFailureKind;
+	public final fun component4 ()Lio/github/artemidius/blowhard/core/api/RunRetryAdvice;
+	public final fun component5 ()Ljava/lang/Long;
+	public final fun copy-uNDbCUI (JLio/github/artemidius/blowhard/core/api/RunTerminalStatus;Lio/github/artemidius/blowhard/core/api/RunFailureKind;Lio/github/artemidius/blowhard/core/api/RunRetryAdvice;Ljava/lang/Long;)Lio/github/artemidius/blowhard/core/api/RunInspectionEvent$Finished;
+	public static synthetic fun copy-uNDbCUI$default (Lio/github/artemidius/blowhard/core/api/RunInspectionEvent$Finished;JLio/github/artemidius/blowhard/core/api/RunTerminalStatus;Lio/github/artemidius/blowhard/core/api/RunFailureKind;Lio/github/artemidius/blowhard/core/api/RunRetryAdvice;Ljava/lang/Long;ILjava/lang/Object;)Lio/github/artemidius/blowhard/core/api/RunInspectionEvent$Finished;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun getAt-Yj_JHEY ()J
+	public final fun getFailureKind ()Lio/github/artemidius/blowhard/core/api/RunFailureKind;
+	public final fun getRetryAdvice ()Lio/github/artemidius/blowhard/core/api/RunRetryAdvice;
+	public final fun getRetryAfterSeconds ()Ljava/lang/Long;
+	public final fun getStatus ()Lio/github/artemidius/blowhard/core/api/RunTerminalStatus;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class io/github/artemidius/blowhard/core/api/RunInspectionEvent$Started : io/github/artemidius/blowhard/core/api/RunInspectionEvent {
+	public synthetic fun <init> (JLkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1-Yj_JHEY ()J
+	public final fun copy-i7Tr0AI (J)Lio/github/artemidius/blowhard/core/api/RunInspectionEvent$Started;
+	public static synthetic fun copy-i7Tr0AI$default (Lio/github/artemidius/blowhard/core/api/RunInspectionEvent$Started;JILjava/lang/Object;)Lio/github/artemidius/blowhard/core/api/RunInspectionEvent$Started;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun getAt-Yj_JHEY ()J
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public abstract interface class io/github/artemidius/blowhard/core/api/RunInspectionResult {
+}
+
+public final class io/github/artemidius/blowhard/core/api/RunInspectionResult$Found : io/github/artemidius/blowhard/core/api/RunInspectionResult {
+	public fun <init> (Lio/github/artemidius/blowhard/core/api/RunInspection;)V
+	public final fun component1 ()Lio/github/artemidius/blowhard/core/api/RunInspection;
+	public final fun copy (Lio/github/artemidius/blowhard/core/api/RunInspection;)Lio/github/artemidius/blowhard/core/api/RunInspectionResult$Found;
+	public static synthetic fun copy$default (Lio/github/artemidius/blowhard/core/api/RunInspectionResult$Found;Lio/github/artemidius/blowhard/core/api/RunInspection;ILjava/lang/Object;)Lio/github/artemidius/blowhard/core/api/RunInspectionResult$Found;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getInspection ()Lio/github/artemidius/blowhard/core/api/RunInspection;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class io/github/artemidius/blowhard/core/api/RunInspectionResult$NotFound : io/github/artemidius/blowhard/core/api/RunInspectionResult {
+	public static final field INSTANCE Lio/github/artemidius/blowhard/core/api/RunInspectionResult$NotFound;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public abstract interface class io/github/artemidius/blowhard/core/api/RunInspector {
+	public abstract fun inspect-Mzzv5v0 (Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+}
+
 public final class io/github/artemidius/blowhard/core/api/RunRetryAdvice : java/lang/Enum {
 	public static final field DO_NOT_RETRY Lio/github/artemidius/blowhard/core/api/RunRetryAdvice;
 	public static final field EXPLICIT_NEW_ATTEMPT Lio/github/artemidius/blowhard/core/api/RunRetryAdvice;
@@ -385,6 +483,15 @@ public final class io/github/artemidius/blowhard/core/api/RunSnapshot$Succeeded 
 	public fun toString ()Ljava/lang/String;
 }
 
+public final class io/github/artemidius/blowhard/core/api/RunTerminalStatus : java/lang/Enum {
+	public static final field CANCELLED Lio/github/artemidius/blowhard/core/api/RunTerminalStatus;
+	public static final field FAILED Lio/github/artemidius/blowhard/core/api/RunTerminalStatus;
+	public static final field SUCCEEDED Lio/github/artemidius/blowhard/core/api/RunTerminalStatus;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public static fun valueOf (Ljava/lang/String;)Lio/github/artemidius/blowhard/core/api/RunTerminalStatus;
+	public static fun values ()[Lio/github/artemidius/blowhard/core/api/RunTerminalStatus;
+}
+
 public final class io/github/artemidius/blowhard/core/api/RunTimestamp {
 	public static final synthetic fun box-impl (J)Lio/github/artemidius/blowhard/core/api/RunTimestamp;
 	public static fun constructor-impl (J)J
@@ -460,6 +567,23 @@ public final class io/github/artemidius/blowhard/core/api/StartRunResult$Started
 	public fun equals (Ljava/lang/Object;)Z
 	public final fun getRunId-oS5FZMg ()Ljava/lang/String;
 	public final fun getTarget ()Lio/github/artemidius/blowhard/core/api/GenerationTarget;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class io/github/artemidius/blowhard/core/api/TokenUsage {
+	public fun <init> ()V
+	public fun <init> (Ljava/lang/Long;Ljava/lang/Long;Ljava/lang/Long;)V
+	public synthetic fun <init> (Ljava/lang/Long;Ljava/lang/Long;Ljava/lang/Long;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()Ljava/lang/Long;
+	public final fun component2 ()Ljava/lang/Long;
+	public final fun component3 ()Ljava/lang/Long;
+	public final fun copy (Ljava/lang/Long;Ljava/lang/Long;Ljava/lang/Long;)Lio/github/artemidius/blowhard/core/api/TokenUsage;
+	public static synthetic fun copy$default (Lio/github/artemidius/blowhard/core/api/TokenUsage;Ljava/lang/Long;Ljava/lang/Long;Ljava/lang/Long;ILjava/lang/Object;)Lio/github/artemidius/blowhard/core/api/TokenUsage;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getInputTokens ()Ljava/lang/Long;
+	public final fun getOutputTokens ()Ljava/lang/Long;
+	public final fun getTotalTokens ()Ljava/lang/Long;
 	public fun hashCode ()I
 	public fun toString ()Ljava/lang/String;
 }

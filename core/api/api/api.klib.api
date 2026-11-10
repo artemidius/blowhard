@@ -151,6 +151,18 @@ final enum class io.github.artemidius.blowhard.core.api/RunRetryAdvice : kotlin/
     final fun values(): kotlin/Array<io.github.artemidius.blowhard.core.api/RunRetryAdvice> // io.github.artemidius.blowhard.core.api/RunRetryAdvice.values|values#static(){}[0]
 }
 
+final enum class io.github.artemidius.blowhard.core.api/RunTerminalStatus : kotlin/Enum<io.github.artemidius.blowhard.core.api/RunTerminalStatus> { // io.github.artemidius.blowhard.core.api/RunTerminalStatus|null[0]
+    enum entry CANCELLED // io.github.artemidius.blowhard.core.api/RunTerminalStatus.CANCELLED|null[0]
+    enum entry FAILED // io.github.artemidius.blowhard.core.api/RunTerminalStatus.FAILED|null[0]
+    enum entry SUCCEEDED // io.github.artemidius.blowhard.core.api/RunTerminalStatus.SUCCEEDED|null[0]
+
+    final val entries // io.github.artemidius.blowhard.core.api/RunTerminalStatus.entries|#static{}entries[0]
+        final fun <get-entries>(): kotlin.enums/EnumEntries<io.github.artemidius.blowhard.core.api/RunTerminalStatus> // io.github.artemidius.blowhard.core.api/RunTerminalStatus.entries.<get-entries>|<get-entries>#static(){}[0]
+
+    final fun valueOf(kotlin/String): io.github.artemidius.blowhard.core.api/RunTerminalStatus // io.github.artemidius.blowhard.core.api/RunTerminalStatus.valueOf|valueOf#static(kotlin.String){}[0]
+    final fun values(): kotlin/Array<io.github.artemidius.blowhard.core.api/RunTerminalStatus> // io.github.artemidius.blowhard.core.api/RunTerminalStatus.values|values#static(){}[0]
+}
+
 final enum class io.github.artemidius.blowhard.core.api/StartRunRejection : kotlin/Enum<io.github.artemidius.blowhard.core.api/StartRunRejection> { // io.github.artemidius.blowhard.core.api/StartRunRejection|null[0]
     enum entry BLANK_PROMPT // io.github.artemidius.blowhard.core.api/StartRunRejection.BLANK_PROMPT|null[0]
     enum entry CONVERSATION_BUSY // io.github.artemidius.blowhard.core.api/StartRunRejection.CONVERSATION_BUSY|null[0]
@@ -163,6 +175,10 @@ final enum class io.github.artemidius.blowhard.core.api/StartRunRejection : kotl
 
     final fun valueOf(kotlin/String): io.github.artemidius.blowhard.core.api/StartRunRejection // io.github.artemidius.blowhard.core.api/StartRunRejection.valueOf|valueOf#static(kotlin.String){}[0]
     final fun values(): kotlin/Array<io.github.artemidius.blowhard.core.api/StartRunRejection> // io.github.artemidius.blowhard.core.api/StartRunRejection.values|values#static(){}[0]
+}
+
+abstract fun interface io.github.artemidius.blowhard.core.api/RunInspector { // io.github.artemidius.blowhard.core.api/RunInspector|null[0]
+    abstract suspend fun inspect(io.github.artemidius.blowhard.core.api/RunId): io.github.artemidius.blowhard.core.api/RunInspectionResult // io.github.artemidius.blowhard.core.api/RunInspector.inspect|inspect(io.github.artemidius.blowhard.core.api.RunId){}[0]
 }
 
 abstract interface io.github.artemidius.blowhard.core.api/ConnectionSettings { // io.github.artemidius.blowhard.core.api/ConnectionSettings|null[0]
@@ -250,6 +266,83 @@ sealed interface io.github.artemidius.blowhard.core.api/ObserveRunResult { // io
         final fun equals(kotlin/Any?): kotlin/Boolean // io.github.artemidius.blowhard.core.api/ObserveRunResult.NotFound.equals|equals(kotlin.Any?){}[0]
         final fun hashCode(): kotlin/Int // io.github.artemidius.blowhard.core.api/ObserveRunResult.NotFound.hashCode|hashCode(){}[0]
         final fun toString(): kotlin/String // io.github.artemidius.blowhard.core.api/ObserveRunResult.NotFound.toString|toString(){}[0]
+    }
+}
+
+sealed interface io.github.artemidius.blowhard.core.api/RunInspectionEvent { // io.github.artemidius.blowhard.core.api/RunInspectionEvent|null[0]
+    abstract val at // io.github.artemidius.blowhard.core.api/RunInspectionEvent.at|{}at[0]
+        abstract fun <get-at>(): io.github.artemidius.blowhard.core.api/RunTimestamp // io.github.artemidius.blowhard.core.api/RunInspectionEvent.at.<get-at>|<get-at>(){}[0]
+
+    final class Accepted : io.github.artemidius.blowhard.core.api/RunInspectionEvent { // io.github.artemidius.blowhard.core.api/RunInspectionEvent.Accepted|null[0]
+        constructor <init>(io.github.artemidius.blowhard.core.api/RunTimestamp) // io.github.artemidius.blowhard.core.api/RunInspectionEvent.Accepted.<init>|<init>(io.github.artemidius.blowhard.core.api.RunTimestamp){}[0]
+
+        final val at // io.github.artemidius.blowhard.core.api/RunInspectionEvent.Accepted.at|{}at[0]
+            final fun <get-at>(): io.github.artemidius.blowhard.core.api/RunTimestamp // io.github.artemidius.blowhard.core.api/RunInspectionEvent.Accepted.at.<get-at>|<get-at>(){}[0]
+
+        final fun component1(): io.github.artemidius.blowhard.core.api/RunTimestamp // io.github.artemidius.blowhard.core.api/RunInspectionEvent.Accepted.component1|component1(){}[0]
+        final fun copy(io.github.artemidius.blowhard.core.api/RunTimestamp = ...): io.github.artemidius.blowhard.core.api/RunInspectionEvent.Accepted // io.github.artemidius.blowhard.core.api/RunInspectionEvent.Accepted.copy|copy(io.github.artemidius.blowhard.core.api.RunTimestamp){}[0]
+        final fun equals(kotlin/Any?): kotlin/Boolean // io.github.artemidius.blowhard.core.api/RunInspectionEvent.Accepted.equals|equals(kotlin.Any?){}[0]
+        final fun hashCode(): kotlin/Int // io.github.artemidius.blowhard.core.api/RunInspectionEvent.Accepted.hashCode|hashCode(){}[0]
+        final fun toString(): kotlin/String // io.github.artemidius.blowhard.core.api/RunInspectionEvent.Accepted.toString|toString(){}[0]
+    }
+
+    final class Finished : io.github.artemidius.blowhard.core.api/RunInspectionEvent { // io.github.artemidius.blowhard.core.api/RunInspectionEvent.Finished|null[0]
+        constructor <init>(io.github.artemidius.blowhard.core.api/RunTimestamp, io.github.artemidius.blowhard.core.api/RunTerminalStatus, io.github.artemidius.blowhard.core.api/RunFailureKind? = ..., io.github.artemidius.blowhard.core.api/RunRetryAdvice? = ..., kotlin/Long? = ...) // io.github.artemidius.blowhard.core.api/RunInspectionEvent.Finished.<init>|<init>(io.github.artemidius.blowhard.core.api.RunTimestamp;io.github.artemidius.blowhard.core.api.RunTerminalStatus;io.github.artemidius.blowhard.core.api.RunFailureKind?;io.github.artemidius.blowhard.core.api.RunRetryAdvice?;kotlin.Long?){}[0]
+
+        final val at // io.github.artemidius.blowhard.core.api/RunInspectionEvent.Finished.at|{}at[0]
+            final fun <get-at>(): io.github.artemidius.blowhard.core.api/RunTimestamp // io.github.artemidius.blowhard.core.api/RunInspectionEvent.Finished.at.<get-at>|<get-at>(){}[0]
+        final val failureKind // io.github.artemidius.blowhard.core.api/RunInspectionEvent.Finished.failureKind|{}failureKind[0]
+            final fun <get-failureKind>(): io.github.artemidius.blowhard.core.api/RunFailureKind? // io.github.artemidius.blowhard.core.api/RunInspectionEvent.Finished.failureKind.<get-failureKind>|<get-failureKind>(){}[0]
+        final val retryAdvice // io.github.artemidius.blowhard.core.api/RunInspectionEvent.Finished.retryAdvice|{}retryAdvice[0]
+            final fun <get-retryAdvice>(): io.github.artemidius.blowhard.core.api/RunRetryAdvice? // io.github.artemidius.blowhard.core.api/RunInspectionEvent.Finished.retryAdvice.<get-retryAdvice>|<get-retryAdvice>(){}[0]
+        final val retryAfterSeconds // io.github.artemidius.blowhard.core.api/RunInspectionEvent.Finished.retryAfterSeconds|{}retryAfterSeconds[0]
+            final fun <get-retryAfterSeconds>(): kotlin/Long? // io.github.artemidius.blowhard.core.api/RunInspectionEvent.Finished.retryAfterSeconds.<get-retryAfterSeconds>|<get-retryAfterSeconds>(){}[0]
+        final val status // io.github.artemidius.blowhard.core.api/RunInspectionEvent.Finished.status|{}status[0]
+            final fun <get-status>(): io.github.artemidius.blowhard.core.api/RunTerminalStatus // io.github.artemidius.blowhard.core.api/RunInspectionEvent.Finished.status.<get-status>|<get-status>(){}[0]
+
+        final fun component1(): io.github.artemidius.blowhard.core.api/RunTimestamp // io.github.artemidius.blowhard.core.api/RunInspectionEvent.Finished.component1|component1(){}[0]
+        final fun component2(): io.github.artemidius.blowhard.core.api/RunTerminalStatus // io.github.artemidius.blowhard.core.api/RunInspectionEvent.Finished.component2|component2(){}[0]
+        final fun component3(): io.github.artemidius.blowhard.core.api/RunFailureKind? // io.github.artemidius.blowhard.core.api/RunInspectionEvent.Finished.component3|component3(){}[0]
+        final fun component4(): io.github.artemidius.blowhard.core.api/RunRetryAdvice? // io.github.artemidius.blowhard.core.api/RunInspectionEvent.Finished.component4|component4(){}[0]
+        final fun component5(): kotlin/Long? // io.github.artemidius.blowhard.core.api/RunInspectionEvent.Finished.component5|component5(){}[0]
+        final fun copy(io.github.artemidius.blowhard.core.api/RunTimestamp = ..., io.github.artemidius.blowhard.core.api/RunTerminalStatus = ..., io.github.artemidius.blowhard.core.api/RunFailureKind? = ..., io.github.artemidius.blowhard.core.api/RunRetryAdvice? = ..., kotlin/Long? = ...): io.github.artemidius.blowhard.core.api/RunInspectionEvent.Finished // io.github.artemidius.blowhard.core.api/RunInspectionEvent.Finished.copy|copy(io.github.artemidius.blowhard.core.api.RunTimestamp;io.github.artemidius.blowhard.core.api.RunTerminalStatus;io.github.artemidius.blowhard.core.api.RunFailureKind?;io.github.artemidius.blowhard.core.api.RunRetryAdvice?;kotlin.Long?){}[0]
+        final fun equals(kotlin/Any?): kotlin/Boolean // io.github.artemidius.blowhard.core.api/RunInspectionEvent.Finished.equals|equals(kotlin.Any?){}[0]
+        final fun hashCode(): kotlin/Int // io.github.artemidius.blowhard.core.api/RunInspectionEvent.Finished.hashCode|hashCode(){}[0]
+        final fun toString(): kotlin/String // io.github.artemidius.blowhard.core.api/RunInspectionEvent.Finished.toString|toString(){}[0]
+    }
+
+    final class Started : io.github.artemidius.blowhard.core.api/RunInspectionEvent { // io.github.artemidius.blowhard.core.api/RunInspectionEvent.Started|null[0]
+        constructor <init>(io.github.artemidius.blowhard.core.api/RunTimestamp) // io.github.artemidius.blowhard.core.api/RunInspectionEvent.Started.<init>|<init>(io.github.artemidius.blowhard.core.api.RunTimestamp){}[0]
+
+        final val at // io.github.artemidius.blowhard.core.api/RunInspectionEvent.Started.at|{}at[0]
+            final fun <get-at>(): io.github.artemidius.blowhard.core.api/RunTimestamp // io.github.artemidius.blowhard.core.api/RunInspectionEvent.Started.at.<get-at>|<get-at>(){}[0]
+
+        final fun component1(): io.github.artemidius.blowhard.core.api/RunTimestamp // io.github.artemidius.blowhard.core.api/RunInspectionEvent.Started.component1|component1(){}[0]
+        final fun copy(io.github.artemidius.blowhard.core.api/RunTimestamp = ...): io.github.artemidius.blowhard.core.api/RunInspectionEvent.Started // io.github.artemidius.blowhard.core.api/RunInspectionEvent.Started.copy|copy(io.github.artemidius.blowhard.core.api.RunTimestamp){}[0]
+        final fun equals(kotlin/Any?): kotlin/Boolean // io.github.artemidius.blowhard.core.api/RunInspectionEvent.Started.equals|equals(kotlin.Any?){}[0]
+        final fun hashCode(): kotlin/Int // io.github.artemidius.blowhard.core.api/RunInspectionEvent.Started.hashCode|hashCode(){}[0]
+        final fun toString(): kotlin/String // io.github.artemidius.blowhard.core.api/RunInspectionEvent.Started.toString|toString(){}[0]
+    }
+}
+
+sealed interface io.github.artemidius.blowhard.core.api/RunInspectionResult { // io.github.artemidius.blowhard.core.api/RunInspectionResult|null[0]
+    final class Found : io.github.artemidius.blowhard.core.api/RunInspectionResult { // io.github.artemidius.blowhard.core.api/RunInspectionResult.Found|null[0]
+        constructor <init>(io.github.artemidius.blowhard.core.api/RunInspection) // io.github.artemidius.blowhard.core.api/RunInspectionResult.Found.<init>|<init>(io.github.artemidius.blowhard.core.api.RunInspection){}[0]
+
+        final val inspection // io.github.artemidius.blowhard.core.api/RunInspectionResult.Found.inspection|{}inspection[0]
+            final fun <get-inspection>(): io.github.artemidius.blowhard.core.api/RunInspection // io.github.artemidius.blowhard.core.api/RunInspectionResult.Found.inspection.<get-inspection>|<get-inspection>(){}[0]
+
+        final fun component1(): io.github.artemidius.blowhard.core.api/RunInspection // io.github.artemidius.blowhard.core.api/RunInspectionResult.Found.component1|component1(){}[0]
+        final fun copy(io.github.artemidius.blowhard.core.api/RunInspection = ...): io.github.artemidius.blowhard.core.api/RunInspectionResult.Found // io.github.artemidius.blowhard.core.api/RunInspectionResult.Found.copy|copy(io.github.artemidius.blowhard.core.api.RunInspection){}[0]
+        final fun equals(kotlin/Any?): kotlin/Boolean // io.github.artemidius.blowhard.core.api/RunInspectionResult.Found.equals|equals(kotlin.Any?){}[0]
+        final fun hashCode(): kotlin/Int // io.github.artemidius.blowhard.core.api/RunInspectionResult.Found.hashCode|hashCode(){}[0]
+        final fun toString(): kotlin/String // io.github.artemidius.blowhard.core.api/RunInspectionResult.Found.toString|toString(){}[0]
+    }
+
+    final object NotFound : io.github.artemidius.blowhard.core.api/RunInspectionResult { // io.github.artemidius.blowhard.core.api/RunInspectionResult.NotFound|null[0]
+        final fun equals(kotlin/Any?): kotlin/Boolean // io.github.artemidius.blowhard.core.api/RunInspectionResult.NotFound.equals|equals(kotlin.Any?){}[0]
+        final fun hashCode(): kotlin/Int // io.github.artemidius.blowhard.core.api/RunInspectionResult.NotFound.hashCode|hashCode(){}[0]
+        final fun toString(): kotlin/String // io.github.artemidius.blowhard.core.api/RunInspectionResult.NotFound.toString|toString(){}[0]
     }
 }
 
@@ -474,6 +567,39 @@ final class io.github.artemidius.blowhard.core.api/RunFailure { // io.github.art
     final fun toString(): kotlin/String // io.github.artemidius.blowhard.core.api/RunFailure.toString|toString(){}[0]
 }
 
+final class io.github.artemidius.blowhard.core.api/RunInspection { // io.github.artemidius.blowhard.core.api/RunInspection|null[0]
+    constructor <init>(io.github.artemidius.blowhard.core.api/RunId, io.github.artemidius.blowhard.core.api/ConversationId, io.github.artemidius.blowhard.core.api/GenerationTarget, io.github.artemidius.blowhard.core.api/GenerationParameters, kotlin.collections/List<io.github.artemidius.blowhard.core.api/RunInspectionEvent>, io.github.artemidius.blowhard.core.api/TokenUsage? = ...) // io.github.artemidius.blowhard.core.api/RunInspection.<init>|<init>(io.github.artemidius.blowhard.core.api.RunId;io.github.artemidius.blowhard.core.api.ConversationId;io.github.artemidius.blowhard.core.api.GenerationTarget;io.github.artemidius.blowhard.core.api.GenerationParameters;kotlin.collections.List<io.github.artemidius.blowhard.core.api.RunInspectionEvent>;io.github.artemidius.blowhard.core.api.TokenUsage?){}[0]
+
+    final val conversationId // io.github.artemidius.blowhard.core.api/RunInspection.conversationId|{}conversationId[0]
+        final fun <get-conversationId>(): io.github.artemidius.blowhard.core.api/ConversationId // io.github.artemidius.blowhard.core.api/RunInspection.conversationId.<get-conversationId>|<get-conversationId>(){}[0]
+    final val events // io.github.artemidius.blowhard.core.api/RunInspection.events|{}events[0]
+        final fun <get-events>(): kotlin.collections/List<io.github.artemidius.blowhard.core.api/RunInspectionEvent> // io.github.artemidius.blowhard.core.api/RunInspection.events.<get-events>|<get-events>(){}[0]
+    final val parameters // io.github.artemidius.blowhard.core.api/RunInspection.parameters|{}parameters[0]
+        final fun <get-parameters>(): io.github.artemidius.blowhard.core.api/GenerationParameters // io.github.artemidius.blowhard.core.api/RunInspection.parameters.<get-parameters>|<get-parameters>(){}[0]
+    final val runId // io.github.artemidius.blowhard.core.api/RunInspection.runId|{}runId[0]
+        final fun <get-runId>(): io.github.artemidius.blowhard.core.api/RunId // io.github.artemidius.blowhard.core.api/RunInspection.runId.<get-runId>|<get-runId>(){}[0]
+    final val target // io.github.artemidius.blowhard.core.api/RunInspection.target|{}target[0]
+        final fun <get-target>(): io.github.artemidius.blowhard.core.api/GenerationTarget // io.github.artemidius.blowhard.core.api/RunInspection.target.<get-target>|<get-target>(){}[0]
+    final val usage // io.github.artemidius.blowhard.core.api/RunInspection.usage|{}usage[0]
+        final fun <get-usage>(): io.github.artemidius.blowhard.core.api/TokenUsage? // io.github.artemidius.blowhard.core.api/RunInspection.usage.<get-usage>|<get-usage>(){}[0]
+
+    final fun component1(): io.github.artemidius.blowhard.core.api/RunId // io.github.artemidius.blowhard.core.api/RunInspection.component1|component1(){}[0]
+    final fun component2(): io.github.artemidius.blowhard.core.api/ConversationId // io.github.artemidius.blowhard.core.api/RunInspection.component2|component2(){}[0]
+    final fun component3(): io.github.artemidius.blowhard.core.api/GenerationTarget // io.github.artemidius.blowhard.core.api/RunInspection.component3|component3(){}[0]
+    final fun component4(): io.github.artemidius.blowhard.core.api/GenerationParameters // io.github.artemidius.blowhard.core.api/RunInspection.component4|component4(){}[0]
+    final fun component5(): kotlin.collections/List<io.github.artemidius.blowhard.core.api/RunInspectionEvent> // io.github.artemidius.blowhard.core.api/RunInspection.component5|component5(){}[0]
+    final fun component6(): io.github.artemidius.blowhard.core.api/TokenUsage? // io.github.artemidius.blowhard.core.api/RunInspection.component6|component6(){}[0]
+    final fun copy(io.github.artemidius.blowhard.core.api/RunId = ..., io.github.artemidius.blowhard.core.api/ConversationId = ..., io.github.artemidius.blowhard.core.api/GenerationTarget = ..., io.github.artemidius.blowhard.core.api/GenerationParameters = ..., kotlin.collections/List<io.github.artemidius.blowhard.core.api/RunInspectionEvent> = ..., io.github.artemidius.blowhard.core.api/TokenUsage? = ...): io.github.artemidius.blowhard.core.api/RunInspection // io.github.artemidius.blowhard.core.api/RunInspection.copy|copy(io.github.artemidius.blowhard.core.api.RunId;io.github.artemidius.blowhard.core.api.ConversationId;io.github.artemidius.blowhard.core.api.GenerationTarget;io.github.artemidius.blowhard.core.api.GenerationParameters;kotlin.collections.List<io.github.artemidius.blowhard.core.api.RunInspectionEvent>;io.github.artemidius.blowhard.core.api.TokenUsage?){}[0]
+    final fun equals(kotlin/Any?): kotlin/Boolean // io.github.artemidius.blowhard.core.api/RunInspection.equals|equals(kotlin.Any?){}[0]
+    final fun hashCode(): kotlin/Int // io.github.artemidius.blowhard.core.api/RunInspection.hashCode|hashCode(){}[0]
+    final fun toString(): kotlin/String // io.github.artemidius.blowhard.core.api/RunInspection.toString|toString(){}[0]
+
+    final object Companion { // io.github.artemidius.blowhard.core.api/RunInspection.Companion|null[0]
+        final const val MAX_EVENTS // io.github.artemidius.blowhard.core.api/RunInspection.Companion.MAX_EVENTS|{}MAX_EVENTS[0]
+            final fun <get-MAX_EVENTS>(): kotlin/Int // io.github.artemidius.blowhard.core.api/RunInspection.Companion.MAX_EVENTS.<get-MAX_EVENTS>|<get-MAX_EVENTS>(){}[0]
+    }
+}
+
 final class io.github.artemidius.blowhard.core.api/SelectableModel { // io.github.artemidius.blowhard.core.api/SelectableModel|null[0]
     constructor <init>(kotlin/String, kotlin/Long?) // io.github.artemidius.blowhard.core.api/SelectableModel.<init>|<init>(kotlin.String;kotlin.Long?){}[0]
 
@@ -504,6 +630,25 @@ final class io.github.artemidius.blowhard.core.api/StartRunRequest { // io.githu
     final fun equals(kotlin/Any?): kotlin/Boolean // io.github.artemidius.blowhard.core.api/StartRunRequest.equals|equals(kotlin.Any?){}[0]
     final fun hashCode(): kotlin/Int // io.github.artemidius.blowhard.core.api/StartRunRequest.hashCode|hashCode(){}[0]
     final fun toString(): kotlin/String // io.github.artemidius.blowhard.core.api/StartRunRequest.toString|toString(){}[0]
+}
+
+final class io.github.artemidius.blowhard.core.api/TokenUsage { // io.github.artemidius.blowhard.core.api/TokenUsage|null[0]
+    constructor <init>(kotlin/Long? = ..., kotlin/Long? = ..., kotlin/Long? = ...) // io.github.artemidius.blowhard.core.api/TokenUsage.<init>|<init>(kotlin.Long?;kotlin.Long?;kotlin.Long?){}[0]
+
+    final val inputTokens // io.github.artemidius.blowhard.core.api/TokenUsage.inputTokens|{}inputTokens[0]
+        final fun <get-inputTokens>(): kotlin/Long? // io.github.artemidius.blowhard.core.api/TokenUsage.inputTokens.<get-inputTokens>|<get-inputTokens>(){}[0]
+    final val outputTokens // io.github.artemidius.blowhard.core.api/TokenUsage.outputTokens|{}outputTokens[0]
+        final fun <get-outputTokens>(): kotlin/Long? // io.github.artemidius.blowhard.core.api/TokenUsage.outputTokens.<get-outputTokens>|<get-outputTokens>(){}[0]
+    final val totalTokens // io.github.artemidius.blowhard.core.api/TokenUsage.totalTokens|{}totalTokens[0]
+        final fun <get-totalTokens>(): kotlin/Long? // io.github.artemidius.blowhard.core.api/TokenUsage.totalTokens.<get-totalTokens>|<get-totalTokens>(){}[0]
+
+    final fun component1(): kotlin/Long? // io.github.artemidius.blowhard.core.api/TokenUsage.component1|component1(){}[0]
+    final fun component2(): kotlin/Long? // io.github.artemidius.blowhard.core.api/TokenUsage.component2|component2(){}[0]
+    final fun component3(): kotlin/Long? // io.github.artemidius.blowhard.core.api/TokenUsage.component3|component3(){}[0]
+    final fun copy(kotlin/Long? = ..., kotlin/Long? = ..., kotlin/Long? = ...): io.github.artemidius.blowhard.core.api/TokenUsage // io.github.artemidius.blowhard.core.api/TokenUsage.copy|copy(kotlin.Long?;kotlin.Long?;kotlin.Long?){}[0]
+    final fun equals(kotlin/Any?): kotlin/Boolean // io.github.artemidius.blowhard.core.api/TokenUsage.equals|equals(kotlin.Any?){}[0]
+    final fun hashCode(): kotlin/Int // io.github.artemidius.blowhard.core.api/TokenUsage.hashCode|hashCode(){}[0]
+    final fun toString(): kotlin/String // io.github.artemidius.blowhard.core.api/TokenUsage.toString|toString(){}[0]
 }
 
 final value class io.github.artemidius.blowhard.core.api/ConversationId { // io.github.artemidius.blowhard.core.api/ConversationId|null[0]

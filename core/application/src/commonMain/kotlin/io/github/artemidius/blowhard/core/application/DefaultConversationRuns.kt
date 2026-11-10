@@ -11,6 +11,8 @@ import io.github.artemidius.blowhard.core.api.GenerationParameters
 import io.github.artemidius.blowhard.core.api.GenerationTarget
 import io.github.artemidius.blowhard.core.api.ObserveRunResult
 import io.github.artemidius.blowhard.core.api.RunId
+import io.github.artemidius.blowhard.core.api.RunInspectionResult
+import io.github.artemidius.blowhard.core.api.RunInspector
 import io.github.artemidius.blowhard.core.api.RunSnapshot
 import io.github.artemidius.blowhard.core.api.StartRunRejection
 import io.github.artemidius.blowhard.core.api.StartRunRequest
@@ -52,7 +54,8 @@ public class DefaultConversationRuns(
     conversationStore: ConversationStore? = null,
     checkpointPolicy: RunCheckpointPolicy = RunCheckpointPolicy(),
 ) : ConversationRuns,
-    ConversationLibrary {
+    ConversationLibrary,
+    RunInspector {
     private val validator = StartRunRequestValidator()
     private val repository = InMemoryRunRepository(clock)
     private val permits = Semaphore(policy.maxConcurrentRuns)
@@ -136,6 +139,10 @@ public class DefaultConversationRuns(
     override suspend fun delete(conversationId: ConversationId): ConversationDeletionResult =
         deletion.delete(conversationId)
 
+    override suspend fun inspect(runId: RunId): RunInspectionResult = repository.find(runId)?.let {
+        RunInspectionResult.Found(it.inspection.value)
+    } ?: RunInspectionResult.NotFound
+
     /** Cancels owned work, records terminal cancellation, and rejects future starts. */
     public suspend fun close() {
         val activeRecords = repository.close()
@@ -149,7 +156,7 @@ public class DefaultConversationRuns(
     private suspend fun execute(record: RunRecord) {
         try {
             permits.withPermit {
-                if (!repository.markRunning(record)) return@withPermit
+                if (!repository.update(record, ActiveRunUpdate.Started)) return@withPermit
                 durableRuns.checkpoint(record, record.snapshots.value)
                 collectGeneration(record)
             }
@@ -173,8 +180,10 @@ public class DefaultConversationRuns(
         )
         generation.generate(request).takeWhile { event ->
             when (event) {
-                is GenerationEvent.TextDelta -> repository.append(record, event.text)
+                is GenerationEvent.TextDelta -> repository.update(record, ActiveRunUpdate.TextDelta(event.text))
                     .also { updated -> if (updated) durableRuns.checkpoint(record, record.snapshots.value) }
+
+                is GenerationEvent.Usage -> repository.update(record, ActiveRunUpdate.Usage(event.value))
 
                 GenerationEvent.Completed -> {
                     durableRuns.finish(record, RunTerminal.Succeeded)
