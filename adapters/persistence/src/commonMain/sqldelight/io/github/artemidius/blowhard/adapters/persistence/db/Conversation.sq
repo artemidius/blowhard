@@ -1,0 +1,32 @@
+CREATE TABLE conversation (
+    id TEXT NOT NULL PRIMARY KEY,
+    title TEXT NOT NULL CHECK(length(trim(title)) > 0 AND length(title) <= 200),
+    created_at_epoch_ms INTEGER NOT NULL CHECK(created_at_epoch_ms >= 0),
+    updated_at_epoch_ms INTEGER NOT NULL CHECK(updated_at_epoch_ms >= created_at_epoch_ms)
+);
+
+CREATE INDEX conversation_by_recent_update
+ON conversation(updated_at_epoch_ms DESC, id ASC);
+
+insertConversation:
+INSERT OR IGNORE INTO conversation(id, title, created_at_epoch_ms, updated_at_epoch_ms)
+VALUES (?, ?, ?, ?);
+
+updateConversation:
+UPDATE conversation
+SET title = ?, updated_at_epoch_ms = ?
+WHERE id = ?;
+
+findConversation:
+SELECT *
+FROM conversation
+WHERE id = ?;
+
+listConversations:
+SELECT *
+FROM conversation
+ORDER BY updated_at_epoch_ms DESC, id ASC;
+
+deleteConversation:
+DELETE FROM conversation
+WHERE id = ?;

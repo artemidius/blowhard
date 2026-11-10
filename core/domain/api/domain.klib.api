@@ -109,6 +109,14 @@ abstract fun interface io.github.artemidius.blowhard.core.domain/TextGenerationP
     abstract fun generate(io.github.artemidius.blowhard.core.domain/GenerationRequest): kotlinx.coroutines.flow/Flow<io.github.artemidius.blowhard.core.domain/GenerationEvent> // io.github.artemidius.blowhard.core.domain/TextGenerationPort.generate|generate(io.github.artemidius.blowhard.core.domain.GenerationRequest){}[0]
 }
 
+abstract interface io.github.artemidius.blowhard.core.domain/ConversationStore { // io.github.artemidius.blowhard.core.domain/ConversationStore|null[0]
+    abstract suspend fun close() // io.github.artemidius.blowhard.core.domain/ConversationStore.close|close(){}[0]
+    abstract suspend fun delete(io.github.artemidius.blowhard.core.api/ConversationId): kotlin/Boolean // io.github.artemidius.blowhard.core.domain/ConversationStore.delete|delete(io.github.artemidius.blowhard.core.api.ConversationId){}[0]
+    abstract suspend fun find(io.github.artemidius.blowhard.core.api/ConversationId): io.github.artemidius.blowhard.core.domain/StoredConversation? // io.github.artemidius.blowhard.core.domain/ConversationStore.find|find(io.github.artemidius.blowhard.core.api.ConversationId){}[0]
+    abstract suspend fun list(): kotlin.collections/List<io.github.artemidius.blowhard.core.domain/StoredConversation> // io.github.artemidius.blowhard.core.domain/ConversationStore.list|list(){}[0]
+    abstract suspend fun save(io.github.artemidius.blowhard.core.domain/StoredConversation) // io.github.artemidius.blowhard.core.domain/ConversationStore.save|save(io.github.artemidius.blowhard.core.domain.StoredConversation){}[0]
+}
+
 abstract interface io.github.artemidius.blowhard.core.domain/CredentialStore { // io.github.artemidius.blowhard.core.domain/CredentialStore|null[0]
     abstract suspend fun delete(): io.github.artemidius.blowhard.core.domain/CredentialMutationResult // io.github.artemidius.blowhard.core.domain/CredentialStore.delete|delete(){}[0]
     abstract suspend fun read(): io.github.artemidius.blowhard.core.domain/CredentialReadResult // io.github.artemidius.blowhard.core.domain/CredentialStore.read|read(){}[0]
@@ -376,6 +384,33 @@ final class io.github.artemidius.blowhard.core.domain/ModelCatalogFailure { // i
     final fun equals(kotlin/Any?): kotlin/Boolean // io.github.artemidius.blowhard.core.domain/ModelCatalogFailure.equals|equals(kotlin.Any?){}[0]
     final fun hashCode(): kotlin/Int // io.github.artemidius.blowhard.core.domain/ModelCatalogFailure.hashCode|hashCode(){}[0]
     final fun toString(): kotlin/String // io.github.artemidius.blowhard.core.domain/ModelCatalogFailure.toString|toString(){}[0]
+}
+
+final class io.github.artemidius.blowhard.core.domain/StoredConversation { // io.github.artemidius.blowhard.core.domain/StoredConversation|null[0]
+    constructor <init>(io.github.artemidius.blowhard.core.api/ConversationId, kotlin/String, kotlin/Long, kotlin/Long) // io.github.artemidius.blowhard.core.domain/StoredConversation.<init>|<init>(io.github.artemidius.blowhard.core.api.ConversationId;kotlin.String;kotlin.Long;kotlin.Long){}[0]
+
+    final val createdAtEpochMilliseconds // io.github.artemidius.blowhard.core.domain/StoredConversation.createdAtEpochMilliseconds|{}createdAtEpochMilliseconds[0]
+        final fun <get-createdAtEpochMilliseconds>(): kotlin/Long // io.github.artemidius.blowhard.core.domain/StoredConversation.createdAtEpochMilliseconds.<get-createdAtEpochMilliseconds>|<get-createdAtEpochMilliseconds>(){}[0]
+    final val id // io.github.artemidius.blowhard.core.domain/StoredConversation.id|{}id[0]
+        final fun <get-id>(): io.github.artemidius.blowhard.core.api/ConversationId // io.github.artemidius.blowhard.core.domain/StoredConversation.id.<get-id>|<get-id>(){}[0]
+    final val title // io.github.artemidius.blowhard.core.domain/StoredConversation.title|{}title[0]
+        final fun <get-title>(): kotlin/String // io.github.artemidius.blowhard.core.domain/StoredConversation.title.<get-title>|<get-title>(){}[0]
+    final val updatedAtEpochMilliseconds // io.github.artemidius.blowhard.core.domain/StoredConversation.updatedAtEpochMilliseconds|{}updatedAtEpochMilliseconds[0]
+        final fun <get-updatedAtEpochMilliseconds>(): kotlin/Long // io.github.artemidius.blowhard.core.domain/StoredConversation.updatedAtEpochMilliseconds.<get-updatedAtEpochMilliseconds>|<get-updatedAtEpochMilliseconds>(){}[0]
+
+    final fun component1(): io.github.artemidius.blowhard.core.api/ConversationId // io.github.artemidius.blowhard.core.domain/StoredConversation.component1|component1(){}[0]
+    final fun component2(): kotlin/String // io.github.artemidius.blowhard.core.domain/StoredConversation.component2|component2(){}[0]
+    final fun component3(): kotlin/Long // io.github.artemidius.blowhard.core.domain/StoredConversation.component3|component3(){}[0]
+    final fun component4(): kotlin/Long // io.github.artemidius.blowhard.core.domain/StoredConversation.component4|component4(){}[0]
+    final fun copy(io.github.artemidius.blowhard.core.api/ConversationId = ..., kotlin/String = ..., kotlin/Long = ..., kotlin/Long = ...): io.github.artemidius.blowhard.core.domain/StoredConversation // io.github.artemidius.blowhard.core.domain/StoredConversation.copy|copy(io.github.artemidius.blowhard.core.api.ConversationId;kotlin.String;kotlin.Long;kotlin.Long){}[0]
+    final fun equals(kotlin/Any?): kotlin/Boolean // io.github.artemidius.blowhard.core.domain/StoredConversation.equals|equals(kotlin.Any?){}[0]
+    final fun hashCode(): kotlin/Int // io.github.artemidius.blowhard.core.domain/StoredConversation.hashCode|hashCode(){}[0]
+    final fun toString(): kotlin/String // io.github.artemidius.blowhard.core.domain/StoredConversation.toString|toString(){}[0]
+
+    final object Companion { // io.github.artemidius.blowhard.core.domain/StoredConversation.Companion|null[0]
+        final const val MAX_TITLE_LENGTH // io.github.artemidius.blowhard.core.domain/StoredConversation.Companion.MAX_TITLE_LENGTH|{}MAX_TITLE_LENGTH[0]
+            final fun <get-MAX_TITLE_LENGTH>(): kotlin/Int // io.github.artemidius.blowhard.core.domain/StoredConversation.Companion.MAX_TITLE_LENGTH.<get-MAX_TITLE_LENGTH>|<get-MAX_TITLE_LENGTH>(){}[0]
+    }
 }
 
 final value class io.github.artemidius.blowhard.core.domain/PromptText { // io.github.artemidius.blowhard.core.domain/PromptText|null[0]
