@@ -45,12 +45,36 @@ internal class InMemoryRunRepository(private val clock: RunClock) {
         }
     }
 
-    suspend fun markRunning(record: RunRecord): Boolean = updateActive(record) { current ->
-        RunSnapshot.Running(record.runId, record.conversationId, clock.now(), current.output())
-    }
+    suspend fun update(record: RunRecord, update: ActiveRunUpdate): Boolean = mutex.withLock {
+        val current = record.snapshots.value
+        if (current.isTerminal() || record.cancellationRequested) {
+            false
+        } else {
+            when (update) {
+                ActiveRunUpdate.Started -> {
+                    val timestamp = clock.now()
+                    record.snapshots.value = RunSnapshot.Running(
+                        record.runId,
+                        record.conversationId,
+                        timestamp,
+                        current.output(),
+                    )
+                    record.inspection.value = record.inspection.value.started(timestamp)
+                }
 
-    suspend fun append(record: RunRecord, text: String): Boolean = updateActive(record) { current ->
-        RunSnapshot.Running(record.runId, record.conversationId, clock.now(), current.output() + text)
+                is ActiveRunUpdate.TextDelta -> record.snapshots.value = RunSnapshot.Running(
+                    record.runId,
+                    record.conversationId,
+                    clock.now(),
+                    current.output() + update.text,
+                )
+
+                is ActiveRunUpdate.Usage ->
+                    record.inspection.value =
+                        record.inspection.value.withUsage(update.value)
+            }
+            true
+        }
     }
 
     suspend fun finish(record: RunRecord, terminalSnapshot: RunSnapshot): Boolean = mutex.withLock {
@@ -65,6 +89,7 @@ internal class InMemoryRunRepository(private val clock: RunClock) {
         } else {
             activeConversations -= record.conversationId
             record.snapshots.value = terminalSnapshot
+            record.inspection.value = record.inspection.value.finished(terminalSnapshot)
             true
         }
     }
@@ -112,17 +137,14 @@ internal class InMemoryRunRepository(private val clock: RunClock) {
         closed = true
         runs.values.filterNot { it.snapshots.value.isTerminal() }.onEach { it.cancellationRequested = true }
     }
+}
 
-    private suspend fun updateActive(record: RunRecord, transform: (RunSnapshot) -> RunSnapshot): Boolean =
-        mutex.withLock {
-            val current = record.snapshots.value
-            if (current.isTerminal() || record.cancellationRequested) {
-                false
-            } else {
-                record.snapshots.value = transform(current)
-                true
-            }
-        }
+internal sealed interface ActiveRunUpdate {
+    data object Started : ActiveRunUpdate
+
+    data class TextDelta(val text: String) : ActiveRunUpdate
+
+    data class Usage(val value: io.github.artemidius.blowhard.core.api.TokenUsage) : ActiveRunUpdate
 }
 
 internal sealed interface RunTerminal {

@@ -127,6 +127,14 @@ without claiming success. Deletion affects Blowhard's local copy only: it does n
 credential or provider-side retention. See
 [`ADR 0022`](docs/decisions/0022-confirmed-local-conversation-deletion.md).
 
+The first run-inspection boundary now records a bounded, content-free operational timeline for
+each process-owned attempt. It allowlists routing, generation controls, lifecycle timing, terminal
+classification, retry guidance, and optional provider token counts while omitting prompts,
+responses, credentials, headers, and provider references by construction. Mistral streaming
+requests explicitly ask for usage, and missing counts remain unknown rather than zero. See
+[`ADR 0023`](docs/decisions/0023-bounded-content-free-run-inspection.md) and the
+[run-inspection guide](docs/architecture/run-inspection.md).
+
 ## Run the desktop application
 
 ```shell

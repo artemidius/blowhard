@@ -29,7 +29,8 @@ terminal-state rules while remaining cancellable by the application-owned run co
   content, text after a finish reason, oversized input, and a successful stream without a valid
   terminal marker.
 - Support plain string content and arrays composed only of text chunks. Usage information is
-  optional and does not enter the domain contract.
+  optional. [`ADR 0023`](0023-bounded-content-free-run-inspection.md) supersedes the original
+  exclusion from the domain contract with a typed, content-free usage event.
 - Coalesce small provider deltas before presentation. Bound prompt length, SSE line and event size,
   and total generated characters. Flush accepted text before reporting a non-cancellation failure.
 - Propagate coroutine cancellation without translating it to a failure event. Closing collection
@@ -55,4 +56,5 @@ boundary.
 
 The adapter is ready for a future live composition root but is not wired into the runnable demo.
 Credential persistence, conversation-history requests, tools, images, citations, non-text content,
-and automatic retry remain outside this decision.
+and automatic retry remain outside this decision. Bounded inspection and usage handling are defined
+separately by [`ADR 0023`](0023-bounded-content-free-run-inspection.md).

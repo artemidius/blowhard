@@ -1,5 +1,6 @@
 package io.github.artemidius.blowhard.adapters.mistral
 
+import io.github.artemidius.blowhard.core.api.TokenUsage
 import io.github.artemidius.blowhard.core.domain.GenerationEvent
 import io.github.artemidius.blowhard.core.domain.GenerationFailure
 import io.github.artemidius.blowhard.core.domain.GenerationFailureKind
@@ -104,6 +105,7 @@ public class MistralTextGenerationPort private constructor(
     ) {
         var sawChoice = false
         var finishObserved = false
+        var reportedUsage: TokenUsage? = null
         val result = channel.readMistralSse { data ->
             val chunk = try {
                 STREAM_JSON.decodeFromString<MistralChatChunkDto>(data).toParsedChunk()
@@ -113,13 +115,19 @@ public class MistralTextGenerationPort private constructor(
             if (finishObserved && chunk.text.isNotEmpty()) throw InvalidMistralStreamException()
             sawChoice = sawChoice || chunk.hasChoice
             finishObserved = finishObserved || chunk.finished
+            reportedUsage = reportedUsage.merge(chunk.usage)
             batcher.add(chunk.text)
             true
         }
         batcher.flush()
         when {
-            result == SseReadResult.DONE && sawChoice -> send(GenerationEvent.Completed)
+            result == SseReadResult.DONE && sawChoice -> {
+                reportedUsage?.let { send(GenerationEvent.Usage(it)) }
+                send(GenerationEvent.Completed)
+            }
+
             result == SseReadResult.DONE -> emitFailure(invalidResponseFailure())
+
             else -> emitFailure(unavailableFailure())
         }
     }
@@ -128,6 +136,7 @@ public class MistralTextGenerationPort private constructor(
         model = configuration.modelId,
         messages = listOf(MistralChatMessageDto(role = "user", content = prompt.value)),
         stream = true,
+        streamOptions = MistralStreamOptionsDto(includeUsage = true),
         maxTokens = parameters.maxOutputTokens,
         temperature = parameters.temperature,
     )
@@ -147,6 +156,23 @@ public class MistralTextGenerationPort private constructor(
             client: HttpClient,
         ): MistralTextGenerationPort = MistralTextGenerationPort(credentials, configuration, client)
     }
+}
+
+private fun TokenUsage?.merge(update: TokenUsage?): TokenUsage? = when {
+    this == null -> update
+
+    update == null -> this
+
+    else -> TokenUsage(
+        inputTokens = inputTokens.mergeCount(update.inputTokens),
+        outputTokens = outputTokens.mergeCount(update.outputTokens),
+        totalTokens = totalTokens.mergeCount(update.totalTokens),
+    )
+}
+
+private fun Long?.mergeCount(update: Long?): Long? {
+    if (this != null && update != null && this != update) throw InvalidMistralStreamException()
+    return update ?: this
 }
 
 private suspend fun SendChannel<GenerationEvent>.emitFailure(failure: GenerationFailure) {

@@ -3,6 +3,7 @@ package io.github.artemidius.blowhard.adapters.mistral
 import io.github.artemidius.blowhard.core.api.ConversationId
 import io.github.artemidius.blowhard.core.api.GenerationParameters
 import io.github.artemidius.blowhard.core.api.RunId
+import io.github.artemidius.blowhard.core.api.TokenUsage
 import io.github.artemidius.blowhard.core.domain.GenerationEvent
 import io.github.artemidius.blowhard.core.domain.GenerationFailureKind
 import io.github.artemidius.blowhard.core.domain.GenerationRequest
@@ -61,6 +62,9 @@ class MistralTextGenerationPortTest {
             val json = Json.parseToJsonElement(sent.body.toByteArray().decodeToString()).jsonObject
             assertEquals("mistral-small-latest", json.getValue("model").jsonPrimitive.content)
             assertTrue(json.getValue("stream").jsonPrimitive.boolean)
+            assertTrue(
+                json.getValue("stream_options").jsonObject.getValue("include_usage").jsonPrimitive.boolean,
+            )
             assertEquals(64, json.getValue("max_tokens").jsonPrimitive.int)
             assertEquals(0.2, json.getValue("temperature").jsonPrimitive.double)
             val message = json.getValue("messages").jsonArray.single().jsonObject
@@ -89,18 +93,47 @@ class MistralTextGenerationPortTest {
     }
 
     @Test
-    fun `text arrays usage-only events and missing usage are accepted`() = runTest {
+    fun `text arrays and compatible partial usage frames are accepted`() = runTest {
         val body = sse(
             chatChunk(content = "[{\"type\":\"text\",\"text\":\"Hello \"}]"),
-            "{\"choices\":[],\"usage\":{\"completion_tokens\":2}}",
+            "{\"choices\":[],\"usage\":{\"prompt_tokens\":3}}",
+            "{\"choices\":[],\"usage\":{\"prompt_tokens\":3}}",
+            "{\"choices\":[],\"usage\":{\"completion_tokens\":2,\"total_tokens\":5}}",
             chatChunk(content = "\"world\"", finishReason = "stop"),
             "[DONE]",
         )
         val fixture = generationResponding(body)
         try {
             assertEquals(
-                listOf(GenerationEvent.TextDelta("Hello world"), GenerationEvent.Completed),
+                listOf(
+                    GenerationEvent.TextDelta("Hello world"),
+                    GenerationEvent.Usage(TokenUsage(inputTokens = 3, outputTokens = 2, totalTokens = 5)),
+                    GenerationEvent.Completed,
+                ),
                 fixture.port.generate(request()).toList(),
+            )
+        } finally {
+            fixture.port.close()
+        }
+    }
+
+    @Test
+    fun `conflicting usage frames invalidate a successful stream`() = runTest {
+        val fixture = generationResponding(
+            sse(
+                chatChunk(content = "\"partial\""),
+                "{\"choices\":[],\"usage\":{\"completion_tokens\":2}}",
+                "{\"choices\":[],\"usage\":{\"completion_tokens\":3}}",
+                "[DONE]",
+            ),
+        )
+        try {
+            val events = fixture.port.generate(request()).toList()
+
+            assertEquals("partial", assertIs<GenerationEvent.TextDelta>(events.first()).text)
+            assertEquals(
+                GenerationFailureKind.INVALID_RESPONSE,
+                assertIs<GenerationEvent.Failed>(events.last()).failure.kind,
             )
         } finally {
             fixture.port.close()
