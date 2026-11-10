@@ -56,3 +56,8 @@ python3 tools/packaging/release_evidence.py verify . \
 Linux uses `linux`/`amd64`; Windows uses `windows`/`x64`. Evidence is generated under the ignored
 `apps/desktop/build/release-evidence` directory and is uploaded by CI with the corresponding native
 package.
+
+The [protected release process](release-process.md) re-verifies this evidence after artifacts from
+all three operating systems are merged. It rejects a missing target, changed package, stale source
+revision, checksum mismatch, unsafe license archive, or unexpected release file before draft
+creation receives repository write permission.
