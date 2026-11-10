@@ -89,6 +89,11 @@ User-initiated regeneration appends a distinct attempt while preserving the prio
 provenance. It never replays automatically and follows conservative retry advice. See
 [`ADR 0015`](docs/decisions/0015-explicit-regeneration-attempts.md).
 
+Provider-neutral maximum-output and temperature controls are validated and snapshotted when an
+attempt is accepted, then mapped to documented Mistral request fields. Model defaults remain
+explicitly selectable. See
+[`ADR 0016`](docs/decisions/0016-generation-parameter-snapshots.md).
+
 ## Run the desktop application
 
 ```shell
@@ -102,8 +107,9 @@ mode.
 
 On macOS, open **Settings** to configure a Keychain-backed credential, run a non-generative
 connection test, select a verified model, acknowledge external processing, and explicitly select
-**Live Mistral** for new attempts. The title, composer, conversation, and assistant response show
-the active source. Live failures never switch to the fixture.
+**Live Mistral** for new attempts. Generation controls offer bounded maximum-output and temperature
+presets for subsequently accepted attempts. The title, composer, conversation, and assistant
+response show the active source. Live failures never switch to the fixture.
 
 Use `Command+Enter` on macOS or `Ctrl+Enter` on Windows and Linux to send from the composer. Native
 menus expose New conversation, Send, Stop, Regenerate latest response, Copy latest response, and

@@ -1,6 +1,7 @@
 package io.github.artemidius.blowhard.core.domain
 
 import io.github.artemidius.blowhard.core.api.ConversationId
+import io.github.artemidius.blowhard.core.api.GenerationParameters
 import io.github.artemidius.blowhard.core.api.GenerationTarget
 import io.github.artemidius.blowhard.core.api.RunId
 import kotlinx.coroutines.flow.Flow
@@ -22,6 +23,7 @@ public data class GenerationRequest(
     public val conversationId: ConversationId,
     public val prompt: PromptText,
     public val target: GenerationTarget = GenerationTarget.Demo,
+    public val parameters: GenerationParameters = GenerationParameters(),
 )
 
 /** Provider-neutral event produced during generation. */

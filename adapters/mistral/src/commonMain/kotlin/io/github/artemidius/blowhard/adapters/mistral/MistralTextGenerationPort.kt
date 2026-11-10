@@ -128,7 +128,8 @@ public class MistralTextGenerationPort private constructor(
         model = configuration.modelId,
         messages = listOf(MistralChatMessageDto(role = "user", content = prompt.value)),
         stream = true,
-        maxTokens = configuration.maxOutputTokens,
+        maxTokens = parameters.maxOutputTokens,
+        temperature = parameters.temperature,
     )
 
     /** Creates streaming adapters with the production HTTP policy. */

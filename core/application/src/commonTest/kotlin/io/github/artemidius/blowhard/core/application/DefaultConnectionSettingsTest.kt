@@ -6,6 +6,7 @@ import io.github.artemidius.blowhard.core.api.ConnectionTestResult
 import io.github.artemidius.blowhard.core.api.CredentialStatus
 import io.github.artemidius.blowhard.core.api.CredentialUpdateResult
 import io.github.artemidius.blowhard.core.api.GenerationMode
+import io.github.artemidius.blowhard.core.api.GenerationParameters
 import io.github.artemidius.blowhard.core.api.ModeSelectionResult
 import io.github.artemidius.blowhard.core.api.ModelSelectionResult
 import io.github.artemidius.blowhard.core.domain.AvailableModel
@@ -207,6 +208,18 @@ class DefaultConnectionSettingsTest {
 
         assertEquals(ModelSelectionResult.NOT_AVAILABLE, settings.selectModel("invented"))
         assertEquals("chat-model", settings.state.value.selectedModelId)
+    }
+
+    @Test
+    fun `generation parameters remain local and survive credential evidence reset`() = runTest {
+        val settings = settings()
+        val parameters = GenerationParameters(maxOutputTokens = 4_096, temperature = 0.5)
+
+        settings.updateGenerationParameters(parameters)
+        settings.replaceCredential("replacement")
+
+        assertEquals(parameters, settings.state.value.generationParameters)
+        assertEquals(ConnectionStatus.NOT_TESTED, settings.state.value.connectionStatus)
     }
 
     @Test
