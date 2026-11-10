@@ -12,6 +12,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import io.github.artemidius.blowhard.core.api.ConnectionSettingsState
+import io.github.artemidius.blowhard.core.api.RunId
 import io.github.artemidius.blowhard.ui.presentation.ConversationAction
 import io.github.artemidius.blowhard.ui.presentation.ConversationUiState
 
@@ -21,6 +22,7 @@ internal fun ConversationScreen(
     connection: ConnectionSettingsState,
     onAction: (ConversationAction) -> Unit,
     onOpenSettings: () -> Unit,
+    onInspectRun: (RunId) -> Unit,
 ) {
     BoxWithConstraints(
         modifier = Modifier.fillMaxSize().background(MaterialTheme.colorScheme.background),
@@ -34,10 +36,10 @@ internal fun ConversationScreen(
                     onOpenSettings = onOpenSettings,
                     modifier = Modifier.width(SIDEBAR_WIDTH),
                 )
-                ConversationPane(state, connection, onAction, onOpenSettings, compact = false)
+                ConversationPane(state, connection, onAction, onOpenSettings, onInspectRun, compact = false)
             }
         } else {
-            ConversationPane(state, connection, onAction, onOpenSettings, compact = true)
+            ConversationPane(state, connection, onAction, onOpenSettings, onInspectRun, compact = true)
         }
     }
     state.pendingDeletionConversation?.let { conversation ->

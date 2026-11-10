@@ -26,6 +26,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import io.github.artemidius.blowhard.core.api.GenerationTarget
+import io.github.artemidius.blowhard.core.api.RunId
 import io.github.artemidius.blowhard.ui.presentation.ChatMessageUi
 import io.github.artemidius.blowhard.ui.presentation.ChatRole
 import io.github.artemidius.blowhard.ui.presentation.ConversationAction
@@ -36,6 +37,7 @@ internal fun MessageList(
     messages: List<ChatMessageUi>,
     regenerationEnabled: Boolean,
     onAction: (ConversationAction) -> Unit,
+    onInspectRun: (RunId) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     if (messages.isEmpty()) {
@@ -54,7 +56,7 @@ internal fun MessageList(
         contentPadding = androidx.compose.foundation.layout.PaddingValues(vertical = 24.dp),
     ) {
         items(messages, key = { it.id }) { message ->
-            MessageBubble(message, regenerationEnabled, onAction)
+            MessageBubble(message, regenerationEnabled, onAction, onInspectRun)
         }
     }
 }
@@ -64,6 +66,7 @@ private fun MessageBubble(
     message: ChatMessageUi,
     regenerationEnabled: Boolean,
     onAction: (ConversationAction) -> Unit,
+    onInspectRun: (RunId) -> Unit,
 ) {
     val isUser = message.role == ChatRole.USER
     Box(
@@ -88,7 +91,7 @@ private fun MessageBubble(
                 } else {
                     SafeMarkdownText(message.text)
                 }
-                MessageFooter(message, isUser, regenerationEnabled, onAction)
+                MessageFooter(message, isUser, regenerationEnabled, onAction, onInspectRun)
             }
         }
     }
@@ -100,6 +103,7 @@ private fun MessageFooter(
     isUser: Boolean,
     regenerationEnabled: Boolean,
     onAction: (ConversationAction) -> Unit,
+    onInspectRun: (RunId) -> Unit,
 ) {
     message.attemptId?.let { attemptId ->
         Text(
@@ -121,6 +125,13 @@ private fun MessageFooter(
     if (message.text.isNotBlank()) {
         TextButton(onClick = { onAction(ConversationAction.CopyMessage(message.id)) }) {
             Text("Copy ${if (isUser) "your message" else "response"}")
+        }
+    }
+    if (!isUser) {
+        message.attemptId?.let { runId ->
+            TextButton(onClick = { onInspectRun(runId) }) {
+                Text("Inspect run")
+            }
         }
     }
     if (!isUser && message.canRegenerate) {

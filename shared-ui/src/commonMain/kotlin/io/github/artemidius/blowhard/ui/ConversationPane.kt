@@ -22,6 +22,7 @@ import androidx.compose.ui.unit.dp
 import io.github.artemidius.blowhard.core.api.ConnectionSettingsState
 import io.github.artemidius.blowhard.core.api.GenerationMode
 import io.github.artemidius.blowhard.core.api.GenerationTarget
+import io.github.artemidius.blowhard.core.api.RunId
 import io.github.artemidius.blowhard.ui.presentation.ConversationAction
 import io.github.artemidius.blowhard.ui.presentation.ConversationUiState
 
@@ -31,6 +32,7 @@ internal fun ConversationPane(
     connection: ConnectionSettingsState,
     onAction: (ConversationAction) -> Unit,
     onOpenSettings: () -> Unit,
+    onInspectRun: (RunId) -> Unit,
     compact: Boolean,
 ) {
     Column(Modifier.fillMaxSize()) {
@@ -41,6 +43,7 @@ internal fun ConversationPane(
             messages = state.selectedConversation.messages,
             regenerationEnabled = !state.selectedConversation.runState.isActive,
             onAction = onAction,
+            onInspectRun = onInspectRun,
             modifier = Modifier.weight(1f).fillMaxWidth(),
         )
         state.notice?.let { notice ->
