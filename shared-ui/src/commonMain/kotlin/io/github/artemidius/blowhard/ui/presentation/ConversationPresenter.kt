@@ -2,6 +2,7 @@ package io.github.artemidius.blowhard.ui.presentation
 
 import io.github.artemidius.blowhard.core.api.CancelRunResult
 import io.github.artemidius.blowhard.core.api.ConversationId
+import io.github.artemidius.blowhard.core.api.ConversationLibrary
 import io.github.artemidius.blowhard.core.api.ConversationRuns
 import io.github.artemidius.blowhard.core.api.GenerationTarget
 import io.github.artemidius.blowhard.core.api.ObserveRunResult
@@ -31,6 +32,7 @@ import kotlin.coroutines.CoroutineContext
  */
 public class ConversationPresenter(
     private val runs: ConversationRuns,
+    private val library: ConversationLibrary,
     private val scenarioSelection: DemoScenarioSelection,
     clipboardWriter: ClipboardWriter,
     coroutineContext: CoroutineContext,
@@ -46,6 +48,7 @@ public class ConversationPresenter(
         prefix = "conversation",
         reserved = initialState.conversations.mapTo(mutableSetOf()) { it.id.value },
     )
+    private val conversationManagement = ConversationManagementPresenter(library, conversationIds)
     private val messageIds = PresentationIdSequence(
         prefix = "message",
         reserved = initialState.conversations.flatMapTo(mutableSetOf()) { conversation ->
@@ -81,6 +84,10 @@ public class ConversationPresenter(
     }
 
     private suspend fun handle(action: ConversationAction) {
+        if (action.isConversationManagement()) {
+            mutableState.value = conversationManagement.handle(mutableState.value, action)
+            return
+        }
         when (action) {
             is ConversationAction.ComposerChanged ->
                 mutableState.value =
@@ -96,8 +103,6 @@ public class ConversationPresenter(
                 mutableState.value =
                     mutableState.value.copy(scenario = action.scenario)
 
-            ConversationAction.NewConversation -> createConversation()
-
             ConversationAction.Send -> mutableState.value.sendAttempt()?.let { startAttempt(it) }
 
             ConversationAction.Stop -> stop()
@@ -110,6 +115,12 @@ public class ConversationPresenter(
             }
 
             ConversationAction.NoticeDismissed -> mutableState.value = mutableState.value.withSelectedNotice(null)
+
+            ConversationAction.NewConversation,
+            ConversationAction.DeleteConversationConfirmed,
+            ConversationAction.DeleteConversationDismissed,
+            is ConversationAction.DeleteConversationRequested,
+            -> error("Conversation management action was not routed")
         }
     }
 
@@ -195,15 +206,6 @@ public class ConversationPresenter(
         if (result == CancelRunResult.NOT_FOUND) failRun(conversationId, CANCEL_FAILURE_MESSAGE)
     }
 
-    private fun createConversation() {
-        val id = ConversationId(conversationIds.next())
-        mutableState.value = mutableState.value.copy(
-            conversations = mutableState.value.conversations + ConversationUiModel(id, "New conversation"),
-            selectedConversationId = id,
-            composer = "",
-        )
-    }
-
     private fun handleSnapshot(snapshot: RunSnapshot) {
         val active = activeRuns[snapshot.conversationId] ?: return
         if (active.runId != snapshot.runId) return
@@ -276,3 +278,13 @@ private fun StartRunRejection.safeMessage(): String = when (this) {
 private const val START_FAILURE_MESSAGE = "The run could not be started safely."
 private const val OBSERVE_FAILURE_MESSAGE = "The accepted run could not be observed."
 private const val CANCEL_FAILURE_MESSAGE = "The active run could not be stopped safely."
+
+private fun ConversationAction.isConversationManagement(): Boolean = when (this) {
+    ConversationAction.NewConversation,
+    ConversationAction.DeleteConversationConfirmed,
+    ConversationAction.DeleteConversationDismissed,
+    is ConversationAction.DeleteConversationRequested,
+    -> true
+
+    else -> false
+}

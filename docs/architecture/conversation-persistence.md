@@ -8,8 +8,11 @@ Presentation code has no database dependency.
 flowchart LR
     Desktop[Desktop startup session] --> Loader[core:application history loader]
     Runs[core:application run lifecycle] --> Checkpoints[bounded checkpoint coordinator]
+    UI[Shared presentation] --> Library[core:api ConversationLibrary]
+    Library --> Deletion[application deletion coordinator]
     Loader --> Port[core:domain ConversationStore]
     Checkpoints --> Port
+    Deletion --> Port
     SQLite[adapters:persistence] --> Port
     SQLite --> Schema[Versioned SQLDelight schema]
     Schema --> Desktop[JDBC SQLite]
@@ -84,6 +87,26 @@ write failure rejects the start before provider invocation. A later failure stop
 produces a safe `STORAGE_UNAVAILABLE` run failure; the last durable nonterminal state is marked
 interrupted during the next startup rather than replayed.
 
+## Retention and deletion
+
+Conversation history is retained locally until the user explicitly deletes it; Blowhard does not
+silently expire or prune conversations. `ConversationLibrary` exposes deletion through the same
+provider-neutral client API used by desktop and future mobile composition roots. The application
+reserves the conversation identity before calling storage, so a new attempt cannot race deletion.
+An active attempt must be stopped before deletion can begin.
+
+The shared UI requires a confirmation that names the affected conversation and explains the
+boundary. A confirmed operation removes conversation metadata, messages, and attempt snapshots in
+one SQLite transaction. A new, never-persisted workspace may return `NOT_FOUND`; the presenter can
+still remove that empty local item. `DELETED` and `NOT_FOUND` are the only outcomes that remove the
+conversation from presentation. A storage exception, unavailable store, active run, or closed
+lifecycle leaves it visible and produces content-safe feedback.
+
+Deleting the final conversation creates a fresh empty presentation workspace. It does not create
+a replacement database row until a run is accepted. Successful deletion also discards the
+application's retained run lookup entries for that conversation. The operation never invokes the
+generation provider and never reads, replaces, or deletes the API credential.
+
 ## Schema evolution
 
 The current schema is version 2. The committed version-1 SQLite baseline remains unchanged, and
@@ -104,8 +127,8 @@ transaction. This keeps the minimum Android target truthful without maintaining 
 The database is intended for app-owned local storage. It must never contain provider credentials;
 those remain in the platform credential vault. The database is not application-encrypted and does
 not protect content from the same OS user, local malware, backups, or a compromised operating
-system. Platform file permissions and full deletion behavior must be verified before persistent
-history is enabled in the application.
+system. Local deletion is not secure erasure: SQLite pages, filesystem snapshots, backups, or
+provider-side copies may retain data outside the live Blowhard database.
 
 The desktop database path follows platform application-configuration conventions:
 
@@ -117,9 +140,10 @@ The database is opened during desktop startup and closed exactly once during run
 
 ## Deliberate limitations
 
-- Full retention and user-facing deletion behavior are not wired to presentation actions.
 - Transcript checkpoints replace all owned rows; more granular write optimization is deferred
   until evidence shows it is needed.
-- No claim is made that closing SQLite securely erases previously stored bytes.
+- Deletion does not offer secure erase, backup removal, or provider-side deletion.
+- Automatic retention windows and bulk deletion are intentionally absent; history remains until an
+  individual conversation is explicitly deleted.
 
-These limits keep retention and deletion independently reviewable from runtime checkpoint policy.
+These limits keep platform data-lifecycle claims narrower than the verified local database behavior.

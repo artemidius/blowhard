@@ -10,10 +10,14 @@ public data class ConversationUiState(
     public val selectedConversationId: ConversationId,
     public val composer: String = "",
     public val scenario: DemoScenario = DemoScenario.SUCCESS,
+    public val pendingDeletionConversationId: ConversationId? = null,
 ) {
     init {
         require(conversations.any { it.id == selectedConversationId }) {
             "Selected conversation must exist"
+        }
+        require(pendingDeletionConversationId == null || conversations.any { it.id == pendingDeletionConversationId }) {
+            "Pending deletion conversation must exist"
         }
     }
 
@@ -32,6 +36,10 @@ public data class ConversationUiState(
     /** Feedback owned by the currently visible conversation. */
     public val notice: UiNotice?
         get() = selectedConversation.notice
+
+    /** Conversation awaiting explicit local-deletion confirmation, if any. */
+    public val pendingDeletionConversation: ConversationUiModel?
+        get() = conversations.firstOrNull { it.id == pendingDeletionConversationId }
 }
 
 /** One conversation listed in the shared workspace. */

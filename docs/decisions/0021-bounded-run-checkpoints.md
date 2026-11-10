@@ -66,5 +66,7 @@ with a safe typed failure makes the loss of durability explicit.
 - Provider execution never begins before the queued attempt is durable when storage is connected.
 - One atomic database transaction keeps conversation metadata and transcript state consistent.
 - The same application policy is reusable by future Android, iOS, and headless composition roots.
-- A transcript checkpoint currently replaces all owned message and attempt rows; retention,
-  deletion UI, and more granular storage optimization remain separate increments.
+- A transcript checkpoint currently replaces all owned message and attempt rows; more granular
+  storage optimization remains a separate increment.
+- User-confirmed local deletion is defined separately by
+  [`ADR 0022`](0022-confirmed-local-conversation-deletion.md).
