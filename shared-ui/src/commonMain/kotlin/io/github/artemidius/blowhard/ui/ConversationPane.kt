@@ -23,9 +23,14 @@ import io.github.artemidius.blowhard.ui.presentation.ConversationAction
 import io.github.artemidius.blowhard.ui.presentation.ConversationUiState
 
 @Composable
-internal fun ConversationPane(state: ConversationUiState, onAction: (ConversationAction) -> Unit, compact: Boolean) {
+internal fun ConversationPane(
+    state: ConversationUiState,
+    onAction: (ConversationAction) -> Unit,
+    onOpenSettings: () -> Unit,
+    compact: Boolean,
+) {
     Column(Modifier.fillMaxSize()) {
-        if (compact) CompactConversationNavigation(state, onAction)
+        if (compact) CompactConversationNavigation(state, onAction, onOpenSettings)
         ConversationHeader(state)
         HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
         MessageList(
@@ -69,7 +74,11 @@ private fun ConversationHeader(state: ConversationUiState) {
 }
 
 @Composable
-private fun CompactConversationNavigation(state: ConversationUiState, onAction: (ConversationAction) -> Unit) {
+private fun CompactConversationNavigation(
+    state: ConversationUiState,
+    onAction: (ConversationAction) -> Unit,
+    onOpenSettings: () -> Unit,
+) {
     LazyRow(
         modifier = Modifier.fillMaxWidth().padding(horizontal = 12.dp, vertical = 8.dp),
         horizontalArrangement = Arrangement.spacedBy(4.dp),
@@ -78,6 +87,9 @@ private fun CompactConversationNavigation(state: ConversationUiState, onAction: 
             TextButton(onClick = { onAction(ConversationAction.NewConversation) }) {
                 Text("+ New")
             }
+        }
+        item {
+            TextButton(onClick = onOpenSettings) { Text("Settings") }
         }
         items(state.conversations, key = { it.id.value }) { conversation ->
             TextButton(onClick = { onAction(ConversationAction.ConversationSelected(conversation.id)) }) {

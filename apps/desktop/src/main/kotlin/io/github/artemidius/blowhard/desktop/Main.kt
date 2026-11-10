@@ -17,6 +17,10 @@ import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.WindowPlacement
 import androidx.compose.ui.window.application
 import androidx.compose.ui.window.rememberWindowState
+import io.github.artemidius.blowhard.adapters.mistral.MistralModelCatalog
+import io.github.artemidius.blowhard.adapters.mistral.asMistralCredentialProvider
+import io.github.artemidius.blowhard.adapters.platform.DesktopCredentialStores
+import io.github.artemidius.blowhard.core.application.DefaultConnectionSettings
 import io.github.artemidius.blowhard.ui.BlowhardApp
 
 private const val PACKAGING_SMOKE_TEST_ENVIRONMENT_VARIABLE = "BLOWHARD_PACKAGING_SMOKE_TEST"
@@ -49,7 +53,10 @@ private fun ApplicationScope.BlowhardDesktopApplication(bootstrap: DesktopBootst
     Window(onCloseRequest = shutdown, state = windowState, title = "Blowhard — Offline Demo") {
         window.minimumSize = java.awt.Dimension(MINIMUM_WINDOW_WIDTH, MINIMUM_WINDOW_HEIGHT)
         DesktopMenuBar(uiState, bootstrap.environment.platform, bootstrap.runtime.presenter::dispatch, shutdown)
-        BlowhardApp(bootstrap.runtime.presenter)
+        BlowhardApp(
+            conversationPresenter = bootstrap.runtime.presenter,
+            connectionSettingsPresenter = bootstrap.runtime.connectionSettingsPresenter,
+        )
         if (packagingSmokeTest) {
             LaunchedEffect(Unit) {
                 withFrameNanos { }
@@ -72,7 +79,10 @@ private fun createDesktopBootstrap(): DesktopBootstrap {
     val preferencesStore = WindowPreferencesStore(directories.configuration)
     val preferences = preferencesStore.load()
     val clipboard = AwtClipboardWriter(sessionAvailable = { environment.hasClipboardSession })
-    val runtime = DesktopDemoRuntime.create(clipboard)
+    val credentialStore = DesktopCredentialStores.mistralApiKey()
+    val modelCatalog = MistralModelCatalog.create(credentialStore.asMistralCredentialProvider())
+    val connectionSettings = DefaultConnectionSettings(credentialStore, modelCatalog)
+    val runtime = DesktopDemoRuntime.create(clipboard, connectionSettings, modelCatalog::close)
     return DesktopBootstrap(environment, preferencesStore, preferences, runtime)
 }
 

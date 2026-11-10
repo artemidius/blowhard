@@ -17,6 +17,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -38,6 +39,7 @@ import io.github.artemidius.blowhard.ui.presentation.ConversationUiState
 internal fun ConversationSidebar(
     state: ConversationUiState,
     onAction: (ConversationAction) -> Unit,
+    onOpenSettings: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Column(
@@ -63,6 +65,9 @@ internal fun ConversationSidebar(
                     onClick = { onAction(ConversationAction.ConversationSelected(conversation.id)) },
                 )
             }
+        }
+        OutlinedButton(onClick = onOpenSettings, modifier = Modifier.fillMaxWidth()) {
+            Text("Provider settings")
         }
         Text(
             "Offline fixture • no API key • no network",
