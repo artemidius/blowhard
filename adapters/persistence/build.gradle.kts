@@ -64,6 +64,10 @@ kotlin {
             implementation(kotlin("test"))
             implementation(libs.kotlinx.coroutines.test)
         }
+
+        named("desktopTest") {
+            resources.srcDir("src/commonMain/sqldelight/databases")
+        }
     }
 }
 
