@@ -22,6 +22,11 @@ Terminal snapshots are immutable. Completion stops collection immediately, so a 
 or future adapter cannot append a late chunk. Cancelling an observer has no effect on execution;
 clients use `ConversationRuns.cancel` explicitly.
 
+When a conversation store is connected, the application commits queued state before provider work,
+uses bounded running checkpoints, and commits the terminal snapshot before publishing it. A failed
+initial checkpoint rejects the start; a later failure stops collection with a safe storage error.
+See [`ADR 0021`](../decisions/0021-bounded-run-checkpoints.md).
+
 Regeneration does not reopen or recollect a terminal run. It is an explicit client action that
 submits the prior prompt through `start` and receives a fresh attempt ID. Both attempts remain
 independently observable, and the provider adapter still executes at most once for each accepted
@@ -51,5 +56,6 @@ val terminal = snapshots.first { it is RunSnapshot.Succeeded }
 runs.close()
 ```
 
-The repository retains snapshots only for the current application process. Durable history and
-restart recovery are separate, later increments.
+The in-memory run repository owns live observation. Supplying a `ConversationStore` additionally
+enables application-owned durable checkpoints and restart history without changing the
+client-facing observation contract.

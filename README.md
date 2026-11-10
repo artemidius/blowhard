@@ -114,9 +114,12 @@ replays provider work. Storage failures produce an explicit content-safe unavail
 than silently substituting a disposable database. See
 [`ADR 0019`](docs/decisions/0019-fail-closed-restart-recovery.md).
 
-New conversation activity is still process-local: checkpoint writes and retention actions remain
-the next persistence increment. See
-[`ADR 0020`](docs/decisions/0020-desktop-history-startup.md).
+New desktop attempts now extend the durable transcript through application-owned checkpoints.
+Queued state is committed before provider work, streaming writes are bounded by output growth or
+elapsed time, and terminal outcomes are committed before publication. Metadata and transcript move
+atomically, while storage failures stop safely without provider replay. See
+[`ADR 0020`](docs/decisions/0020-desktop-history-startup.md) and
+[`ADR 0021`](docs/decisions/0021-bounded-run-checkpoints.md).
 
 ## Run the desktop application
 

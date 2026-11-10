@@ -53,8 +53,8 @@ two.
 ### Persist every streamed token immediately
 
 Rejected because it creates excessive write amplification and still cannot guarantee that related
-message and attempt fields are checkpointed together. A later coordinator will choose bounded,
-useful checkpoint intervals and replace the aggregate atomically.
+message and attempt fields are checkpointed together. The bounded coordinator subsequently adopted
+in [`ADR 0021`](0021-bounded-run-checkpoints.md) replaces the aggregate atomically.
 
 ### Regenerate the version-1 schema fixture
 
@@ -66,7 +66,8 @@ The old fixture remains immutable and the numbered migration advances it.
 - Transcript invariants fail before database work begins.
 - Database constraints provide a second defensive layer against inconsistent state.
 - A complete transcript replacement is simple and atomic, but can write unchanged rows; checkpoint
-  scheduling must remain bounded.
+  scheduling is bounded by the application policy in
+  [`ADR 0021`](0021-bounded-run-checkpoints.md).
 - Correct deletion does not depend on platform-specific foreign-key initialization behavior.
 - The schema can represent interrupted attempts; recovery policy is separate from transcript
   replacement and automatic presentation loading.
