@@ -3,6 +3,7 @@ package io.github.artemidius.blowhard.ui.presentation
 import io.github.artemidius.blowhard.core.api.CancelRunResult
 import io.github.artemidius.blowhard.core.api.ConversationId
 import io.github.artemidius.blowhard.core.api.ConversationRuns
+import io.github.artemidius.blowhard.core.api.GenerationTarget
 import io.github.artemidius.blowhard.core.api.ObserveRunResult
 import io.github.artemidius.blowhard.core.api.RunFailure
 import io.github.artemidius.blowhard.core.api.RunFailureKind
@@ -55,9 +56,26 @@ class ConversationPresenterTest {
         assertEquals(1, fixture.runs.observeCalls)
         assertEquals(listOf(DemoScenario.SUCCESS), fixture.scenarios.map { it.second })
         assertEquals(listOf(ChatRole.USER, ChatRole.ASSISTANT), state.selectedConversation.messages.map { it.role })
+        assertEquals(GenerationTarget.Demo, state.selectedConversation.latestTarget)
         assertEquals("Explain the lifecycle", state.selectedConversation.title)
         assertFalse(state.canSend)
         assertTrue(state.canStop)
+        fixture.close()
+    }
+
+    @Test
+    fun `accepted live target labels the conversation and both messages`() = runTest {
+        val fixture = PresenterFixture(this)
+        fixture.runs.startTarget = GenerationTarget.Live("verified-model")
+
+        fixture.start("Use live routing")
+
+        val conversation = fixture.presenter.state.value.selectedConversation
+        assertEquals(GenerationTarget.Live("verified-model"), conversation.latestTarget)
+        assertEquals(
+            listOf(GenerationTarget.Live("verified-model"), GenerationTarget.Live("verified-model")),
+            conversation.messages.map { it.target },
+        )
         fixture.close()
     }
 
@@ -226,6 +244,8 @@ class ConversationPresenterTest {
         val expectedCopy = mapOf(
             StartRunRejection.BLANK_PROMPT to "Enter a message before starting generation.",
             StartRunRejection.CONVERSATION_BUSY to "This conversation already has an active run.",
+            StartRunRejection.LIVE_CONFIGURATION_NOT_READY to
+                "Live configuration is not ready. Reverify the credential and selected model.",
             StartRunRejection.LIFECYCLE_CLOSED to "The application is shutting down and cannot start another run.",
         )
         expectedCopy.forEach { (rejection, copy) ->
@@ -396,6 +416,7 @@ private class FakeConversationRuns : ConversationRuns {
     var observeThrows = false
     var cancelThrows = false
     var cancelResult: CancelRunResult? = null
+    var startTarget: GenerationTarget = GenerationTarget.Demo
     var observeCalls = 0
     private val snapshots = mutableMapOf<RunId, MutableStateFlow<RunSnapshot>>()
 
@@ -405,7 +426,7 @@ private class FakeConversationRuns : ConversationRuns {
         startResult?.let { return it }
         val runId = RunId("fake-run-${startRequests.size}")
         snapshots[runId] = MutableStateFlow(RunSnapshot.Queued(runId, request.conversationId, NOW))
-        return StartRunResult.Started(runId)
+        return StartRunResult.Started(runId, startTarget)
     }
 
     override suspend fun observe(runId: RunId): ObserveRunResult {

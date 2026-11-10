@@ -4,6 +4,8 @@ import io.github.artemidius.blowhard.core.api.ConnectionSettings
 import io.github.artemidius.blowhard.core.api.ConnectionTestFailureKind
 import io.github.artemidius.blowhard.core.api.ConnectionTestResult
 import io.github.artemidius.blowhard.core.api.CredentialUpdateResult
+import io.github.artemidius.blowhard.core.api.GenerationMode
+import io.github.artemidius.blowhard.core.api.ModeSelectionResult
 import io.github.artemidius.blowhard.core.api.ModelSelectionResult
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineScope
@@ -80,6 +82,8 @@ public class ConnectionSettingsPresenter(
 
             is ConnectionSettingsAction.ModelSelected -> selectModel(action.modelId)
 
+            is ConnectionSettingsAction.ModeSelected -> selectMode(action.mode)
+
             ConnectionSettingsAction.LiveDataDisclosureAccepted -> {
                 connectionSettings.acknowledgeLiveDataDisclosure()
                 notice.value = null
@@ -124,6 +128,21 @@ public class ConnectionSettingsPresenter(
         notice.value = when (connectionSettings.selectModel(modelId)) {
             ModelSelectionResult.UPDATED -> null
             ModelSelectionResult.NOT_AVAILABLE -> "That model is not in the latest verified catalog."
+        }
+    }
+
+    private suspend fun selectMode(mode: GenerationMode) {
+        notice.value = when (connectionSettings.selectMode(mode)) {
+            ModeSelectionResult.UPDATED -> when (mode) {
+                GenerationMode.DEMO -> "Offline demo mode selected for new attempts."
+                GenerationMode.LIVE -> "Live Mistral mode selected for new attempts."
+            }
+
+            ModeSelectionResult.LIVE_NOT_READY ->
+                "Verify a compatible model with the current credential before selecting live mode."
+
+            ModeSelectionResult.DISCLOSURE_REQUIRED ->
+                "Acknowledge external prompt processing before selecting live mode."
         }
     }
 }

@@ -1,6 +1,7 @@
 package io.github.artemidius.blowhard.ui.presentation
 
 import io.github.artemidius.blowhard.core.api.ConversationId
+import io.github.artemidius.blowhard.core.api.GenerationTarget
 
 internal fun initialConversationState(): ConversationUiState {
     val id = ConversationId("conversation-1")
@@ -24,19 +25,22 @@ internal fun ConversationUiState.beginRun(
     prompt: String,
     userMessageId: String,
     assistantMessageId: String,
+    target: GenerationTarget,
 ): ConversationUiState = updateConversation(conversationId) { conversation ->
     val title = if (conversation.messages.isEmpty()) prompt.toConversationTitle() else conversation.title
     conversation.copy(
         title = title,
         runState = ConversationRunState.QUEUED,
         notice = null,
+        latestTarget = target,
         messages = conversation.messages + listOf(
-            ChatMessageUi(userMessageId, ChatRole.USER, prompt),
+            ChatMessageUi(userMessageId, ChatRole.USER, prompt, target = target),
             ChatMessageUi(
                 id = assistantMessageId,
                 role = ChatRole.ASSISTANT,
                 text = "",
                 delivery = MessageDelivery.STREAMING,
+                target = target,
             ),
         ),
     )

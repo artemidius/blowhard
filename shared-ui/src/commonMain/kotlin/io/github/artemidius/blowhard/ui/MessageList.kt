@@ -24,6 +24,7 @@ import androidx.compose.ui.semantics.liveRegion
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import io.github.artemidius.blowhard.core.api.GenerationTarget
 import io.github.artemidius.blowhard.ui.presentation.ChatMessageUi
 import io.github.artemidius.blowhard.ui.presentation.ChatRole
 import io.github.artemidius.blowhard.ui.presentation.ConversationAction
@@ -69,7 +70,7 @@ private fun MessageBubble(message: ChatMessageUi, onAction: (ConversationAction)
         ) {
             Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
                 Text(
-                    if (isUser) "YOU" else "FIXTURE",
+                    if (isUser) "YOU" else message.target.providerLabel(),
                     style = MaterialTheme.typography.labelSmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                     fontWeight = FontWeight.Bold,
@@ -102,13 +103,18 @@ private fun MessageFooter(message: ChatMessageUi, isUser: Boolean, onAction: (Co
     }
 }
 
+private fun GenerationTarget?.providerLabel(): String = when (this) {
+    null, GenerationTarget.Demo -> "FIXTURE"
+    is GenerationTarget.Live -> "MISTRAL • $modelId"
+}
+
 @Composable
 private fun EmptyConversation(modifier: Modifier) {
     Box(modifier = modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
         Column(horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.spacedBy(8.dp)) {
-            Text("Offline conversation demo", style = MaterialTheme.typography.headlineSmall)
+            Text("Start a conversation", style = MaterialTheme.typography.headlineSmall)
             Text(
-                "Choose a scenario, send a message, and inspect the deterministic lifecycle.",
+                "Choose an explicit generation mode, send a message, and inspect the shared lifecycle.",
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
             )

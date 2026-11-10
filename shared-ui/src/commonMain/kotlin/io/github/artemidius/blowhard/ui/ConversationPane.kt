@@ -19,19 +19,23 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import io.github.artemidius.blowhard.core.api.ConnectionSettingsState
+import io.github.artemidius.blowhard.core.api.GenerationMode
+import io.github.artemidius.blowhard.core.api.GenerationTarget
 import io.github.artemidius.blowhard.ui.presentation.ConversationAction
 import io.github.artemidius.blowhard.ui.presentation.ConversationUiState
 
 @Composable
 internal fun ConversationPane(
     state: ConversationUiState,
+    connection: ConnectionSettingsState,
     onAction: (ConversationAction) -> Unit,
     onOpenSettings: () -> Unit,
     compact: Boolean,
 ) {
     Column(Modifier.fillMaxSize()) {
         if (compact) CompactConversationNavigation(state, onAction, onOpenSettings)
-        ConversationHeader(state)
+        ConversationHeader(state, connection)
         HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
         MessageList(
             messages = state.selectedConversation.messages,
@@ -45,12 +49,12 @@ internal fun ConversationPane(
                 modifier = Modifier.padding(horizontal = 24.dp),
             )
         }
-        ComposerPanel(state = state, onAction = onAction)
+        ComposerPanel(state = state, connection = connection, onAction = onAction)
     }
 }
 
 @Composable
-private fun ConversationHeader(state: ConversationUiState) {
+private fun ConversationHeader(state: ConversationUiState, connection: ConnectionSettingsState) {
     Row(
         modifier = Modifier.fillMaxWidth().padding(horizontal = 24.dp, vertical = 18.dp),
         horizontalArrangement = Arrangement.spacedBy(12.dp),
@@ -64,13 +68,24 @@ private fun ConversationHeader(state: ConversationUiState) {
                 overflow = TextOverflow.Ellipsis,
             )
             Text(
-                "Offline deterministic provider",
+                state.selectedConversation.latestTarget?.description()
+                    ?: connection.currentTargetDescription(),
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
             )
         }
-        DemoBadge()
+        ModeBadge(connection.mode)
     }
+}
+
+private fun GenerationTarget.description(): String = when (this) {
+    GenerationTarget.Demo -> "Offline deterministic provider"
+    is GenerationTarget.Live -> "Live Mistral • $modelId"
+}
+
+private fun ConnectionSettingsState.currentTargetDescription(): String = when (mode) {
+    GenerationMode.DEMO -> "Offline deterministic provider"
+    GenerationMode.LIVE -> selectedModelId?.let { "Live Mistral • $it" } ?: "Live configuration unavailable"
 }
 
 @Composable
