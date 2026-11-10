@@ -66,6 +66,12 @@ spotless {
     }
 }
 
+allprojects {
+    tasks.matching { it.name.startsWith("dokka") }.configureEach {
+        mustRunAfter(rootProject.tasks.named("spotlessCheck"))
+    }
+}
+
 detekt {
     buildUponDefaultConfig = true
     parallel = true
@@ -167,7 +173,13 @@ private val allowedProjectDependencies = mapOf(
     ":adapters:fixture" to setOf(":core:domain"),
     ":adapters:mistral" to setOf(":core:domain"),
     ":adapters:platform" to setOf(":core:domain"),
-    ":apps:desktop" to setOf(":adapters:fixture", ":core:application", ":shared-ui"),
+    ":apps:desktop" to setOf(
+        ":adapters:fixture",
+        ":adapters:mistral",
+        ":adapters:platform",
+        ":core:application",
+        ":shared-ui",
+    ),
     ":core:api" to emptySet(),
     ":core:application" to setOf(":core:api", ":core:domain"),
     ":core:domain" to setOf(":core:api"),
