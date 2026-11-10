@@ -5,8 +5,10 @@ package io.github.artemidius.blowhard.ui
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Button
@@ -14,10 +16,16 @@ import androidx.compose.material3.FilterChip
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
@@ -49,12 +57,12 @@ internal fun ComposerPanel(
         if (!state.selectedConversation.runState.isActive) composerFocus.requestFocus()
     }
     Column(
-        modifier = Modifier.fillMaxWidth().padding(24.dp),
+        modifier = Modifier.widthIn(max = 920.dp).fillMaxWidth().padding(horizontal = 24.dp, vertical = 16.dp),
         verticalArrangement = Arrangement.spacedBy(10.dp),
     ) {
-        if (connection.mode == GenerationMode.DEMO) ScenarioSelector(state = state, onAction = onAction)
         ComposerInput(state, connection, composerFocus, onAction)
         ComposerActions(state = state, onAction = onAction)
+        if (connection.mode == GenerationMode.DEMO) ScenarioSelector(state = state, onAction = onAction)
     }
 }
 
@@ -82,7 +90,13 @@ private fun ComposerInput(
                     false
                 }
             },
-        label = { Text("Message") },
+        shape = MaterialTheme.shapes.large,
+        colors = OutlinedTextFieldDefaults.colors(
+            focusedContainerColor = MaterialTheme.colorScheme.surfaceContainer,
+            unfocusedContainerColor = MaterialTheme.colorScheme.surfaceContainer,
+            focusedBorderColor = MaterialTheme.colorScheme.primary,
+            unfocusedBorderColor = MaterialTheme.colorScheme.outlineVariant,
+        ),
         placeholder = { Text(connection.composerPlaceholder()) },
         minLines = 2,
         maxLines = 6,
@@ -91,18 +105,22 @@ private fun ComposerInput(
 }
 
 private fun ConnectionSettingsState.composerPlaceholder(): String = if (mode == GenerationMode.DEMO) {
-    "Ask the offline fixture anything…"
+    "Try a message in the offline demo…"
 } else {
     "Send a prompt to ${selectedModelId ?: "the live provider"}…"
 }
 
 @Composable
 private fun ScenarioSelector(state: ConversationUiState, onAction: (ConversationAction) -> Unit) {
-    Text(
-        "DEMO SCENARIO",
-        style = MaterialTheme.typography.labelSmall,
-        color = MaterialTheme.colorScheme.onSurfaceVariant,
-    )
+    var expanded by remember { mutableStateOf(false) }
+    TextButton(onClick = { expanded = !expanded }) {
+        Text(
+            "Demo scenario · ${state.scenario.label}  ${if (expanded) "−" else "+"}",
+            style = MaterialTheme.typography.labelMedium,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+        )
+    }
+    if (!expanded) return
     LazyRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
         items(DemoScenario.entries) { scenario ->
             FilterChip(
@@ -121,20 +139,31 @@ private fun ScenarioSelector(state: ConversationUiState, onAction: (Conversation
 
 @Composable
 private fun ComposerActions(state: ConversationUiState, onAction: (ConversationAction) -> Unit) {
-    Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-        Button(onClick = { onAction(ConversationAction.Send) }, enabled = state.canSend) {
-            Text("Send")
-        }
-        OutlinedButton(onClick = { onAction(ConversationAction.Stop) }, enabled = state.canStop) {
-            Text("Stop")
-        }
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.spacedBy(8.dp),
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
         Text(
-            state.selectedConversation.runState.displayLabel(),
+            if (state.selectedConversation.runState.isActive) {
+                state.selectedConversation.runState.displayLabel()
+            } else {
+                "⌘ / Ctrl + Enter to send"
+            },
             modifier = Modifier
-                .padding(start = 8.dp, top = 12.dp)
                 .semantics { liveRegion = LiveRegionMode.Polite },
             style = MaterialTheme.typography.labelMedium,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
         )
+        Spacer(Modifier.weight(1f))
+        if (state.canStop) {
+            OutlinedButton(onClick = { onAction(ConversationAction.Stop) }) { Text("Stop") }
+        } else {
+            Button(onClick = {
+                onAction(ConversationAction.Send)
+            }, enabled = state.canSend, shape = MaterialTheme.shapes.medium) {
+                Text("Send ↑")
+            }
+        }
     }
 }

@@ -3,6 +3,7 @@
 package io.github.artemidius.blowhard.ui
 
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -20,6 +21,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.semantics.Role
@@ -47,15 +49,16 @@ internal fun ConversationSidebar(
     modifier: Modifier = Modifier,
 ) {
     Column(
-        modifier = modifier.fillMaxHeight().padding(20.dp),
+        modifier = modifier.fillMaxHeight().background(MaterialTheme.colorScheme.surface).padding(20.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp),
     ) {
-        BrandHeader(connection.mode)
+        BrandHeader()
         Button(
             onClick = { onAction(ConversationAction.NewConversation) },
             modifier = Modifier.fillMaxWidth(),
+            shape = MaterialTheme.shapes.medium,
         ) {
-            Text("New conversation")
+            Text("+  New conversation")
         }
         Text("CONVERSATIONS", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.outline)
         LazyColumn(
@@ -86,13 +89,21 @@ internal fun ConversationSidebar(
 }
 
 @Composable
-private fun BrandHeader(mode: GenerationMode) {
-    Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
+private fun BrandHeader() {
+    Row(
+        modifier = Modifier.padding(vertical = 14.dp),
+        horizontalArrangement = Arrangement.spacedBy(10.dp),
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        BlowhardMark()
         Column {
-            Text("BLOWHARD", style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Black)
-            Text("Mistral client laboratory", style = MaterialTheme.typography.bodySmall)
+            Text("blowhard", style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold)
+            Text(
+                "A space to think.",
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+            )
         }
-        ModeBadge(mode)
     }
 }
 
@@ -110,12 +121,12 @@ private fun ConversationItem(conversation: ConversationUiModel, selected: Boolea
             .clickable(onClick = onClick),
         colors = CardDefaults.cardColors(
             containerColor = if (selected) {
-                MaterialTheme.colorScheme.primaryContainer
+                MaterialTheme.colorScheme.surfaceVariant
             } else {
                 MaterialTheme.colorScheme.surface
             },
         ),
-        border = if (selected) BorderStroke(1.dp, MaterialTheme.colorScheme.primary) else null,
+        border = if (selected) BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant) else null,
     ) {
         Column(Modifier.padding(12.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
             Text(
