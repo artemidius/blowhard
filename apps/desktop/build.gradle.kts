@@ -82,7 +82,9 @@ compose.desktop {
             packageName = "Blowhard"
             packageVersion = providers.gradleProperty("blowhardInstallerVersion").get()
             description = "A desktop-first Kotlin Multiplatform client for Mistral AI"
+            copyright = "Copyright © 2026 Blowhard contributors"
             vendor = "Blowhard contributors"
+            licenseFile.set(rootProject.file("LICENSE"))
 
             linux {
                 packageName = "blowhard"
