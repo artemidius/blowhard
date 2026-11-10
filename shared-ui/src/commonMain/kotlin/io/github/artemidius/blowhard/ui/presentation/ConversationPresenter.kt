@@ -89,9 +89,12 @@ public class ConversationPresenter(
 
             ConversationAction.NewConversation -> createConversation()
 
-            ConversationAction.Send -> send()
+            ConversationAction.Send -> mutableState.value.sendAttempt()?.let { startAttempt(it) }
 
             ConversationAction.Stop -> stop()
+
+            is ConversationAction.Regenerate ->
+                mutableState.value.regenerationAttempt(action.messageId)?.let { startAttempt(it) }
 
             is ConversationAction.CopyMessage -> {
                 mutableState.value = messageClipboard.copy(mutableState.value, action.messageId)
@@ -101,16 +104,11 @@ public class ConversationPresenter(
         }
     }
 
-    private suspend fun send() {
-        val beforeStart = mutableState.value
-        if (!beforeStart.canSend) return
-        val conversationId = beforeStart.selectedConversationId
-        val prompt = beforeStart.composer.trim()
-        mutableState.value = beforeStart.updateConversation(conversationId) {
-            it.copy(runState = ConversationRunState.STARTING, notice = null)
-        }.copy(composer = "")
+    private suspend fun startAttempt(attempt: StartAttempt) {
+        val conversationId = attempt.beforeStart.selectedConversationId
+        mutableState.value = attempt.beforeStart.prepareRunStart(conversationId, attempt.clearComposer)
         val scenarioPrepared = try {
-            scenarioSelection.prepare(conversationId, beforeStart.scenario)
+            scenarioSelection.prepare(conversationId, attempt.beforeStart.scenario)
             true
         } catch (_: Throwable) {
             false
@@ -118,7 +116,7 @@ public class ConversationPresenter(
 
         val result = if (scenarioPrepared) {
             try {
-                runs.start(StartRunRequest(conversationId, prompt))
+                runs.start(StartRunRequest(conversationId, attempt.prompt))
             } catch (cancelled: CancellationException) {
                 throw cancelled
             } catch (_: Throwable) {
@@ -128,13 +126,14 @@ public class ConversationPresenter(
             null
         }
         if (result == null) {
-            mutableState.value = beforeStart.withSelectedNotice(UiNotice(START_FAILURE_MESSAGE))
+            mutableState.value = attempt.beforeStart.withSelectedNotice(UiNotice(START_FAILURE_MESSAGE))
         } else {
             when (result) {
-                is StartRunResult.Started -> observe(result.runId, conversationId, prompt, result.target)
+                is StartRunResult.Started -> observe(result.runId, conversationId, attempt.prompt, result.target)
 
                 is StartRunResult.Rejected -> {
-                    mutableState.value = beforeStart.withSelectedNotice(UiNotice(result.reason.safeMessage()))
+                    mutableState.value =
+                        attempt.beforeStart.withSelectedNotice(UiNotice(result.reason.safeMessage()))
                 }
             }
         }
@@ -151,6 +150,7 @@ public class ConversationPresenter(
         activeRuns[conversationId] = ActiveRun(runId, assistantMessageId)
         mutableState.value = mutableState.value.beginRun(
             conversationId = conversationId,
+            runId = runId,
             prompt = prompt,
             userMessageId = userMessageId,
             assistantMessageId = assistantMessageId,
@@ -230,6 +230,19 @@ public class ConversationPresenter(
 }
 
 private data class ActiveRun(val runId: RunId, val assistantMessageId: String)
+
+private data class StartAttempt(val beforeStart: ConversationUiState, val prompt: String, val clearComposer: Boolean)
+
+private fun ConversationUiState.sendAttempt(): StartAttempt? = if (canSend) {
+    StartAttempt(this, composer.trim(), clearComposer = true)
+} else {
+    null
+}
+
+private fun ConversationUiState.regenerationAttempt(messageId: String): StartAttempt? =
+    regenerationPrompt(messageId)?.let { prompt ->
+        StartAttempt(this, prompt, clearComposer = false)
+    }
 
 private sealed interface PresenterEvent {
     data class Action(val action: ConversationAction) : PresenterEvent

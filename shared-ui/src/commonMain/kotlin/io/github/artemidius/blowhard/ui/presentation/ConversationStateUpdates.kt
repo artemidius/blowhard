@@ -2,6 +2,7 @@ package io.github.artemidius.blowhard.ui.presentation
 
 import io.github.artemidius.blowhard.core.api.ConversationId
 import io.github.artemidius.blowhard.core.api.GenerationTarget
+import io.github.artemidius.blowhard.core.api.RunId
 
 internal fun initialConversationState(): ConversationUiState {
     val id = ConversationId("conversation-1")
@@ -20,8 +21,36 @@ internal fun ConversationUiState.updateConversation(
     },
 )
 
+internal fun ConversationUiState.prepareRunStart(
+    conversationId: ConversationId,
+    clearComposer: Boolean,
+): ConversationUiState = updateConversation(conversationId) {
+    it.copy(runState = ConversationRunState.STARTING, notice = null)
+}.let { state ->
+    if (clearComposer) state.copy(composer = "") else state
+}
+
+internal fun ConversationUiState.regenerationPrompt(messageId: String): String? {
+    val conversation = selectedConversation
+    return if (conversation.runState.isActive) {
+        null
+    } else {
+        conversation.messages.firstOrNull { message ->
+            message.id == messageId &&
+                message.role == ChatRole.ASSISTANT &&
+                message.canRegenerate &&
+                message.attemptId != null
+        }?.let { response ->
+            conversation.messages.firstOrNull { message ->
+                message.role == ChatRole.USER && message.attemptId == response.attemptId
+            }?.text
+        }
+    }
+}
+
 internal fun ConversationUiState.beginRun(
     conversationId: ConversationId,
+    runId: RunId,
     prompt: String,
     userMessageId: String,
     assistantMessageId: String,
@@ -34,17 +63,24 @@ internal fun ConversationUiState.beginRun(
         notice = null,
         latestTarget = target,
         messages = conversation.messages + listOf(
-            ChatMessageUi(userMessageId, ChatRole.USER, prompt, target = target),
+            ChatMessageUi(
+                id = userMessageId,
+                role = ChatRole.USER,
+                text = prompt,
+                target = target,
+                attemptId = runId,
+            ),
             ChatMessageUi(
                 id = assistantMessageId,
                 role = ChatRole.ASSISTANT,
                 text = "",
                 delivery = MessageDelivery.STREAMING,
                 target = target,
+                attemptId = runId,
             ),
         ),
     )
-}.copy(composer = "")
+}
 
 internal fun ConversationUiState.applySnapshot(
     conversationId: ConversationId,
@@ -56,7 +92,11 @@ internal fun ConversationUiState.applySnapshot(
         notice = snapshot.notice ?: conversation.notice,
         messages = conversation.messages.map { message ->
             if (message.id == assistantMessageId) {
-                message.copy(text = snapshot.output, delivery = snapshot.delivery)
+                message.copy(
+                    text = snapshot.output,
+                    delivery = snapshot.delivery,
+                    canRegenerate = snapshot.canRegenerate,
+                )
             } else {
                 message
             }
