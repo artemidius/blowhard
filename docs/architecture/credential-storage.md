@@ -4,7 +4,8 @@ The credential store is owned by the application boundary rather than the Mistra
 
 ```mermaid
 flowchart LR
-    Settings[Future settings workflow] -->|CredentialStore| Domain[core:domain]
+    Settings[DefaultConnectionSettings] -->|CredentialStore| Domain[core:domain]
+    UI[Shared settings presentation] --> Settings
     Provider[Mistral credential provider] -->|read just in time| Domain
     Factory[DesktopCredentialStores] --> Store[KeychainCredentialStore]
     Store --> Gateway[MacOsKeychainGateway]
@@ -21,6 +22,10 @@ key does not leave abandoned entries. Delete treats an absent item as success.
 
 Windows and Linux currently return `PLATFORM_UNAVAILABLE`. This is intentional fail-closed behavior:
 there is no plaintext preferences, database, environment, or file fallback.
+
+The desktop settings screen keeps typed credential text only in transient, non-saveable UI state.
+Submission clears the field and sends the value directly through `ConnectionSettings` to this
+store. Presenter state and notices never contain credential material.
 
 ## Verification
 

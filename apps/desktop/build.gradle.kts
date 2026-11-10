@@ -10,6 +10,8 @@ plugins {
 dependencies {
     implementation(compose.desktop.currentOs)
     implementation(project(":adapters:fixture"))
+    implementation(project(":adapters:mistral"))
+    implementation(project(":adapters:platform"))
     implementation(project(":core:application"))
     implementation(project(":shared-ui"))
     testImplementation(kotlin("test"))

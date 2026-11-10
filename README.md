@@ -75,6 +75,14 @@ mode can be selected. The policy is documented in
 [`ADR 0012`](docs/decisions/0012-explicit-live-provider-settings.md) and the
 [live-provider settings guide](docs/architecture/live-provider-settings.md).
 
+The shared settings presenter, transient credential-entry policy, and desktop adapter composition
+are documented in [`ADR 0013`](docs/decisions/0013-shared-provider-settings-presentation.md).
+
+The desktop client exposes that workflow through a shared settings screen and composes the macOS
+Keychain with the Mistral model catalog. Credential entry remains outside observable presentation
+state, while Windows and Linux continue to fail closed. See
+[`ADR 0013`](docs/decisions/0013-provider-settings-presentation.md).
+
 ## Run the desktop application
 
 ```shell
@@ -84,6 +92,10 @@ mode can be selected. The policy is documented in
 The runnable application is an explicitly labeled offline demo. Choose a bundled success, failure,
 rate-limit, or interrupted-stream scenario, enter any non-blank prompt, then use **Send** or
 **Stop** to exercise the real shared lifecycle. No API key or network request is required.
+
+Open **Settings** to inspect secure credential availability, configure a key on supported hosts,
+run a non-generative connection test, and select a verified model. This does not reroute the current
+offline conversation; live routing remains a separate, explicit increment.
 
 Use `Command+Enter` on macOS or `Ctrl+Enter` on Windows and Linux to send from the composer. Native
 menus expose New conversation, Send, Stop, Copy latest response, and Exit with platform-appropriate
@@ -137,10 +149,9 @@ to the macOS app, but it is not Developer ID signed or notarized. The Windows pa
 publisher-signed. These packages are therefore intended only for build verification; trusted
 signing and release distribution are intentionally deferred.
 
-The runnable application still uses synthetic fixture output rather than live Mistral generation.
-The repository includes isolated, tested model-catalog and streaming-chat transport boundaries, but
-the macOS credential store and provider boundaries are not yet exposed in the UI. Public release
-artifacts are not available yet.
+The runnable conversation still uses synthetic fixture output rather than live Mistral generation.
+The settings UI now composes the macOS credential store and model-catalog boundary, while live chat
+routing remains deliberately disconnected. Public release artifacts are not available yet.
 
 See [`CONTRIBUTING.md`](CONTRIBUTING.md) for the review and verification workflow.
 

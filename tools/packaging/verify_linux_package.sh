@@ -30,5 +30,9 @@ sudo dpkg --install "$package_file"
 launcher="$(dpkg-query --listfiles blowhard | awk '/\/bin\// && !/\/runtime\// { print; exit }')"
 test -x "$launcher"
 
-PATH=/usr/bin:/bin BLOWHARD_PACKAGING_SMOKE_TEST=1 xvfb-run --auto-servernum "$launcher"
+PATH=/usr/bin:/bin \
+  BLOWHARD_PACKAGING_SMOKE_TEST=1 \
+  SKIKO_RENDER_API=SOFTWARE \
+  timeout --signal=TERM --kill-after=5s 30s \
+  xvfb-run --auto-servernum "$launcher"
 echo "Installed and launched $package_file ($architecture)"

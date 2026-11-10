@@ -43,3 +43,5 @@ final class io.github.artemidius.blowhard.adapters.mistral/MistralTextGeneration
         final fun create(io.github.artemidius.blowhard.adapters.mistral/MistralCredentialProvider, io.github.artemidius.blowhard.adapters.mistral/MistralChatConfiguration): io.github.artemidius.blowhard.adapters.mistral/MistralTextGenerationPort // io.github.artemidius.blowhard.adapters.mistral/MistralTextGenerationPort.Companion.create|create(io.github.artemidius.blowhard.adapters.mistral.MistralCredentialProvider;io.github.artemidius.blowhard.adapters.mistral.MistralChatConfiguration){}[0]
     }
 }
+
+final fun (io.github.artemidius.blowhard.core.domain/CredentialStore).io.github.artemidius.blowhard.adapters.mistral/asMistralCredentialProvider(): io.github.artemidius.blowhard.adapters.mistral/MistralCredentialProvider // io.github.artemidius.blowhard.adapters.mistral/asMistralCredentialProvider|asMistralCredentialProvider@io.github.artemidius.blowhard.core.domain.CredentialStore(){}[0]
