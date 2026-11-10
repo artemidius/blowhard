@@ -11,12 +11,14 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import io.github.artemidius.blowhard.core.api.ConnectionSettingsState
 import io.github.artemidius.blowhard.ui.presentation.ConversationAction
 import io.github.artemidius.blowhard.ui.presentation.ConversationUiState
 
 @Composable
 internal fun ConversationScreen(
     state: ConversationUiState,
+    connection: ConnectionSettingsState,
     onAction: (ConversationAction) -> Unit,
     onOpenSettings: () -> Unit,
 ) {
@@ -27,14 +29,15 @@ internal fun ConversationScreen(
             Row(Modifier.fillMaxSize()) {
                 ConversationSidebar(
                     state = state,
+                    connection = connection,
                     onAction = onAction,
                     onOpenSettings = onOpenSettings,
                     modifier = Modifier.width(SIDEBAR_WIDTH),
                 )
-                ConversationPane(state, onAction, onOpenSettings, compact = false)
+                ConversationPane(state, connection, onAction, onOpenSettings, compact = false)
             }
         } else {
-            ConversationPane(state, onAction, onOpenSettings, compact = true)
+            ConversationPane(state, connection, onAction, onOpenSettings, compact = true)
         }
     }
 }
