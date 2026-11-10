@@ -1,3 +1,34 @@
+public final class io/github/artemidius/blowhard/core/application/ConversationHistoryEntry {
+	public fun <init> (Lio/github/artemidius/blowhard/core/domain/StoredConversation;Lio/github/artemidius/blowhard/core/domain/StoredTranscript;)V
+	public final fun component1 ()Lio/github/artemidius/blowhard/core/domain/StoredConversation;
+	public final fun component2 ()Lio/github/artemidius/blowhard/core/domain/StoredTranscript;
+	public final fun copy (Lio/github/artemidius/blowhard/core/domain/StoredConversation;Lio/github/artemidius/blowhard/core/domain/StoredTranscript;)Lio/github/artemidius/blowhard/core/application/ConversationHistoryEntry;
+	public static synthetic fun copy$default (Lio/github/artemidius/blowhard/core/application/ConversationHistoryEntry;Lio/github/artemidius/blowhard/core/domain/StoredConversation;Lio/github/artemidius/blowhard/core/domain/StoredTranscript;ILjava/lang/Object;)Lio/github/artemidius/blowhard/core/application/ConversationHistoryEntry;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getConversation ()Lio/github/artemidius/blowhard/core/domain/StoredConversation;
+	public final fun getTranscript ()Lio/github/artemidius/blowhard/core/domain/StoredTranscript;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class io/github/artemidius/blowhard/core/application/ConversationHistoryLoader {
+	public fun <init> (Lio/github/artemidius/blowhard/core/domain/ConversationStore;Lio/github/artemidius/blowhard/core/application/RunClock;)V
+	public final fun load (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+}
+
+public final class io/github/artemidius/blowhard/core/application/ConversationHistorySnapshot {
+	public fun <init> (Ljava/util/List;J)V
+	public final fun component1 ()Ljava/util/List;
+	public final fun component2 ()J
+	public final fun copy (Ljava/util/List;J)Lio/github/artemidius/blowhard/core/application/ConversationHistorySnapshot;
+	public static synthetic fun copy$default (Lio/github/artemidius/blowhard/core/application/ConversationHistorySnapshot;Ljava/util/List;JILjava/lang/Object;)Lio/github/artemidius/blowhard/core/application/ConversationHistorySnapshot;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getEntries ()Ljava/util/List;
+	public final fun getRecoveredAttemptCount ()J
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
 public final class io/github/artemidius/blowhard/core/application/DefaultConnectionSettings : io/github/artemidius/blowhard/core/api/ConnectionSettings {
 	public fun <init> (Lio/github/artemidius/blowhard/core/domain/CredentialStore;Lio/github/artemidius/blowhard/core/domain/ModelCatalogPort;)V
 	public fun acknowledgeLiveDataDisclosure (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;

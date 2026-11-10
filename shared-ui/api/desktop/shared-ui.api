@@ -213,7 +213,8 @@ public final class io/github/artemidius/blowhard/ui/presentation/ConversationAct
 
 public final class io/github/artemidius/blowhard/ui/presentation/ConversationPresenter {
 	public static final field $stable I
-	public fun <init> (Lio/github/artemidius/blowhard/core/api/ConversationRuns;Lio/github/artemidius/blowhard/ui/presentation/DemoScenarioSelection;Lio/github/artemidius/blowhard/ui/presentation/ClipboardWriter;Lkotlin/coroutines/CoroutineContext;)V
+	public fun <init> (Lio/github/artemidius/blowhard/core/api/ConversationRuns;Lio/github/artemidius/blowhard/ui/presentation/DemoScenarioSelection;Lio/github/artemidius/blowhard/ui/presentation/ClipboardWriter;Lkotlin/coroutines/CoroutineContext;Lio/github/artemidius/blowhard/ui/presentation/ConversationUiState;)V
+	public synthetic fun <init> (Lio/github/artemidius/blowhard/core/api/ConversationRuns;Lio/github/artemidius/blowhard/ui/presentation/DemoScenarioSelection;Lio/github/artemidius/blowhard/ui/presentation/ClipboardWriter;Lkotlin/coroutines/CoroutineContext;Lio/github/artemidius/blowhard/ui/presentation/ConversationUiState;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
 	public final fun close ()V
 	public final fun dispatch (Lio/github/artemidius/blowhard/ui/presentation/ConversationAction;)V
 	public final fun getState ()Lkotlinx/coroutines/flow/StateFlow;
@@ -223,6 +224,7 @@ public final class io/github/artemidius/blowhard/ui/presentation/ConversationRun
 	public static final field CANCELLED Lio/github/artemidius/blowhard/ui/presentation/ConversationRunState;
 	public static final field FAILED Lio/github/artemidius/blowhard/ui/presentation/ConversationRunState;
 	public static final field IDLE Lio/github/artemidius/blowhard/ui/presentation/ConversationRunState;
+	public static final field INTERRUPTED Lio/github/artemidius/blowhard/ui/presentation/ConversationRunState;
 	public static final field QUEUED Lio/github/artemidius/blowhard/ui/presentation/ConversationRunState;
 	public static final field STARTING Lio/github/artemidius/blowhard/ui/presentation/ConversationRunState;
 	public static final field STREAMING Lio/github/artemidius/blowhard/ui/presentation/ConversationRunState;
@@ -299,6 +301,7 @@ public final class io/github/artemidius/blowhard/ui/presentation/MessageDelivery
 	public static final field CANCELLED Lio/github/artemidius/blowhard/ui/presentation/MessageDelivery;
 	public static final field COMPLETE Lio/github/artemidius/blowhard/ui/presentation/MessageDelivery;
 	public static final field FAILED Lio/github/artemidius/blowhard/ui/presentation/MessageDelivery;
+	public static final field INTERRUPTED Lio/github/artemidius/blowhard/ui/presentation/MessageDelivery;
 	public static final field STREAMING Lio/github/artemidius/blowhard/ui/presentation/MessageDelivery;
 	public static fun getEntries ()Lkotlin/enums/EnumEntries;
 	public static fun valueOf (Ljava/lang/String;)Lio/github/artemidius/blowhard/ui/presentation/MessageDelivery;

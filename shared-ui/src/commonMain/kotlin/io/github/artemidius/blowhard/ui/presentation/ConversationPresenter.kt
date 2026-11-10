@@ -34,15 +34,24 @@ public class ConversationPresenter(
     private val scenarioSelection: DemoScenarioSelection,
     clipboardWriter: ClipboardWriter,
     coroutineContext: CoroutineContext,
+    initialState: ConversationUiState = initialConversationState(),
 ) {
     private val scope = CoroutineScope(coroutineContext + SupervisorJob())
     private val events = Channel<PresenterEvent>(Channel.UNLIMITED)
-    private val mutableState = MutableStateFlow(initialConversationState())
+    private val mutableState = MutableStateFlow(initialState)
     private val activeRuns = mutableMapOf<ConversationId, ActiveRun>()
     private val observers = mutableMapOf<ConversationId, Job>()
     private val messageClipboard = MessageClipboard(clipboardWriter)
-    private val conversationIds = PresentationIdSequence("conversation", initialValue = 1L)
-    private val messageIds = PresentationIdSequence("message")
+    private val conversationIds = PresentationIdSequence(
+        prefix = "conversation",
+        reserved = initialState.conversations.mapTo(mutableSetOf()) { it.id.value },
+    )
+    private val messageIds = PresentationIdSequence(
+        prefix = "message",
+        reserved = initialState.conversations.flatMapTo(mutableSetOf()) { conversation ->
+            conversation.messages.map { it.id }
+        },
+    )
 
     /** Current immutable state of the conversation workspace. */
     public val state: StateFlow<ConversationUiState> = mutableState.asStateFlow()

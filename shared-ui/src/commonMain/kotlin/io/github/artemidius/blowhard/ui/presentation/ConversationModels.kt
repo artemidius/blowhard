@@ -77,6 +77,9 @@ public enum class MessageDelivery {
 
     /** Generation was cancelled by the user or application lifecycle. */
     CANCELLED,
+
+    /** A previous process stopped before the attempt reached a known terminal outcome. */
+    INTERRUPTED,
 }
 
 /** Current lifecycle state presented for a conversation. */
@@ -101,6 +104,9 @@ public enum class ConversationRunState {
 
     /** The latest attempt was cancelled. */
     CANCELLED,
+
+    /** The latest attempt lost authoritative execution state during a previous process. */
+    INTERRUPTED,
     ;
 
     /** Whether this state prevents another run in the same conversation. */
