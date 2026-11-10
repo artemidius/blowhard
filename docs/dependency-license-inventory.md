@@ -22,8 +22,8 @@ independent inventory verifier also rejects:
 - absence of representative Compose, Ktor, SQLDelight, JNA, or Kotlin runtime components.
 
 This is an automated engineering control, not legal advice. New or changed dependencies still
-require review. The inventory describes third-party software and does not define the license of the
-Blowhard project itself.
+require review. The inventory describes third-party software; Blowhard itself is distributed under
+the [MIT License](../LICENSE).
 
 ## Generate locally
 

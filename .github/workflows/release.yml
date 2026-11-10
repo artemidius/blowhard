@@ -1,0 +1,266 @@
+name: Release candidate
+
+on:
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: Exact project tag, for example v0.1.0
+        required: true
+        type: string
+
+permissions:
+  contents: read
+
+concurrency:
+  group: release-${{ inputs.tag }}
+  cancel-in-progress: false
+
+jobs:
+  validate:
+    name: Validate release source
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+
+    steps:
+      - name: Check out immutable source
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Validate tag, source, license, and notes
+        env:
+          RELEASE_TAG: ${{ inputs.tag }}
+        run: >-
+          python3 tools/packaging/release_gate.py validate-source .
+          --tag "$RELEASE_TAG"
+          --revision "$GITHUB_SHA"
+          --git-ref "$GITHUB_REF"
+
+      - name: Reject an existing tag or release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RELEASE_TAG: ${{ inputs.tag }}
+        run: |
+          if gh api "repos/${GITHUB_REPOSITORY}/git/ref/tags/${RELEASE_TAG}" >/dev/null 2>&1; then
+            echo "Release tag already exists: ${RELEASE_TAG}" >&2
+            exit 1
+          fi
+          if gh release view "$RELEASE_TAG" >/dev/null 2>&1; then
+            echo "Release already exists: ${RELEASE_TAG}" >&2
+            exit 1
+          fi
+
+  quality:
+    name: Release quality gate
+    needs: validate
+    runs-on: ubuntu-24.04
+    timeout-minutes: 35
+
+    steps:
+      - name: Check out immutable source
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ github.sha }}
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Set up JDK 21
+        uses: actions/setup-java@77dd5b2ce225ea11469928ac317850245a74ae78 # v6.2.0
+        with:
+          distribution: temurin
+          java-version: '21'
+
+      - name: Set up Gradle
+        uses: gradle/actions/setup-gradle@8da46b539cd8fe6ab27ca75128919a18d757604c # v6.4.1
+
+      - name: Install verified quality tools
+        uses: ./.github/actions/setup-quality-tools
+
+      - name: Lint GitHub Actions workflows
+        run: actionlint -color
+
+      - name: Run complete quality and security gate
+        run: ./gradlew --no-daemon --no-configuration-cache qualityCheck
+
+      - name: Test release tooling
+        run: python3 -m unittest discover -s tools/packaging -p 'test_*.py' -v
+
+      - name: Prepare license and KDoc assets
+        run: >-
+          python3 tools/packaging/release_gate.py prepare-docs .
+          build/release-assets/docs
+
+      - name: Upload documentation assets
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: release-documentation-assets
+          path: build/release-assets/docs/*
+          if-no-files-found: error
+          retention-days: 1
+
+  desktop:
+    name: Release desktop / ${{ matrix.label }}
+    needs: validate
+    runs-on: ${{ matrix.runner }}
+    timeout-minutes: 45
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - label: Linux
+            runner: ubuntu-24.04
+            gradle: ./gradlew
+            package_task: :apps:desktop:packageDeb
+            platform: linux
+            architecture: amd64
+          - label: Windows
+            runner: windows-2025
+            gradle: ./gradlew.bat
+            package_task: :apps:desktop:packageMsi
+            platform: windows
+            architecture: x64
+          - label: macOS
+            runner: macos-15
+            gradle: ./gradlew
+            package_task: :apps:desktop:packageDmg
+            platform: macos
+            architecture: arm64
+
+    steps:
+      - name: Check out immutable source
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+
+      - name: Set up JDK 21
+        uses: actions/setup-java@77dd5b2ce225ea11469928ac317850245a74ae78 # v6.2.0
+        with:
+          distribution: temurin
+          java-version: '21'
+
+      - name: Set up Gradle
+        uses: gradle/actions/setup-gradle@8da46b539cd8fe6ab27ca75128919a18d757604c # v6.4.1
+
+      - name: Build desktop application
+        run: ${{ matrix.gradle }} --no-daemon :apps:desktop:build
+
+      - name: Build native package
+        run: >-
+          ${{ matrix.gradle }} --no-daemon --no-configuration-cache
+          ${{ matrix.package_task }}
+
+      - name: Audit desktop runtime licenses
+        run: >-
+          ${{ matrix.gradle }} --no-daemon --no-parallel --no-configuration-cache
+          :apps:desktop:checkLicense
+          :apps:desktop:verifyLicenseInventory
+
+      - name: Install and launch Linux package
+        if: ${{ runner.os == 'Linux' }}
+        run: ./tools/packaging/verify_linux_package.sh .
+
+      - name: Install and launch Windows package
+        if: ${{ runner.os == 'Windows' }}
+        shell: pwsh
+        run: ./tools/packaging/Verify-WindowsPackage.ps1 .
+
+      - name: Install and launch macOS package
+        if: ${{ runner.os == 'macOS' }}
+        run: ./tools/packaging/verify_macos_package.sh .
+
+      - name: Generate release evidence
+        run: >-
+          python tools/packaging/release_evidence.py create .
+          --platform ${{ matrix.platform }}
+          --architecture ${{ matrix.architecture }}
+          --source-revision ${{ github.sha }}
+
+      - name: Verify release evidence
+        run: >-
+          python tools/packaging/release_evidence.py verify .
+          apps/desktop/build/release-evidence/${{ matrix.platform }}-${{ matrix.architecture }}/manifest.json
+
+      - name: Prepare native release assets
+        run: >-
+          python tools/packaging/release_gate.py prepare-native .
+          apps/desktop/build/release-evidence/${{ matrix.platform }}-${{ matrix.architecture }}/manifest.json
+          apps/desktop/build/reports/dependency-license
+          apps/desktop/build/release-assets/${{ matrix.platform }}-${{ matrix.architecture }}
+
+      - name: Upload native release assets
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: release-${{ matrix.platform }}-${{ matrix.architecture }}-assets
+          path: apps/desktop/build/release-assets/${{ matrix.platform }}-${{ matrix.architecture }}/*
+          if-no-files-found: error
+          retention-days: 1
+
+  draft-release:
+    name: Create reviewed draft release
+    needs:
+      - validate
+      - quality
+      - desktop
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    environment: release
+    permissions:
+      contents: write
+
+    steps:
+      - name: Check out immutable source
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+
+      - name: Download all release assets
+        uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+        with:
+          pattern: release-*-assets
+          path: build/release-assets/merged
+          merge-multiple: true
+
+      - name: Verify merged release assets
+        run: >-
+          python3 tools/packaging/release_gate.py verify-assets .
+          build/release-assets/merged
+          --revision "$GITHUB_SHA"
+
+      - name: Recheck destination is unused
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RELEASE_TAG: ${{ inputs.tag }}
+        run: |
+          if gh api "repos/${GITHUB_REPOSITORY}/git/ref/tags/${RELEASE_TAG}" >/dev/null 2>&1; then
+            echo "Release tag appeared during the build: ${RELEASE_TAG}" >&2
+            exit 1
+          fi
+          if gh release view "$RELEASE_TAG" >/dev/null 2>&1; then
+            echo "Release appeared during the build: ${RELEASE_TAG}" >&2
+            exit 1
+          fi
+
+      - name: Create draft prerelease
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RELEASE_TAG: ${{ inputs.tag }}
+        run: >-
+          gh release create "$RELEASE_TAG"
+          build/release-assets/merged/*
+          --draft
+          --prerelease
+          --latest=false
+          --target "$GITHUB_SHA"
+          --title "Blowhard ${RELEASE_TAG#v}"
+          --notes-file "docs/releases/${RELEASE_TAG}.md"
+
+      - name: Report draft URL
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RELEASE_TAG: ${{ inputs.tag }}
+        run: |
+          release_url="$(gh release view "$RELEASE_TAG" --json url --jq .url)"
+          echo "::notice title=Draft release created::${release_url}"

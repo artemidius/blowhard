@@ -185,6 +185,7 @@ boundaries, API compatibility, KDoc generation, desktop runtime licenses, and se
 history and the working tree. Apply safe formatting changes with `./gradlew spotlessApply`.
 The explicit cache flag reflects the license-report plugin's documented configuration-cache
 limitation; ordinary compilation and test tasks continue to use the repository cache settings.
+CI additionally runs a checksum-verified actionlint binary against every GitHub Actions workflow.
 
 Generated API documentation is written to `build/dokka/html`, and the XML coverage report is
 written to `build/reports/kover/report.xml`.
@@ -242,6 +243,15 @@ The [installation guide](docs/installation.md) documents candidate verification,
 steps, signing limitations, capability boundaries, and local data locations without presenting CI
 artifacts as a public release.
 
+Release candidates are assembled only by the manually approved, least-privilege
+[protected release process](docs/release-process.md). The workflow rebuilds immutable `main` source
+on all three desktop hosts and creates a draft prerelease for human review; see
+[`ADR 0027`](docs/decisions/0027-protected-draft-publication.md).
+
 See [`CONTRIBUTING.md`](CONTRIBUTING.md) for the review and verification workflow.
 
 Blowhard is an independent project and is not affiliated with Mistral AI.
+
+## License
+
+Blowhard is open-source software available under the permissive [MIT License](LICENSE).

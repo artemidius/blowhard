@@ -15,7 +15,7 @@ cleanup() {
 }
 trap cleanup EXIT
 
-hdiutil attach "$package_file" -nobrowse -readonly -mountpoint "$mount_point"
+printf 'Y\n' | hdiutil attach "$package_file" -nobrowse -readonly -mountpoint "$mount_point"
 source_app="$(find "$mount_point" -maxdepth 1 -type d -name '*.app' -print -quit)"
 test -n "$source_app"
 installed_app="$install_root/$(basename "$source_app")"
