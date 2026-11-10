@@ -29,6 +29,12 @@ class StoredConversationTest {
         }
     }
 
+    @Test
+    fun `recovery summary rejects a negative count`() {
+        assertEquals(2L, ConversationRecoveryResult(2).interruptedAttemptCount)
+        assertFailsWith<IllegalArgumentException> { ConversationRecoveryResult(-1) }
+    }
+
     private fun conversation(
         title: String = "Conversation",
         createdAt: Long = 1,

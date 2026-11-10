@@ -4,6 +4,8 @@ import app.cash.sqldelight.db.SqlDriver
 import io.github.artemidius.blowhard.adapters.persistence.db.BlowhardDatabase
 import io.github.artemidius.blowhard.adapters.persistence.db.Conversation
 import io.github.artemidius.blowhard.core.api.ConversationId
+import io.github.artemidius.blowhard.core.api.RunTimestamp
+import io.github.artemidius.blowhard.core.domain.ConversationRecoveryResult
 import io.github.artemidius.blowhard.core.domain.ConversationStore
 import io.github.artemidius.blowhard.core.domain.StoredConversation
 import io.github.artemidius.blowhard.core.domain.StoredTranscript
@@ -62,6 +64,14 @@ internal class SqlDelightConversationStore(private val driver: SqlDriver) : Conv
         }
         database.transcriptQueries.load(id)
     }
+
+    override suspend fun recoverInFlightAttempts(recoveredAt: RunTimestamp): ConversationRecoveryResult =
+        access.withLock {
+            requireOpen()
+            ConversationRecoveryResult(
+                database.transcriptQueries.interruptInFlightAttempts(recoveredAt.epochMilliseconds).value,
+            )
+        }
 
     override suspend fun delete(id: ConversationId): Boolean = access.withLock {
         requireOpen()

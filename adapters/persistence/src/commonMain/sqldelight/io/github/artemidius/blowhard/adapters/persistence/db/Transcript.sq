@@ -86,6 +86,16 @@ FROM generation_attempt
 WHERE conversation_id = ?
 ORDER BY created_at_epoch_ms ASC, id ASC;
 
+interruptInFlightAttempts:
+UPDATE generation_attempt
+SET
+    status = 'INTERRUPTED',
+    updated_at_epoch_ms = CASE
+        WHEN updated_at_epoch_ms > :recovered_at_epoch_ms THEN updated_at_epoch_ms
+        ELSE :recovered_at_epoch_ms
+    END
+WHERE status IN ('QUEUED', 'RUNNING');
+
 deleteAttempts:
 DELETE FROM generation_attempt
 WHERE conversation_id = ?;

@@ -1,6 +1,7 @@
 package io.github.artemidius.blowhard.core.domain
 
 import io.github.artemidius.blowhard.core.api.ConversationId
+import io.github.artemidius.blowhard.core.api.RunTimestamp
 
 /** Durable, non-secret metadata for one locally owned conversation. */
 public data class StoredConversation(
@@ -48,6 +49,14 @@ public interface ConversationStore {
     /** Returns the transcript owned by [id], or `null` when the conversation is absent. */
     public suspend fun loadTranscript(id: ConversationId): StoredTranscript?
 
+    /**
+     * Marks every queued or running attempt as interrupted after a process restart.
+     *
+     * This operation is atomic and idempotent. It preserves message content and immutable attempt
+     * snapshots, and it never starts or replays provider work.
+     */
+    public suspend fun recoverInFlightAttempts(recoveredAt: RunTimestamp): ConversationRecoveryResult
+
     /** Deletes [id] and reports whether a row existed. */
     public suspend fun delete(id: ConversationId): Boolean
 
@@ -62,4 +71,11 @@ public enum class TranscriptSaveResult {
 
     /** No transcript was written because its conversation metadata was absent. */
     CONVERSATION_NOT_FOUND,
+}
+
+/** Summary of one fail-closed restart recovery pass. */
+public data class ConversationRecoveryResult(public val interruptedAttemptCount: Long) {
+    init {
+        require(interruptedAttemptCount >= 0) { "Interrupted attempt count must not be negative" }
+    }
 }
