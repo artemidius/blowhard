@@ -5,8 +5,9 @@ public data class StartRunRequest(public val conversationId: ConversationId, pub
 
 /** Result of asking the application to start a run. */
 public sealed interface StartRunResult {
-    /** A new attempt was created and can be observed using [runId]. */
-    public data class Started(public val runId: RunId) : StartRunResult
+    /** A new attempt was created with immutable [target] and can be observed using [runId]. */
+    public data class Started(public val runId: RunId, public val target: GenerationTarget = GenerationTarget.Demo) :
+        StartRunResult
 
     /** No attempt was created because the request violated an application rule. */
     public data class Rejected(public val reason: StartRunRejection) : StartRunResult
@@ -19,6 +20,9 @@ public enum class StartRunRejection {
 
     /** Another run already owns the conversation's active-generation slot. */
     CONVERSATION_BUSY,
+
+    /** Live mode is selected, but its credential, model, or verification is stale. */
+    LIVE_CONFIGURATION_NOT_READY,
 
     /** The owning lifecycle has shut down and cannot accept more work. */
     LIFECYCLE_CLOSED,

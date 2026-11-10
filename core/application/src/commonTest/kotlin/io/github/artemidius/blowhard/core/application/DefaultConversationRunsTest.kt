@@ -1,11 +1,23 @@
 package io.github.artemidius.blowhard.core.application
 
 import io.github.artemidius.blowhard.core.api.CancelRunResult
+import io.github.artemidius.blowhard.core.api.ConnectionSettings
+import io.github.artemidius.blowhard.core.api.ConnectionSettingsState
+import io.github.artemidius.blowhard.core.api.ConnectionStatus
+import io.github.artemidius.blowhard.core.api.ConnectionTestFailureKind
+import io.github.artemidius.blowhard.core.api.ConnectionTestResult
 import io.github.artemidius.blowhard.core.api.ConversationId
+import io.github.artemidius.blowhard.core.api.CredentialStatus
+import io.github.artemidius.blowhard.core.api.CredentialUpdateResult
+import io.github.artemidius.blowhard.core.api.GenerationMode
+import io.github.artemidius.blowhard.core.api.GenerationTarget
+import io.github.artemidius.blowhard.core.api.ModeSelectionResult
+import io.github.artemidius.blowhard.core.api.ModelSelectionResult
 import io.github.artemidius.blowhard.core.api.ObserveRunResult
 import io.github.artemidius.blowhard.core.api.RunId
 import io.github.artemidius.blowhard.core.api.RunSnapshot
 import io.github.artemidius.blowhard.core.api.RunTimestamp
+import io.github.artemidius.blowhard.core.api.SelectableModel
 import io.github.artemidius.blowhard.core.api.StartRunRejection
 import io.github.artemidius.blowhard.core.api.StartRunRequest
 import io.github.artemidius.blowhard.core.api.StartRunResult
@@ -14,6 +26,8 @@ import io.github.artemidius.blowhard.core.domain.TextGenerationPort
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitCancellation
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOf
@@ -124,6 +138,52 @@ class DefaultConversationRunsTest {
     }
 
     @Test
+    fun `accepted live run keeps its verified model when settings change before execution`() = runTest {
+        val settings = FakeRunConnectionSettings(readyLiveState())
+        var observedTarget: GenerationTarget? = null
+        val runs = controller(
+            generation = TextGenerationPort { request ->
+                observedTarget = request.target
+                flowOf(GenerationEvent.Completed)
+            },
+            connectionSettings = settings,
+        )
+
+        val result = assertIs<StartRunResult.Started>(
+            runs.start(StartRunRequest(ConversationId("live-conversation"), "Hello")),
+        )
+        settings.mutableState.value = ConnectionSettingsState()
+        advanceUntilIdle()
+
+        assertEquals(GenerationTarget.Live("verified-model"), result.target)
+        assertEquals(result.target, observedTarget)
+    }
+
+    @Test
+    fun `stale live selection fails closed before provider execution`() = runTest {
+        var executions = 0
+        val settings = FakeRunConnectionSettings(
+            readyLiveState().copy(connectionStatus = ConnectionStatus.FAILED),
+        )
+        val runs = controller(
+            generation = TextGenerationPort {
+                executions += 1
+                flowOf(GenerationEvent.Completed)
+            },
+            connectionSettings = settings,
+        )
+
+        val result = runs.start(StartRunRequest(ConversationId("live-conversation"), "Hello"))
+        advanceUntilIdle()
+
+        assertEquals(
+            StartRunRejection.LIVE_CONFIGURATION_NOT_READY,
+            assertIs<StartRunResult.Rejected>(result).reason,
+        )
+        assertEquals(0, executions)
+    }
+
+    @Test
     fun `close cancels active work and rejects future starts`() = runTest {
         val runs = controller(TextGenerationPort { flow { awaitCancellation() } })
         val runId = runs.startRun("conversation-1")
@@ -163,14 +223,46 @@ class DefaultConversationRunsTest {
     private fun kotlinx.coroutines.test.TestScope.controller(
         generation: TextGenerationPort,
         maxConcurrentRuns: Int = 2,
+        connectionSettings: ConnectionSettings? = null,
     ): DefaultConversationRuns = DefaultConversationRuns(
         generation = generation,
         idFactory = SequentialRunIdFactory(),
         clock = IncrementingClock(),
         coroutineContext = StandardTestDispatcher(testScheduler),
         policy = RunExecutionPolicy(maxConcurrentRuns),
+        connectionSettings = connectionSettings,
     )
 }
+
+private class FakeRunConnectionSettings(initial: ConnectionSettingsState) : ConnectionSettings {
+    val mutableState = MutableStateFlow(initial)
+    override val state: StateFlow<ConnectionSettingsState> = mutableState
+
+    override suspend fun refreshCredentialStatus() = Unit
+
+    override suspend fun replaceCredential(secret: String): CredentialUpdateResult = CredentialUpdateResult.SUCCESS
+
+    override suspend fun deleteCredential(): CredentialUpdateResult = CredentialUpdateResult.SUCCESS
+
+    override suspend fun testConnection(): ConnectionTestResult = ConnectionTestResult.Failure(
+        ConnectionTestFailureKind.UNEXPECTED,
+    )
+
+    override suspend fun selectModel(modelId: String): ModelSelectionResult = ModelSelectionResult.UPDATED
+
+    override suspend fun acknowledgeLiveDataDisclosure() = Unit
+
+    override suspend fun selectMode(mode: GenerationMode): ModeSelectionResult = ModeSelectionResult.UPDATED
+}
+
+private fun readyLiveState(): ConnectionSettingsState = ConnectionSettingsState(
+    mode = GenerationMode.LIVE,
+    credentialStatus = CredentialStatus.CONFIGURED,
+    connectionStatus = ConnectionStatus.READY,
+    models = listOf(SelectableModel("verified-model", 32_000)),
+    selectedModelId = "verified-model",
+    liveDataDisclosureAccepted = true,
+)
 
 internal suspend fun DefaultConversationRuns.startRun(conversation: String): RunId {
     val result = start(StartRunRequest(ConversationId(conversation), "Hello"))
