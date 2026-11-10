@@ -24,8 +24,9 @@ Set the recovered update timestamp to the later of the stored timestamp and the 
 time. Repeating recovery is a no-op because interrupted is terminal for this policy.
 
 Keep recovery independent from `TextGenerationPort`. The operation records local uncertainty only;
-it never starts, resumes, retries, or replays provider work. A later startup coordinator will call
-recovery before loading history into presentation state.
+it never starts, resumes, retries, or replays provider work. The desktop startup coordinator added
+by [`ADR 0020`](0020-desktop-history-startup.md) calls recovery before loading history into
+presentation state.
 
 ## Alternatives considered
 
@@ -55,5 +56,4 @@ idempotent, and avoids partially recovered startup state.
 - Partial output and immutable request provenance remain available for inspection.
 - Recovery stays efficient regardless of the number of stored conversations.
 - Affected-row count provides bounded startup evidence without exposing conversation content.
-- The desktop composition root must still open storage, invoke recovery, and map history in a later
-  increment.
+- Clients still decide how to map recovered domain history into platform-specific presentation.

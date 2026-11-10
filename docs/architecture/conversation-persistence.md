@@ -6,7 +6,8 @@ Presentation code has no database dependency.
 
 ```mermaid
 flowchart LR
-    Client[Future application coordinator] --> Port[core:domain ConversationStore]
+    Desktop[Desktop startup session] --> Loader[core:application history loader]
+    Loader --> Port[core:domain ConversationStore]
     SQLite[adapters:persistence] --> Port
     SQLite --> Schema[Versioned SQLDelight schema]
     Schema --> Desktop[JDBC SQLite]
@@ -53,7 +54,16 @@ recovery time, so a backward system-clock adjustment cannot violate chronology.
 
 The operation is idempotent and has no generation-port dependency, so it cannot replay provider
 work. A startup coordinator must call it after opening storage and before exposing recovered
-history. That coordinator is deliberately not part of the persistence adapter.
+history. `ConversationHistoryLoader` enforces recovery before list/load operations, while the
+desktop composition root owns the database session and maps domain records into presentation
+models.
+
+The most recently updated stored conversation is selected deterministically. Interrupted partial
+responses are visible and labeled, while defensive mapping treats any unexpectedly active durable
+state as interrupted rather than presenting a phantom cancellable run. An empty database creates a
+clean demo workspace. A storage open or load failure creates an explicit, content-safe unavailable
+state; it does not expose paths/driver details or silently replace durable storage with an
+in-memory repository.
 
 ## Schema evolution
 
@@ -78,14 +88,19 @@ not protect content from the same OS user, local malware, backups, or a compromi
 system. Platform file permissions and full deletion behavior must be verified before persistent
 history is enabled in the application.
 
+The desktop database path follows platform application-configuration conventions:
+
+- macOS: `~/Library/Application Support/Blowhard/conversations.db`;
+- Windows: `%APPDATA%/Blowhard/conversations.db`, with the documented home-directory fallback;
+- Linux: `$XDG_CONFIG_HOME/blowhard/conversations.db`, or `~/.config/blowhard/conversations.db`.
+
+The database is opened during desktop startup and closed exactly once during runtime shutdown.
+
 ## Deliberate limitations
 
-- The desktop composition root does not open this store yet, so visible conversations remain
-  process-local.
-- Streaming checkpoints and desktop startup loading are not implemented; the recovery operation is
-  available but not yet invoked by the application lifecycle.
+- New messages and attempts remain process-local because checkpoint writes are not wired yet.
 - Full retention and user-facing deletion behavior are not wired to presentation actions.
 - No claim is made that closing SQLite securely erases previously stored bytes.
 
-These limits keep durable representation and migration behavior independently reviewable before
-the application lifecycle begins to depend on them.
+These limits keep startup recovery independently reviewable before live checkpoint scheduling and
+write-failure behavior are introduced.

@@ -32,6 +32,7 @@ final enum class io.github.artemidius.blowhard.ui.presentation/ConversationRunSt
     enum entry CANCELLED // io.github.artemidius.blowhard.ui.presentation/ConversationRunState.CANCELLED|null[0]
     enum entry FAILED // io.github.artemidius.blowhard.ui.presentation/ConversationRunState.FAILED|null[0]
     enum entry IDLE // io.github.artemidius.blowhard.ui.presentation/ConversationRunState.IDLE|null[0]
+    enum entry INTERRUPTED // io.github.artemidius.blowhard.ui.presentation/ConversationRunState.INTERRUPTED|null[0]
     enum entry QUEUED // io.github.artemidius.blowhard.ui.presentation/ConversationRunState.QUEUED|null[0]
     enum entry STARTING // io.github.artemidius.blowhard.ui.presentation/ConversationRunState.STARTING|null[0]
     enum entry STREAMING // io.github.artemidius.blowhard.ui.presentation/ConversationRunState.STREAMING|null[0]
@@ -67,6 +68,7 @@ final enum class io.github.artemidius.blowhard.ui.presentation/MessageDelivery :
     enum entry CANCELLED // io.github.artemidius.blowhard.ui.presentation/MessageDelivery.CANCELLED|null[0]
     enum entry COMPLETE // io.github.artemidius.blowhard.ui.presentation/MessageDelivery.COMPLETE|null[0]
     enum entry FAILED // io.github.artemidius.blowhard.ui.presentation/MessageDelivery.FAILED|null[0]
+    enum entry INTERRUPTED // io.github.artemidius.blowhard.ui.presentation/MessageDelivery.INTERRUPTED|null[0]
     enum entry STREAMING // io.github.artemidius.blowhard.ui.presentation/MessageDelivery.STREAMING|null[0]
 
     final val entries // io.github.artemidius.blowhard.ui.presentation/MessageDelivery.entries|#static{}entries[0]
@@ -232,7 +234,7 @@ final class io.github.artemidius.blowhard.ui.presentation/ConnectionSettingsUiSt
 }
 
 final class io.github.artemidius.blowhard.ui.presentation/ConversationPresenter { // io.github.artemidius.blowhard.ui.presentation/ConversationPresenter|null[0]
-    constructor <init>(io.github.artemidius.blowhard.core.api/ConversationRuns, io.github.artemidius.blowhard.ui.presentation/DemoScenarioSelection, io.github.artemidius.blowhard.ui.presentation/ClipboardWriter, kotlin.coroutines/CoroutineContext) // io.github.artemidius.blowhard.ui.presentation/ConversationPresenter.<init>|<init>(io.github.artemidius.blowhard.core.api.ConversationRuns;io.github.artemidius.blowhard.ui.presentation.DemoScenarioSelection;io.github.artemidius.blowhard.ui.presentation.ClipboardWriter;kotlin.coroutines.CoroutineContext){}[0]
+    constructor <init>(io.github.artemidius.blowhard.core.api/ConversationRuns, io.github.artemidius.blowhard.ui.presentation/DemoScenarioSelection, io.github.artemidius.blowhard.ui.presentation/ClipboardWriter, kotlin.coroutines/CoroutineContext, io.github.artemidius.blowhard.ui.presentation/ConversationUiState = ...) // io.github.artemidius.blowhard.ui.presentation/ConversationPresenter.<init>|<init>(io.github.artemidius.blowhard.core.api.ConversationRuns;io.github.artemidius.blowhard.ui.presentation.DemoScenarioSelection;io.github.artemidius.blowhard.ui.presentation.ClipboardWriter;kotlin.coroutines.CoroutineContext;io.github.artemidius.blowhard.ui.presentation.ConversationUiState){}[0]
 
     final val state // io.github.artemidius.blowhard.ui.presentation/ConversationPresenter.state|{}state[0]
         final fun <get-state>(): kotlinx.coroutines.flow/StateFlow<io.github.artemidius.blowhard.ui.presentation/ConversationUiState> // io.github.artemidius.blowhard.ui.presentation/ConversationPresenter.state.<get-state>|<get-state>(){}[0]

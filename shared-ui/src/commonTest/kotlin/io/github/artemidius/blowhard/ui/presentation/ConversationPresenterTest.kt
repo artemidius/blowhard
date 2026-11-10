@@ -45,6 +45,40 @@ class ConversationPresenterTest {
     }
 
     @Test
+    fun `restored state is preserved and generated identities avoid collisions`() = runTest {
+        val restored = ConversationUiState(
+            conversations = listOf(
+                ConversationUiModel(
+                    id = ConversationId("conversation-1"),
+                    title = "Restored",
+                    messages = listOf(
+                        ChatMessageUi("message-1", ChatRole.USER, "Stored"),
+                    ),
+                ),
+            ),
+            selectedConversationId = ConversationId("conversation-1"),
+        )
+        val presenter = ConversationPresenter(
+            runs = FakeConversationRuns(),
+            scenarioSelection = { _, _ -> },
+            clipboardWriter = ClipboardWriter { ClipboardWriteResult.COPIED },
+            coroutineContext = StandardTestDispatcher(testScheduler),
+            initialState = restored,
+        )
+
+        assertEquals(restored, presenter.state.value)
+        presenter.dispatch(ConversationAction.NewConversation)
+        presenter.dispatch(ConversationAction.ComposerChanged("New"))
+        presenter.dispatch(ConversationAction.Send)
+        runCurrent()
+
+        val state = presenter.state.value
+        assertEquals(ConversationId("conversation-2"), state.selectedConversationId)
+        assertEquals(listOf("message-2", "message-3"), state.selectedConversation.messages.map { it.id })
+        presenter.close()
+    }
+
+    @Test
     fun `two send actions create one run and one observer`() = runTest {
         val fixture = PresenterFixture(this)
         fixture.presenter.dispatch(ConversationAction.ComposerChanged("Explain the lifecycle"))
