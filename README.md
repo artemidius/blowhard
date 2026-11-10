@@ -135,6 +135,11 @@ requests explicitly ask for usage, and missing counts remain unknown rather than
 [`ADR 0023`](docs/decisions/0023-bounded-content-free-run-inspection.md) and the
 [run-inspection guide](docs/architecture/run-inspection.md).
 
+Completed and active assistant attempts expose an **Inspect run** action in the shared UI. The
+screen performs a passive lookup through the same provider-neutral core contract, renders only the
+allowlisted inspection model, and offers an explicit refresh without starting or replaying provider
+work. Restored attempts honestly report that process-local inspection data is unavailable.
+
 ## Run the desktop application
 
 ```shell
