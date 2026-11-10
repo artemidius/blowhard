@@ -78,12 +78,42 @@ final enum class io.github.artemidius.blowhard.ui.presentation/MessageDelivery :
     final fun values(): kotlin/Array<io.github.artemidius.blowhard.ui.presentation/MessageDelivery> // io.github.artemidius.blowhard.ui.presentation/MessageDelivery.values|values#static(){}[0]
 }
 
+final enum class io.github.artemidius.blowhard.ui.presentation/RunDiagnosticExportStatus : kotlin/Enum<io.github.artemidius.blowhard.ui.presentation/RunDiagnosticExportStatus> { // io.github.artemidius.blowhard.ui.presentation/RunDiagnosticExportStatus|null[0]
+    enum entry CANCELLED // io.github.artemidius.blowhard.ui.presentation/RunDiagnosticExportStatus.CANCELLED|null[0]
+    enum entry FAILED // io.github.artemidius.blowhard.ui.presentation/RunDiagnosticExportStatus.FAILED|null[0]
+    enum entry IDLE // io.github.artemidius.blowhard.ui.presentation/RunDiagnosticExportStatus.IDLE|null[0]
+    enum entry SAVED // io.github.artemidius.blowhard.ui.presentation/RunDiagnosticExportStatus.SAVED|null[0]
+    enum entry SAVING // io.github.artemidius.blowhard.ui.presentation/RunDiagnosticExportStatus.SAVING|null[0]
+
+    final val entries // io.github.artemidius.blowhard.ui.presentation/RunDiagnosticExportStatus.entries|#static{}entries[0]
+        final fun <get-entries>(): kotlin.enums/EnumEntries<io.github.artemidius.blowhard.ui.presentation/RunDiagnosticExportStatus> // io.github.artemidius.blowhard.ui.presentation/RunDiagnosticExportStatus.entries.<get-entries>|<get-entries>#static(){}[0]
+
+    final fun valueOf(kotlin/String): io.github.artemidius.blowhard.ui.presentation/RunDiagnosticExportStatus // io.github.artemidius.blowhard.ui.presentation/RunDiagnosticExportStatus.valueOf|valueOf#static(kotlin.String){}[0]
+    final fun values(): kotlin/Array<io.github.artemidius.blowhard.ui.presentation/RunDiagnosticExportStatus> // io.github.artemidius.blowhard.ui.presentation/RunDiagnosticExportStatus.values|values#static(){}[0]
+}
+
+final enum class io.github.artemidius.blowhard.ui.presentation/RunDiagnosticReportSaveResult : kotlin/Enum<io.github.artemidius.blowhard.ui.presentation/RunDiagnosticReportSaveResult> { // io.github.artemidius.blowhard.ui.presentation/RunDiagnosticReportSaveResult|null[0]
+    enum entry CANCELLED // io.github.artemidius.blowhard.ui.presentation/RunDiagnosticReportSaveResult.CANCELLED|null[0]
+    enum entry SAVED // io.github.artemidius.blowhard.ui.presentation/RunDiagnosticReportSaveResult.SAVED|null[0]
+    enum entry UNAVAILABLE // io.github.artemidius.blowhard.ui.presentation/RunDiagnosticReportSaveResult.UNAVAILABLE|null[0]
+
+    final val entries // io.github.artemidius.blowhard.ui.presentation/RunDiagnosticReportSaveResult.entries|#static{}entries[0]
+        final fun <get-entries>(): kotlin.enums/EnumEntries<io.github.artemidius.blowhard.ui.presentation/RunDiagnosticReportSaveResult> // io.github.artemidius.blowhard.ui.presentation/RunDiagnosticReportSaveResult.entries.<get-entries>|<get-entries>#static(){}[0]
+
+    final fun valueOf(kotlin/String): io.github.artemidius.blowhard.ui.presentation/RunDiagnosticReportSaveResult // io.github.artemidius.blowhard.ui.presentation/RunDiagnosticReportSaveResult.valueOf|valueOf#static(kotlin.String){}[0]
+    final fun values(): kotlin/Array<io.github.artemidius.blowhard.ui.presentation/RunDiagnosticReportSaveResult> // io.github.artemidius.blowhard.ui.presentation/RunDiagnosticReportSaveResult.values|values#static(){}[0]
+}
+
 abstract fun interface io.github.artemidius.blowhard.ui.presentation/ClipboardWriter { // io.github.artemidius.blowhard.ui.presentation/ClipboardWriter|null[0]
     abstract fun write(kotlin/String): io.github.artemidius.blowhard.ui.presentation/ClipboardWriteResult // io.github.artemidius.blowhard.ui.presentation/ClipboardWriter.write|write(kotlin.String){}[0]
 }
 
 abstract fun interface io.github.artemidius.blowhard.ui.presentation/DemoScenarioSelection { // io.github.artemidius.blowhard.ui.presentation/DemoScenarioSelection|null[0]
     abstract fun prepare(io.github.artemidius.blowhard.core.api/ConversationId, io.github.artemidius.blowhard.ui.presentation/DemoScenario) // io.github.artemidius.blowhard.ui.presentation/DemoScenarioSelection.prepare|prepare(io.github.artemidius.blowhard.core.api.ConversationId;io.github.artemidius.blowhard.ui.presentation.DemoScenario){}[0]
+}
+
+abstract fun interface io.github.artemidius.blowhard.ui.presentation/RunDiagnosticReportSaver { // io.github.artemidius.blowhard.ui.presentation/RunDiagnosticReportSaver|null[0]
+    abstract suspend fun save(io.github.artemidius.blowhard.core.api/RunDiagnosticReport): io.github.artemidius.blowhard.ui.presentation/RunDiagnosticReportSaveResult // io.github.artemidius.blowhard.ui.presentation/RunDiagnosticReportSaver.save|save(io.github.artemidius.blowhard.core.api.RunDiagnosticReport){}[0]
 }
 
 sealed interface io.github.artemidius.blowhard.ui.presentation/ConversationAction { // io.github.artemidius.blowhard.ui.presentation/ConversationAction|null[0]
@@ -216,6 +246,12 @@ sealed interface io.github.artemidius.blowhard.ui.presentation/RunInspectorActio
         final fun toString(): kotlin/String // io.github.artemidius.blowhard.ui.presentation/RunInspectorAction.Open.toString|toString(){}[0]
     }
 
+    final object Export : io.github.artemidius.blowhard.ui.presentation/RunInspectorAction { // io.github.artemidius.blowhard.ui.presentation/RunInspectorAction.Export|null[0]
+        final fun equals(kotlin/Any?): kotlin/Boolean // io.github.artemidius.blowhard.ui.presentation/RunInspectorAction.Export.equals|equals(kotlin.Any?){}[0]
+        final fun hashCode(): kotlin/Int // io.github.artemidius.blowhard.ui.presentation/RunInspectorAction.Export.hashCode|hashCode(){}[0]
+        final fun toString(): kotlin/String // io.github.artemidius.blowhard.ui.presentation/RunInspectorAction.Export.toString|toString(){}[0]
+    }
+
     final object Refresh : io.github.artemidius.blowhard.ui.presentation/RunInspectorAction { // io.github.artemidius.blowhard.ui.presentation/RunInspectorAction.Refresh|null[0]
         final fun equals(kotlin/Any?): kotlin/Boolean // io.github.artemidius.blowhard.ui.presentation/RunInspectorAction.Refresh.equals|equals(kotlin.Any?){}[0]
         final fun hashCode(): kotlin/Int // io.github.artemidius.blowhard.ui.presentation/RunInspectorAction.Refresh.hashCode|hashCode(){}[0]
@@ -267,15 +303,18 @@ sealed interface io.github.artemidius.blowhard.ui.presentation/RunInspectorUiSta
     }
 
     final class Ready : io.github.artemidius.blowhard.ui.presentation/RunInspectorUiState { // io.github.artemidius.blowhard.ui.presentation/RunInspectorUiState.Ready|null[0]
-        constructor <init>(io.github.artemidius.blowhard.core.api/RunInspection) // io.github.artemidius.blowhard.ui.presentation/RunInspectorUiState.Ready.<init>|<init>(io.github.artemidius.blowhard.core.api.RunInspection){}[0]
+        constructor <init>(io.github.artemidius.blowhard.core.api/RunInspection, io.github.artemidius.blowhard.ui.presentation/RunDiagnosticExportStatus = ...) // io.github.artemidius.blowhard.ui.presentation/RunInspectorUiState.Ready.<init>|<init>(io.github.artemidius.blowhard.core.api.RunInspection;io.github.artemidius.blowhard.ui.presentation.RunDiagnosticExportStatus){}[0]
 
+        final val exportStatus // io.github.artemidius.blowhard.ui.presentation/RunInspectorUiState.Ready.exportStatus|{}exportStatus[0]
+            final fun <get-exportStatus>(): io.github.artemidius.blowhard.ui.presentation/RunDiagnosticExportStatus // io.github.artemidius.blowhard.ui.presentation/RunInspectorUiState.Ready.exportStatus.<get-exportStatus>|<get-exportStatus>(){}[0]
         final val inspection // io.github.artemidius.blowhard.ui.presentation/RunInspectorUiState.Ready.inspection|{}inspection[0]
             final fun <get-inspection>(): io.github.artemidius.blowhard.core.api/RunInspection // io.github.artemidius.blowhard.ui.presentation/RunInspectorUiState.Ready.inspection.<get-inspection>|<get-inspection>(){}[0]
         final val runId // io.github.artemidius.blowhard.ui.presentation/RunInspectorUiState.Ready.runId|{}runId[0]
             final fun <get-runId>(): io.github.artemidius.blowhard.core.api/RunId // io.github.artemidius.blowhard.ui.presentation/RunInspectorUiState.Ready.runId.<get-runId>|<get-runId>(){}[0]
 
         final fun component1(): io.github.artemidius.blowhard.core.api/RunInspection // io.github.artemidius.blowhard.ui.presentation/RunInspectorUiState.Ready.component1|component1(){}[0]
-        final fun copy(io.github.artemidius.blowhard.core.api/RunInspection = ...): io.github.artemidius.blowhard.ui.presentation/RunInspectorUiState.Ready // io.github.artemidius.blowhard.ui.presentation/RunInspectorUiState.Ready.copy|copy(io.github.artemidius.blowhard.core.api.RunInspection){}[0]
+        final fun component2(): io.github.artemidius.blowhard.ui.presentation/RunDiagnosticExportStatus // io.github.artemidius.blowhard.ui.presentation/RunInspectorUiState.Ready.component2|component2(){}[0]
+        final fun copy(io.github.artemidius.blowhard.core.api/RunInspection = ..., io.github.artemidius.blowhard.ui.presentation/RunDiagnosticExportStatus = ...): io.github.artemidius.blowhard.ui.presentation/RunInspectorUiState.Ready // io.github.artemidius.blowhard.ui.presentation/RunInspectorUiState.Ready.copy|copy(io.github.artemidius.blowhard.core.api.RunInspection;io.github.artemidius.blowhard.ui.presentation.RunDiagnosticExportStatus){}[0]
         final fun equals(kotlin/Any?): kotlin/Boolean // io.github.artemidius.blowhard.ui.presentation/RunInspectorUiState.Ready.equals|equals(kotlin.Any?){}[0]
         final fun hashCode(): kotlin/Int // io.github.artemidius.blowhard.ui.presentation/RunInspectorUiState.Ready.hashCode|hashCode(){}[0]
         final fun toString(): kotlin/String // io.github.artemidius.blowhard.ui.presentation/RunInspectorUiState.Ready.toString|toString(){}[0]
@@ -421,7 +460,7 @@ final class io.github.artemidius.blowhard.ui.presentation/ConversationUiState { 
 }
 
 final class io.github.artemidius.blowhard.ui.presentation/RunInspectorPresenter { // io.github.artemidius.blowhard.ui.presentation/RunInspectorPresenter|null[0]
-    constructor <init>(io.github.artemidius.blowhard.core.api/RunInspector, kotlin.coroutines/CoroutineContext) // io.github.artemidius.blowhard.ui.presentation/RunInspectorPresenter.<init>|<init>(io.github.artemidius.blowhard.core.api.RunInspector;kotlin.coroutines.CoroutineContext){}[0]
+    constructor <init>(io.github.artemidius.blowhard.core.api/RunInspector, io.github.artemidius.blowhard.core.api/RunDiagnosticReportGenerator, io.github.artemidius.blowhard.ui.presentation/RunDiagnosticReportSaver, kotlin.coroutines/CoroutineContext) // io.github.artemidius.blowhard.ui.presentation/RunInspectorPresenter.<init>|<init>(io.github.artemidius.blowhard.core.api.RunInspector;io.github.artemidius.blowhard.core.api.RunDiagnosticReportGenerator;io.github.artemidius.blowhard.ui.presentation.RunDiagnosticReportSaver;kotlin.coroutines.CoroutineContext){}[0]
 
     final val state // io.github.artemidius.blowhard.ui.presentation/RunInspectorPresenter.state|{}state[0]
         final fun <get-state>(): kotlinx.coroutines.flow/StateFlow<io.github.artemidius.blowhard.ui.presentation/RunInspectorUiState> // io.github.artemidius.blowhard.ui.presentation/RunInspectorPresenter.state.<get-state>|<get-state>(){}[0]
@@ -472,9 +511,11 @@ final val io.github.artemidius.blowhard.ui.presentation/io_github_artemidius_blo
 final val io.github.artemidius.blowhard.ui.presentation/io_github_artemidius_blowhard_ui_presentation_ConversationUiModel$stableprop // io.github.artemidius.blowhard.ui.presentation/io_github_artemidius_blowhard_ui_presentation_ConversationUiModel$stableprop|#static{}io_github_artemidius_blowhard_ui_presentation_ConversationUiModel$stableprop[0]
 final val io.github.artemidius.blowhard.ui.presentation/io_github_artemidius_blowhard_ui_presentation_ConversationUiState$stableprop // io.github.artemidius.blowhard.ui.presentation/io_github_artemidius_blowhard_ui_presentation_ConversationUiState$stableprop|#static{}io_github_artemidius_blowhard_ui_presentation_ConversationUiState$stableprop[0]
 final val io.github.artemidius.blowhard.ui.presentation/io_github_artemidius_blowhard_ui_presentation_InspectorPresenterEvent_Action$stableprop // io.github.artemidius.blowhard.ui.presentation/io_github_artemidius_blowhard_ui_presentation_InspectorPresenterEvent_Action$stableprop|#static{}io_github_artemidius_blowhard_ui_presentation_InspectorPresenterEvent_Action$stableprop[0]
+final val io.github.artemidius.blowhard.ui.presentation/io_github_artemidius_blowhard_ui_presentation_InspectorPresenterEvent_Exported$stableprop // io.github.artemidius.blowhard.ui.presentation/io_github_artemidius_blowhard_ui_presentation_InspectorPresenterEvent_Exported$stableprop|#static{}io_github_artemidius_blowhard_ui_presentation_InspectorPresenterEvent_Exported$stableprop[0]
 final val io.github.artemidius.blowhard.ui.presentation/io_github_artemidius_blowhard_ui_presentation_InspectorPresenterEvent_Loaded$stableprop // io.github.artemidius.blowhard.ui.presentation/io_github_artemidius_blowhard_ui_presentation_InspectorPresenterEvent_Loaded$stableprop|#static{}io_github_artemidius_blowhard_ui_presentation_InspectorPresenterEvent_Loaded$stableprop[0]
 final val io.github.artemidius.blowhard.ui.presentation/io_github_artemidius_blowhard_ui_presentation_PresenterEvent_Action$stableprop // io.github.artemidius.blowhard.ui.presentation/io_github_artemidius_blowhard_ui_presentation_PresenterEvent_Action$stableprop|#static{}io_github_artemidius_blowhard_ui_presentation_PresenterEvent_Action$stableprop[0]
 final val io.github.artemidius.blowhard.ui.presentation/io_github_artemidius_blowhard_ui_presentation_PresenterEvent_Snapshot$stableprop // io.github.artemidius.blowhard.ui.presentation/io_github_artemidius_blowhard_ui_presentation_PresenterEvent_Snapshot$stableprop|#static{}io_github_artemidius_blowhard_ui_presentation_PresenterEvent_Snapshot$stableprop[0]
+final val io.github.artemidius.blowhard.ui.presentation/io_github_artemidius_blowhard_ui_presentation_RunInspectorAction_Export$stableprop // io.github.artemidius.blowhard.ui.presentation/io_github_artemidius_blowhard_ui_presentation_RunInspectorAction_Export$stableprop|#static{}io_github_artemidius_blowhard_ui_presentation_RunInspectorAction_Export$stableprop[0]
 final val io.github.artemidius.blowhard.ui.presentation/io_github_artemidius_blowhard_ui_presentation_RunInspectorAction_Open$stableprop // io.github.artemidius.blowhard.ui.presentation/io_github_artemidius_blowhard_ui_presentation_RunInspectorAction_Open$stableprop|#static{}io_github_artemidius_blowhard_ui_presentation_RunInspectorAction_Open$stableprop[0]
 final val io.github.artemidius.blowhard.ui.presentation/io_github_artemidius_blowhard_ui_presentation_RunInspectorAction_Refresh$stableprop // io.github.artemidius.blowhard.ui.presentation/io_github_artemidius_blowhard_ui_presentation_RunInspectorAction_Refresh$stableprop|#static{}io_github_artemidius_blowhard_ui_presentation_RunInspectorAction_Refresh$stableprop[0]
 final val io.github.artemidius.blowhard.ui.presentation/io_github_artemidius_blowhard_ui_presentation_RunInspectorPresenter$stableprop // io.github.artemidius.blowhard.ui.presentation/io_github_artemidius_blowhard_ui_presentation_RunInspectorPresenter$stableprop|#static{}io_github_artemidius_blowhard_ui_presentation_RunInspectorPresenter$stableprop[0]
@@ -518,9 +559,11 @@ final fun io.github.artemidius.blowhard.ui.presentation/io_github_artemidius_blo
 final fun io.github.artemidius.blowhard.ui.presentation/io_github_artemidius_blowhard_ui_presentation_ConversationUiModel$stableprop_getter(): kotlin/Int // io.github.artemidius.blowhard.ui.presentation/io_github_artemidius_blowhard_ui_presentation_ConversationUiModel$stableprop_getter|io_github_artemidius_blowhard_ui_presentation_ConversationUiModel$stableprop_getter(){}[0]
 final fun io.github.artemidius.blowhard.ui.presentation/io_github_artemidius_blowhard_ui_presentation_ConversationUiState$stableprop_getter(): kotlin/Int // io.github.artemidius.blowhard.ui.presentation/io_github_artemidius_blowhard_ui_presentation_ConversationUiState$stableprop_getter|io_github_artemidius_blowhard_ui_presentation_ConversationUiState$stableprop_getter(){}[0]
 final fun io.github.artemidius.blowhard.ui.presentation/io_github_artemidius_blowhard_ui_presentation_InspectorPresenterEvent_Action$stableprop_getter(): kotlin/Int // io.github.artemidius.blowhard.ui.presentation/io_github_artemidius_blowhard_ui_presentation_InspectorPresenterEvent_Action$stableprop_getter|io_github_artemidius_blowhard_ui_presentation_InspectorPresenterEvent_Action$stableprop_getter(){}[0]
+final fun io.github.artemidius.blowhard.ui.presentation/io_github_artemidius_blowhard_ui_presentation_InspectorPresenterEvent_Exported$stableprop_getter(): kotlin/Int // io.github.artemidius.blowhard.ui.presentation/io_github_artemidius_blowhard_ui_presentation_InspectorPresenterEvent_Exported$stableprop_getter|io_github_artemidius_blowhard_ui_presentation_InspectorPresenterEvent_Exported$stableprop_getter(){}[0]
 final fun io.github.artemidius.blowhard.ui.presentation/io_github_artemidius_blowhard_ui_presentation_InspectorPresenterEvent_Loaded$stableprop_getter(): kotlin/Int // io.github.artemidius.blowhard.ui.presentation/io_github_artemidius_blowhard_ui_presentation_InspectorPresenterEvent_Loaded$stableprop_getter|io_github_artemidius_blowhard_ui_presentation_InspectorPresenterEvent_Loaded$stableprop_getter(){}[0]
 final fun io.github.artemidius.blowhard.ui.presentation/io_github_artemidius_blowhard_ui_presentation_PresenterEvent_Action$stableprop_getter(): kotlin/Int // io.github.artemidius.blowhard.ui.presentation/io_github_artemidius_blowhard_ui_presentation_PresenterEvent_Action$stableprop_getter|io_github_artemidius_blowhard_ui_presentation_PresenterEvent_Action$stableprop_getter(){}[0]
 final fun io.github.artemidius.blowhard.ui.presentation/io_github_artemidius_blowhard_ui_presentation_PresenterEvent_Snapshot$stableprop_getter(): kotlin/Int // io.github.artemidius.blowhard.ui.presentation/io_github_artemidius_blowhard_ui_presentation_PresenterEvent_Snapshot$stableprop_getter|io_github_artemidius_blowhard_ui_presentation_PresenterEvent_Snapshot$stableprop_getter(){}[0]
+final fun io.github.artemidius.blowhard.ui.presentation/io_github_artemidius_blowhard_ui_presentation_RunInspectorAction_Export$stableprop_getter(): kotlin/Int // io.github.artemidius.blowhard.ui.presentation/io_github_artemidius_blowhard_ui_presentation_RunInspectorAction_Export$stableprop_getter|io_github_artemidius_blowhard_ui_presentation_RunInspectorAction_Export$stableprop_getter(){}[0]
 final fun io.github.artemidius.blowhard.ui.presentation/io_github_artemidius_blowhard_ui_presentation_RunInspectorAction_Open$stableprop_getter(): kotlin/Int // io.github.artemidius.blowhard.ui.presentation/io_github_artemidius_blowhard_ui_presentation_RunInspectorAction_Open$stableprop_getter|io_github_artemidius_blowhard_ui_presentation_RunInspectorAction_Open$stableprop_getter(){}[0]
 final fun io.github.artemidius.blowhard.ui.presentation/io_github_artemidius_blowhard_ui_presentation_RunInspectorAction_Refresh$stableprop_getter(): kotlin/Int // io.github.artemidius.blowhard.ui.presentation/io_github_artemidius_blowhard_ui_presentation_RunInspectorAction_Refresh$stableprop_getter|io_github_artemidius_blowhard_ui_presentation_RunInspectorAction_Refresh$stableprop_getter(){}[0]
 final fun io.github.artemidius.blowhard.ui.presentation/io_github_artemidius_blowhard_ui_presentation_RunInspectorPresenter$stableprop_getter(): kotlin/Int // io.github.artemidius.blowhard.ui.presentation/io_github_artemidius_blowhard_ui_presentation_RunInspectorPresenter$stableprop_getter|io_github_artemidius_blowhard_ui_presentation_RunInspectorPresenter$stableprop_getter(){}[0]

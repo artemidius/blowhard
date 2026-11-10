@@ -239,6 +239,57 @@ public final class io/github/artemidius/blowhard/core/api/ObserveRunResult$NotFo
 	public fun toString ()Ljava/lang/String;
 }
 
+public final class io/github/artemidius/blowhard/core/api/RunDiagnosticReport {
+	public static final field Companion Lio/github/artemidius/blowhard/core/api/RunDiagnosticReport$Companion;
+	public static final field FILE_NAME Ljava/lang/String;
+	public static final field MAX_CONTENT_LENGTH I
+	public fun <init> (Ljava/lang/String;Ljava/lang/String;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun component2 ()Ljava/lang/String;
+	public final fun copy (Ljava/lang/String;Ljava/lang/String;)Lio/github/artemidius/blowhard/core/api/RunDiagnosticReport;
+	public static synthetic fun copy$default (Lio/github/artemidius/blowhard/core/api/RunDiagnosticReport;Ljava/lang/String;Ljava/lang/String;ILjava/lang/Object;)Lio/github/artemidius/blowhard/core/api/RunDiagnosticReport;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getContent ()Ljava/lang/String;
+	public final fun getSuggestedFileName ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class io/github/artemidius/blowhard/core/api/RunDiagnosticReport$Companion {
+}
+
+public abstract interface class io/github/artemidius/blowhard/core/api/RunDiagnosticReportGenerator {
+	public abstract fun generate-Mzzv5v0 (Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+}
+
+public abstract interface class io/github/artemidius/blowhard/core/api/RunDiagnosticReportResult {
+}
+
+public final class io/github/artemidius/blowhard/core/api/RunDiagnosticReportResult$Generated : io/github/artemidius/blowhard/core/api/RunDiagnosticReportResult {
+	public fun <init> (Lio/github/artemidius/blowhard/core/api/RunDiagnosticReport;)V
+	public final fun component1 ()Lio/github/artemidius/blowhard/core/api/RunDiagnosticReport;
+	public final fun copy (Lio/github/artemidius/blowhard/core/api/RunDiagnosticReport;)Lio/github/artemidius/blowhard/core/api/RunDiagnosticReportResult$Generated;
+	public static synthetic fun copy$default (Lio/github/artemidius/blowhard/core/api/RunDiagnosticReportResult$Generated;Lio/github/artemidius/blowhard/core/api/RunDiagnosticReport;ILjava/lang/Object;)Lio/github/artemidius/blowhard/core/api/RunDiagnosticReportResult$Generated;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getReport ()Lio/github/artemidius/blowhard/core/api/RunDiagnosticReport;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class io/github/artemidius/blowhard/core/api/RunDiagnosticReportResult$NotFound : io/github/artemidius/blowhard/core/api/RunDiagnosticReportResult {
+	public static final field INSTANCE Lio/github/artemidius/blowhard/core/api/RunDiagnosticReportResult$NotFound;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class io/github/artemidius/blowhard/core/api/RunDiagnosticReportResult$Unavailable : io/github/artemidius/blowhard/core/api/RunDiagnosticReportResult {
+	public static final field INSTANCE Lio/github/artemidius/blowhard/core/api/RunDiagnosticReportResult$Unavailable;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
 public final class io/github/artemidius/blowhard/core/api/RunFailure {
 	public fun <init> (Lio/github/artemidius/blowhard/core/api/RunFailureKind;Ljava/lang/String;Lio/github/artemidius/blowhard/core/api/RunRetryAdvice;Ljava/lang/Long;)V
 	public synthetic fun <init> (Lio/github/artemidius/blowhard/core/api/RunFailureKind;Ljava/lang/String;Lio/github/artemidius/blowhard/core/api/RunRetryAdvice;Ljava/lang/Long;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
