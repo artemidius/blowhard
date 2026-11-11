@@ -1,0 +1,15 @@
+CREATE TABLE meeting_note (
+    id TEXT NOT NULL PRIMARY KEY,
+    document_id TEXT NOT NULL REFERENCES document(id) ON DELETE CASCADE,
+    template_version TEXT NOT NULL CHECK(length(trim(template_version)) > 0 AND length(template_version) <= 128),
+    model_id TEXT NOT NULL CHECK(length(trim(model_id)) > 0 AND length(model_id) <= 256),
+    generated_json TEXT NOT NULL CHECK(length(generated_json) BETWEEN 1 AND 524288),
+    edited_json TEXT CHECK(edited_json IS NULL OR length(edited_json) BETWEEN 1 AND 524288),
+    created_at_epoch_ms INTEGER NOT NULL CHECK(created_at_epoch_ms >= 0),
+    updated_at_epoch_ms INTEGER NOT NULL CHECK(updated_at_epoch_ms >= created_at_epoch_ms),
+    revision INTEGER NOT NULL CHECK(revision >= 0),
+    CHECK((revision = 0 AND edited_json IS NULL) OR (revision > 0 AND edited_json IS NOT NULL))
+);
+
+CREATE INDEX meeting_note_by_source_creation
+ON meeting_note(document_id, created_at_epoch_ms DESC, id ASC);
