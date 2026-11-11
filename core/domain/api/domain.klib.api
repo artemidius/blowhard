@@ -217,6 +217,18 @@ final enum class io.github.artemidius.blowhard.core.domain/StoredMessageRole : k
     final fun values(): kotlin/Array<io.github.artemidius.blowhard.core.domain/StoredMessageRole> // io.github.artemidius.blowhard.core.domain/StoredMessageRole.values|values#static(){}[0]
 }
 
+final enum class io.github.artemidius.blowhard.core.domain/ToolCallOutcome : kotlin/Enum<io.github.artemidius.blowhard.core.domain/ToolCallOutcome> { // io.github.artemidius.blowhard.core.domain/ToolCallOutcome|null[0]
+    enum entry FAILED // io.github.artemidius.blowhard.core.domain/ToolCallOutcome.FAILED|null[0]
+    enum entry REJECTED // io.github.artemidius.blowhard.core.domain/ToolCallOutcome.REJECTED|null[0]
+    enum entry SUCCEEDED // io.github.artemidius.blowhard.core.domain/ToolCallOutcome.SUCCEEDED|null[0]
+
+    final val entries // io.github.artemidius.blowhard.core.domain/ToolCallOutcome.entries|#static{}entries[0]
+        final fun <get-entries>(): kotlin.enums/EnumEntries<io.github.artemidius.blowhard.core.domain/ToolCallOutcome> // io.github.artemidius.blowhard.core.domain/ToolCallOutcome.entries.<get-entries>|<get-entries>#static(){}[0]
+
+    final fun valueOf(kotlin/String): io.github.artemidius.blowhard.core.domain/ToolCallOutcome // io.github.artemidius.blowhard.core.domain/ToolCallOutcome.valueOf|valueOf#static(kotlin.String){}[0]
+    final fun values(): kotlin/Array<io.github.artemidius.blowhard.core.domain/ToolCallOutcome> // io.github.artemidius.blowhard.core.domain/ToolCallOutcome.values|values#static(){}[0]
+}
+
 final enum class io.github.artemidius.blowhard.core.domain/TranscriptSaveResult : kotlin/Enum<io.github.artemidius.blowhard.core.domain/TranscriptSaveResult> { // io.github.artemidius.blowhard.core.domain/TranscriptSaveResult|null[0]
     enum entry CONVERSATION_NOT_FOUND // io.github.artemidius.blowhard.core.domain/TranscriptSaveResult.CONVERSATION_NOT_FOUND|null[0]
     enum entry SAVED // io.github.artemidius.blowhard.core.domain/TranscriptSaveResult.SAVED|null[0]
@@ -246,6 +258,10 @@ abstract fun interface io.github.artemidius.blowhard.core.domain/ModelCatalogPor
 
 abstract fun interface io.github.artemidius.blowhard.core.domain/TextGenerationPort { // io.github.artemidius.blowhard.core.domain/TextGenerationPort|null[0]
     abstract fun generate(io.github.artemidius.blowhard.core.domain/GenerationRequest): kotlinx.coroutines.flow/Flow<io.github.artemidius.blowhard.core.domain/GenerationEvent> // io.github.artemidius.blowhard.core.domain/TextGenerationPort.generate|generate(io.github.artemidius.blowhard.core.domain.GenerationRequest){}[0]
+}
+
+abstract fun interface io.github.artemidius.blowhard.core.domain/ToolExecutor { // io.github.artemidius.blowhard.core.domain/ToolExecutor|null[0]
+    abstract suspend fun execute(kotlin/String): io.github.artemidius.blowhard.core.domain/ToolExecutionResult // io.github.artemidius.blowhard.core.domain/ToolExecutor.execute|execute(kotlin.String){}[0]
 }
 
 abstract interface io.github.artemidius.blowhard.core.domain/ConversationStore { // io.github.artemidius.blowhard.core.domain/ConversationStore|null[0]
@@ -705,6 +721,47 @@ sealed interface io.github.artemidius.blowhard.core.domain/PromptTextResult { //
     }
 }
 
+sealed interface io.github.artemidius.blowhard.core.domain/ToolExecutionResult { // io.github.artemidius.blowhard.core.domain/ToolExecutionResult|null[0]
+    final class Completed : io.github.artemidius.blowhard.core.domain/ToolExecutionResult { // io.github.artemidius.blowhard.core.domain/ToolExecutionResult.Completed|null[0]
+        constructor <init>(kotlin/String) // io.github.artemidius.blowhard.core.domain/ToolExecutionResult.Completed.<init>|<init>(kotlin.String){}[0]
+
+        final val outputJson // io.github.artemidius.blowhard.core.domain/ToolExecutionResult.Completed.outputJson|{}outputJson[0]
+            final fun <get-outputJson>(): kotlin/String // io.github.artemidius.blowhard.core.domain/ToolExecutionResult.Completed.outputJson.<get-outputJson>|<get-outputJson>(){}[0]
+
+        final fun component1(): kotlin/String // io.github.artemidius.blowhard.core.domain/ToolExecutionResult.Completed.component1|component1(){}[0]
+        final fun copy(kotlin/String = ...): io.github.artemidius.blowhard.core.domain/ToolExecutionResult.Completed // io.github.artemidius.blowhard.core.domain/ToolExecutionResult.Completed.copy|copy(kotlin.String){}[0]
+        final fun equals(kotlin/Any?): kotlin/Boolean // io.github.artemidius.blowhard.core.domain/ToolExecutionResult.Completed.equals|equals(kotlin.Any?){}[0]
+        final fun hashCode(): kotlin/Int // io.github.artemidius.blowhard.core.domain/ToolExecutionResult.Completed.hashCode|hashCode(){}[0]
+        final fun toString(): kotlin/String // io.github.artemidius.blowhard.core.domain/ToolExecutionResult.Completed.toString|toString(){}[0]
+    }
+
+    final class Failed : io.github.artemidius.blowhard.core.domain/ToolExecutionResult { // io.github.artemidius.blowhard.core.domain/ToolExecutionResult.Failed|null[0]
+        constructor <init>(kotlin/String) // io.github.artemidius.blowhard.core.domain/ToolExecutionResult.Failed.<init>|<init>(kotlin.String){}[0]
+
+        final val outputJson // io.github.artemidius.blowhard.core.domain/ToolExecutionResult.Failed.outputJson|{}outputJson[0]
+            final fun <get-outputJson>(): kotlin/String // io.github.artemidius.blowhard.core.domain/ToolExecutionResult.Failed.outputJson.<get-outputJson>|<get-outputJson>(){}[0]
+
+        final fun component1(): kotlin/String // io.github.artemidius.blowhard.core.domain/ToolExecutionResult.Failed.component1|component1(){}[0]
+        final fun copy(kotlin/String = ...): io.github.artemidius.blowhard.core.domain/ToolExecutionResult.Failed // io.github.artemidius.blowhard.core.domain/ToolExecutionResult.Failed.copy|copy(kotlin.String){}[0]
+        final fun equals(kotlin/Any?): kotlin/Boolean // io.github.artemidius.blowhard.core.domain/ToolExecutionResult.Failed.equals|equals(kotlin.Any?){}[0]
+        final fun hashCode(): kotlin/Int // io.github.artemidius.blowhard.core.domain/ToolExecutionResult.Failed.hashCode|hashCode(){}[0]
+        final fun toString(): kotlin/String // io.github.artemidius.blowhard.core.domain/ToolExecutionResult.Failed.toString|toString(){}[0]
+    }
+
+    final class Rejected : io.github.artemidius.blowhard.core.domain/ToolExecutionResult { // io.github.artemidius.blowhard.core.domain/ToolExecutionResult.Rejected|null[0]
+        constructor <init>(kotlin/String) // io.github.artemidius.blowhard.core.domain/ToolExecutionResult.Rejected.<init>|<init>(kotlin.String){}[0]
+
+        final val outputJson // io.github.artemidius.blowhard.core.domain/ToolExecutionResult.Rejected.outputJson|{}outputJson[0]
+            final fun <get-outputJson>(): kotlin/String // io.github.artemidius.blowhard.core.domain/ToolExecutionResult.Rejected.outputJson.<get-outputJson>|<get-outputJson>(){}[0]
+
+        final fun component1(): kotlin/String // io.github.artemidius.blowhard.core.domain/ToolExecutionResult.Rejected.component1|component1(){}[0]
+        final fun copy(kotlin/String = ...): io.github.artemidius.blowhard.core.domain/ToolExecutionResult.Rejected // io.github.artemidius.blowhard.core.domain/ToolExecutionResult.Rejected.copy|copy(kotlin.String){}[0]
+        final fun equals(kotlin/Any?): kotlin/Boolean // io.github.artemidius.blowhard.core.domain/ToolExecutionResult.Rejected.equals|equals(kotlin.Any?){}[0]
+        final fun hashCode(): kotlin/Int // io.github.artemidius.blowhard.core.domain/ToolExecutionResult.Rejected.hashCode|hashCode(){}[0]
+        final fun toString(): kotlin/String // io.github.artemidius.blowhard.core.domain/ToolExecutionResult.Rejected.toString|toString(){}[0]
+    }
+}
+
 final class io.github.artemidius.blowhard.core.domain/AvailableModel { // io.github.artemidius.blowhard.core.domain/AvailableModel|null[0]
     constructor <init>(kotlin/String, kotlin.collections/List<kotlin/String>, kotlin/Long?, io.github.artemidius.blowhard.core.domain/ModelAvailability, io.github.artemidius.blowhard.core.domain/ModelCapabilities) // io.github.artemidius.blowhard.core.domain/AvailableModel.<init>|<init>(kotlin.String;kotlin.collections.List<kotlin.String>;kotlin.Long?;io.github.artemidius.blowhard.core.domain.ModelAvailability;io.github.artemidius.blowhard.core.domain.ModelCapabilities){}[0]
 
@@ -1020,6 +1077,69 @@ final class io.github.artemidius.blowhard.core.domain/StoredTranscript { // io.g
     final fun toString(): kotlin/String // io.github.artemidius.blowhard.core.domain/StoredTranscript.toString|toString(){}[0]
 }
 
+final class io.github.artemidius.blowhard.core.domain/ToolCallProposal { // io.github.artemidius.blowhard.core.domain/ToolCallProposal|null[0]
+    constructor <init>(io.github.artemidius.blowhard.core.domain/ToolCallId, io.github.artemidius.blowhard.core.domain/ToolName, kotlin/String) // io.github.artemidius.blowhard.core.domain/ToolCallProposal.<init>|<init>(io.github.artemidius.blowhard.core.domain.ToolCallId;io.github.artemidius.blowhard.core.domain.ToolName;kotlin.String){}[0]
+
+    final val argumentsJson // io.github.artemidius.blowhard.core.domain/ToolCallProposal.argumentsJson|{}argumentsJson[0]
+        final fun <get-argumentsJson>(): kotlin/String // io.github.artemidius.blowhard.core.domain/ToolCallProposal.argumentsJson.<get-argumentsJson>|<get-argumentsJson>(){}[0]
+    final val id // io.github.artemidius.blowhard.core.domain/ToolCallProposal.id|{}id[0]
+        final fun <get-id>(): io.github.artemidius.blowhard.core.domain/ToolCallId // io.github.artemidius.blowhard.core.domain/ToolCallProposal.id.<get-id>|<get-id>(){}[0]
+    final val name // io.github.artemidius.blowhard.core.domain/ToolCallProposal.name|{}name[0]
+        final fun <get-name>(): io.github.artemidius.blowhard.core.domain/ToolName // io.github.artemidius.blowhard.core.domain/ToolCallProposal.name.<get-name>|<get-name>(){}[0]
+
+    final fun component1(): io.github.artemidius.blowhard.core.domain/ToolCallId // io.github.artemidius.blowhard.core.domain/ToolCallProposal.component1|component1(){}[0]
+    final fun component2(): io.github.artemidius.blowhard.core.domain/ToolName // io.github.artemidius.blowhard.core.domain/ToolCallProposal.component2|component2(){}[0]
+    final fun component3(): kotlin/String // io.github.artemidius.blowhard.core.domain/ToolCallProposal.component3|component3(){}[0]
+    final fun copy(io.github.artemidius.blowhard.core.domain/ToolCallId = ..., io.github.artemidius.blowhard.core.domain/ToolName = ..., kotlin/String = ...): io.github.artemidius.blowhard.core.domain/ToolCallProposal // io.github.artemidius.blowhard.core.domain/ToolCallProposal.copy|copy(io.github.artemidius.blowhard.core.domain.ToolCallId;io.github.artemidius.blowhard.core.domain.ToolName;kotlin.String){}[0]
+    final fun equals(kotlin/Any?): kotlin/Boolean // io.github.artemidius.blowhard.core.domain/ToolCallProposal.equals|equals(kotlin.Any?){}[0]
+    final fun hashCode(): kotlin/Int // io.github.artemidius.blowhard.core.domain/ToolCallProposal.hashCode|hashCode(){}[0]
+    final fun toString(): kotlin/String // io.github.artemidius.blowhard.core.domain/ToolCallProposal.toString|toString(){}[0]
+}
+
+final class io.github.artemidius.blowhard.core.domain/ToolCallResult { // io.github.artemidius.blowhard.core.domain/ToolCallResult|null[0]
+    constructor <init>(io.github.artemidius.blowhard.core.domain/ToolCallId, io.github.artemidius.blowhard.core.domain/ToolName, io.github.artemidius.blowhard.core.domain/ToolCallOutcome, kotlin/String) // io.github.artemidius.blowhard.core.domain/ToolCallResult.<init>|<init>(io.github.artemidius.blowhard.core.domain.ToolCallId;io.github.artemidius.blowhard.core.domain.ToolName;io.github.artemidius.blowhard.core.domain.ToolCallOutcome;kotlin.String){}[0]
+
+    final val id // io.github.artemidius.blowhard.core.domain/ToolCallResult.id|{}id[0]
+        final fun <get-id>(): io.github.artemidius.blowhard.core.domain/ToolCallId // io.github.artemidius.blowhard.core.domain/ToolCallResult.id.<get-id>|<get-id>(){}[0]
+    final val name // io.github.artemidius.blowhard.core.domain/ToolCallResult.name|{}name[0]
+        final fun <get-name>(): io.github.artemidius.blowhard.core.domain/ToolName // io.github.artemidius.blowhard.core.domain/ToolCallResult.name.<get-name>|<get-name>(){}[0]
+    final val outcome // io.github.artemidius.blowhard.core.domain/ToolCallResult.outcome|{}outcome[0]
+        final fun <get-outcome>(): io.github.artemidius.blowhard.core.domain/ToolCallOutcome // io.github.artemidius.blowhard.core.domain/ToolCallResult.outcome.<get-outcome>|<get-outcome>(){}[0]
+    final val outputJson // io.github.artemidius.blowhard.core.domain/ToolCallResult.outputJson|{}outputJson[0]
+        final fun <get-outputJson>(): kotlin/String // io.github.artemidius.blowhard.core.domain/ToolCallResult.outputJson.<get-outputJson>|<get-outputJson>(){}[0]
+
+    final fun component1(): io.github.artemidius.blowhard.core.domain/ToolCallId // io.github.artemidius.blowhard.core.domain/ToolCallResult.component1|component1(){}[0]
+    final fun component2(): io.github.artemidius.blowhard.core.domain/ToolName // io.github.artemidius.blowhard.core.domain/ToolCallResult.component2|component2(){}[0]
+    final fun component3(): io.github.artemidius.blowhard.core.domain/ToolCallOutcome // io.github.artemidius.blowhard.core.domain/ToolCallResult.component3|component3(){}[0]
+    final fun component4(): kotlin/String // io.github.artemidius.blowhard.core.domain/ToolCallResult.component4|component4(){}[0]
+    final fun copy(io.github.artemidius.blowhard.core.domain/ToolCallId = ..., io.github.artemidius.blowhard.core.domain/ToolName = ..., io.github.artemidius.blowhard.core.domain/ToolCallOutcome = ..., kotlin/String = ...): io.github.artemidius.blowhard.core.domain/ToolCallResult // io.github.artemidius.blowhard.core.domain/ToolCallResult.copy|copy(io.github.artemidius.blowhard.core.domain.ToolCallId;io.github.artemidius.blowhard.core.domain.ToolName;io.github.artemidius.blowhard.core.domain.ToolCallOutcome;kotlin.String){}[0]
+    final fun equals(kotlin/Any?): kotlin/Boolean // io.github.artemidius.blowhard.core.domain/ToolCallResult.equals|equals(kotlin.Any?){}[0]
+    final fun hashCode(): kotlin/Int // io.github.artemidius.blowhard.core.domain/ToolCallResult.hashCode|hashCode(){}[0]
+    final fun toString(): kotlin/String // io.github.artemidius.blowhard.core.domain/ToolCallResult.toString|toString(){}[0]
+}
+
+final class io.github.artemidius.blowhard.core.domain/ToolDefinition { // io.github.artemidius.blowhard.core.domain/ToolDefinition|null[0]
+    constructor <init>(io.github.artemidius.blowhard.core.domain/ToolName, kotlin/String, kotlin/String, kotlin/Boolean = ...) // io.github.artemidius.blowhard.core.domain/ToolDefinition.<init>|<init>(io.github.artemidius.blowhard.core.domain.ToolName;kotlin.String;kotlin.String;kotlin.Boolean){}[0]
+
+    final val description // io.github.artemidius.blowhard.core.domain/ToolDefinition.description|{}description[0]
+        final fun <get-description>(): kotlin/String // io.github.artemidius.blowhard.core.domain/ToolDefinition.description.<get-description>|<get-description>(){}[0]
+    final val inputSchemaJson // io.github.artemidius.blowhard.core.domain/ToolDefinition.inputSchemaJson|{}inputSchemaJson[0]
+        final fun <get-inputSchemaJson>(): kotlin/String // io.github.artemidius.blowhard.core.domain/ToolDefinition.inputSchemaJson.<get-inputSchemaJson>|<get-inputSchemaJson>(){}[0]
+    final val mutating // io.github.artemidius.blowhard.core.domain/ToolDefinition.mutating|{}mutating[0]
+        final fun <get-mutating>(): kotlin/Boolean // io.github.artemidius.blowhard.core.domain/ToolDefinition.mutating.<get-mutating>|<get-mutating>(){}[0]
+    final val name // io.github.artemidius.blowhard.core.domain/ToolDefinition.name|{}name[0]
+        final fun <get-name>(): io.github.artemidius.blowhard.core.domain/ToolName // io.github.artemidius.blowhard.core.domain/ToolDefinition.name.<get-name>|<get-name>(){}[0]
+
+    final fun component1(): io.github.artemidius.blowhard.core.domain/ToolName // io.github.artemidius.blowhard.core.domain/ToolDefinition.component1|component1(){}[0]
+    final fun component2(): kotlin/String // io.github.artemidius.blowhard.core.domain/ToolDefinition.component2|component2(){}[0]
+    final fun component3(): kotlin/String // io.github.artemidius.blowhard.core.domain/ToolDefinition.component3|component3(){}[0]
+    final fun component4(): kotlin/Boolean // io.github.artemidius.blowhard.core.domain/ToolDefinition.component4|component4(){}[0]
+    final fun copy(io.github.artemidius.blowhard.core.domain/ToolName = ..., kotlin/String = ..., kotlin/String = ..., kotlin/Boolean = ...): io.github.artemidius.blowhard.core.domain/ToolDefinition // io.github.artemidius.blowhard.core.domain/ToolDefinition.copy|copy(io.github.artemidius.blowhard.core.domain.ToolName;kotlin.String;kotlin.String;kotlin.Boolean){}[0]
+    final fun equals(kotlin/Any?): kotlin/Boolean // io.github.artemidius.blowhard.core.domain/ToolDefinition.equals|equals(kotlin.Any?){}[0]
+    final fun hashCode(): kotlin/Int // io.github.artemidius.blowhard.core.domain/ToolDefinition.hashCode|hashCode(){}[0]
+    final fun toString(): kotlin/String // io.github.artemidius.blowhard.core.domain/ToolDefinition.toString|toString(){}[0]
+}
+
 final value class io.github.artemidius.blowhard.core.domain/PromptText { // io.github.artemidius.blowhard.core.domain/PromptText|null[0]
     final val value // io.github.artemidius.blowhard.core.domain/PromptText.value|{}value[0]
         final fun <get-value>(): kotlin/String // io.github.artemidius.blowhard.core.domain/PromptText.value.<get-value>|<get-value>(){}[0]
@@ -1033,5 +1153,35 @@ final value class io.github.artemidius.blowhard.core.domain/PromptText { // io.g
     }
 }
 
+final value class io.github.artemidius.blowhard.core.domain/ToolCallId { // io.github.artemidius.blowhard.core.domain/ToolCallId|null[0]
+    constructor <init>(kotlin/String) // io.github.artemidius.blowhard.core.domain/ToolCallId.<init>|<init>(kotlin.String){}[0]
+
+    final val value // io.github.artemidius.blowhard.core.domain/ToolCallId.value|{}value[0]
+        final fun <get-value>(): kotlin/String // io.github.artemidius.blowhard.core.domain/ToolCallId.value.<get-value>|<get-value>(){}[0]
+
+    final fun equals(kotlin/Any?): kotlin/Boolean // io.github.artemidius.blowhard.core.domain/ToolCallId.equals|equals(kotlin.Any?){}[0]
+    final fun hashCode(): kotlin/Int // io.github.artemidius.blowhard.core.domain/ToolCallId.hashCode|hashCode(){}[0]
+    final fun toString(): kotlin/String // io.github.artemidius.blowhard.core.domain/ToolCallId.toString|toString(){}[0]
+}
+
+final value class io.github.artemidius.blowhard.core.domain/ToolName { // io.github.artemidius.blowhard.core.domain/ToolName|null[0]
+    constructor <init>(kotlin/String) // io.github.artemidius.blowhard.core.domain/ToolName.<init>|<init>(kotlin.String){}[0]
+
+    final val value // io.github.artemidius.blowhard.core.domain/ToolName.value|{}value[0]
+        final fun <get-value>(): kotlin/String // io.github.artemidius.blowhard.core.domain/ToolName.value.<get-value>|<get-value>(){}[0]
+
+    final fun equals(kotlin/Any?): kotlin/Boolean // io.github.artemidius.blowhard.core.domain/ToolName.equals|equals(kotlin.Any?){}[0]
+    final fun hashCode(): kotlin/Int // io.github.artemidius.blowhard.core.domain/ToolName.hashCode|hashCode(){}[0]
+    final fun toString(): kotlin/String // io.github.artemidius.blowhard.core.domain/ToolName.toString|toString(){}[0]
+}
+
 final const val io.github.artemidius.blowhard.core.domain/MAX_GENERATION_IMAGE_BYTES // io.github.artemidius.blowhard.core.domain/MAX_GENERATION_IMAGE_BYTES|{}MAX_GENERATION_IMAGE_BYTES[0]
     final fun <get-MAX_GENERATION_IMAGE_BYTES>(): kotlin/Int // io.github.artemidius.blowhard.core.domain/MAX_GENERATION_IMAGE_BYTES.<get-MAX_GENERATION_IMAGE_BYTES>|<get-MAX_GENERATION_IMAGE_BYTES>(){}[0]
+final const val io.github.artemidius.blowhard.core.domain/MAX_TOOL_CALL_ID_CHARACTERS // io.github.artemidius.blowhard.core.domain/MAX_TOOL_CALL_ID_CHARACTERS|{}MAX_TOOL_CALL_ID_CHARACTERS[0]
+    final fun <get-MAX_TOOL_CALL_ID_CHARACTERS>(): kotlin/Int // io.github.artemidius.blowhard.core.domain/MAX_TOOL_CALL_ID_CHARACTERS.<get-MAX_TOOL_CALL_ID_CHARACTERS>|<get-MAX_TOOL_CALL_ID_CHARACTERS>(){}[0]
+final const val io.github.artemidius.blowhard.core.domain/MAX_TOOL_DESCRIPTION_CHARACTERS // io.github.artemidius.blowhard.core.domain/MAX_TOOL_DESCRIPTION_CHARACTERS|{}MAX_TOOL_DESCRIPTION_CHARACTERS[0]
+    final fun <get-MAX_TOOL_DESCRIPTION_CHARACTERS>(): kotlin/Int // io.github.artemidius.blowhard.core.domain/MAX_TOOL_DESCRIPTION_CHARACTERS.<get-MAX_TOOL_DESCRIPTION_CHARACTERS>|<get-MAX_TOOL_DESCRIPTION_CHARACTERS>(){}[0]
+final const val io.github.artemidius.blowhard.core.domain/MAX_TOOL_JSON_CHARACTERS // io.github.artemidius.blowhard.core.domain/MAX_TOOL_JSON_CHARACTERS|{}MAX_TOOL_JSON_CHARACTERS[0]
+    final fun <get-MAX_TOOL_JSON_CHARACTERS>(): kotlin/Int // io.github.artemidius.blowhard.core.domain/MAX_TOOL_JSON_CHARACTERS.<get-MAX_TOOL_JSON_CHARACTERS>|<get-MAX_TOOL_JSON_CHARACTERS>(){}[0]
+final const val io.github.artemidius.blowhard.core.domain/MAX_TOOL_OUTPUT_CHARACTERS // io.github.artemidius.blowhard.core.domain/MAX_TOOL_OUTPUT_CHARACTERS|{}MAX_TOOL_OUTPUT_CHARACTERS[0]
+    final fun <get-MAX_TOOL_OUTPUT_CHARACTERS>(): kotlin/Int // io.github.artemidius.blowhard.core.domain/MAX_TOOL_OUTPUT_CHARACTERS.<get-MAX_TOOL_OUTPUT_CHARACTERS>|<get-MAX_TOOL_OUTPUT_CHARACTERS>(){}[0]
