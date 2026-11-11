@@ -1,0 +1,34 @@
+{
+    "schemaVersion": "meeting-note-evaluation-report-v1",
+    "executionKind": "fixture",
+    "datasetVersion": "meeting-note-synthetic-v1",
+    "templateVersion": "meeting-note-v1",
+    "modelId": "fixture-meeting-note-v1",
+    "configurationVersion": "fixture-evaluation-v1",
+    "reportDate": "2026-11-11",
+    "sampleCount": 12,
+    "latencyPolicy": "deterministic-zero",
+    "usage": null,
+    "semanticReview": "synthetic expectations hand-reviewed; live model quality not measured",
+    "summary": {
+        "schemaValidity": {"passed": 12, "failed": 0, "total": 12},
+        "fieldCorrectness": {"passed": 8, "failed": 0, "total": 8},
+        "missingFieldHandling": {"passed": 8, "failed": 0, "total": 8},
+        "sourceResolution": {"passed": 8, "failed": 0, "total": 8},
+        "expectedOutcome": {"passed": 12, "failed": 0, "total": 12}
+    },
+    "cases": [
+        {"id": "basic-decision-action", "latencyMilliseconds": 0, "schemaValidity": "PASS", "fieldCorrectness": "PASS", "missingFieldHandling": "PASS", "sourceResolution": "PASS", "expectedOutcome": "PASS", "observedRejection": null},
+        {"id": "unknown-owner-date", "latencyMilliseconds": 0, "schemaValidity": "PASS", "fieldCorrectness": "PASS", "missingFieldHandling": "PASS", "sourceResolution": "PASS", "expectedOutcome": "PASS", "observedRejection": null},
+        {"id": "nullable-title", "latencyMilliseconds": 0, "schemaValidity": "PASS", "fieldCorrectness": "PASS", "missingFieldHandling": "PASS", "sourceResolution": "PASS", "expectedOutcome": "PASS", "observedRejection": null},
+        {"id": "multiple-decisions", "latencyMilliseconds": 0, "schemaValidity": "PASS", "fieldCorrectness": "PASS", "missingFieldHandling": "PASS", "sourceResolution": "PASS", "expectedOutcome": "PASS", "observedRejection": null},
+        {"id": "action-only", "latencyMilliseconds": 0, "schemaValidity": "PASS", "fieldCorrectness": "PASS", "missingFieldHandling": "PASS", "sourceResolution": "PASS", "expectedOutcome": "PASS", "observedRejection": null},
+        {"id": "decision-only", "latencyMilliseconds": 0, "schemaValidity": "PASS", "fieldCorrectness": "PASS", "missingFieldHandling": "PASS", "sourceResolution": "PASS", "expectedOutcome": "PASS", "observedRejection": null},
+        {"id": "multi-page-sources", "latencyMilliseconds": 0, "schemaValidity": "PASS", "fieldCorrectness": "PASS", "missingFieldHandling": "PASS", "sourceResolution": "PASS", "expectedOutcome": "PASS", "observedRejection": null},
+        {"id": "explicit-abstention", "latencyMilliseconds": 0, "schemaValidity": "PASS", "fieldCorrectness": "PASS", "missingFieldHandling": "PASS", "sourceResolution": "PASS", "expectedOutcome": "PASS", "observedRejection": null},
+        {"id": "malformed-json", "latencyMilliseconds": 0, "schemaValidity": "PASS", "fieldCorrectness": "NOT_APPLICABLE", "missingFieldHandling": "NOT_APPLICABLE", "sourceResolution": "NOT_APPLICABLE", "expectedOutcome": "PASS", "observedRejection": "INVALID_OUTPUT"},
+        {"id": "unknown-field", "latencyMilliseconds": 0, "schemaValidity": "PASS", "fieldCorrectness": "NOT_APPLICABLE", "missingFieldHandling": "NOT_APPLICABLE", "sourceResolution": "NOT_APPLICABLE", "expectedOutcome": "PASS", "observedRejection": "INVALID_OUTPUT"},
+        {"id": "invalid-date", "latencyMilliseconds": 0, "schemaValidity": "PASS", "fieldCorrectness": "NOT_APPLICABLE", "missingFieldHandling": "NOT_APPLICABLE", "sourceResolution": "NOT_APPLICABLE", "expectedOutcome": "PASS", "observedRejection": "INVALID_OUTPUT"},
+        {"id": "unsupported-citation", "latencyMilliseconds": 0, "schemaValidity": "PASS", "fieldCorrectness": "NOT_APPLICABLE", "missingFieldHandling": "NOT_APPLICABLE", "sourceResolution": "NOT_APPLICABLE", "expectedOutcome": "PASS", "observedRejection": "INVALID_OUTPUT"}
+    ]
+}
