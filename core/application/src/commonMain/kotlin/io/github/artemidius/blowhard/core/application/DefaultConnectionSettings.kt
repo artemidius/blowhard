@@ -168,7 +168,13 @@ public class DefaultConnectionSettings(
             .asSequence()
             .filter { it.availability == ModelAvailability.AVAILABLE }
             .filter { it.capabilities.chatCompletion == CapabilitySupport.SUPPORTED }
-            .map { SelectableModel(it.id, it.contextWindowTokens) }
+            .map {
+                SelectableModel(
+                    id = it.id,
+                    contextWindowTokens = it.contextWindowTokens,
+                    supportsVision = it.capabilities.vision == CapabilitySupport.SUPPORTED,
+                )
+            }
             .distinctBy(SelectableModel::id)
             .sortedBy(SelectableModel::id)
             .toList()

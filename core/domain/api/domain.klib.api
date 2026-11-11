@@ -97,6 +97,19 @@ final enum class io.github.artemidius.blowhard.core.domain/GenerationFailureKind
     final fun values(): kotlin/Array<io.github.artemidius.blowhard.core.domain/GenerationFailureKind> // io.github.artemidius.blowhard.core.domain/GenerationFailureKind.values|values#static(){}[0]
 }
 
+final enum class io.github.artemidius.blowhard.core.domain/GenerationImageMediaType : kotlin/Enum<io.github.artemidius.blowhard.core.domain/GenerationImageMediaType> { // io.github.artemidius.blowhard.core.domain/GenerationImageMediaType|null[0]
+    enum entry JPEG // io.github.artemidius.blowhard.core.domain/GenerationImageMediaType.JPEG|null[0]
+    enum entry PNG // io.github.artemidius.blowhard.core.domain/GenerationImageMediaType.PNG|null[0]
+
+    final val entries // io.github.artemidius.blowhard.core.domain/GenerationImageMediaType.entries|#static{}entries[0]
+        final fun <get-entries>(): kotlin.enums/EnumEntries<io.github.artemidius.blowhard.core.domain/GenerationImageMediaType> // io.github.artemidius.blowhard.core.domain/GenerationImageMediaType.entries.<get-entries>|<get-entries>#static(){}[0]
+    final val value // io.github.artemidius.blowhard.core.domain/GenerationImageMediaType.value|{}value[0]
+        final fun <get-value>(): kotlin/String // io.github.artemidius.blowhard.core.domain/GenerationImageMediaType.value.<get-value>|<get-value>(){}[0]
+
+    final fun valueOf(kotlin/String): io.github.artemidius.blowhard.core.domain/GenerationImageMediaType // io.github.artemidius.blowhard.core.domain/GenerationImageMediaType.valueOf|valueOf#static(kotlin.String){}[0]
+    final fun values(): kotlin/Array<io.github.artemidius.blowhard.core.domain/GenerationImageMediaType> // io.github.artemidius.blowhard.core.domain/GenerationImageMediaType.values|values#static(){}[0]
+}
+
 final enum class io.github.artemidius.blowhard.core.domain/GenerationRetryAdvice : kotlin/Enum<io.github.artemidius.blowhard.core.domain/GenerationRetryAdvice> { // io.github.artemidius.blowhard.core.domain/GenerationRetryAdvice|null[0]
     enum entry DO_NOT_RETRY // io.github.artemidius.blowhard.core.domain/GenerationRetryAdvice.DO_NOT_RETRY|null[0]
     enum entry EXPLICIT_NEW_ATTEMPT // io.github.artemidius.blowhard.core.domain/GenerationRetryAdvice.EXPLICIT_NEW_ATTEMPT|null[0]
@@ -648,11 +661,26 @@ final class io.github.artemidius.blowhard.core.domain/GenerationFailure { // io.
     final fun toString(): kotlin/String // io.github.artemidius.blowhard.core.domain/GenerationFailure.toString|toString(){}[0]
 }
 
+final class io.github.artemidius.blowhard.core.domain/GenerationImage { // io.github.artemidius.blowhard.core.domain/GenerationImage|null[0]
+    final val mediaType // io.github.artemidius.blowhard.core.domain/GenerationImage.mediaType|{}mediaType[0]
+        final fun <get-mediaType>(): io.github.artemidius.blowhard.core.domain/GenerationImageMediaType // io.github.artemidius.blowhard.core.domain/GenerationImage.mediaType.<get-mediaType>|<get-mediaType>(){}[0]
+    final val sizeBytes // io.github.artemidius.blowhard.core.domain/GenerationImage.sizeBytes|{}sizeBytes[0]
+        final fun <get-sizeBytes>(): kotlin/Int // io.github.artemidius.blowhard.core.domain/GenerationImage.sizeBytes.<get-sizeBytes>|<get-sizeBytes>(){}[0]
+
+    final fun copyBytes(): kotlin/ByteArray // io.github.artemidius.blowhard.core.domain/GenerationImage.copyBytes|copyBytes(){}[0]
+
+    final object Companion { // io.github.artemidius.blowhard.core.domain/GenerationImage.Companion|null[0]
+        final fun from(io.github.artemidius.blowhard.core.domain/GenerationImageMediaType, kotlin/ByteArray): io.github.artemidius.blowhard.core.domain/GenerationImage? // io.github.artemidius.blowhard.core.domain/GenerationImage.Companion.from|from(io.github.artemidius.blowhard.core.domain.GenerationImageMediaType;kotlin.ByteArray){}[0]
+    }
+}
+
 final class io.github.artemidius.blowhard.core.domain/GenerationRequest { // io.github.artemidius.blowhard.core.domain/GenerationRequest|null[0]
-    constructor <init>(io.github.artemidius.blowhard.core.api/RunId, io.github.artemidius.blowhard.core.api/ConversationId, io.github.artemidius.blowhard.core.domain/PromptText, io.github.artemidius.blowhard.core.api/GenerationTarget = ..., io.github.artemidius.blowhard.core.api/GenerationParameters = ...) // io.github.artemidius.blowhard.core.domain/GenerationRequest.<init>|<init>(io.github.artemidius.blowhard.core.api.RunId;io.github.artemidius.blowhard.core.api.ConversationId;io.github.artemidius.blowhard.core.domain.PromptText;io.github.artemidius.blowhard.core.api.GenerationTarget;io.github.artemidius.blowhard.core.api.GenerationParameters){}[0]
+    constructor <init>(io.github.artemidius.blowhard.core.api/RunId, io.github.artemidius.blowhard.core.api/ConversationId, io.github.artemidius.blowhard.core.domain/PromptText, io.github.artemidius.blowhard.core.api/GenerationTarget = ..., io.github.artemidius.blowhard.core.api/GenerationParameters = ..., io.github.artemidius.blowhard.core.domain/GenerationImage? = ...) // io.github.artemidius.blowhard.core.domain/GenerationRequest.<init>|<init>(io.github.artemidius.blowhard.core.api.RunId;io.github.artemidius.blowhard.core.api.ConversationId;io.github.artemidius.blowhard.core.domain.PromptText;io.github.artemidius.blowhard.core.api.GenerationTarget;io.github.artemidius.blowhard.core.api.GenerationParameters;io.github.artemidius.blowhard.core.domain.GenerationImage?){}[0]
 
     final val conversationId // io.github.artemidius.blowhard.core.domain/GenerationRequest.conversationId|{}conversationId[0]
         final fun <get-conversationId>(): io.github.artemidius.blowhard.core.api/ConversationId // io.github.artemidius.blowhard.core.domain/GenerationRequest.conversationId.<get-conversationId>|<get-conversationId>(){}[0]
+    final val image // io.github.artemidius.blowhard.core.domain/GenerationRequest.image|{}image[0]
+        final fun <get-image>(): io.github.artemidius.blowhard.core.domain/GenerationImage? // io.github.artemidius.blowhard.core.domain/GenerationRequest.image.<get-image>|<get-image>(){}[0]
     final val parameters // io.github.artemidius.blowhard.core.domain/GenerationRequest.parameters|{}parameters[0]
         final fun <get-parameters>(): io.github.artemidius.blowhard.core.api/GenerationParameters // io.github.artemidius.blowhard.core.domain/GenerationRequest.parameters.<get-parameters>|<get-parameters>(){}[0]
     final val prompt // io.github.artemidius.blowhard.core.domain/GenerationRequest.prompt|{}prompt[0]
@@ -667,7 +695,8 @@ final class io.github.artemidius.blowhard.core.domain/GenerationRequest { // io.
     final fun component3(): io.github.artemidius.blowhard.core.domain/PromptText // io.github.artemidius.blowhard.core.domain/GenerationRequest.component3|component3(){}[0]
     final fun component4(): io.github.artemidius.blowhard.core.api/GenerationTarget // io.github.artemidius.blowhard.core.domain/GenerationRequest.component4|component4(){}[0]
     final fun component5(): io.github.artemidius.blowhard.core.api/GenerationParameters // io.github.artemidius.blowhard.core.domain/GenerationRequest.component5|component5(){}[0]
-    final fun copy(io.github.artemidius.blowhard.core.api/RunId = ..., io.github.artemidius.blowhard.core.api/ConversationId = ..., io.github.artemidius.blowhard.core.domain/PromptText = ..., io.github.artemidius.blowhard.core.api/GenerationTarget = ..., io.github.artemidius.blowhard.core.api/GenerationParameters = ...): io.github.artemidius.blowhard.core.domain/GenerationRequest // io.github.artemidius.blowhard.core.domain/GenerationRequest.copy|copy(io.github.artemidius.blowhard.core.api.RunId;io.github.artemidius.blowhard.core.api.ConversationId;io.github.artemidius.blowhard.core.domain.PromptText;io.github.artemidius.blowhard.core.api.GenerationTarget;io.github.artemidius.blowhard.core.api.GenerationParameters){}[0]
+    final fun component6(): io.github.artemidius.blowhard.core.domain/GenerationImage? // io.github.artemidius.blowhard.core.domain/GenerationRequest.component6|component6(){}[0]
+    final fun copy(io.github.artemidius.blowhard.core.api/RunId = ..., io.github.artemidius.blowhard.core.api/ConversationId = ..., io.github.artemidius.blowhard.core.domain/PromptText = ..., io.github.artemidius.blowhard.core.api/GenerationTarget = ..., io.github.artemidius.blowhard.core.api/GenerationParameters = ..., io.github.artemidius.blowhard.core.domain/GenerationImage? = ...): io.github.artemidius.blowhard.core.domain/GenerationRequest // io.github.artemidius.blowhard.core.domain/GenerationRequest.copy|copy(io.github.artemidius.blowhard.core.api.RunId;io.github.artemidius.blowhard.core.api.ConversationId;io.github.artemidius.blowhard.core.domain.PromptText;io.github.artemidius.blowhard.core.api.GenerationTarget;io.github.artemidius.blowhard.core.api.GenerationParameters;io.github.artemidius.blowhard.core.domain.GenerationImage?){}[0]
     final fun equals(kotlin/Any?): kotlin/Boolean // io.github.artemidius.blowhard.core.domain/GenerationRequest.equals|equals(kotlin.Any?){}[0]
     final fun hashCode(): kotlin/Int // io.github.artemidius.blowhard.core.domain/GenerationRequest.hashCode|hashCode(){}[0]
     final fun toString(): kotlin/String // io.github.artemidius.blowhard.core.domain/GenerationRequest.toString|toString(){}[0]
@@ -846,3 +875,6 @@ final value class io.github.artemidius.blowhard.core.domain/PromptText { // io.g
         final fun from(kotlin/String): io.github.artemidius.blowhard.core.domain/PromptTextResult // io.github.artemidius.blowhard.core.domain/PromptText.Companion.from|from(kotlin.String){}[0]
     }
 }
+
+final const val io.github.artemidius.blowhard.core.domain/MAX_GENERATION_IMAGE_BYTES // io.github.artemidius.blowhard.core.domain/MAX_GENERATION_IMAGE_BYTES|{}MAX_GENERATION_IMAGE_BYTES[0]
+    final fun <get-MAX_GENERATION_IMAGE_BYTES>(): kotlin/Int // io.github.artemidius.blowhard.core.domain/MAX_GENERATION_IMAGE_BYTES.<get-MAX_GENERATION_IMAGE_BYTES>|<get-MAX_GENERATION_IMAGE_BYTES>(){}[0]

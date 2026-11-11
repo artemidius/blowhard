@@ -9,6 +9,10 @@ import io.github.artemidius.blowhard.core.api.ConnectionTestResult
 import io.github.artemidius.blowhard.core.api.ConversationId
 import io.github.artemidius.blowhard.core.api.CredentialStatus
 import io.github.artemidius.blowhard.core.api.CredentialUpdateResult
+import io.github.artemidius.blowhard.core.api.DocumentContentDescriptor
+import io.github.artemidius.blowhard.core.api.DocumentExtraction
+import io.github.artemidius.blowhard.core.api.DocumentFormat
+import io.github.artemidius.blowhard.core.api.DocumentId
 import io.github.artemidius.blowhard.core.api.GenerationMode
 import io.github.artemidius.blowhard.core.api.GenerationParameters
 import io.github.artemidius.blowhard.core.api.GenerationTarget
@@ -16,6 +20,7 @@ import io.github.artemidius.blowhard.core.api.MessageId
 import io.github.artemidius.blowhard.core.api.ModeSelectionResult
 import io.github.artemidius.blowhard.core.api.ModelSelectionResult
 import io.github.artemidius.blowhard.core.api.ObserveRunResult
+import io.github.artemidius.blowhard.core.api.RunAttachment
 import io.github.artemidius.blowhard.core.api.RunFailureKind
 import io.github.artemidius.blowhard.core.api.RunId
 import io.github.artemidius.blowhard.core.api.RunSnapshot
@@ -26,15 +31,22 @@ import io.github.artemidius.blowhard.core.api.StartRunRequest
 import io.github.artemidius.blowhard.core.api.StartRunResult
 import io.github.artemidius.blowhard.core.domain.ConversationRecoveryResult
 import io.github.artemidius.blowhard.core.domain.ConversationStore
+import io.github.artemidius.blowhard.core.domain.DocumentExtractionSaveResult
+import io.github.artemidius.blowhard.core.domain.DocumentExtractionStoreLookupResult
+import io.github.artemidius.blowhard.core.domain.DocumentProcessingStore
+import io.github.artemidius.blowhard.core.domain.DocumentSourceLookupResult
 import io.github.artemidius.blowhard.core.domain.GenerationEvent
+import io.github.artemidius.blowhard.core.domain.GenerationImageMediaType
 import io.github.artemidius.blowhard.core.domain.StoredAttemptStatus
 import io.github.artemidius.blowhard.core.domain.StoredConversation
+import io.github.artemidius.blowhard.core.domain.StoredDocumentSource
 import io.github.artemidius.blowhard.core.domain.StoredGenerationAttempt
 import io.github.artemidius.blowhard.core.domain.StoredMessage
 import io.github.artemidius.blowhard.core.domain.StoredMessageRole
 import io.github.artemidius.blowhard.core.domain.StoredTranscript
 import io.github.artemidius.blowhard.core.domain.TextGenerationPort
 import io.github.artemidius.blowhard.core.domain.TranscriptSaveResult
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitCancellation
@@ -49,6 +61,7 @@ import kotlinx.coroutines.test.runCurrent
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertFailsWith
 import kotlin.test.assertIs
 
 @OptIn(ExperimentalCoroutinesApi::class)
@@ -220,6 +233,137 @@ class DefaultConversationRunsTest {
     }
 
     @Test
+    fun `vision run resolves one explicitly selected local image`() = runTest {
+        val documentId = DocumentId("selected-image")
+        val content = byteArrayOf(1, 2, 3)
+        var observedBytes: ByteArray? = null
+        var observedMediaType: GenerationImageMediaType? = null
+        val runs = controller(
+            generation = TextGenerationPort { request ->
+                observedBytes = request.image?.copyBytes()
+                observedMediaType = request.image?.mediaType
+                flowOf(GenerationEvent.Completed)
+            },
+            connectionSettings = FakeRunConnectionSettings(readyLiveState(supportsVision = true)),
+            documentProcessingStore = FakeDocumentProcessingStore(
+                DocumentSourceLookupResult.Found(imageSource(documentId, content)),
+            ),
+        )
+
+        val result = runs.start(
+            StartRunRequest(
+                ConversationId("vision"),
+                "Describe this image",
+                RunAttachment(documentId),
+            ),
+        )
+        content[0] = 9
+        advanceUntilIdle()
+
+        assertIs<StartRunResult.Started>(result)
+        assertEquals(listOf<Byte>(1, 2, 3), observedBytes?.toList())
+        assertEquals(GenerationImageMediaType.PNG, observedMediaType)
+    }
+
+    @Test
+    fun `vision capability is required before local content is read`() = runTest {
+        val store = FakeDocumentProcessingStore(DocumentSourceLookupResult.Unavailable)
+        val runs = controller(
+            generation = TextGenerationPort { flowOf(GenerationEvent.Completed) },
+            connectionSettings = FakeRunConnectionSettings(readyLiveState()),
+            documentProcessingStore = store,
+        )
+
+        val result = runs.start(
+            StartRunRequest(
+                ConversationId("vision"),
+                "Describe",
+                RunAttachment(DocumentId("selected-image")),
+            ),
+        )
+
+        assertEquals(
+            StartRunRejection.MODEL_DOES_NOT_SUPPORT_VISION,
+            assertIs<StartRunResult.Rejected>(result).reason,
+        )
+        assertEquals(0, store.readCalls)
+    }
+
+    @Test
+    fun `missing and non-image selections never invoke generation`() = runTest {
+        var executions = 0
+        val settings = FakeRunConnectionSettings(readyLiveState(supportsVision = true))
+        val generation = TextGenerationPort {
+            executions += 1
+            flowOf(GenerationEvent.Completed)
+        }
+        val missingRuns = controller(
+            generation,
+            connectionSettings = settings,
+            documentProcessingStore = FakeDocumentProcessingStore(DocumentSourceLookupResult.NotFound),
+        )
+        val pdfRuns = controller(
+            generation,
+            connectionSettings = settings,
+            documentProcessingStore = FakeDocumentProcessingStore(
+                DocumentSourceLookupResult.Found(pdfSource(DocumentId("pdf"))),
+            ),
+        )
+
+        val missing = missingRuns.start(
+            StartRunRequest(ConversationId("missing"), "Describe", RunAttachment(DocumentId("missing"))),
+        )
+        val pdf = pdfRuns.start(
+            StartRunRequest(ConversationId("pdf"), "Describe", RunAttachment(DocumentId("pdf"))),
+        )
+        advanceUntilIdle()
+
+        assertEquals(
+            StartRunRejection.ATTACHMENT_NOT_AVAILABLE,
+            assertIs<StartRunResult.Rejected>(missing).reason,
+        )
+        assertEquals(
+            StartRunRejection.ATTACHMENT_NOT_SUPPORTED,
+            assertIs<StartRunResult.Rejected>(pdf).reason,
+        )
+        assertEquals(0, executions)
+    }
+
+    @Test
+    fun `image lookup failures are safe while cancellation remains cooperative`() = runTest {
+        val settings = FakeRunConnectionSettings(readyLiveState(supportsVision = true))
+        val unavailableRuns = controller(
+            TextGenerationPort { flowOf(GenerationEvent.Completed) },
+            connectionSettings = settings,
+            documentProcessingStore = FakeDocumentProcessingStore(
+                DocumentSourceLookupResult.Unavailable,
+                failure = IllegalStateException("private database detail"),
+            ),
+        )
+        val cancelledRuns = controller(
+            TextGenerationPort { flowOf(GenerationEvent.Completed) },
+            connectionSettings = settings,
+            documentProcessingStore = FakeDocumentProcessingStore(
+                DocumentSourceLookupResult.Unavailable,
+                failure = CancellationException("cancelled"),
+            ),
+        )
+        val request = StartRunRequest(
+            ConversationId("vision"),
+            "Describe",
+            RunAttachment(DocumentId("selected-image")),
+        )
+
+        val unavailable = unavailableRuns.start(request)
+
+        assertEquals(
+            StartRunRejection.ATTACHMENT_NOT_AVAILABLE,
+            assertIs<StartRunResult.Rejected>(unavailable).reason,
+        )
+        assertFailsWith<CancellationException> { cancelledRuns.start(request) }
+    }
+
+    @Test
     fun `close cancels active work and rejects future starts`() = runTest {
         val runs = controller(TextGenerationPort { flow { awaitCancellation() } })
         val runId = runs.startRun("conversation-1")
@@ -380,6 +524,7 @@ class DefaultConversationRunsTest {
         connectionSettings: ConnectionSettings? = null,
         conversationStore: ConversationStore? = null,
         checkpointPolicy: RunCheckpointPolicy = RunCheckpointPolicy(),
+        documentProcessingStore: DocumentProcessingStore? = null,
     ): DefaultConversationRuns = DefaultConversationRuns(
         generation = generation,
         idFactory = SequentialRunIdFactory(),
@@ -389,6 +534,53 @@ class DefaultConversationRunsTest {
         connectionSettings = connectionSettings,
         conversationStore = conversationStore,
         checkpointPolicy = checkpointPolicy,
+        documentProcessingStore = documentProcessingStore,
+    )
+}
+
+private class FakeDocumentProcessingStore(
+    private val result: DocumentSourceLookupResult,
+    private val failure: Throwable? = null,
+) : DocumentProcessingStore {
+    var readCalls: Int = 0
+
+    override suspend fun readSource(id: DocumentId): DocumentSourceLookupResult {
+        readCalls += 1
+        failure?.let { throw it }
+        return result
+    }
+
+    override suspend fun saveExtraction(extraction: DocumentExtraction): DocumentExtractionSaveResult =
+        DocumentExtractionSaveResult.UNAVAILABLE
+
+    override suspend fun findExtraction(id: DocumentId): DocumentExtractionStoreLookupResult =
+        DocumentExtractionStoreLookupResult.Unavailable
+
+    override suspend fun close(): Unit = Unit
+}
+
+private fun imageSource(id: DocumentId, content: ByteArray): StoredDocumentSource = StoredDocumentSource(
+    document = io.github.artemidius.blowhard.core.api.ImportedDocument(
+        id,
+        "image.png",
+        content.size.toLong(),
+        1,
+        DocumentContentDescriptor.Image(DocumentFormat.PNG, 1, 1),
+    ),
+    content = content,
+)
+
+private fun pdfSource(id: DocumentId): StoredDocumentSource {
+    val content = byteArrayOf(1)
+    return StoredDocumentSource(
+        document = io.github.artemidius.blowhard.core.api.ImportedDocument(
+            id,
+            "document.pdf",
+            content.size.toLong(),
+            1,
+            DocumentContentDescriptor.Pdf(1),
+        ),
+        content = content,
     )
 }
 
@@ -488,11 +680,11 @@ private class FakeRunConnectionSettings(initial: ConnectionSettingsState) : Conn
     override suspend fun selectMode(mode: GenerationMode): ModeSelectionResult = ModeSelectionResult.UPDATED
 }
 
-private fun readyLiveState(): ConnectionSettingsState = ConnectionSettingsState(
+private fun readyLiveState(supportsVision: Boolean = false): ConnectionSettingsState = ConnectionSettingsState(
     mode = GenerationMode.LIVE,
     credentialStatus = CredentialStatus.CONFIGURED,
     connectionStatus = ConnectionStatus.READY,
-    models = listOf(SelectableModel("verified-model", 32_000)),
+    models = listOf(SelectableModel("verified-model", 32_000, supportsVision)),
     selectedModelId = "verified-model",
     liveDataDisclosureAccepted = true,
 )

@@ -18,6 +18,7 @@ import io.github.artemidius.blowhard.core.api.StartRunRejection
 import io.github.artemidius.blowhard.core.api.StartRunRequest
 import io.github.artemidius.blowhard.core.api.StartRunResult
 import io.github.artemidius.blowhard.core.domain.ConversationStore
+import io.github.artemidius.blowhard.core.domain.DocumentProcessingStore
 import io.github.artemidius.blowhard.core.domain.GenerationEvent
 import io.github.artemidius.blowhard.core.domain.GenerationRequest
 import io.github.artemidius.blowhard.core.domain.TextGenerationPort
@@ -53,6 +54,7 @@ public class DefaultConversationRuns(
     private val connectionSettings: ConnectionSettings? = null,
     conversationStore: ConversationStore? = null,
     checkpointPolicy: RunCheckpointPolicy = RunCheckpointPolicy(),
+    documentProcessingStore: DocumentProcessingStore? = null,
 ) : ConversationRuns,
     ConversationLibrary,
     RunInspector {
@@ -66,6 +68,7 @@ public class DefaultConversationRuns(
         clock,
     )
     private val deletion = ConversationDeletionCoordinator(conversationStore, repository)
+    private val imageResolver = RunImageResolver(documentProcessingStore)
 
     override suspend fun start(request: StartRunRequest): StartRunResult = when (
         val validation = validator.validate(request)
@@ -82,6 +85,15 @@ public class DefaultConversationRuns(
         return if (runConfiguration == null) {
             StartRunResult.Rejected(StartRunRejection.LIVE_CONFIGURATION_NOT_READY)
         } else {
+            val image = when (
+                val resolution = imageResolver.resolve(
+                    request.attachment,
+                    runConfiguration.supportsVision,
+                )
+            ) {
+                is ImageResolution.Accepted -> resolution.image
+                is ImageResolution.Rejected -> return StartRunResult.Rejected(resolution.reason)
+            }
             val runId = idFactory.next()
             val record = RunRecord(
                 runId = runId,
@@ -89,6 +101,7 @@ public class DefaultConversationRuns(
                 prompt = validation.prompt,
                 target = runConfiguration.target,
                 parameters = runConfiguration.parameters,
+                image = image,
                 initialSnapshot = RunSnapshot.Queued(runId, request.conversationId, clock.now()),
             )
             when (repository.add(record)) {
@@ -177,6 +190,7 @@ public class DefaultConversationRuns(
             record.prompt,
             record.target,
             record.parameters,
+            record.image,
         )
         generation.generate(request).takeWhile { event ->
             when (event) {
@@ -205,7 +219,7 @@ public class DefaultConversationRuns(
 
     private fun resolveRunConfiguration(): RunConfiguration? {
         val settings = connectionSettings?.state?.value
-            ?: return RunConfiguration(GenerationTarget.Demo, GenerationParameters())
+            ?: return RunConfiguration(GenerationTarget.Demo, GenerationParameters(), supportsVision = false)
         val target = when (settings.mode) {
             GenerationMode.DEMO -> GenerationTarget.Demo
 
@@ -214,8 +228,15 @@ public class DefaultConversationRuns(
                     ?.takeIf { settings.canUseLiveMode }
                     ?.let(GenerationTarget::Live)
         }
-        return target?.let { RunConfiguration(it, settings.generationParameters) }
+        val supportsVision = settings.selectedModelId?.let { selected ->
+            settings.models.firstOrNull { it.id == selected }?.supportsVision
+        } ?: false
+        return target?.let { RunConfiguration(it, settings.generationParameters, supportsVision) }
     }
 }
 
-private data class RunConfiguration(val target: GenerationTarget, val parameters: GenerationParameters)
+private data class RunConfiguration(
+    val target: GenerationTarget,
+    val parameters: GenerationParameters,
+    val supportsVision: Boolean,
+)
