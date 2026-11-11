@@ -34,6 +34,7 @@ internal fun DocumentLibraryScreen(
         HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
         Box(Modifier.fillMaxSize(), contentAlignment = Alignment.TopCenter) {
             when {
+                state.selectedDocument != null -> DocumentWorkbench(state, onAction)
                 state.isBusy && state.documents.isEmpty() -> DocumentLibraryLoading()
                 state.documents.isEmpty() -> EmptyDocumentLibrary()
                 else -> DocumentList(state.documents, state.isBusy, onAction)
@@ -67,20 +68,47 @@ private fun DocumentLibraryHeader(
         horizontalArrangement = Arrangement.spacedBy(12.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
-        TextButton(onClick = onBack) { Text("Back") }
-        Column(Modifier.weight(1f)) {
-            Text("Local documents", style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.SemiBold)
-            Text(
-                "Inspected locally · app-managed storage · never sent automatically",
-                style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
-            )
-        }
+        TextButton(
+            onClick = {
+                if (state.selectedDocument == null) onBack() else onAction(DocumentLibraryAction.WorkbenchClosed)
+            },
+        ) { Text("Back") }
+        DocumentLibraryTitle(state, Modifier.weight(1f))
         Button(
-            onClick = { onAction(DocumentLibraryAction.ImportRequested) },
+            onClick = {
+                state.selectedDocument?.let { onAction(DocumentLibraryAction.ProcessRequested(it.id)) }
+                    ?: onAction(DocumentLibraryAction.ImportRequested)
+            },
             enabled = !state.isBusy,
         ) {
-            Text(if (state.isBusy) "Working…" else "Import document")
+            Text(
+                when {
+                    state.isBusy -> "Working…"
+                    state.selectedDocument != null && state.extraction != null -> "Extract again"
+                    state.selectedDocument != null -> "Extract with Mistral"
+                    else -> "Import document"
+                },
+            )
         }
+    }
+}
+
+@Composable
+private fun DocumentLibraryTitle(state: DocumentLibraryUiState, modifier: Modifier) {
+    Column(modifier) {
+        Text(
+            state.selectedDocument?.displayName ?: "Local documents",
+            style = MaterialTheme.typography.titleLarge,
+            fontWeight = FontWeight.SemiBold,
+        )
+        Text(
+            if (state.selectedDocument == null) {
+                "Inspected locally · app-managed storage · never sent automatically"
+            } else {
+                "Source stays local until you explicitly request extraction"
+            },
+            style = MaterialTheme.typography.bodySmall,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+        )
     }
 }
