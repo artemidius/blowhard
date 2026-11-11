@@ -2,11 +2,17 @@
 
 [![CI](https://github.com/artemidius/blowhard/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/artemidius/blowhard/actions/workflows/ci.yml)
 
-A desktop-first Kotlin Multiplatform client for Mistral AI.
+A desktop-first Kotlin Multiplatform client for Mistral AI and an inspectable AI-engineering portfolio project.
 
-Blowhard is in early development. The current application demonstrates one shared Compose
-conversation workflow backed by a platform-neutral run lifecycle and explicit deterministic or
-Mistral-backed generation. The shared presentation module also compiles for Android and iOS.
+The current milestone demonstrates an end-to-end document-to-meeting-note workflow: bounded local
+import, explicit provider processing, structured evidence-linked output, typed editing, measurable
+evaluation, scoped read tools, exact mutation approval, and crash-safe persistence. The shared
+presentation module also compiles for Android and iOS.
+
+If you are reviewing the repository, start with the
+[five-minute reviewer guide](docs/reviewer-guide.md), the
+[showcase architecture](docs/architecture/meeting-note-showcase.md), and the
+[security disclosure](docs/security.md).
 
 ## Technical direction
 
@@ -14,6 +20,7 @@ Mistral-backed generation. The shared presentation module also compiles for Andr
 - Streaming conversations, document workflows, and controlled AI tool execution.
 - Small, focused modules with explicit contracts and platform-specific adapters.
 - Security-conscious design, automated testing, static analysis, and documented APIs.
+- Reproducible synthetic evaluation with deterministic machine- and human-readable reports.
 
 The desktop application is the initial focus, with Android and iOS compatibility guiding
 the shared architecture.
@@ -198,6 +205,39 @@ imported PNG or JPEG with the next prompt. The selection is explicit and one-sho
 attach PDFs, send every imported file, accept provider-fetched image URLs, or reuse an image during
 regeneration.
 
+For PDFs with extracted text, choose **Generate meeting notes** in the document workbench. Blowhard
+requests a strict structured response, validates source references, and presents typed summary,
+decision, action-item, and risk fields for editing. **Approve local copy** opens a separate consent
+step showing the exact content and destination. Denial writes nothing; approval is single-use and
+the local write is paired atomically with a recovery receipt.
+
+The internal tool protocol is deliberately narrow. `search_text` and `read_page` can read only the
+documents attached to the run, under hard result and orchestration limits. Model output cannot
+register tools, escape document scope, or authorize a mutation. See the
+[meeting-note architecture](docs/architecture/meeting-note-showcase.md),
+[`ADR 0031`](docs/decisions/0031-bounded-tool-orchestration.md), and
+[`ADR 0032`](docs/decisions/0032-exact-consent-and-no-replay-writes.md).
+
+Reproduce the 12-case synthetic meeting-note evaluation without a credential or network call:
+
+```shell
+./gradlew :apps:evaluation:run
+```
+
+The checked-in [fixture report](docs/evaluation/meeting-note-fixture-v1.md) and
+[methodology](docs/evaluation/meeting-note-methodology.md) disclose the independent scoring
+denominators and limitations. Live evaluation is a separate bounded opt-in mode; invoke it with
+explicit arguments so the model, case limit, output location, and secure credential requirements
+remain reviewable:
+
+```shell
+./gradlew :apps:evaluation:run \
+  --args='--live --model MODEL_ID --max-cases 1 --output build/reports/evaluation-live'
+```
+
+The dated [one-case live reference](docs/evaluation/meeting-note-live-reference-2026-11-12.md)
+preserves both passes and failures and explicitly states that no human semantic review was performed.
+
 Use `Command+Enter` on macOS or `Ctrl+Enter` on Windows and Linux to send from the composer. Native
 menus expose New conversation, Send, Stop, Regenerate latest response, Copy latest response, and
 Exit with platform-appropriate shortcuts. Every non-empty message has a visible copy action.
@@ -250,7 +290,7 @@ CI builds each native format, inspects its contents, installs it, and launches t
 Compose application in a deterministic smoke mode. Pull-request archives are retained with the CI
 run for seven days; reviewed milestone packages are available from
 [GitHub Releases](https://github.com/artemidius/blowhard/releases). Each package is accompanied by a deterministic
-manifest and `SHA256SUMS` that bind its bytes to release `0.1.0`, installer schema `1.0.0`, the exact
+manifest and `SHA256SUMS` that bind its bytes to release `0.2.0`, installer schema `1.0.0`, the exact
 source revision, target architecture, and disclosed signing status. See the
 [release-evidence guide](docs/release-evidence.md) and
 [`ADR 0025`](docs/decisions/0025-deterministic-release-evidence.md).
@@ -262,14 +302,14 @@ and [`ADR 0026`](docs/decisions/0026-runtime-license-inventory.md).
 
 The current packages have no trusted publisher signature. `jpackage` applies an ad hoc signature
 to the macOS app, but it is not Developer ID signed or notarized. The Windows package is not
-publisher-signed. The `v0.1.0` prerelease is intended for source-bound portfolio evaluation on the
+publisher-signed. The `v0.2.0` prerelease is intended for source-bound portfolio evaluation on the
 documented targets; trusted distribution requires publisher signing and notarization.
 
 macOS is the current live reference host. Windows and Linux packages currently cannot start a
 conversation because a verified secure credential adapter is not implemented for those hosts.
 Automated tests use synthetic provider fixtures; a bounded macOS
 [live reference check](docs/live-reference-check.md) has also passed through a locally installed
-DMG candidate. The reviewed [`v0.1.0` prerelease](https://github.com/artemidius/blowhard/releases/tag/v0.1.0)
+DMG candidate. The reviewed [`v0.2.0` prerelease](https://github.com/artemidius/blowhard/releases/tag/v0.2.0)
 contains the three native packages and their verification evidence.
 
 The [installation guide](docs/installation.md) documents package verification, native install

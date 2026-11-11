@@ -1,0 +1,52 @@
+{
+    "schemaVersion": "meeting-note-evaluation-report-v1",
+    "executionKind": "live",
+    "datasetVersion": "meeting-note-synthetic-v1",
+    "templateVersion": "meeting-note-v1",
+    "modelId": "mistral-small-latest",
+    "configurationVersion": "bounded-live-evaluation-v1",
+    "reportDate": "2026-11-12",
+    "sampleCount": 1,
+    "latencyPolicy": "wall-clock-per-case",
+    "usage": "unavailable from current structured-output adapter",
+    "semanticReview": "not reviewed; machine scores are not a factuality judgment",
+    "summary": {
+        "schemaValidity": {
+            "passed": 1,
+            "failed": 0,
+            "total": 1
+        },
+        "fieldCorrectness": {
+            "passed": 0,
+            "failed": 1,
+            "total": 1
+        },
+        "missingFieldHandling": {
+            "passed": 0,
+            "failed": 1,
+            "total": 1
+        },
+        "sourceResolution": {
+            "passed": 1,
+            "failed": 0,
+            "total": 1
+        },
+        "expectedOutcome": {
+            "passed": 1,
+            "failed": 0,
+            "total": 1
+        }
+    },
+    "cases": [
+        {
+            "id": "basic-decision-action",
+            "latencyMilliseconds": 1348,
+            "schemaValidity": "PASS",
+            "fieldCorrectness": "FAIL",
+            "missingFieldHandling": "FAIL",
+            "sourceResolution": "PASS",
+            "expectedOutcome": "PASS",
+            "observedRejection": null
+        }
+    ]
+}
