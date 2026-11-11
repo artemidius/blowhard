@@ -154,6 +154,12 @@ can list and confirm deletion of these copies; importing never starts a provider
 content to Mistral. See [`ADR 0028`](docs/decisions/0028-bounded-local-document-lifecycle.md) and
 the [document lifecycle guide](docs/architecture/document-lifecycle.md).
 
+Each imported document can be opened in a shared workbench. **Extract with Mistral** is a separate,
+explicit request that submits only that stored source to the fixed OCR endpoint. Request and
+response sizes, page ordering, content type, and output shape are validated before the Markdown is
+atomically persisted. Reopening the workbench reads local output without repeating provider work.
+See [`ADR 0029`](docs/decisions/0029-explicit-bounded-document-ocr.md).
+
 ## Run the desktop application
 
 ```shell
@@ -174,6 +180,10 @@ creates a fresh empty workspace without recreating the deleted database record.
 Use **Local documents** in the desktop sidebar to import one PDF, PNG, or JPEG into Blowhard's
 app-managed storage. The 20 MiB, 100-page, and 40-megapixel limits are checked locally. Deleting an
 imported copy does not modify the originally selected file.
+
+Open a stored document to inspect its verified source metadata and any durable OCR output. Choose
+**Extract with Mistral** to submit it; local import alone never uploads content. Successful output
+is grouped by page and retained with the app-owned copy until that document is deleted.
 
 Use `Command+Enter` on macOS or `Ctrl+Enter` on Windows and Linux to send from the composer. Native
 menus expose New conversation, Send, Stop, Regenerate latest response, Copy latest response, and
