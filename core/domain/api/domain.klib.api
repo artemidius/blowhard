@@ -122,6 +122,20 @@ final enum class io.github.artemidius.blowhard.core.domain/GenerationRetryAdvice
     final fun values(): kotlin/Array<io.github.artemidius.blowhard.core.domain/GenerationRetryAdvice> // io.github.artemidius.blowhard.core.domain/GenerationRetryAdvice.values|values#static(){}[0]
 }
 
+final enum class io.github.artemidius.blowhard.core.domain/MeetingNoteGenerationFailureKind : kotlin/Enum<io.github.artemidius.blowhard.core.domain/MeetingNoteGenerationFailureKind> { // io.github.artemidius.blowhard.core.domain/MeetingNoteGenerationFailureKind|null[0]
+    enum entry AUTHENTICATION // io.github.artemidius.blowhard.core.domain/MeetingNoteGenerationFailureKind.AUTHENTICATION|null[0]
+    enum entry INPUT_REJECTED // io.github.artemidius.blowhard.core.domain/MeetingNoteGenerationFailureKind.INPUT_REJECTED|null[0]
+    enum entry INVALID_RESPONSE // io.github.artemidius.blowhard.core.domain/MeetingNoteGenerationFailureKind.INVALID_RESPONSE|null[0]
+    enum entry RATE_LIMITED // io.github.artemidius.blowhard.core.domain/MeetingNoteGenerationFailureKind.RATE_LIMITED|null[0]
+    enum entry REMOTE_FAILURE // io.github.artemidius.blowhard.core.domain/MeetingNoteGenerationFailureKind.REMOTE_FAILURE|null[0]
+
+    final val entries // io.github.artemidius.blowhard.core.domain/MeetingNoteGenerationFailureKind.entries|#static{}entries[0]
+        final fun <get-entries>(): kotlin.enums/EnumEntries<io.github.artemidius.blowhard.core.domain/MeetingNoteGenerationFailureKind> // io.github.artemidius.blowhard.core.domain/MeetingNoteGenerationFailureKind.entries.<get-entries>|<get-entries>#static(){}[0]
+
+    final fun valueOf(kotlin/String): io.github.artemidius.blowhard.core.domain/MeetingNoteGenerationFailureKind // io.github.artemidius.blowhard.core.domain/MeetingNoteGenerationFailureKind.valueOf|valueOf#static(kotlin.String){}[0]
+    final fun values(): kotlin/Array<io.github.artemidius.blowhard.core.domain/MeetingNoteGenerationFailureKind> // io.github.artemidius.blowhard.core.domain/MeetingNoteGenerationFailureKind.values|values#static(){}[0]
+}
+
 final enum class io.github.artemidius.blowhard.core.domain/ModelAvailability : kotlin/Enum<io.github.artemidius.blowhard.core.domain/ModelAvailability> { // io.github.artemidius.blowhard.core.domain/ModelAvailability|null[0]
     enum entry ARCHIVED // io.github.artemidius.blowhard.core.domain/ModelAvailability.ARCHIVED|null[0]
     enum entry AVAILABLE // io.github.artemidius.blowhard.core.domain/ModelAvailability.AVAILABLE|null[0]
@@ -207,6 +221,10 @@ abstract fun interface io.github.artemidius.blowhard.core.domain/DocumentInspect
 
 abstract fun interface io.github.artemidius.blowhard.core.domain/DocumentOcrPort { // io.github.artemidius.blowhard.core.domain/DocumentOcrPort|null[0]
     abstract suspend fun process(io.github.artemidius.blowhard.core.domain/DocumentOcrRequest): io.github.artemidius.blowhard.core.domain/DocumentOcrPortResult // io.github.artemidius.blowhard.core.domain/DocumentOcrPort.process|process(io.github.artemidius.blowhard.core.domain.DocumentOcrRequest){}[0]
+}
+
+abstract fun interface io.github.artemidius.blowhard.core.domain/MeetingNoteGenerationPort { // io.github.artemidius.blowhard.core.domain/MeetingNoteGenerationPort|null[0]
+    abstract suspend fun generate(io.github.artemidius.blowhard.core.domain/MeetingNoteGenerationRequest): io.github.artemidius.blowhard.core.domain/MeetingNoteGenerationResult // io.github.artemidius.blowhard.core.domain/MeetingNoteGenerationPort.generate|generate(io.github.artemidius.blowhard.core.domain.MeetingNoteGenerationRequest){}[0]
 }
 
 abstract fun interface io.github.artemidius.blowhard.core.domain/ModelCatalogPort { // io.github.artemidius.blowhard.core.domain/ModelCatalogPort|null[0]
@@ -520,6 +538,37 @@ sealed interface io.github.artemidius.blowhard.core.domain/GenerationEvent { // 
     }
 }
 
+sealed interface io.github.artemidius.blowhard.core.domain/MeetingNoteGenerationResult { // io.github.artemidius.blowhard.core.domain/MeetingNoteGenerationResult|null[0]
+    final class Failed : io.github.artemidius.blowhard.core.domain/MeetingNoteGenerationResult { // io.github.artemidius.blowhard.core.domain/MeetingNoteGenerationResult.Failed|null[0]
+        constructor <init>(io.github.artemidius.blowhard.core.domain/MeetingNoteGenerationFailureKind) // io.github.artemidius.blowhard.core.domain/MeetingNoteGenerationResult.Failed.<init>|<init>(io.github.artemidius.blowhard.core.domain.MeetingNoteGenerationFailureKind){}[0]
+
+        final val kind // io.github.artemidius.blowhard.core.domain/MeetingNoteGenerationResult.Failed.kind|{}kind[0]
+            final fun <get-kind>(): io.github.artemidius.blowhard.core.domain/MeetingNoteGenerationFailureKind // io.github.artemidius.blowhard.core.domain/MeetingNoteGenerationResult.Failed.kind.<get-kind>|<get-kind>(){}[0]
+
+        final fun component1(): io.github.artemidius.blowhard.core.domain/MeetingNoteGenerationFailureKind // io.github.artemidius.blowhard.core.domain/MeetingNoteGenerationResult.Failed.component1|component1(){}[0]
+        final fun copy(io.github.artemidius.blowhard.core.domain/MeetingNoteGenerationFailureKind = ...): io.github.artemidius.blowhard.core.domain/MeetingNoteGenerationResult.Failed // io.github.artemidius.blowhard.core.domain/MeetingNoteGenerationResult.Failed.copy|copy(io.github.artemidius.blowhard.core.domain.MeetingNoteGenerationFailureKind){}[0]
+        final fun equals(kotlin/Any?): kotlin/Boolean // io.github.artemidius.blowhard.core.domain/MeetingNoteGenerationResult.Failed.equals|equals(kotlin.Any?){}[0]
+        final fun hashCode(): kotlin/Int // io.github.artemidius.blowhard.core.domain/MeetingNoteGenerationResult.Failed.hashCode|hashCode(){}[0]
+        final fun toString(): kotlin/String // io.github.artemidius.blowhard.core.domain/MeetingNoteGenerationResult.Failed.toString|toString(){}[0]
+    }
+
+    final class Generated : io.github.artemidius.blowhard.core.domain/MeetingNoteGenerationResult { // io.github.artemidius.blowhard.core.domain/MeetingNoteGenerationResult.Generated|null[0]
+        constructor <init>(kotlin/String, kotlin/String) // io.github.artemidius.blowhard.core.domain/MeetingNoteGenerationResult.Generated.<init>|<init>(kotlin.String;kotlin.String){}[0]
+
+        final val json // io.github.artemidius.blowhard.core.domain/MeetingNoteGenerationResult.Generated.json|{}json[0]
+            final fun <get-json>(): kotlin/String // io.github.artemidius.blowhard.core.domain/MeetingNoteGenerationResult.Generated.json.<get-json>|<get-json>(){}[0]
+        final val modelId // io.github.artemidius.blowhard.core.domain/MeetingNoteGenerationResult.Generated.modelId|{}modelId[0]
+            final fun <get-modelId>(): kotlin/String // io.github.artemidius.blowhard.core.domain/MeetingNoteGenerationResult.Generated.modelId.<get-modelId>|<get-modelId>(){}[0]
+
+        final fun component1(): kotlin/String // io.github.artemidius.blowhard.core.domain/MeetingNoteGenerationResult.Generated.component1|component1(){}[0]
+        final fun component2(): kotlin/String // io.github.artemidius.blowhard.core.domain/MeetingNoteGenerationResult.Generated.component2|component2(){}[0]
+        final fun copy(kotlin/String = ..., kotlin/String = ...): io.github.artemidius.blowhard.core.domain/MeetingNoteGenerationResult.Generated // io.github.artemidius.blowhard.core.domain/MeetingNoteGenerationResult.Generated.copy|copy(kotlin.String;kotlin.String){}[0]
+        final fun equals(kotlin/Any?): kotlin/Boolean // io.github.artemidius.blowhard.core.domain/MeetingNoteGenerationResult.Generated.equals|equals(kotlin.Any?){}[0]
+        final fun hashCode(): kotlin/Int // io.github.artemidius.blowhard.core.domain/MeetingNoteGenerationResult.Generated.hashCode|hashCode(){}[0]
+        final fun toString(): kotlin/String // io.github.artemidius.blowhard.core.domain/MeetingNoteGenerationResult.Generated.toString|toString(){}[0]
+    }
+}
+
 sealed interface io.github.artemidius.blowhard.core.domain/ModelCatalogResult { // io.github.artemidius.blowhard.core.domain/ModelCatalogResult|null[0]
     final class Failure : io.github.artemidius.blowhard.core.domain/ModelCatalogResult { // io.github.artemidius.blowhard.core.domain/ModelCatalogResult.Failure|null[0]
         constructor <init>(io.github.artemidius.blowhard.core.domain/ModelCatalogFailure) // io.github.artemidius.blowhard.core.domain/ModelCatalogResult.Failure.<init>|<init>(io.github.artemidius.blowhard.core.domain.ModelCatalogFailure){}[0]
@@ -700,6 +749,34 @@ final class io.github.artemidius.blowhard.core.domain/GenerationRequest { // io.
     final fun equals(kotlin/Any?): kotlin/Boolean // io.github.artemidius.blowhard.core.domain/GenerationRequest.equals|equals(kotlin.Any?){}[0]
     final fun hashCode(): kotlin/Int // io.github.artemidius.blowhard.core.domain/GenerationRequest.hashCode|hashCode(){}[0]
     final fun toString(): kotlin/String // io.github.artemidius.blowhard.core.domain/GenerationRequest.toString|toString(){}[0]
+}
+
+final class io.github.artemidius.blowhard.core.domain/MeetingNoteGenerationRequest { // io.github.artemidius.blowhard.core.domain/MeetingNoteGenerationRequest|null[0]
+    constructor <init>(kotlin/String, kotlin/String, kotlin/String, kotlin/String, kotlin/Int) // io.github.artemidius.blowhard.core.domain/MeetingNoteGenerationRequest.<init>|<init>(kotlin.String;kotlin.String;kotlin.String;kotlin.String;kotlin.Int){}[0]
+
+    final val instructions // io.github.artemidius.blowhard.core.domain/MeetingNoteGenerationRequest.instructions|{}instructions[0]
+        final fun <get-instructions>(): kotlin/String // io.github.artemidius.blowhard.core.domain/MeetingNoteGenerationRequest.instructions.<get-instructions>|<get-instructions>(){}[0]
+    final val maximumOutputTokens // io.github.artemidius.blowhard.core.domain/MeetingNoteGenerationRequest.maximumOutputTokens|{}maximumOutputTokens[0]
+        final fun <get-maximumOutputTokens>(): kotlin/Int // io.github.artemidius.blowhard.core.domain/MeetingNoteGenerationRequest.maximumOutputTokens.<get-maximumOutputTokens>|<get-maximumOutputTokens>(){}[0]
+    final val schemaJson // io.github.artemidius.blowhard.core.domain/MeetingNoteGenerationRequest.schemaJson|{}schemaJson[0]
+        final fun <get-schemaJson>(): kotlin/String // io.github.artemidius.blowhard.core.domain/MeetingNoteGenerationRequest.schemaJson.<get-schemaJson>|<get-schemaJson>(){}[0]
+    final val schemaName // io.github.artemidius.blowhard.core.domain/MeetingNoteGenerationRequest.schemaName|{}schemaName[0]
+        final fun <get-schemaName>(): kotlin/String // io.github.artemidius.blowhard.core.domain/MeetingNoteGenerationRequest.schemaName.<get-schemaName>|<get-schemaName>(){}[0]
+    final val sourceJson // io.github.artemidius.blowhard.core.domain/MeetingNoteGenerationRequest.sourceJson|{}sourceJson[0]
+        final fun <get-sourceJson>(): kotlin/String // io.github.artemidius.blowhard.core.domain/MeetingNoteGenerationRequest.sourceJson.<get-sourceJson>|<get-sourceJson>(){}[0]
+
+    final object Companion { // io.github.artemidius.blowhard.core.domain/MeetingNoteGenerationRequest.Companion|null[0]
+        final const val MAX_INSTRUCTION_CHARACTERS // io.github.artemidius.blowhard.core.domain/MeetingNoteGenerationRequest.Companion.MAX_INSTRUCTION_CHARACTERS|{}MAX_INSTRUCTION_CHARACTERS[0]
+            final fun <get-MAX_INSTRUCTION_CHARACTERS>(): kotlin/Int // io.github.artemidius.blowhard.core.domain/MeetingNoteGenerationRequest.Companion.MAX_INSTRUCTION_CHARACTERS.<get-MAX_INSTRUCTION_CHARACTERS>|<get-MAX_INSTRUCTION_CHARACTERS>(){}[0]
+        final const val MAX_OUTPUT_TOKENS // io.github.artemidius.blowhard.core.domain/MeetingNoteGenerationRequest.Companion.MAX_OUTPUT_TOKENS|{}MAX_OUTPUT_TOKENS[0]
+            final fun <get-MAX_OUTPUT_TOKENS>(): kotlin/Int // io.github.artemidius.blowhard.core.domain/MeetingNoteGenerationRequest.Companion.MAX_OUTPUT_TOKENS.<get-MAX_OUTPUT_TOKENS>|<get-MAX_OUTPUT_TOKENS>(){}[0]
+        final const val MAX_SCHEMA_CHARACTERS // io.github.artemidius.blowhard.core.domain/MeetingNoteGenerationRequest.Companion.MAX_SCHEMA_CHARACTERS|{}MAX_SCHEMA_CHARACTERS[0]
+            final fun <get-MAX_SCHEMA_CHARACTERS>(): kotlin/Int // io.github.artemidius.blowhard.core.domain/MeetingNoteGenerationRequest.Companion.MAX_SCHEMA_CHARACTERS.<get-MAX_SCHEMA_CHARACTERS>|<get-MAX_SCHEMA_CHARACTERS>(){}[0]
+        final const val MAX_SCHEMA_NAME_CHARACTERS // io.github.artemidius.blowhard.core.domain/MeetingNoteGenerationRequest.Companion.MAX_SCHEMA_NAME_CHARACTERS|{}MAX_SCHEMA_NAME_CHARACTERS[0]
+            final fun <get-MAX_SCHEMA_NAME_CHARACTERS>(): kotlin/Int // io.github.artemidius.blowhard.core.domain/MeetingNoteGenerationRequest.Companion.MAX_SCHEMA_NAME_CHARACTERS.<get-MAX_SCHEMA_NAME_CHARACTERS>|<get-MAX_SCHEMA_NAME_CHARACTERS>(){}[0]
+        final const val MAX_SOURCE_CHARACTERS // io.github.artemidius.blowhard.core.domain/MeetingNoteGenerationRequest.Companion.MAX_SOURCE_CHARACTERS|{}MAX_SOURCE_CHARACTERS[0]
+            final fun <get-MAX_SOURCE_CHARACTERS>(): kotlin/Int // io.github.artemidius.blowhard.core.domain/MeetingNoteGenerationRequest.Companion.MAX_SOURCE_CHARACTERS.<get-MAX_SOURCE_CHARACTERS>|<get-MAX_SOURCE_CHARACTERS>(){}[0]
+    }
 }
 
 final class io.github.artemidius.blowhard.core.domain/ModelCapabilities { // io.github.artemidius.blowhard.core.domain/ModelCapabilities|null[0]
