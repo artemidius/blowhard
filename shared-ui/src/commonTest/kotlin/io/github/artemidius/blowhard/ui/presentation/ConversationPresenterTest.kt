@@ -499,6 +499,14 @@ class ConversationPresenterTest {
             StartRunRejection.CONVERSATION_BUSY to "This conversation already has an active run.",
             StartRunRejection.LIVE_CONFIGURATION_NOT_READY to
                 "Live configuration is not ready. Reverify the credential and selected model.",
+            StartRunRejection.MODEL_DOES_NOT_SUPPORT_VISION to
+                "The selected model does not advertise vision support. Choose a vision model or remove the image.",
+            StartRunRejection.ATTACHMENT_NOT_AVAILABLE to
+                "The selected image is no longer available. Choose it again from Local documents.",
+            StartRunRejection.ATTACHMENT_NOT_SUPPORTED to
+                "The selected attachment is not a supported bounded image.",
+            StartRunRejection.STORAGE_UNAVAILABLE to
+                "Local conversation history is unavailable. Generation was not started.",
             StartRunRejection.LIFECYCLE_CLOSED to "The application is shutting down and cannot start another run.",
         )
         expectedCopy.forEach { (rejection, copy) ->
