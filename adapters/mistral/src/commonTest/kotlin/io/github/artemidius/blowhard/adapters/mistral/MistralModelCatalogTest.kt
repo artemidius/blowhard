@@ -32,15 +32,17 @@ class MistralModelCatalogTest {
         try {
             val models = assertIs<ModelCatalogResult.Success>(fixture.catalog.listModels()).models
 
-            assertEquals(listOf("archived-model", "chat-model"), models.map { it.id })
+            assertEquals(listOf("archived-model", "base-chat", "chat-model"), models.map { it.id })
             assertEquals(ModelAvailability.ARCHIVED, models[0].availability)
             assertEquals(CapabilitySupport.UNKNOWN, models[0].capabilities.chatCompletion)
             assertEquals(ModelAvailability.AVAILABLE, models[1].availability)
-            assertEquals(listOf("chat-latest"), models[1].aliases)
-            assertEquals(32_768, models[1].contextWindowTokens)
             assertEquals(CapabilitySupport.SUPPORTED, models[1].capabilities.chatCompletion)
-            assertEquals(CapabilitySupport.UNSUPPORTED, models[1].capabilities.fillInMiddle)
-            assertEquals(CapabilitySupport.SUPPORTED, models[1].capabilities.functionCalling)
+            assertEquals(ModelAvailability.AVAILABLE, models[2].availability)
+            assertEquals(listOf("chat-latest"), models[2].aliases)
+            assertEquals(32_768, models[2].contextWindowTokens)
+            assertEquals(CapabilitySupport.SUPPORTED, models[2].capabilities.chatCompletion)
+            assertEquals(CapabilitySupport.UNSUPPORTED, models[2].capabilities.fillInMiddle)
+            assertEquals(CapabilitySupport.SUPPORTED, models[2].capabilities.functionCalling)
         } finally {
             fixture.catalog.close()
         }
@@ -239,6 +241,10 @@ private const val SUCCESS_RESPONSE = """
       "object": "list",
       "unknown_root": true,
       "data": [
+        {
+          "id": "base-chat",
+          "capabilities": { "completion_chat": true }
+        },
         {
           "id": "chat-model",
           "aliases": ["chat-latest", "", "chat-latest"],

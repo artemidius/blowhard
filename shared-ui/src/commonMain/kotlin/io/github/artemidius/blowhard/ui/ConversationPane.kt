@@ -23,7 +23,6 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import io.github.artemidius.blowhard.core.api.ConnectionSettingsState
 import io.github.artemidius.blowhard.core.api.GenerationMode
-import io.github.artemidius.blowhard.core.api.GenerationTarget
 import io.github.artemidius.blowhard.core.api.RunId
 import io.github.artemidius.blowhard.ui.presentation.ConversationAction
 import io.github.artemidius.blowhard.ui.presentation.ConversationUiState
@@ -39,7 +38,7 @@ internal fun ConversationPane(
 ) {
     Column(Modifier.fillMaxSize(), horizontalAlignment = Alignment.CenterHorizontally) {
         if (compact) CompactConversationNavigation(state, onAction, onOpenSettings)
-        ConversationHeader(state, connection, onAction)
+        ConversationHeader(state, connection, onAction, onOpenSettings)
         HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
         MessageList(
             messages = state.selectedConversation.messages,
@@ -64,6 +63,7 @@ private fun ConversationHeader(
     state: ConversationUiState,
     connection: ConnectionSettingsState,
     onAction: (ConversationAction) -> Unit,
+    onOpenSettings: () -> Unit,
 ) {
     Row(
         modifier = Modifier.fillMaxWidth().padding(horizontal = 24.dp, vertical = 18.dp),
@@ -78,8 +78,7 @@ private fun ConversationHeader(
                 overflow = TextOverflow.Ellipsis,
             )
             Text(
-                state.selectedConversation.latestTarget?.description()
-                    ?: connection.currentTargetDescription(),
+                "Next message • ${connection.currentTargetDescription()}",
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
             )
@@ -92,13 +91,14 @@ private fun ConversationHeader(
         ) {
             Text("Delete")
         }
-        ModeBadge(connection.mode)
+        TextButton(onClick = onOpenSettings, modifier = Modifier.widthIn(max = 240.dp)) {
+            Text(
+                connection.selectedModelId?.let { "Model: $it" } ?: "Choose model",
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
+            )
+        }
     }
-}
-
-private fun GenerationTarget.description(): String = when (this) {
-    GenerationTarget.Demo -> "Local demo · no API key needed"
-    is GenerationTarget.Live -> "Live Mistral • $modelId"
 }
 
 private fun ConnectionSettingsState.currentTargetDescription(): String = when (mode) {

@@ -36,8 +36,8 @@ the target router. Live adapters are cached by verified model identifier and clo
 service has cancelled and joined active work. The Mistral adapter reads the Keychain-backed
 credential for each request rather than retaining it in the router.
 
-macOS is the current verified secure-storage host. Windows and Linux cannot satisfy live readiness
-and remain in explicit demo mode; no preferences or file fallback is used.
+macOS is the current verified secure-storage host. Windows and Linux cannot satisfy live readiness,
+so the desktop conversation remains inactive; no preferences or file fallback is used.
 
 ## Verification boundary
 

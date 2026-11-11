@@ -52,6 +52,7 @@ internal class DesktopRuntime private constructor(
             connectionSettings: ConnectionSettings,
             generation: TextGenerationPort,
             scenarioSelection: DemoScenarioSelection,
+            autoVerifyCredential: Boolean = false,
             reportSaver: RunDiagnosticReportSaver = RunDiagnosticReportSaver {
                 RunDiagnosticReportSaveResult.UNAVAILABLE
             },
@@ -79,6 +80,7 @@ internal class DesktopRuntime private constructor(
             val connectionSettingsPresenter = ConnectionSettingsPresenter(
                 connectionSettings = connectionSettings,
                 coroutineContext = Dispatchers.Default,
+                autoVerifyCredential = autoVerifyCredential,
             )
             val runInspectorPresenter = RunInspectorPresenter(
                 inspector = runs,

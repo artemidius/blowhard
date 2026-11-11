@@ -32,7 +32,7 @@ internal fun unavailableHistoryState(): ConversationUiState = emptyDesktopConver
 internal fun emptyDesktopConversationState(notice: UiNotice? = null): ConversationUiState {
     val id = ConversationId("conversation-1")
     return ConversationUiState(
-        conversations = listOf(ConversationUiModel(id, "Demo conversation", notice = notice)),
+        conversations = listOf(ConversationUiModel(id, "New conversation", notice = notice)),
         selectedConversationId = id,
     )
 }
