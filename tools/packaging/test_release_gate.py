@@ -3,6 +3,7 @@ import shutil
 import tempfile
 import unittest
 from pathlib import Path
+from zipfile import ZipFile
 
 from release_evidence import TARGETS, create, digest
 from release_gate import (
@@ -123,6 +124,19 @@ class ReleaseGateTest(unittest.TestCase):
         first = prepare_native_assets(self.root, manifest, report, self.root / "first")[-1]
         second = prepare_native_assets(self.root, manifest, report, self.root / "second")[-1]
         self.assertEqual(digest(first), digest(second))
+        with ZipFile(first) as archive:
+            names = archive.namelist()
+        self.assertEqual(names, sorted(names))
+
+    def test_documentation_archive_uses_portable_name_order(self) -> None:
+        kdoc = self.root / "build/dokka/html"
+        kdoc.joinpath("a").mkdir()
+        kdoc.joinpath("a/index.html").write_text("<html>Nested</html>\n", encoding="utf-8")
+        kdoc.joinpath("a-b.html").write_text("<html>Sibling</html>\n", encoding="utf-8")
+        archive_path = prepare_documentation_assets(self.root, self.root / "docs-output")[-1]
+        with ZipFile(archive_path) as archive:
+            names = archive.namelist()
+        self.assertEqual(names, sorted(names))
 
     def test_verifies_complete_three_platform_asset_set(self) -> None:
         verify_release_assets(self.root, self._complete_assets(), self.revision)
