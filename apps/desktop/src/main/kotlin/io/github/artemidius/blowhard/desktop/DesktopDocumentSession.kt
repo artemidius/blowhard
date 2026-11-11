@@ -39,7 +39,7 @@ internal class DesktopDocumentSession private constructor(
     val ocr: DocumentOcr,
     val available: Boolean,
     private val store: DocumentStore?,
-    private val processingStore: DocumentProcessingStore?,
+    val processingStore: DocumentProcessingStore?,
 ) : AutoCloseable {
     private val closed = AtomicBoolean(false)
 

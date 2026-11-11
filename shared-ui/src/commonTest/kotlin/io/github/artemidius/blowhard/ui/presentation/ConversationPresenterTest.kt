@@ -5,6 +5,7 @@ import io.github.artemidius.blowhard.core.api.ConversationDeletionResult
 import io.github.artemidius.blowhard.core.api.ConversationId
 import io.github.artemidius.blowhard.core.api.ConversationLibrary
 import io.github.artemidius.blowhard.core.api.ConversationRuns
+import io.github.artemidius.blowhard.core.api.DocumentId
 import io.github.artemidius.blowhard.core.api.GenerationTarget
 import io.github.artemidius.blowhard.core.api.ObserveRunResult
 import io.github.artemidius.blowhard.core.api.RunFailure
@@ -99,6 +100,25 @@ class ConversationPresenterTest {
         assertEquals("Explain the lifecycle", state.selectedConversation.title)
         assertFalse(state.canSend)
         assertTrue(state.canStop)
+        fixture.close()
+    }
+
+    @Test
+    fun `explicit image selection is attached once and presented without local bytes`() = runTest {
+        val fixture = PresenterFixture(this)
+        val imageId = DocumentId("selected-image")
+
+        fixture.presenter.dispatch(ConversationAction.ImageSelected(imageId, "diagram.png"))
+        fixture.presenter.dispatch(ConversationAction.ComposerChanged("Explain this diagram"))
+        fixture.presenter.dispatch(ConversationAction.Send)
+        runCurrent()
+
+        val request = fixture.runs.startRequests.single()
+        val state = fixture.presenter.state.value
+        assertEquals(imageId, request.attachment?.documentId)
+        assertEquals("diagram.png", state.selectedConversation.messages.first().attachedImageName)
+        assertEquals(null, state.selectedImage)
+        assertFalse(state.toString().contains("data:image"))
         fixture.close()
     }
 
@@ -322,12 +342,14 @@ class ConversationPresenterTest {
         val fixture = PresenterFixture(this)
         fixture.runs.startResult = StartRunResult.Rejected(StartRunRejection.CONVERSATION_BUSY)
 
+        fixture.presenter.dispatch(ConversationAction.ImageSelected(DocumentId("retry-image"), "retry.png"))
         fixture.presenter.dispatch(ConversationAction.ComposerChanged("retry me"))
         fixture.presenter.dispatch(ConversationAction.Send)
         runCurrent()
 
         val state = fixture.presenter.state.value
         assertEquals("retry me", state.composer)
+        assertEquals(DocumentId("retry-image"), state.selectedImage?.documentId)
         assertTrue(state.selectedConversation.messages.isEmpty())
         assertEquals(ConversationRunState.IDLE, state.selectedConversation.runState)
         assertTrue(state.notice!!.message.contains("active run"))
@@ -517,6 +539,22 @@ class ConversationPresenterTest {
             assertEquals(copy, fixture.presenter.state.value.notice?.message)
             fixture.close()
         }
+    }
+
+    @Test
+    fun `image selection rejects unsafe labels and can be cleared explicitly`() = runTest {
+        val fixture = PresenterFixture(this)
+        val imageId = DocumentId("selected-image")
+
+        fixture.presenter.dispatch(ConversationAction.ImageSelected(imageId, "diagram.png"))
+        fixture.presenter.dispatch(ConversationAction.ImageSelected(imageId, " "))
+        runCurrent()
+        assertEquals("diagram.png", fixture.presenter.state.value.selectedImage?.displayName)
+
+        fixture.presenter.dispatch(ConversationAction.ImageCleared)
+        runCurrent()
+        assertEquals(null, fixture.presenter.state.value.selectedImage)
+        fixture.close()
     }
 
     @Test

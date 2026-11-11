@@ -8,6 +8,7 @@ import io.github.artemidius.blowhard.core.application.DefaultRunDiagnosticReport
 import io.github.artemidius.blowhard.core.application.SequentialRunIdFactory
 import io.github.artemidius.blowhard.core.application.SystemRunClock
 import io.github.artemidius.blowhard.core.domain.ConversationStore
+import io.github.artemidius.blowhard.core.domain.DocumentProcessingStore
 import io.github.artemidius.blowhard.core.domain.TextGenerationPort
 import io.github.artemidius.blowhard.ui.presentation.ClipboardWriter
 import io.github.artemidius.blowhard.ui.presentation.ConnectionSettingsPresenter
@@ -68,10 +69,11 @@ internal class DesktopRuntime private constructor(
             closeProviderResources: () -> Unit = {},
             documentLibrary: DocumentLibrary = UnavailableDocumentLibrary,
             documentOcr: DocumentOcr = UnavailableDocumentOcr,
+            documentProcessingStore: DocumentProcessingStore? = null,
             documentPicker: DocumentPicker = DocumentPicker { null },
             closeDocumentResources: () -> Unit = {},
         ): DesktopRuntime {
-            val runs = createRuns(generation, connectionSettings, conversationStore)
+            val runs = createRuns(generation, connectionSettings, conversationStore, documentProcessingStore)
             val presenters = createPresenters(
                 runs = runs,
                 connectionSettings = connectionSettings,
@@ -107,6 +109,7 @@ private fun createRuns(
     generation: TextGenerationPort,
     connectionSettings: ConnectionSettings,
     conversationStore: ConversationStore?,
+    documentProcessingStore: DocumentProcessingStore?,
 ): DefaultConversationRuns = DefaultConversationRuns(
     generation = generation,
     idFactory = SequentialRunIdFactory("desktop-${UUID.randomUUID()}"),
@@ -114,6 +117,7 @@ private fun createRuns(
     coroutineContext = Dispatchers.Default,
     connectionSettings = connectionSettings,
     conversationStore = conversationStore,
+    documentProcessingStore = documentProcessingStore,
 )
 
 private fun createPresenters(
