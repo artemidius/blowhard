@@ -1,0 +1,15 @@
+CREATE TABLE document_extraction (
+    document_id TEXT NOT NULL PRIMARY KEY REFERENCES document(id) ON DELETE CASCADE,
+    processor TEXT NOT NULL CHECK(length(trim(processor)) > 0 AND length(processor) <= 128),
+    processed_at_epoch_ms INTEGER NOT NULL CHECK(processed_at_epoch_ms >= 0)
+);
+
+CREATE TABLE document_extraction_page (
+    document_id TEXT NOT NULL REFERENCES document_extraction(document_id) ON DELETE CASCADE,
+    page_index INTEGER NOT NULL CHECK(page_index >= 0),
+    markdown TEXT NOT NULL,
+    PRIMARY KEY(document_id, page_index)
+);
+
+CREATE INDEX document_extraction_page_by_source
+ON document_extraction_page(document_id, page_index ASC);
