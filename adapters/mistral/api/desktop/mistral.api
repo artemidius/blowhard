@@ -57,3 +57,13 @@ public final class io/github/artemidius/blowhard/adapters/mistral/MistralTextGen
 	public final fun create (Lio/github/artemidius/blowhard/adapters/mistral/MistralCredentialProvider;Lio/github/artemidius/blowhard/adapters/mistral/MistralChatConfiguration;)Lio/github/artemidius/blowhard/adapters/mistral/MistralTextGenerationPort;
 }
 
+public final class io/github/artemidius/blowhard/adapters/mistral/MistralToolModelPort : io/github/artemidius/blowhard/core/domain/ToolModelPort {
+	public static final field Companion Lio/github/artemidius/blowhard/adapters/mistral/MistralToolModelPort$Companion;
+	public final fun close ()V
+	public fun next (Lio/github/artemidius/blowhard/core/domain/ToolModelRequest;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+}
+
+public final class io/github/artemidius/blowhard/adapters/mistral/MistralToolModelPort$Companion {
+	public final fun create (Lio/github/artemidius/blowhard/adapters/mistral/MistralCredentialProvider;Lio/github/artemidius/blowhard/adapters/mistral/MistralChatConfiguration;)Lio/github/artemidius/blowhard/adapters/mistral/MistralToolModelPort;
+}
+
