@@ -102,6 +102,89 @@ class MeetingNotePresenterTest {
         assertNull(presenter.state.value.notice)
         presenter.close()
     }
+
+    @Test
+    fun `approved proposal reaches a committed terminal state`() = runTest {
+        val approvals = FakeMeetingNoteApprovalPort(ProposedMeetingNoteStatus.COMMITTED)
+        val presenter = approvalPresenter(approvals)
+        presenter.dispatch(MeetingNoteAction.ProposeWrite)
+        runCurrent()
+        assertEquals(ProposedMeetingNoteStatus.PENDING, presenter.state.value.approval?.status)
+
+        presenter.dispatch(MeetingNoteAction.ApproveWrite)
+        runCurrent()
+        assertEquals(ProposedMeetingNoteStatus.COMMITTED, presenter.state.value.approval?.status)
+        assertEquals(1, approvals.approvals)
+        presenter.close()
+    }
+
+    @Test
+    fun `denial and interruption remain explicit without a committed state`() = runTest {
+        val denied = FakeMeetingNoteApprovalPort(ProposedMeetingNoteStatus.COMMITTED)
+        val deniedPresenter = approvalPresenter(denied)
+        deniedPresenter.dispatch(MeetingNoteAction.ProposeWrite)
+        deniedPresenter.dispatch(MeetingNoteAction.DenyWrite)
+        runCurrent()
+        assertEquals(ProposedMeetingNoteStatus.DENIED, deniedPresenter.state.value.approval?.status)
+        assertEquals(0, denied.approvals)
+        deniedPresenter.close()
+
+        val interrupted = FakeMeetingNoteApprovalPort(ProposedMeetingNoteStatus.INTERRUPTED)
+        val interruptedPresenter = approvalPresenter(interrupted)
+        interruptedPresenter.dispatch(MeetingNoteAction.ProposeWrite)
+        interruptedPresenter.dispatch(MeetingNoteAction.ApproveWrite)
+        runCurrent()
+        assertEquals(ProposedMeetingNoteStatus.INTERRUPTED, interruptedPresenter.state.value.approval?.status)
+        interruptedPresenter.close()
+    }
+
+    @Test
+    fun `unavailable proposal fails safely and terminal approval can be dismissed`() = runTest {
+        val presenter = MeetingNotePresenter(FakeMeetingNotes(), StandardTestDispatcher(testScheduler))
+        presenter.dispatch(MeetingNoteAction.Generate(DocumentId("source")))
+        presenter.dispatch(MeetingNoteAction.ProposeWrite)
+        runCurrent()
+        assertEquals(MeetingNoteNotice.OperationUnavailable, presenter.state.value.notice)
+
+        val approvals = FakeMeetingNoteApprovalPort(ProposedMeetingNoteStatus.COMMITTED)
+        val available = approvalPresenter(approvals)
+        available.dispatch(MeetingNoteAction.ProposeWrite)
+        available.dispatch(MeetingNoteAction.ApproveWrite)
+        available.dispatch(MeetingNoteAction.ApproveWrite)
+        runCurrent()
+        assertEquals(1, approvals.approvals)
+        available.dispatch(MeetingNoteAction.ApprovalDismissed)
+        runCurrent()
+        assertNull(available.state.value.approval)
+        presenter.close()
+        available.close()
+    }
+
+    private suspend fun kotlinx.coroutines.test.TestScope.approvalPresenter(
+        approvals: MeetingNoteApprovalPort,
+    ): MeetingNotePresenter {
+        val presenter = MeetingNotePresenter(FakeMeetingNotes(), StandardTestDispatcher(testScheduler), approvals)
+        presenter.dispatch(MeetingNoteAction.Generate(DocumentId("source")))
+        runCurrent()
+        return presenter
+    }
+}
+
+private class FakeMeetingNoteApprovalPort(private val approvalResult: ProposedMeetingNoteStatus) :
+    MeetingNoteApprovalPort {
+    var approvals: Int = 0
+
+    override suspend fun propose(note: MeetingNoteRecord): MeetingNoteApprovalProposalResult =
+        MeetingNoteApprovalProposalResult.Proposed(
+            ProposedMeetingNoteUiState(note, "Local meeting notes / Approved copy"),
+        )
+
+    override suspend fun approve(): ProposedMeetingNoteStatus {
+        approvals += 1
+        return approvalResult
+    }
+
+    override suspend fun deny(): ProposedMeetingNoteStatus = ProposedMeetingNoteStatus.DENIED
 }
 
 private class FakeMeetingNotes : MeetingNotes {

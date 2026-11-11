@@ -19,6 +19,14 @@ internal sealed interface MeetingNoteAction {
 
     data object Save : MeetingNoteAction
 
+    data object ProposeWrite : MeetingNoteAction
+
+    data object ApproveWrite : MeetingNoteAction
+
+    data object DenyWrite : MeetingNoteAction
+
+    data object ApprovalDismissed : MeetingNoteAction
+
     data class Export(val format: MeetingNoteExportFormat) : MeetingNoteAction
 
     data object ExportDismissed : MeetingNoteAction

@@ -21,7 +21,11 @@ import kotlinx.coroutines.launch
 import kotlin.coroutines.CoroutineContext
 
 /** Serializes explicit generation, editing, and export into immutable UI state. */
-public class MeetingNotePresenter(private val notes: MeetingNotes, coroutineContext: CoroutineContext) {
+public class MeetingNotePresenter(
+    private val notes: MeetingNotes,
+    coroutineContext: CoroutineContext,
+    private val approvals: MeetingNoteApprovalPort = UnavailableMeetingNoteApprovalPort,
+) {
     private val scope = CoroutineScope(coroutineContext + SupervisorJob())
     private val actions = Channel<MeetingNoteAction>(Channel.UNLIMITED)
     private val mutableState = MutableStateFlow(MeetingNoteUiState())
@@ -56,6 +60,7 @@ public class MeetingNotePresenter(private val notes: MeetingNotes, coroutineCont
     }
 
     private suspend fun handle(action: MeetingNoteAction) {
+        if (handleApprovalAction(action, approvals, mutableState)) return
         when (action) {
             is MeetingNoteAction.Generate -> generate(action)
 
@@ -78,6 +83,12 @@ public class MeetingNotePresenter(private val notes: MeetingNotes, coroutineCont
             }
 
             MeetingNoteAction.Save -> save()
+
+            MeetingNoteAction.ProposeWrite,
+            MeetingNoteAction.ApproveWrite,
+            MeetingNoteAction.DenyWrite,
+            MeetingNoteAction.ApprovalDismissed,
+            -> error("Approval action was not consumed")
 
             is MeetingNoteAction.Export -> export(action)
 
@@ -149,6 +160,60 @@ public class MeetingNotePresenter(private val notes: MeetingNotes, coroutineCont
     private fun unavailable() {
         mutableState.update { it.copy(isBusy = false, notice = MeetingNoteNotice.OperationUnavailable) }
     }
+}
+
+private suspend fun handleApprovalAction(
+    action: MeetingNoteAction,
+    approvals: MeetingNoteApprovalPort,
+    state: MutableStateFlow<MeetingNoteUiState>,
+): Boolean = when (action) {
+    MeetingNoteAction.ProposeWrite -> {
+        proposeWrite(approvals, state)
+        true
+    }
+
+    MeetingNoteAction.ApproveWrite -> {
+        decideApproval(approvals, state, approve = true)
+        true
+    }
+
+    MeetingNoteAction.DenyWrite -> {
+        decideApproval(approvals, state, approve = false)
+        true
+    }
+
+    MeetingNoteAction.ApprovalDismissed -> {
+        state.update { it.copy(approval = null) }
+        true
+    }
+
+    else -> false
+}
+
+private suspend fun proposeWrite(approvals: MeetingNoteApprovalPort, state: MutableStateFlow<MeetingNoteUiState>) {
+    val note = state.value.note ?: return
+    state.update { it.copy(isBusy = true, notice = null) }
+    when (val result = approvals.propose(note)) {
+        is MeetingNoteApprovalProposalResult.Proposed -> state.update {
+            it.copy(isBusy = false, approval = result.state)
+        }
+
+        MeetingNoteApprovalProposalResult.Unavailable -> state.update {
+            it.copy(isBusy = false, notice = MeetingNoteNotice.OperationUnavailable)
+        }
+    }
+}
+
+private suspend fun decideApproval(
+    approvals: MeetingNoteApprovalPort,
+    state: MutableStateFlow<MeetingNoteUiState>,
+    approve: Boolean,
+) {
+    val current = state.value.approval ?: return
+    if (!current.canApprove) return
+    state.update { it.copy(approval = current.copy(status = ProposedMeetingNoteStatus.WRITING)) }
+    val status = if (approve) approvals.approve() else approvals.deny()
+    state.update { it.copy(approval = current.copy(status = status)) }
 }
 
 private fun MeetingNoteDraft.updateDecision(index: Int, value: String): MeetingNoteDraft {
