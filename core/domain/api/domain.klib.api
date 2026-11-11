@@ -282,6 +282,7 @@ abstract interface io.github.artemidius.blowhard.core.domain/DocumentStore { // 
 }
 
 abstract interface io.github.artemidius.blowhard.core.domain/MeetingNoteStore { // io.github.artemidius.blowhard.core.domain/MeetingNoteStore|null[0]
+    abstract suspend fun close() // io.github.artemidius.blowhard.core.domain/MeetingNoteStore.close|close(){}[0]
     abstract suspend fun find(io.github.artemidius.blowhard.core.api/MeetingNoteId): io.github.artemidius.blowhard.core.domain/MeetingNoteStoreLookup // io.github.artemidius.blowhard.core.domain/MeetingNoteStore.find|find(io.github.artemidius.blowhard.core.api.MeetingNoteId){}[0]
     abstract suspend fun insert(io.github.artemidius.blowhard.core.api/MeetingNoteRecord): io.github.artemidius.blowhard.core.domain/MeetingNoteInsertResult // io.github.artemidius.blowhard.core.domain/MeetingNoteStore.insert|insert(io.github.artemidius.blowhard.core.api.MeetingNoteRecord){}[0]
     abstract suspend fun update(io.github.artemidius.blowhard.core.api/MeetingNoteId, kotlin/Long, io.github.artemidius.blowhard.core.api/MeetingNoteContent, kotlin/Long): io.github.artemidius.blowhard.core.domain/MeetingNoteStoreUpdateResult // io.github.artemidius.blowhard.core.domain/MeetingNoteStore.update|update(io.github.artemidius.blowhard.core.api.MeetingNoteId;kotlin.Long;io.github.artemidius.blowhard.core.api.MeetingNoteContent;kotlin.Long){}[0]

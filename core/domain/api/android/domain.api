@@ -563,6 +563,7 @@ public final class io/github/artemidius/blowhard/core/domain/MeetingNoteInsertRe
 }
 
 public abstract interface class io/github/artemidius/blowhard/core/domain/MeetingNoteStore {
+	public abstract fun close (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public abstract fun find-0lfORfk (Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public abstract fun insert (Lio/github/artemidius/blowhard/core/api/MeetingNoteRecord;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public abstract fun update-vOGpzuw (Ljava/lang/String;JLio/github/artemidius/blowhard/core/api/MeetingNoteContent;JLkotlin/coroutines/Continuation;)Ljava/lang/Object;
