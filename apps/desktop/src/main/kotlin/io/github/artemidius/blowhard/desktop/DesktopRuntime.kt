@@ -2,6 +2,7 @@ package io.github.artemidius.blowhard.desktop
 
 import io.github.artemidius.blowhard.core.api.ConnectionSettings
 import io.github.artemidius.blowhard.core.api.DocumentLibrary
+import io.github.artemidius.blowhard.core.api.DocumentOcr
 import io.github.artemidius.blowhard.core.application.DefaultConversationRuns
 import io.github.artemidius.blowhard.core.application.DefaultRunDiagnosticReportGenerator
 import io.github.artemidius.blowhard.core.application.SequentialRunIdFactory
@@ -66,6 +67,7 @@ internal class DesktopRuntime private constructor(
             closeHistoryResources: () -> Unit = {},
             closeProviderResources: () -> Unit = {},
             documentLibrary: DocumentLibrary = UnavailableDocumentLibrary,
+            documentOcr: DocumentOcr = UnavailableDocumentOcr,
             documentPicker: DocumentPicker = DocumentPicker { null },
             closeDocumentResources: () -> Unit = {},
         ): DesktopRuntime {
@@ -79,6 +81,7 @@ internal class DesktopRuntime private constructor(
                 initialState = initialState,
                 autoVerifyCredential = autoVerifyCredential,
                 documentLibrary = documentLibrary,
+                documentOcr = documentOcr,
                 documentPicker = documentPicker,
             )
             return DesktopRuntime(
@@ -122,6 +125,7 @@ private fun createPresenters(
     initialState: ConversationUiState,
     autoVerifyCredential: Boolean,
     documentLibrary: DocumentLibrary,
+    documentOcr: DocumentOcr,
     documentPicker: DocumentPicker,
 ): DesktopPresenters = DesktopPresenters(
     conversation = ConversationPresenter(
@@ -147,6 +151,7 @@ private fun createPresenters(
         library = documentLibrary,
         picker = documentPicker,
         coroutineContext = Dispatchers.Default,
+        ocr = documentOcr,
     ),
 )
 

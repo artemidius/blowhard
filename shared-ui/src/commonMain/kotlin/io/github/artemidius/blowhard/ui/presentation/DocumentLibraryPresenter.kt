@@ -1,9 +1,14 @@
 package io.github.artemidius.blowhard.ui.presentation
 
 import io.github.artemidius.blowhard.core.api.DocumentDeletionResult
+import io.github.artemidius.blowhard.core.api.DocumentExtractionLookupResult
+import io.github.artemidius.blowhard.core.api.DocumentId
 import io.github.artemidius.blowhard.core.api.DocumentImportResult
 import io.github.artemidius.blowhard.core.api.DocumentLibrary
 import io.github.artemidius.blowhard.core.api.DocumentListResult
+import io.github.artemidius.blowhard.core.api.DocumentOcr
+import io.github.artemidius.blowhard.core.api.DocumentProcessingRejection
+import io.github.artemidius.blowhard.core.api.DocumentProcessingResult
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.SupervisorJob
@@ -21,10 +26,12 @@ public class DocumentLibraryPresenter(
     private val library: DocumentLibrary,
     private val picker: DocumentPicker,
     coroutineContext: CoroutineContext,
+    private val ocr: DocumentOcr = UnavailableDocumentOcr,
 ) {
     private val scope = CoroutineScope(coroutineContext + SupervisorJob())
     private val actions = Channel<DocumentLibraryAction>(Channel.UNLIMITED)
     private val mutableState = MutableStateFlow(DocumentLibraryUiState())
+    private val workbench = DocumentWorkbenchCoordinator(ocr, mutableState)
 
     /** Current local document metadata and sanitized feedback. */
     public val state: StateFlow<DocumentLibraryUiState> = mutableState.asStateFlow()
@@ -60,6 +67,10 @@ public class DocumentLibraryPresenter(
         when (action) {
             DocumentLibraryAction.RefreshRequested -> refresh()
             DocumentLibraryAction.ImportRequested -> importSelected()
+            is DocumentLibraryAction.OpenRequested -> if (workbench.open(action)) refresh()
+            DocumentLibraryAction.WorkbenchClosed -> workbench.close()
+            is DocumentLibraryAction.ProcessRequested -> workbench.process(action)
+            is DocumentLibraryAction.PageSelected -> workbench.selectPage(action)
             is DocumentLibraryAction.DeleteRequested -> requestDeletion(action)
             DocumentLibraryAction.DeleteConfirmed -> deleteConfirmed()
             DocumentLibraryAction.DeleteDismissed -> mutableState.update { it.copy(pendingDeletion = null) }
@@ -121,6 +132,9 @@ public class DocumentLibraryPresenter(
                 it.copy(
                     documents = it.documents.filterNot { candidate -> candidate.id == document.id },
                     isBusy = false,
+                    selectedDocument = it.selectedDocument?.takeUnless { selected -> selected.id == document.id },
+                    extraction = it.extraction?.takeUnless { extraction -> extraction.sourceDocumentId == document.id },
+                    selectedPageIndex = 0,
                     notice = DocumentLibraryNotice.Deleted(document.displayName),
                 )
             }
@@ -134,4 +148,12 @@ public class DocumentLibraryPresenter(
     private fun unavailable() {
         mutableState.update { it.copy(isBusy = false, notice = DocumentLibraryNotice.OperationUnavailable) }
     }
+}
+
+private object UnavailableDocumentOcr : DocumentOcr {
+    override suspend fun process(id: DocumentId): DocumentProcessingResult =
+        DocumentProcessingResult.Rejected(DocumentProcessingRejection.STORAGE_UNAVAILABLE)
+
+    override suspend fun find(id: DocumentId): DocumentExtractionLookupResult =
+        DocumentExtractionLookupResult.StorageUnavailable
 }

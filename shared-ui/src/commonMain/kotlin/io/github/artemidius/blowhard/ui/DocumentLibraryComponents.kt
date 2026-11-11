@@ -48,13 +48,13 @@ internal fun DocumentList(
             )
         }
         items(documents, key = { it.id.value }) { document ->
-            DocumentCard(document, busy) { onAction(DocumentLibraryAction.DeleteRequested(document.id)) }
+            DocumentCard(document, busy, onAction)
         }
     }
 }
 
 @Composable
-private fun DocumentCard(document: ImportedDocument, busy: Boolean, onDelete: () -> Unit) {
+private fun DocumentCard(document: ImportedDocument, busy: Boolean, onAction: (DocumentLibraryAction) -> Unit) {
     Card(
         modifier = Modifier.fillMaxWidth(),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainer),
@@ -78,8 +78,26 @@ private fun DocumentCard(document: ImportedDocument, busy: Boolean, onDelete: ()
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
             }
-            TextButton(onClick = onDelete, enabled = !busy) { Text("Delete") }
+            DocumentCardActions(document, busy, onAction)
         }
+    }
+}
+
+@Composable
+private fun DocumentCardActions(document: ImportedDocument, busy: Boolean, onAction: (DocumentLibraryAction) -> Unit) {
+    Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
+        TextButton(
+            onClick = { onAction(DocumentLibraryAction.OpenRequested(document.id)) },
+            enabled = !busy,
+        ) { Text("View") }
+        TextButton(
+            onClick = { onAction(DocumentLibraryAction.ProcessRequested(document.id)) },
+            enabled = !busy,
+        ) { Text("Extract text") }
+        TextButton(
+            onClick = { onAction(DocumentLibraryAction.DeleteRequested(document.id)) },
+            enabled = !busy,
+        ) { Text("Delete") }
     }
 }
 
