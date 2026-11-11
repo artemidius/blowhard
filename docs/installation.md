@@ -1,12 +1,12 @@
-# Install a desktop candidate
+# Install a desktop package
 
-Blowhard does not publish a general-availability release yet. Native packages attached to CI runs
-are short-lived verification candidates built from a specific commit. A manually approved release
-workflow can also assemble the same evidence into a draft prerelease. Use a package only when you
-trust the workflow and source revision that produced it.
+Blowhard does not publish a general-availability release yet. The reviewed
+[`v0.1.0` prerelease](https://github.com/artemidius/blowhard/releases/tag/v0.1.0) provides native
+packages for portfolio evaluation. Pull-request artifacts remain short-lived verification
+candidates. Use a package only when you trust the workflow and source revision that produced it.
 
-Each candidate evidence archive contains the installer, `manifest.json`, `SHA256SUMS`, and a
-host-specific dependency/license report. The public product version is `0.1.0`; native filenames
+Each release target provides the installer, a manifest, `SHA256SUMS`, and a host-specific
+dependency/license report. The public product version is `0.1.0`; native filenames
 currently use installer schema `1.0.0` because the macOS packager requires a positive major version.
 
 ## Verify before installation
@@ -28,19 +28,19 @@ Get-FileHash -Algorithm SHA256 .\Blowhard-1.0.0.msi
 ```
 
 A matching checksum proves integrity relative to the downloaded evidence; it does not authenticate
-the publisher. Current candidates have no trusted publisher signature. macOS candidates are ad hoc
-signed and not notarized, while Windows and Linux candidates are unsigned. Do not disable operating
-system security controls to install an untrusted candidate.
+the publisher. Current packages have no trusted publisher signature. The macOS package is ad hoc
+signed and not notarized, while Windows and Linux packages are unsigned. Do not disable operating
+system security controls to install an untrusted package.
 
 ## Platform instructions
 
-| Platform | Candidate | Installation | Current capability |
+| Platform | Package | Installation | Current capability |
 | --- | --- | --- | --- |
 | macOS 15, Apple silicon | `.dmg` | Open the image and copy `Blowhard.app` to Applications | Keychain-backed live Mistral configuration |
 | Windows x64 | `.msi` | Run the per-user installer; uninstall through Installed apps | Installation verification; credential storage unavailable |
 | Ubuntu 24.04, amd64 | `.deb` | `sudo apt install ./path-to-candidate.deb` | Installation verification; credential storage unavailable |
 
-Exact filenames are recorded in the candidate manifest. Windows and Linux intentionally fail
+Exact filenames are recorded in each manifest. Windows and Linux intentionally fail
 closed for live mode because their secure credential adapters have not been implemented.
 
 On macOS, enter a Mistral API key when prompted. Blowhard stores it in Keychain and verifies the
