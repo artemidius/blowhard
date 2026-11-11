@@ -147,6 +147,13 @@ state never contains a path or native error. A clearly synthetic
 [schema example](docs/examples/sanitized-run-diagnostic.json) and
 [`ADR 0024`](docs/decisions/0024-explicit-sanitized-diagnostic-export.md) document the boundary.
 
+The local document library accepts explicitly selected PDF, PNG, and JPEG files through a
+path-free shared contract. Imports are bounded, structurally inspected without trusting file
+extensions, and stored atomically with stable identity in the app-owned database. The desktop UI
+can list and confirm deletion of these copies; importing never starts a provider request or sends
+content to Mistral. See [`ADR 0028`](docs/decisions/0028-bounded-local-document-lifecycle.md) and
+the [document lifecycle guide](docs/architecture/document-lifecycle.md).
+
 ## Run the desktop application
 
 ```shell
@@ -163,6 +170,10 @@ processed by Mistral.
 Use **Delete** in the conversation header to remove local history after reviewing the confirmation
 boundary. Stop an active run first. When the last conversation is deleted, the shared client
 creates a fresh empty workspace without recreating the deleted database record.
+
+Use **Local documents** in the desktop sidebar to import one PDF, PNG, or JPEG into Blowhard's
+app-managed storage. The 20 MiB, 100-page, and 40-megapixel limits are checked locally. Deleting an
+imported copy does not modify the originally selected file.
 
 Use `Command+Enter` on macOS or `Ctrl+Enter` on Windows and Linux to send from the composer. Native
 menus expose New conversation, Send, Stop, Regenerate latest response, Copy latest response, and

@@ -109,9 +109,10 @@ generation provider and never reads, replaces, or deletes the API credential.
 
 ## Schema evolution
 
-The current schema is version 2. The committed version-1 SQLite baseline remains unchanged, and
-`1.sqm` adds message and attempt tables plus their indexes and constraints. SQLDelight applies the
-migration to that baseline and compares the result with the latest create statements in
+The current schema is version 3. The committed version-1 SQLite baseline remains unchanged,
+`1.sqm` adds message and attempt tables plus their indexes and constraints, and `2.sqm` adds the
+independently owned document table. SQLDelight applies the migrations to that baseline and compares
+the result with the latest create statements in
 `verifySqlDelightMigration`. A separate runtime test copies the same fixture, inserts legacy
 metadata, opens it through the public desktop factory, and verifies the metadata survives.
 
