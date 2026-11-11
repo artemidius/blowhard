@@ -35,7 +35,7 @@ public final class io/github/artemidius/blowhard/ui/ComposableSingletons$Convers
 public final class io/github/artemidius/blowhard/ui/ComposableSingletons$ConversationSidebarKt {
 	public static final field INSTANCE Lio/github/artemidius/blowhard/ui/ComposableSingletons$ConversationSidebarKt;
 	public fun <init> ()V
-	public final fun getLambda$-281868705$Blowhard_shared_ui ()Lkotlin/jvm/functions/Function3;
+	public final fun getLambda$-201929532$Blowhard_shared_ui ()Lkotlin/jvm/functions/Function3;
 	public final fun getLambda$-428472927$Blowhard_shared_ui ()Lkotlin/jvm/functions/Function3;
 }
 

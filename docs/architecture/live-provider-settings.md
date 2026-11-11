@@ -21,8 +21,9 @@ flowchart LR
 2. On desktop, automatically run a connection test when a configured credential is found at startup
    or a new credential is saved. The user can retry the check in settings. Verification uses model
    discovery rather than a generative request, so it does not consume a prompt or create model output.
-3. Filter conservatively. Only models reported as `AVAILABLE` with chat completion reported as
-   `SUPPORTED` become selectable. `UNKNOWN` never enables a capability.
+3. Filter conservatively. Models explicitly marked archived are excluded. Base model cards without
+   an `archived` field are available through the account catalog; chat completion must still be
+   explicitly reported as supported. `UNKNOWN` never enables a capability.
 4. Select a verified model. The desktop entry screen discloses that messages are processed by
    Mistral before the user saves a key or sends a message.
 5. Choose bounded maximum-output and temperature presets, or retain explicit model defaults.

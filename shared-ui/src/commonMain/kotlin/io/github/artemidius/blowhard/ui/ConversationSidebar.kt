@@ -12,7 +12,9 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
@@ -21,6 +23,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -48,6 +51,7 @@ internal fun ConversationSidebar(
     onOpenSettings: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
+    val listState = rememberSelectedConversationListState(state)
     Column(
         modifier = modifier.fillMaxHeight().background(MaterialTheme.colorScheme.surface).padding(20.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp),
@@ -63,6 +67,7 @@ internal fun ConversationSidebar(
         Text("CONVERSATIONS", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.outline)
         LazyColumn(
             modifier = Modifier.weight(1f),
+            state = listState,
             verticalArrangement = Arrangement.spacedBy(8.dp),
         ) {
             items(state.conversations, key = { it.id.value }) { conversation ->
@@ -73,19 +78,34 @@ internal fun ConversationSidebar(
                 )
             }
         }
-        OutlinedButton(onClick = onOpenSettings, modifier = Modifier.fillMaxWidth()) {
-            Text("Provider settings")
-        }
-        Text(
-            if (connection.mode == GenerationMode.DEMO) {
-                "Offline fixture • no API key • no network"
-            } else {
-                "Live Mistral • external processing • no fallback"
-            },
-            style = MaterialTheme.typography.labelSmall,
-            color = MaterialTheme.colorScheme.onSurfaceVariant,
-        )
+        SidebarStatus(connection, onOpenSettings)
     }
+}
+
+@Composable
+private fun SidebarStatus(connection: ConnectionSettingsState, onOpenSettings: () -> Unit) {
+    OutlinedButton(onClick = onOpenSettings, modifier = Modifier.fillMaxWidth()) {
+        Text("Provider settings")
+    }
+    Text(
+        if (connection.mode == GenerationMode.DEMO) {
+            "Offline fixture • no API key • no network"
+        } else {
+            "Live Mistral • external processing • no fallback"
+        },
+        style = MaterialTheme.typography.labelSmall,
+        color = MaterialTheme.colorScheme.onSurfaceVariant,
+    )
+}
+
+@Composable
+private fun rememberSelectedConversationListState(state: ConversationUiState): LazyListState {
+    val listState = rememberLazyListState()
+    LaunchedEffect(state.selectedConversationId) {
+        val selectedIndex = state.conversations.indexOfFirst { it.id == state.selectedConversationId }
+        if (selectedIndex >= 0) listState.scrollToItem(selectedIndex)
+    }
+    return listState
 }
 
 @Composable
