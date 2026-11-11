@@ -1,5 +1,5 @@
 public final class io/github/artemidius/blowhard/ui/BlowhardAppKt {
-	public static final fun BlowhardApp (Lio/github/artemidius/blowhard/ui/presentation/ConversationPresenter;Lio/github/artemidius/blowhard/ui/presentation/ConnectionSettingsPresenter;Lio/github/artemidius/blowhard/ui/presentation/RunInspectorPresenter;Lio/github/artemidius/blowhard/ui/presentation/DocumentLibraryPresenter;ZLandroidx/compose/runtime/Composer;II)V
+	public static final fun BlowhardApp (Lio/github/artemidius/blowhard/ui/presentation/ConversationPresenter;Lio/github/artemidius/blowhard/ui/presentation/ConnectionSettingsPresenter;Lio/github/artemidius/blowhard/ui/presentation/RunInspectorPresenter;Lio/github/artemidius/blowhard/ui/presentation/DocumentLibraryPresenter;Lio/github/artemidius/blowhard/ui/presentation/MeetingNotePresenter;ZLandroidx/compose/runtime/Composer;II)V
 }
 
 public final class io/github/artemidius/blowhard/ui/ComposableSingletons$ComposerPanelKt {
@@ -64,7 +64,20 @@ public final class io/github/artemidius/blowhard/ui/ComposableSingletons$Documen
 public final class io/github/artemidius/blowhard/ui/ComposableSingletons$DocumentLibraryScreenKt {
 	public static final field INSTANCE Lio/github/artemidius/blowhard/ui/ComposableSingletons$DocumentLibraryScreenKt;
 	public fun <init> ()V
-	public final fun getLambda$-1514169111$Blowhard_shared_ui ()Lkotlin/jvm/functions/Function3;
+	public final fun getLambda$-414025312$Blowhard_shared_ui ()Lkotlin/jvm/functions/Function3;
+	public final fun getLambda$459972022$Blowhard_shared_ui ()Lkotlin/jvm/functions/Function3;
+}
+
+public final class io/github/artemidius/blowhard/ui/ComposableSingletons$MeetingNoteScreenKt {
+	public static final field INSTANCE Lio/github/artemidius/blowhard/ui/ComposableSingletons$MeetingNoteScreenKt;
+	public fun <init> ()V
+	public final fun getLambda$-1270461950$Blowhard_shared_ui ()Lkotlin/jvm/functions/Function3;
+	public final fun getLambda$-1485619510$Blowhard_shared_ui ()Lkotlin/jvm/functions/Function3;
+	public final fun getLambda$-1788506901$Blowhard_shared_ui ()Lkotlin/jvm/functions/Function3;
+	public final fun getLambda$-73660283$Blowhard_shared_ui ()Lkotlin/jvm/functions/Function2;
+	public final fun getLambda$1644486460$Blowhard_shared_ui ()Lkotlin/jvm/functions/Function2;
+	public final fun getLambda$788695847$Blowhard_shared_ui ()Lkotlin/jvm/functions/Function2;
+	public final fun getLambda$788968781$Blowhard_shared_ui ()Lkotlin/jvm/functions/Function3;
 }
 
 public final class io/github/artemidius/blowhard/ui/ComposableSingletons$MessageListKt {
@@ -607,6 +620,122 @@ public final class io/github/artemidius/blowhard/ui/presentation/DocumentLibrary
 
 public abstract interface class io/github/artemidius/blowhard/ui/presentation/DocumentPicker {
 	public abstract fun select (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+}
+
+public final class io/github/artemidius/blowhard/ui/presentation/MeetingActionItemDraft {
+	public static final field $stable I
+	public fun <init> (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/util/List;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun component2 ()Ljava/lang/String;
+	public final fun component3 ()Ljava/lang/String;
+	public final fun component4 ()Ljava/util/List;
+	public final fun copy (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/util/List;)Lio/github/artemidius/blowhard/ui/presentation/MeetingActionItemDraft;
+	public static synthetic fun copy$default (Lio/github/artemidius/blowhard/ui/presentation/MeetingActionItemDraft;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/util/List;ILjava/lang/Object;)Lio/github/artemidius/blowhard/ui/presentation/MeetingActionItemDraft;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getDescription ()Ljava/lang/String;
+	public final fun getDueDate ()Ljava/lang/String;
+	public final fun getOwner ()Ljava/lang/String;
+	public final fun getSources ()Ljava/util/List;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class io/github/artemidius/blowhard/ui/presentation/MeetingDecisionDraft {
+	public static final field $stable I
+	public fun <init> (Ljava/lang/String;Ljava/util/List;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun component2 ()Ljava/util/List;
+	public final fun copy (Ljava/lang/String;Ljava/util/List;)Lio/github/artemidius/blowhard/ui/presentation/MeetingDecisionDraft;
+	public static synthetic fun copy$default (Lio/github/artemidius/blowhard/ui/presentation/MeetingDecisionDraft;Ljava/lang/String;Ljava/util/List;ILjava/lang/Object;)Lio/github/artemidius/blowhard/ui/presentation/MeetingDecisionDraft;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getSources ()Ljava/util/List;
+	public final fun getSummary ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class io/github/artemidius/blowhard/ui/presentation/MeetingNoteDraft {
+	public static final field $stable I
+	public fun <init> (Ljava/lang/String;Ljava/util/List;Ljava/util/List;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun component2 ()Ljava/util/List;
+	public final fun component3 ()Ljava/util/List;
+	public final fun copy (Ljava/lang/String;Ljava/util/List;Ljava/util/List;)Lio/github/artemidius/blowhard/ui/presentation/MeetingNoteDraft;
+	public static synthetic fun copy$default (Lio/github/artemidius/blowhard/ui/presentation/MeetingNoteDraft;Ljava/lang/String;Ljava/util/List;Ljava/util/List;ILjava/lang/Object;)Lio/github/artemidius/blowhard/ui/presentation/MeetingNoteDraft;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getActionItems ()Ljava/util/List;
+	public final fun getDecisions ()Ljava/util/List;
+	public final fun getTitle ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public abstract interface class io/github/artemidius/blowhard/ui/presentation/MeetingNoteNotice {
+}
+
+public final class io/github/artemidius/blowhard/ui/presentation/MeetingNoteNotice$GenerationRejected : io/github/artemidius/blowhard/ui/presentation/MeetingNoteNotice {
+	public static final field $stable I
+	public fun <init> (Ljava/lang/String;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun copy (Ljava/lang/String;)Lio/github/artemidius/blowhard/ui/presentation/MeetingNoteNotice$GenerationRejected;
+	public static synthetic fun copy$default (Lio/github/artemidius/blowhard/ui/presentation/MeetingNoteNotice$GenerationRejected;Ljava/lang/String;ILjava/lang/Object;)Lio/github/artemidius/blowhard/ui/presentation/MeetingNoteNotice$GenerationRejected;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getLabel ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class io/github/artemidius/blowhard/ui/presentation/MeetingNoteNotice$InvalidEdit : io/github/artemidius/blowhard/ui/presentation/MeetingNoteNotice {
+	public static final field $stable I
+	public static final field INSTANCE Lio/github/artemidius/blowhard/ui/presentation/MeetingNoteNotice$InvalidEdit;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class io/github/artemidius/blowhard/ui/presentation/MeetingNoteNotice$OperationUnavailable : io/github/artemidius/blowhard/ui/presentation/MeetingNoteNotice {
+	public static final field $stable I
+	public static final field INSTANCE Lio/github/artemidius/blowhard/ui/presentation/MeetingNoteNotice$OperationUnavailable;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class io/github/artemidius/blowhard/ui/presentation/MeetingNoteNotice$Saved : io/github/artemidius/blowhard/ui/presentation/MeetingNoteNotice {
+	public static final field $stable I
+	public static final field INSTANCE Lio/github/artemidius/blowhard/ui/presentation/MeetingNoteNotice$Saved;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class io/github/artemidius/blowhard/ui/presentation/MeetingNotePresenter {
+	public static final field $stable I
+	public fun <init> (Lio/github/artemidius/blowhard/core/api/MeetingNotes;Lkotlin/coroutines/CoroutineContext;)V
+	public final fun close ()V
+	public final fun getState ()Lkotlinx/coroutines/flow/StateFlow;
+}
+
+public final class io/github/artemidius/blowhard/ui/presentation/MeetingNoteUiState {
+	public static final field $stable I
+	public fun <init> ()V
+	public fun <init> (Lio/github/artemidius/blowhard/core/api/MeetingNoteRecord;Lio/github/artemidius/blowhard/ui/presentation/MeetingNoteDraft;ZLio/github/artemidius/blowhard/ui/presentation/MeetingNoteNotice;Lio/github/artemidius/blowhard/core/api/MeetingNoteExport;)V
+	public synthetic fun <init> (Lio/github/artemidius/blowhard/core/api/MeetingNoteRecord;Lio/github/artemidius/blowhard/ui/presentation/MeetingNoteDraft;ZLio/github/artemidius/blowhard/ui/presentation/MeetingNoteNotice;Lio/github/artemidius/blowhard/core/api/MeetingNoteExport;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()Lio/github/artemidius/blowhard/core/api/MeetingNoteRecord;
+	public final fun component2 ()Lio/github/artemidius/blowhard/ui/presentation/MeetingNoteDraft;
+	public final fun component3 ()Z
+	public final fun component4 ()Lio/github/artemidius/blowhard/ui/presentation/MeetingNoteNotice;
+	public final fun component5 ()Lio/github/artemidius/blowhard/core/api/MeetingNoteExport;
+	public final fun copy (Lio/github/artemidius/blowhard/core/api/MeetingNoteRecord;Lio/github/artemidius/blowhard/ui/presentation/MeetingNoteDraft;ZLio/github/artemidius/blowhard/ui/presentation/MeetingNoteNotice;Lio/github/artemidius/blowhard/core/api/MeetingNoteExport;)Lio/github/artemidius/blowhard/ui/presentation/MeetingNoteUiState;
+	public static synthetic fun copy$default (Lio/github/artemidius/blowhard/ui/presentation/MeetingNoteUiState;Lio/github/artemidius/blowhard/core/api/MeetingNoteRecord;Lio/github/artemidius/blowhard/ui/presentation/MeetingNoteDraft;ZLio/github/artemidius/blowhard/ui/presentation/MeetingNoteNotice;Lio/github/artemidius/blowhard/core/api/MeetingNoteExport;ILjava/lang/Object;)Lio/github/artemidius/blowhard/ui/presentation/MeetingNoteUiState;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getDraft ()Lio/github/artemidius/blowhard/ui/presentation/MeetingNoteDraft;
+	public final fun getExport ()Lio/github/artemidius/blowhard/core/api/MeetingNoteExport;
+	public final fun getNote ()Lio/github/artemidius/blowhard/core/api/MeetingNoteRecord;
+	public final fun getNotice ()Lio/github/artemidius/blowhard/ui/presentation/MeetingNoteNotice;
+	public fun hashCode ()I
+	public final fun isBusy ()Z
+	public fun toString ()Ljava/lang/String;
 }
 
 public final class io/github/artemidius/blowhard/ui/presentation/MessageDelivery : java/lang/Enum {

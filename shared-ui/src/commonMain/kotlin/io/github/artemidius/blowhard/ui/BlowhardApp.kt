@@ -17,6 +17,9 @@ import io.github.artemidius.blowhard.ui.presentation.ConversationPresenter
 import io.github.artemidius.blowhard.ui.presentation.ConversationUiState
 import io.github.artemidius.blowhard.ui.presentation.DocumentLibraryPresenter
 import io.github.artemidius.blowhard.ui.presentation.DocumentLibraryUiState
+import io.github.artemidius.blowhard.ui.presentation.MeetingNoteAction
+import io.github.artemidius.blowhard.ui.presentation.MeetingNotePresenter
+import io.github.artemidius.blowhard.ui.presentation.MeetingNoteUiState
 import io.github.artemidius.blowhard.ui.presentation.RunInspectorAction
 import io.github.artemidius.blowhard.ui.presentation.RunInspectorPresenter
 import io.github.artemidius.blowhard.ui.presentation.RunInspectorUiState
@@ -28,12 +31,14 @@ public fun BlowhardApp(
     connectionSettingsPresenter: ConnectionSettingsPresenter,
     runInspectorPresenter: RunInspectorPresenter,
     documentLibraryPresenter: DocumentLibraryPresenter,
+    meetingNotePresenter: MeetingNotePresenter,
     requiresConnection: Boolean = false,
 ) {
     val conversationState by conversationPresenter.state.collectAsState()
     val settingsState by connectionSettingsPresenter.state.collectAsState()
     val inspectorState by runInspectorPresenter.state.collectAsState()
     val documentLibraryState by documentLibraryPresenter.state.collectAsState()
+    val meetingNoteState by meetingNotePresenter.state.collectAsState()
     var destination by remember { mutableStateOf(WorkspaceDestination.CONVERSATION) }
     MaterialTheme(colorScheme = BlowhardColors, shapes = BlowhardShapes, typography = BlowhardTypography) {
         Surface {
@@ -44,10 +49,12 @@ public fun BlowhardApp(
                 settingsState = settingsState,
                 inspectorState = inspectorState,
                 documentLibraryState = documentLibraryState,
+                meetingNoteState = meetingNoteState,
                 conversationPresenter = conversationPresenter,
                 connectionSettingsPresenter = connectionSettingsPresenter,
                 runInspectorPresenter = runInspectorPresenter,
                 documentLibraryPresenter = documentLibraryPresenter,
+                meetingNotePresenter = meetingNotePresenter,
                 navigate = { destination = it },
             )
         }
@@ -62,10 +69,12 @@ private fun WorkspaceContent(
     settingsState: ConnectionSettingsUiState,
     inspectorState: RunInspectorUiState,
     documentLibraryState: DocumentLibraryUiState,
+    meetingNoteState: MeetingNoteUiState,
     conversationPresenter: ConversationPresenter,
     connectionSettingsPresenter: ConnectionSettingsPresenter,
     runInspectorPresenter: RunInspectorPresenter,
     documentLibraryPresenter: DocumentLibraryPresenter,
+    meetingNotePresenter: MeetingNotePresenter,
     navigate: (WorkspaceDestination) -> Unit,
 ) {
     if (requiresConnection && !settingsState.settings.canUseLiveMode) {
@@ -78,10 +87,12 @@ private fun WorkspaceContent(
         settingsState,
         inspectorState,
         documentLibraryState,
+        meetingNoteState,
         conversationPresenter,
         connectionSettingsPresenter,
         runInspectorPresenter,
         documentLibraryPresenter,
+        meetingNotePresenter,
         navigate,
     )
 }
@@ -93,10 +104,12 @@ private fun WorkspaceDestinationContent(
     settingsState: ConnectionSettingsUiState,
     inspectorState: RunInspectorUiState,
     documentLibraryState: DocumentLibraryUiState,
+    meetingNoteState: MeetingNoteUiState,
     conversationPresenter: ConversationPresenter,
     connectionSettingsPresenter: ConnectionSettingsPresenter,
     runInspectorPresenter: RunInspectorPresenter,
     documentLibraryPresenter: DocumentLibraryPresenter,
+    meetingNotePresenter: MeetingNotePresenter,
     navigate: (WorkspaceDestination) -> Unit,
 ) {
     when (destination) {
@@ -127,12 +140,37 @@ private fun WorkspaceDestinationContent(
             onBack = { navigate(WorkspaceDestination.CONVERSATION) },
         )
 
-        WorkspaceDestination.DOCUMENTS -> DocumentLibraryScreen(
+        WorkspaceDestination.DOCUMENTS -> DocumentDestination(
             documentLibraryState,
-            documentLibraryPresenter::dispatch,
-            onBack = { navigate(WorkspaceDestination.CONVERSATION) },
+            documentLibraryPresenter,
+            meetingNotePresenter,
+            navigate,
+        )
+
+        WorkspaceDestination.MEETING_NOTE -> MeetingNoteScreen(
+            meetingNoteState,
+            meetingNotePresenter::dispatch,
+            onBack = { navigate(WorkspaceDestination.DOCUMENTS) },
         )
     }
+}
+
+@Composable
+private fun DocumentDestination(
+    state: DocumentLibraryUiState,
+    documents: DocumentLibraryPresenter,
+    notes: MeetingNotePresenter,
+    navigate: (WorkspaceDestination) -> Unit,
+) {
+    DocumentLibraryScreen(
+        state,
+        documents::dispatch,
+        onGenerateMeetingNote = { sourceId ->
+            notes.dispatch(MeetingNoteAction.Generate(sourceId))
+            navigate(WorkspaceDestination.MEETING_NOTE)
+        },
+        onBack = { navigate(WorkspaceDestination.CONVERSATION) },
+    )
 }
 
 private enum class WorkspaceDestination {
@@ -140,4 +178,5 @@ private enum class WorkspaceDestination {
     SETTINGS,
     INSPECTOR,
     DOCUMENTS,
+    MEETING_NOTE,
 }

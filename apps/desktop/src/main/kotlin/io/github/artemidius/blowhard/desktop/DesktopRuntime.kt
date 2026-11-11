@@ -3,6 +3,14 @@ package io.github.artemidius.blowhard.desktop
 import io.github.artemidius.blowhard.core.api.ConnectionSettings
 import io.github.artemidius.blowhard.core.api.DocumentLibrary
 import io.github.artemidius.blowhard.core.api.DocumentOcr
+import io.github.artemidius.blowhard.core.api.MeetingNoteExportFormat
+import io.github.artemidius.blowhard.core.api.MeetingNoteExportOutcome
+import io.github.artemidius.blowhard.core.api.MeetingNoteGenerationOutcome
+import io.github.artemidius.blowhard.core.api.MeetingNoteGenerationRejection
+import io.github.artemidius.blowhard.core.api.MeetingNoteId
+import io.github.artemidius.blowhard.core.api.MeetingNoteLookupOutcome
+import io.github.artemidius.blowhard.core.api.MeetingNoteUpdateOutcome
+import io.github.artemidius.blowhard.core.api.MeetingNotes
 import io.github.artemidius.blowhard.core.application.DefaultConversationRuns
 import io.github.artemidius.blowhard.core.application.DefaultRunDiagnosticReportGenerator
 import io.github.artemidius.blowhard.core.application.SequentialRunIdFactory
@@ -17,6 +25,7 @@ import io.github.artemidius.blowhard.ui.presentation.ConversationUiState
 import io.github.artemidius.blowhard.ui.presentation.DemoScenarioSelection
 import io.github.artemidius.blowhard.ui.presentation.DocumentLibraryPresenter
 import io.github.artemidius.blowhard.ui.presentation.DocumentPicker
+import io.github.artemidius.blowhard.ui.presentation.MeetingNotePresenter
 import io.github.artemidius.blowhard.ui.presentation.RunDiagnosticReportSaveResult
 import io.github.artemidius.blowhard.ui.presentation.RunDiagnosticReportSaver
 import io.github.artemidius.blowhard.ui.presentation.RunInspectorPresenter
@@ -30,6 +39,7 @@ internal class DesktopRuntime private constructor(
     val connectionSettingsPresenter: ConnectionSettingsPresenter,
     val runInspectorPresenter: RunInspectorPresenter,
     val documentLibraryPresenter: DocumentLibraryPresenter,
+    val meetingNotePresenter: MeetingNotePresenter,
     private val runs: DefaultConversationRuns,
     private val closeHistoryResources: () -> Unit,
     private val closeProviderResources: () -> Unit,
@@ -40,6 +50,7 @@ internal class DesktopRuntime private constructor(
         if (!closed.compareAndSet(false, true)) return
         try {
             documentLibraryPresenter.close()
+            meetingNotePresenter.close()
             runInspectorPresenter.close()
             connectionSettingsPresenter.close()
             presenter.close()
@@ -72,6 +83,7 @@ internal class DesktopRuntime private constructor(
             documentProcessingStore: DocumentProcessingStore? = null,
             documentPicker: DocumentPicker = DocumentPicker { null },
             closeDocumentResources: () -> Unit = {},
+            meetingNotes: MeetingNotes = UnavailableMeetingNotes,
         ): DesktopRuntime {
             val runs = createRuns(generation, connectionSettings, conversationStore, documentProcessingStore)
             val presenters = createPresenters(
@@ -85,12 +97,14 @@ internal class DesktopRuntime private constructor(
                 documentLibrary = documentLibrary,
                 documentOcr = documentOcr,
                 documentPicker = documentPicker,
+                meetingNotes = meetingNotes,
             )
             return DesktopRuntime(
                 presenters.conversation,
                 presenters.connectionSettings,
                 presenters.runInspector,
                 presenters.documentLibrary,
+                presenters.meetingNotes,
                 runs,
                 closeHistoryResources = {
                     try {
@@ -131,6 +145,7 @@ private fun createPresenters(
     documentLibrary: DocumentLibrary,
     documentOcr: DocumentOcr,
     documentPicker: DocumentPicker,
+    meetingNotes: MeetingNotes,
 ): DesktopPresenters = DesktopPresenters(
     conversation = ConversationPresenter(
         runs = runs,
@@ -157,6 +172,7 @@ private fun createPresenters(
         coroutineContext = Dispatchers.Default,
         ocr = documentOcr,
     ),
+    meetingNotes = MeetingNotePresenter(meetingNotes, Dispatchers.Default),
 )
 
 private data class DesktopPresenters(
@@ -164,4 +180,21 @@ private data class DesktopPresenters(
     val connectionSettings: ConnectionSettingsPresenter,
     val runInspector: RunInspectorPresenter,
     val documentLibrary: DocumentLibraryPresenter,
+    val meetingNotes: MeetingNotePresenter,
 )
+
+internal object UnavailableMeetingNotes : MeetingNotes {
+    override suspend fun generate(sourceDocumentId: io.github.artemidius.blowhard.core.api.DocumentId) =
+        MeetingNoteGenerationOutcome.Rejected(MeetingNoteGenerationRejection.STORAGE_UNAVAILABLE)
+
+    override suspend fun find(id: MeetingNoteId): MeetingNoteLookupOutcome = MeetingNoteLookupOutcome.StorageUnavailable
+
+    override suspend fun update(
+        id: MeetingNoteId,
+        expectedRevision: Long,
+        content: io.github.artemidius.blowhard.core.api.MeetingNoteContent,
+    ): MeetingNoteUpdateOutcome = MeetingNoteUpdateOutcome.StorageUnavailable
+
+    override suspend fun export(id: MeetingNoteId, format: MeetingNoteExportFormat): MeetingNoteExportOutcome =
+        MeetingNoteExportOutcome.StorageUnavailable
+}

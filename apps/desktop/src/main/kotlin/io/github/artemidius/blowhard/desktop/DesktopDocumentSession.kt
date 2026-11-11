@@ -3,6 +3,7 @@ package io.github.artemidius.blowhard.desktop
 import io.github.artemidius.blowhard.adapters.documents.PortableDocumentInspector
 import io.github.artemidius.blowhard.adapters.persistence.DesktopDocumentProcessingStores
 import io.github.artemidius.blowhard.adapters.persistence.DesktopDocumentStores
+import io.github.artemidius.blowhard.adapters.persistence.DesktopMeetingNoteStores
 import io.github.artemidius.blowhard.core.api.DocumentDeletionResult
 import io.github.artemidius.blowhard.core.api.DocumentExtractionLookupResult
 import io.github.artemidius.blowhard.core.api.DocumentId
@@ -27,6 +28,7 @@ import io.github.artemidius.blowhard.core.domain.DocumentOcrPortResult
 import io.github.artemidius.blowhard.core.domain.DocumentOcrRequest
 import io.github.artemidius.blowhard.core.domain.DocumentProcessingStore
 import io.github.artemidius.blowhard.core.domain.DocumentStore
+import io.github.artemidius.blowhard.core.domain.MeetingNoteStore
 import kotlinx.coroutines.runBlocking
 import java.nio.file.Files
 import java.nio.file.Path
@@ -40,12 +42,14 @@ internal class DesktopDocumentSession private constructor(
     val available: Boolean,
     private val store: DocumentStore?,
     val processingStore: DocumentProcessingStore?,
+    val meetingNoteStore: MeetingNoteStore?,
 ) : AutoCloseable {
     private val closed = AtomicBoolean(false)
 
     override fun close() {
         if (!closed.compareAndSet(false, true)) return
         processingStore.closeSafely()
+        meetingNoteStore.closeSafely()
         store.closeSafely()
     }
 
@@ -54,6 +58,7 @@ internal class DesktopDocumentSession private constructor(
             configurationDirectory: Path,
             openStore: (String) -> DocumentStore = DesktopDocumentStores::open,
             openProcessingStore: (String) -> DocumentProcessingStore = DesktopDocumentProcessingStores::open,
+            openMeetingNoteStore: (String) -> MeetingNoteStore = DesktopMeetingNoteStores::open,
             inspector: DocumentInspector = PortableDocumentInspector,
             processor: DocumentOcrPort = UnavailableDocumentOcrPort,
             idFactory: DocumentIdFactory = DocumentIdFactory { DocumentId(UUID.randomUUID().toString()) },
@@ -62,6 +67,7 @@ internal class DesktopDocumentSession private constructor(
         ): DesktopDocumentSession {
             var store: DocumentStore? = null
             var processingStore: DocumentProcessingStore? = null
+            var meetingNoteStore: MeetingNoteStore? = null
             return try {
                 Files.createDirectories(configurationDirectory)
                 val databasePath = conversationDatabasePath(configurationDirectory).toString()
@@ -69,14 +75,18 @@ internal class DesktopDocumentSession private constructor(
                 store = openedStore
                 val openedProcessingStore = openProcessingStore(databasePath)
                 processingStore = openedProcessingStore
+                val openedMeetingNoteStore = openMeetingNoteStore(databasePath)
+                meetingNoteStore = openedMeetingNoteStore
                 DesktopDocumentSession(
                     library = DefaultDocumentLibrary(openedStore, inspector, idFactory, clock),
                     ocr = DefaultDocumentOcr(openedProcessingStore, processor, processingClock),
                     available = true,
                     store = openedStore,
                     processingStore = openedProcessingStore,
+                    meetingNoteStore = openedMeetingNoteStore,
                 )
             } catch (_: Exception) {
+                meetingNoteStore.closeSafely()
                 processingStore.closeSafely()
                 store.closeSafely()
                 DesktopDocumentSession(
@@ -85,6 +95,7 @@ internal class DesktopDocumentSession private constructor(
                     available = false,
                     store = null,
                     processingStore = null,
+                    meetingNoteStore = null,
                 )
             }
         }
@@ -125,6 +136,15 @@ private fun DocumentStore?.closeSafely() {
 }
 
 private fun DocumentProcessingStore?.closeSafely() {
+    val ownedStore = this ?: return
+    try {
+        runBlocking { ownedStore.close() }
+    } catch (_: Exception) {
+        // Startup and shutdown remain safe when a partially opened store cannot close cleanly.
+    }
+}
+
+private fun MeetingNoteStore?.closeSafely() {
     val ownedStore = this ?: return
     try {
         runBlocking { ownedStore.close() }

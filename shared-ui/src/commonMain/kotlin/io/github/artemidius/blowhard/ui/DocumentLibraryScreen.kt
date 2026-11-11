@@ -27,10 +27,11 @@ import io.github.artemidius.blowhard.ui.presentation.DocumentLibraryUiState
 internal fun DocumentLibraryScreen(
     state: DocumentLibraryUiState,
     onAction: (DocumentLibraryAction) -> Unit,
+    onGenerateMeetingNote: (io.github.artemidius.blowhard.core.api.DocumentId) -> Unit,
     onBack: () -> Unit,
 ) {
     Column(Modifier.fillMaxSize().background(MaterialTheme.colorScheme.background)) {
-        DocumentLibraryHeader(state, onAction, onBack)
+        DocumentLibraryHeader(state, onAction, onGenerateMeetingNote, onBack)
         HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
         Box(Modifier.fillMaxSize(), contentAlignment = Alignment.TopCenter) {
             when {
@@ -61,6 +62,7 @@ internal fun DocumentLibraryScreen(
 private fun DocumentLibraryHeader(
     state: DocumentLibraryUiState,
     onAction: (DocumentLibraryAction) -> Unit,
+    onGenerateMeetingNote: (io.github.artemidius.blowhard.core.api.DocumentId) -> Unit,
     onBack: () -> Unit,
 ) {
     Row(
@@ -74,6 +76,12 @@ private fun DocumentLibraryHeader(
             },
         ) { Text("Back") }
         DocumentLibraryTitle(state, Modifier.weight(1f))
+        state.selectedDocument?.takeIf { state.extraction != null }?.let { document ->
+            TextButton(
+                onClick = { onGenerateMeetingNote(document.id) },
+                enabled = !state.isBusy,
+            ) { Text("Generate meeting note") }
+        }
         Button(
             onClick = {
                 state.selectedDocument?.let { onAction(DocumentLibraryAction.ProcessRequested(it.id)) }
