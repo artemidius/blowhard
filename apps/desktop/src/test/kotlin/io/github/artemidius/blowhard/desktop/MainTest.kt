@@ -11,4 +11,11 @@ class MainTest {
         assertFalse(isPackagingSmokeTest(mapOf("BLOWHARD_PACKAGING_SMOKE_TEST" to "true")))
         assertTrue(isPackagingSmokeTest(mapOf("BLOWHARD_PACKAGING_SMOKE_TEST" to "1")))
     }
+
+    @Test
+    fun `live smoke test requires explicit opt in`() {
+        assertFalse(isReferenceLiveSmoke(emptyMap()))
+        assertFalse(isReferenceLiveSmoke(mapOf("BLOWHARD_REFERENCE_LIVE_SMOKE" to "true")))
+        assertTrue(isReferenceLiveSmoke(mapOf("BLOWHARD_REFERENCE_LIVE_SMOKE" to "1")))
+    }
 }

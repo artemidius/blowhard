@@ -30,9 +30,18 @@ import io.github.artemidius.blowhard.ui.presentation.ConversationAction
 
 private const val PACKAGING_SMOKE_TEST_ENVIRONMENT_VARIABLE = "BLOWHARD_PACKAGING_SMOKE_TEST"
 private const val PACKAGING_SMOKE_TEST_ENABLED = "1"
+private const val REFERENCE_LIVE_SMOKE_ENVIRONMENT_VARIABLE = "BLOWHARD_REFERENCE_LIVE_SMOKE"
 
 /** Starts the Blowhard desktop application. */
 public fun main() {
+    val environment = System.getenv()
+    require(!(isPackagingSmokeTest(environment) && isReferenceLiveSmoke(environment))) {
+        "Smoke checks must be selected individually"
+    }
+    if (isReferenceLiveSmoke(environment)) {
+        ReferenceLiveSmoke.main(emptyArray())
+        return
+    }
     val bootstrap = createDesktopBootstrap()
     application { BlowhardDesktopApplication(bootstrap) }
 }
@@ -157,3 +166,6 @@ private data class DesktopBootstrap(
 
 internal fun isPackagingSmokeTest(environment: Map<String, String>): Boolean =
     environment[PACKAGING_SMOKE_TEST_ENVIRONMENT_VARIABLE] == PACKAGING_SMOKE_TEST_ENABLED
+
+internal fun isReferenceLiveSmoke(environment: Map<String, String>): Boolean =
+    environment[REFERENCE_LIVE_SMOKE_ENVIRONMENT_VARIABLE] == PACKAGING_SMOKE_TEST_ENABLED

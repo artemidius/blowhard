@@ -8,13 +8,13 @@ details remain desktop adapters.
 
 | Platform | Package | Automated CI evidence | Interactive evidence |
 | --- | --- | --- | --- |
-| macOS 15, Apple silicon | `.dmg` | Build, inspect, install, launch, and complete an internal fixture scenario | Current development host completed a bounded live check; layout, focus, menus, and clipboard are checked manually |
+| macOS 15, Apple silicon | `.dmg` | Build, inspect, install, launch, and complete an internal fixture scenario | Current development host completed a bounded live check through a copied DMG app; layout, focus, menus, and clipboard are checked manually |
 | Windows Server 2025 runner, x64 | `.msi` | Build, inspect, install, launch, and complete an internal fixture scenario | No interactive or live claim |
 | Ubuntu 24.04 runner, amd64 | `.deb` | Build, inspect, install under Xvfb, launch, and complete an internal fixture scenario | No interactive or live claim |
 
 The internal fixture exercises the package lifecycle; it is not a user-selectable demo mode. The
-macOS [live reference check](../live-reference-check.md) uses the real provider but does not itself
-prove that a release installer is signed or distributed.
+macOS [live reference check](../live-reference-check.md) uses the real provider through a local
+candidate installer. It does not prove that a release installer is signed or distributed.
 
 The Linux clipboard adapter requires a non-headless AWT session with `DISPLAY`. CI supplies that
 session with Xvfb. A Wayland-only session without X11 compatibility is not currently covered.

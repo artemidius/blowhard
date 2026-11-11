@@ -233,8 +233,8 @@ signing and release distribution are intentionally deferred.
 macOS is the current live reference host. Windows and Linux packages currently cannot start a
 conversation because a verified secure credential adapter is not implemented for those hosts.
 Automated tests use synthetic provider fixtures; a bounded macOS
-[live reference check](docs/live-reference-check.md) has also passed. Public release artifacts are
-not available yet.
+[live reference check](docs/live-reference-check.md) has also passed through a locally installed
+DMG candidate. Public release artifacts are not available yet.
 
 The [installation guide](docs/installation.md) documents candidate verification, native install
 steps, signing limitations, capability boundaries, and local data locations without presenting CI
