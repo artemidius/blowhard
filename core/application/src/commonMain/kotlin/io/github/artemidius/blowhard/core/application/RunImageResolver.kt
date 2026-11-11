@@ -9,14 +9,23 @@ import io.github.artemidius.blowhard.core.domain.DocumentSourceLookupResult
 import io.github.artemidius.blowhard.core.domain.GenerationImage
 import io.github.artemidius.blowhard.core.domain.GenerationImageMediaType
 import io.github.artemidius.blowhard.core.domain.StoredDocumentSource
+import kotlinx.coroutines.CancellationException
 
 internal class RunImageResolver(private val store: DocumentProcessingStore?) {
     suspend fun resolve(attachment: RunAttachment?, supportsVision: Boolean): ImageResolution = when {
         attachment == null -> ImageResolution.Accepted(null)
         !supportsVision -> ImageResolution.Rejected(StartRunRejection.MODEL_DOES_NOT_SUPPORT_VISION)
         store == null -> ImageResolution.Rejected(StartRunRejection.ATTACHMENT_NOT_AVAILABLE)
-        else -> store.readSource(attachment.documentId).toImageResolution()
+        else -> readStoredImage(store, attachment)
     }
+}
+
+private suspend fun readStoredImage(store: DocumentProcessingStore, attachment: RunAttachment): ImageResolution = try {
+    store.readSource(attachment.documentId).toImageResolution()
+} catch (cancelled: CancellationException) {
+    throw cancelled
+} catch (_: Throwable) {
+    ImageResolution.Rejected(StartRunRejection.ATTACHMENT_NOT_AVAILABLE)
 }
 
 internal sealed interface ImageResolution {

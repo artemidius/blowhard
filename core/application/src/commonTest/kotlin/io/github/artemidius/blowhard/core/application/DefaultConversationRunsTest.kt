@@ -46,6 +46,7 @@ import io.github.artemidius.blowhard.core.domain.StoredMessageRole
 import io.github.artemidius.blowhard.core.domain.StoredTranscript
 import io.github.artemidius.blowhard.core.domain.TextGenerationPort
 import io.github.artemidius.blowhard.core.domain.TranscriptSaveResult
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitCancellation
@@ -60,6 +61,7 @@ import kotlinx.coroutines.test.runCurrent
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertFailsWith
 import kotlin.test.assertIs
 
 @OptIn(ExperimentalCoroutinesApi::class)
@@ -328,6 +330,40 @@ class DefaultConversationRunsTest {
     }
 
     @Test
+    fun `image lookup failures are safe while cancellation remains cooperative`() = runTest {
+        val settings = FakeRunConnectionSettings(readyLiveState(supportsVision = true))
+        val unavailableRuns = controller(
+            TextGenerationPort { flowOf(GenerationEvent.Completed) },
+            connectionSettings = settings,
+            documentProcessingStore = FakeDocumentProcessingStore(
+                DocumentSourceLookupResult.Unavailable,
+                failure = IllegalStateException("private database detail"),
+            ),
+        )
+        val cancelledRuns = controller(
+            TextGenerationPort { flowOf(GenerationEvent.Completed) },
+            connectionSettings = settings,
+            documentProcessingStore = FakeDocumentProcessingStore(
+                DocumentSourceLookupResult.Unavailable,
+                failure = CancellationException("cancelled"),
+            ),
+        )
+        val request = StartRunRequest(
+            ConversationId("vision"),
+            "Describe",
+            RunAttachment(DocumentId("selected-image")),
+        )
+
+        val unavailable = unavailableRuns.start(request)
+
+        assertEquals(
+            StartRunRejection.ATTACHMENT_NOT_AVAILABLE,
+            assertIs<StartRunResult.Rejected>(unavailable).reason,
+        )
+        assertFailsWith<CancellationException> { cancelledRuns.start(request) }
+    }
+
+    @Test
     fun `close cancels active work and rejects future starts`() = runTest {
         val runs = controller(TextGenerationPort { flow { awaitCancellation() } })
         val runId = runs.startRun("conversation-1")
@@ -502,11 +538,15 @@ class DefaultConversationRunsTest {
     )
 }
 
-private class FakeDocumentProcessingStore(private val result: DocumentSourceLookupResult) : DocumentProcessingStore {
+private class FakeDocumentProcessingStore(
+    private val result: DocumentSourceLookupResult,
+    private val failure: Throwable? = null,
+) : DocumentProcessingStore {
     var readCalls: Int = 0
 
     override suspend fun readSource(id: DocumentId): DocumentSourceLookupResult {
         readCalls += 1
+        failure?.let { throw it }
         return result
     }
 
