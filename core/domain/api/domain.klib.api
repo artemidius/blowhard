@@ -31,6 +31,30 @@ final enum class io.github.artemidius.blowhard.core.domain/CredentialAccessFailu
     final fun values(): kotlin/Array<io.github.artemidius.blowhard.core.domain/CredentialAccessFailure> // io.github.artemidius.blowhard.core.domain/CredentialAccessFailure.values|values#static(){}[0]
 }
 
+final enum class io.github.artemidius.blowhard.core.domain/DocumentSaveResult : kotlin/Enum<io.github.artemidius.blowhard.core.domain/DocumentSaveResult> { // io.github.artemidius.blowhard.core.domain/DocumentSaveResult|null[0]
+    enum entry ID_CONFLICT // io.github.artemidius.blowhard.core.domain/DocumentSaveResult.ID_CONFLICT|null[0]
+    enum entry SAVED // io.github.artemidius.blowhard.core.domain/DocumentSaveResult.SAVED|null[0]
+    enum entry UNAVAILABLE // io.github.artemidius.blowhard.core.domain/DocumentSaveResult.UNAVAILABLE|null[0]
+
+    final val entries // io.github.artemidius.blowhard.core.domain/DocumentSaveResult.entries|#static{}entries[0]
+        final fun <get-entries>(): kotlin.enums/EnumEntries<io.github.artemidius.blowhard.core.domain/DocumentSaveResult> // io.github.artemidius.blowhard.core.domain/DocumentSaveResult.entries.<get-entries>|<get-entries>#static(){}[0]
+
+    final fun valueOf(kotlin/String): io.github.artemidius.blowhard.core.domain/DocumentSaveResult // io.github.artemidius.blowhard.core.domain/DocumentSaveResult.valueOf|valueOf#static(kotlin.String){}[0]
+    final fun values(): kotlin/Array<io.github.artemidius.blowhard.core.domain/DocumentSaveResult> // io.github.artemidius.blowhard.core.domain/DocumentSaveResult.values|values#static(){}[0]
+}
+
+final enum class io.github.artemidius.blowhard.core.domain/DocumentStoreDeletionResult : kotlin/Enum<io.github.artemidius.blowhard.core.domain/DocumentStoreDeletionResult> { // io.github.artemidius.blowhard.core.domain/DocumentStoreDeletionResult|null[0]
+    enum entry DELETED // io.github.artemidius.blowhard.core.domain/DocumentStoreDeletionResult.DELETED|null[0]
+    enum entry NOT_FOUND // io.github.artemidius.blowhard.core.domain/DocumentStoreDeletionResult.NOT_FOUND|null[0]
+    enum entry UNAVAILABLE // io.github.artemidius.blowhard.core.domain/DocumentStoreDeletionResult.UNAVAILABLE|null[0]
+
+    final val entries // io.github.artemidius.blowhard.core.domain/DocumentStoreDeletionResult.entries|#static{}entries[0]
+        final fun <get-entries>(): kotlin.enums/EnumEntries<io.github.artemidius.blowhard.core.domain/DocumentStoreDeletionResult> // io.github.artemidius.blowhard.core.domain/DocumentStoreDeletionResult.entries.<get-entries>|<get-entries>#static(){}[0]
+
+    final fun valueOf(kotlin/String): io.github.artemidius.blowhard.core.domain/DocumentStoreDeletionResult // io.github.artemidius.blowhard.core.domain/DocumentStoreDeletionResult.valueOf|valueOf#static(kotlin.String){}[0]
+    final fun values(): kotlin/Array<io.github.artemidius.blowhard.core.domain/DocumentStoreDeletionResult> // io.github.artemidius.blowhard.core.domain/DocumentStoreDeletionResult.values|values#static(){}[0]
+}
+
 final enum class io.github.artemidius.blowhard.core.domain/GenerationFailureKind : kotlin/Enum<io.github.artemidius.blowhard.core.domain/GenerationFailureKind> { // io.github.artemidius.blowhard.core.domain/GenerationFailureKind|null[0]
     enum entry CREDENTIAL_UNAVAILABLE // io.github.artemidius.blowhard.core.domain/GenerationFailureKind.CREDENTIAL_UNAVAILABLE|null[0]
     enum entry INVALID_REQUEST // io.github.artemidius.blowhard.core.domain/GenerationFailureKind.INVALID_REQUEST|null[0]
@@ -138,6 +162,10 @@ final enum class io.github.artemidius.blowhard.core.domain/TranscriptSaveResult 
     final fun values(): kotlin/Array<io.github.artemidius.blowhard.core.domain/TranscriptSaveResult> // io.github.artemidius.blowhard.core.domain/TranscriptSaveResult.values|values#static(){}[0]
 }
 
+abstract fun interface io.github.artemidius.blowhard.core.domain/DocumentInspector { // io.github.artemidius.blowhard.core.domain/DocumentInspector|null[0]
+    abstract suspend fun inspect(kotlin/ByteArray): io.github.artemidius.blowhard.core.domain/DocumentInspectionResult // io.github.artemidius.blowhard.core.domain/DocumentInspector.inspect|inspect(kotlin.ByteArray){}[0]
+}
+
 abstract fun interface io.github.artemidius.blowhard.core.domain/ModelCatalogPort { // io.github.artemidius.blowhard.core.domain/ModelCatalogPort|null[0]
     abstract suspend fun listModels(): io.github.artemidius.blowhard.core.domain/ModelCatalogResult // io.github.artemidius.blowhard.core.domain/ModelCatalogPort.listModels|listModels(){}[0]
 }
@@ -162,6 +190,13 @@ abstract interface io.github.artemidius.blowhard.core.domain/CredentialStore { /
     abstract suspend fun delete(): io.github.artemidius.blowhard.core.domain/CredentialMutationResult // io.github.artemidius.blowhard.core.domain/CredentialStore.delete|delete(){}[0]
     abstract suspend fun read(): io.github.artemidius.blowhard.core.domain/CredentialReadResult // io.github.artemidius.blowhard.core.domain/CredentialStore.read|read(){}[0]
     abstract suspend fun replace(kotlin/String): io.github.artemidius.blowhard.core.domain/CredentialMutationResult // io.github.artemidius.blowhard.core.domain/CredentialStore.replace|replace(kotlin.String){}[0]
+}
+
+abstract interface io.github.artemidius.blowhard.core.domain/DocumentStore { // io.github.artemidius.blowhard.core.domain/DocumentStore|null[0]
+    abstract suspend fun delete(io.github.artemidius.blowhard.core.api/DocumentId): io.github.artemidius.blowhard.core.domain/DocumentStoreDeletionResult // io.github.artemidius.blowhard.core.domain/DocumentStore.delete|delete(io.github.artemidius.blowhard.core.api.DocumentId){}[0]
+    abstract suspend fun find(io.github.artemidius.blowhard.core.api/DocumentId): io.github.artemidius.blowhard.core.domain/DocumentStoreLookupResult // io.github.artemidius.blowhard.core.domain/DocumentStore.find|find(io.github.artemidius.blowhard.core.api.DocumentId){}[0]
+    abstract suspend fun list(): io.github.artemidius.blowhard.core.domain/DocumentStoreListResult // io.github.artemidius.blowhard.core.domain/DocumentStore.list|list(){}[0]
+    abstract suspend fun save(io.github.artemidius.blowhard.core.api/ImportedDocument, kotlin/ByteArray): io.github.artemidius.blowhard.core.domain/DocumentSaveResult // io.github.artemidius.blowhard.core.domain/DocumentStore.save|save(io.github.artemidius.blowhard.core.api.ImportedDocument;kotlin.ByteArray){}[0]
 }
 
 sealed interface io.github.artemidius.blowhard.core.domain/CredentialMutationResult { // io.github.artemidius.blowhard.core.domain/CredentialMutationResult|null[0]
@@ -218,6 +253,81 @@ sealed interface io.github.artemidius.blowhard.core.domain/CredentialReadResult 
         final fun equals(kotlin/Any?): kotlin/Boolean // io.github.artemidius.blowhard.core.domain/CredentialReadResult.Missing.equals|equals(kotlin.Any?){}[0]
         final fun hashCode(): kotlin/Int // io.github.artemidius.blowhard.core.domain/CredentialReadResult.Missing.hashCode|hashCode(){}[0]
         final fun toString(): kotlin/String // io.github.artemidius.blowhard.core.domain/CredentialReadResult.Missing.toString|toString(){}[0]
+    }
+}
+
+sealed interface io.github.artemidius.blowhard.core.domain/DocumentInspectionResult { // io.github.artemidius.blowhard.core.domain/DocumentInspectionResult|null[0]
+    final class Inspected : io.github.artemidius.blowhard.core.domain/DocumentInspectionResult { // io.github.artemidius.blowhard.core.domain/DocumentInspectionResult.Inspected|null[0]
+        constructor <init>(io.github.artemidius.blowhard.core.api/DocumentContentDescriptor) // io.github.artemidius.blowhard.core.domain/DocumentInspectionResult.Inspected.<init>|<init>(io.github.artemidius.blowhard.core.api.DocumentContentDescriptor){}[0]
+
+        final val descriptor // io.github.artemidius.blowhard.core.domain/DocumentInspectionResult.Inspected.descriptor|{}descriptor[0]
+            final fun <get-descriptor>(): io.github.artemidius.blowhard.core.api/DocumentContentDescriptor // io.github.artemidius.blowhard.core.domain/DocumentInspectionResult.Inspected.descriptor.<get-descriptor>|<get-descriptor>(){}[0]
+
+        final fun component1(): io.github.artemidius.blowhard.core.api/DocumentContentDescriptor // io.github.artemidius.blowhard.core.domain/DocumentInspectionResult.Inspected.component1|component1(){}[0]
+        final fun copy(io.github.artemidius.blowhard.core.api/DocumentContentDescriptor = ...): io.github.artemidius.blowhard.core.domain/DocumentInspectionResult.Inspected // io.github.artemidius.blowhard.core.domain/DocumentInspectionResult.Inspected.copy|copy(io.github.artemidius.blowhard.core.api.DocumentContentDescriptor){}[0]
+        final fun equals(kotlin/Any?): kotlin/Boolean // io.github.artemidius.blowhard.core.domain/DocumentInspectionResult.Inspected.equals|equals(kotlin.Any?){}[0]
+        final fun hashCode(): kotlin/Int // io.github.artemidius.blowhard.core.domain/DocumentInspectionResult.Inspected.hashCode|hashCode(){}[0]
+        final fun toString(): kotlin/String // io.github.artemidius.blowhard.core.domain/DocumentInspectionResult.Inspected.toString|toString(){}[0]
+    }
+
+    final object InvalidContent : io.github.artemidius.blowhard.core.domain/DocumentInspectionResult { // io.github.artemidius.blowhard.core.domain/DocumentInspectionResult.InvalidContent|null[0]
+        final fun equals(kotlin/Any?): kotlin/Boolean // io.github.artemidius.blowhard.core.domain/DocumentInspectionResult.InvalidContent.equals|equals(kotlin.Any?){}[0]
+        final fun hashCode(): kotlin/Int // io.github.artemidius.blowhard.core.domain/DocumentInspectionResult.InvalidContent.hashCode|hashCode(){}[0]
+        final fun toString(): kotlin/String // io.github.artemidius.blowhard.core.domain/DocumentInspectionResult.InvalidContent.toString|toString(){}[0]
+    }
+
+    final object UnsupportedFormat : io.github.artemidius.blowhard.core.domain/DocumentInspectionResult { // io.github.artemidius.blowhard.core.domain/DocumentInspectionResult.UnsupportedFormat|null[0]
+        final fun equals(kotlin/Any?): kotlin/Boolean // io.github.artemidius.blowhard.core.domain/DocumentInspectionResult.UnsupportedFormat.equals|equals(kotlin.Any?){}[0]
+        final fun hashCode(): kotlin/Int // io.github.artemidius.blowhard.core.domain/DocumentInspectionResult.UnsupportedFormat.hashCode|hashCode(){}[0]
+        final fun toString(): kotlin/String // io.github.artemidius.blowhard.core.domain/DocumentInspectionResult.UnsupportedFormat.toString|toString(){}[0]
+    }
+}
+
+sealed interface io.github.artemidius.blowhard.core.domain/DocumentStoreListResult { // io.github.artemidius.blowhard.core.domain/DocumentStoreListResult|null[0]
+    final class Available : io.github.artemidius.blowhard.core.domain/DocumentStoreListResult { // io.github.artemidius.blowhard.core.domain/DocumentStoreListResult.Available|null[0]
+        constructor <init>(kotlin.collections/List<io.github.artemidius.blowhard.core.api/ImportedDocument>) // io.github.artemidius.blowhard.core.domain/DocumentStoreListResult.Available.<init>|<init>(kotlin.collections.List<io.github.artemidius.blowhard.core.api.ImportedDocument>){}[0]
+
+        final val documents // io.github.artemidius.blowhard.core.domain/DocumentStoreListResult.Available.documents|{}documents[0]
+            final fun <get-documents>(): kotlin.collections/List<io.github.artemidius.blowhard.core.api/ImportedDocument> // io.github.artemidius.blowhard.core.domain/DocumentStoreListResult.Available.documents.<get-documents>|<get-documents>(){}[0]
+
+        final fun component1(): kotlin.collections/List<io.github.artemidius.blowhard.core.api/ImportedDocument> // io.github.artemidius.blowhard.core.domain/DocumentStoreListResult.Available.component1|component1(){}[0]
+        final fun copy(kotlin.collections/List<io.github.artemidius.blowhard.core.api/ImportedDocument> = ...): io.github.artemidius.blowhard.core.domain/DocumentStoreListResult.Available // io.github.artemidius.blowhard.core.domain/DocumentStoreListResult.Available.copy|copy(kotlin.collections.List<io.github.artemidius.blowhard.core.api.ImportedDocument>){}[0]
+        final fun equals(kotlin/Any?): kotlin/Boolean // io.github.artemidius.blowhard.core.domain/DocumentStoreListResult.Available.equals|equals(kotlin.Any?){}[0]
+        final fun hashCode(): kotlin/Int // io.github.artemidius.blowhard.core.domain/DocumentStoreListResult.Available.hashCode|hashCode(){}[0]
+        final fun toString(): kotlin/String // io.github.artemidius.blowhard.core.domain/DocumentStoreListResult.Available.toString|toString(){}[0]
+    }
+
+    final object Unavailable : io.github.artemidius.blowhard.core.domain/DocumentStoreListResult { // io.github.artemidius.blowhard.core.domain/DocumentStoreListResult.Unavailable|null[0]
+        final fun equals(kotlin/Any?): kotlin/Boolean // io.github.artemidius.blowhard.core.domain/DocumentStoreListResult.Unavailable.equals|equals(kotlin.Any?){}[0]
+        final fun hashCode(): kotlin/Int // io.github.artemidius.blowhard.core.domain/DocumentStoreListResult.Unavailable.hashCode|hashCode(){}[0]
+        final fun toString(): kotlin/String // io.github.artemidius.blowhard.core.domain/DocumentStoreListResult.Unavailable.toString|toString(){}[0]
+    }
+}
+
+sealed interface io.github.artemidius.blowhard.core.domain/DocumentStoreLookupResult { // io.github.artemidius.blowhard.core.domain/DocumentStoreLookupResult|null[0]
+    final class Found : io.github.artemidius.blowhard.core.domain/DocumentStoreLookupResult { // io.github.artemidius.blowhard.core.domain/DocumentStoreLookupResult.Found|null[0]
+        constructor <init>(io.github.artemidius.blowhard.core.api/ImportedDocument) // io.github.artemidius.blowhard.core.domain/DocumentStoreLookupResult.Found.<init>|<init>(io.github.artemidius.blowhard.core.api.ImportedDocument){}[0]
+
+        final val document // io.github.artemidius.blowhard.core.domain/DocumentStoreLookupResult.Found.document|{}document[0]
+            final fun <get-document>(): io.github.artemidius.blowhard.core.api/ImportedDocument // io.github.artemidius.blowhard.core.domain/DocumentStoreLookupResult.Found.document.<get-document>|<get-document>(){}[0]
+
+        final fun component1(): io.github.artemidius.blowhard.core.api/ImportedDocument // io.github.artemidius.blowhard.core.domain/DocumentStoreLookupResult.Found.component1|component1(){}[0]
+        final fun copy(io.github.artemidius.blowhard.core.api/ImportedDocument = ...): io.github.artemidius.blowhard.core.domain/DocumentStoreLookupResult.Found // io.github.artemidius.blowhard.core.domain/DocumentStoreLookupResult.Found.copy|copy(io.github.artemidius.blowhard.core.api.ImportedDocument){}[0]
+        final fun equals(kotlin/Any?): kotlin/Boolean // io.github.artemidius.blowhard.core.domain/DocumentStoreLookupResult.Found.equals|equals(kotlin.Any?){}[0]
+        final fun hashCode(): kotlin/Int // io.github.artemidius.blowhard.core.domain/DocumentStoreLookupResult.Found.hashCode|hashCode(){}[0]
+        final fun toString(): kotlin/String // io.github.artemidius.blowhard.core.domain/DocumentStoreLookupResult.Found.toString|toString(){}[0]
+    }
+
+    final object NotFound : io.github.artemidius.blowhard.core.domain/DocumentStoreLookupResult { // io.github.artemidius.blowhard.core.domain/DocumentStoreLookupResult.NotFound|null[0]
+        final fun equals(kotlin/Any?): kotlin/Boolean // io.github.artemidius.blowhard.core.domain/DocumentStoreLookupResult.NotFound.equals|equals(kotlin.Any?){}[0]
+        final fun hashCode(): kotlin/Int // io.github.artemidius.blowhard.core.domain/DocumentStoreLookupResult.NotFound.hashCode|hashCode(){}[0]
+        final fun toString(): kotlin/String // io.github.artemidius.blowhard.core.domain/DocumentStoreLookupResult.NotFound.toString|toString(){}[0]
+    }
+
+    final object Unavailable : io.github.artemidius.blowhard.core.domain/DocumentStoreLookupResult { // io.github.artemidius.blowhard.core.domain/DocumentStoreLookupResult.Unavailable|null[0]
+        final fun equals(kotlin/Any?): kotlin/Boolean // io.github.artemidius.blowhard.core.domain/DocumentStoreLookupResult.Unavailable.equals|equals(kotlin.Any?){}[0]
+        final fun hashCode(): kotlin/Int // io.github.artemidius.blowhard.core.domain/DocumentStoreLookupResult.Unavailable.hashCode|hashCode(){}[0]
+        final fun toString(): kotlin/String // io.github.artemidius.blowhard.core.domain/DocumentStoreLookupResult.Unavailable.toString|toString(){}[0]
     }
 }
 
