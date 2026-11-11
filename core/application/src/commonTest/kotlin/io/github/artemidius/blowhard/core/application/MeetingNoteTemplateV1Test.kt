@@ -116,6 +116,40 @@ class MeetingNoteTemplateV1Test {
             validJson().replace("] ,\n  \"action_items\"", ",$duplicatedDecision] ,\n  \"action_items\""),
             MeetingNoteOutputRejection.DUPLICATE_ITEM,
         )
+        val duplicatedAction =
+            """{"description":" prepare release ","owner":null,"due_date":null,"sources":[{"page_index":0,"excerpt":"Ada prepares release"}]}"""
+        assertRejected(
+            validJson().replace("\n  ]\n}", ",$duplicatedAction\n  ]\n}"),
+            MeetingNoteOutputRejection.DUPLICATE_ITEM,
+        )
+    }
+
+    @Test
+    fun `invalid scalar and collection shapes fail closed`() {
+        val invalidValues = listOf(
+            validJson().replace("\"summary\": \"Ship on Friday\"", "\"summary\": 7"),
+            validJson().replace("\"summary\": \"Ship on Friday\"", "\"summary\": {}"),
+            validJson().replace(
+                """{
+      "summary": "Ship on Friday",
+      "sources": [{"page_index": 0, "excerpt": "ship on Friday"}]
+    }""",
+                "\"not-a-decision\"",
+            ),
+            validJson().replace(
+                "\"sources\": [{\"page_index\": 0, \"excerpt\": \"ship on Friday\"}]",
+                "\"sources\": {}",
+            ),
+            validJson().replace("\"page_index\": 0", "\"page_index\": \"zero\""),
+            validJson().replace("\"page_index\": 0", "\"page_index\": {}"),
+            validJson().replace("\"owner\": null", "\"owner\": 7"),
+            validJson().replace("\"owner\": null", "\"owner\": {}"),
+        )
+        invalidValues.forEach { assertRejected(it, MeetingNoteOutputRejection.VALUE_INVALID) }
+
+        val nullDate = validJson().replace("\"due_date\": \"2026-12-04\"", "\"due_date\": null")
+        val content = assertIs<MeetingNoteOutputValidation.Accepted>(parser.parse(nullDate, source)).content
+        assertEquals(null, content.actionItems.single().dueDate)
     }
 
     @Test
