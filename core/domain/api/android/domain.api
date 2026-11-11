@@ -441,18 +441,40 @@ public final class io/github/artemidius/blowhard/core/domain/GenerationFailureKi
 	public static fun values ()[Lio/github/artemidius/blowhard/core/domain/GenerationFailureKind;
 }
 
+public final class io/github/artemidius/blowhard/core/domain/GenerationImage {
+	public static final field Companion Lio/github/artemidius/blowhard/core/domain/GenerationImage$Companion;
+	public final fun copyBytes ()[B
+	public final fun getMediaType ()Lio/github/artemidius/blowhard/core/domain/GenerationImageMediaType;
+	public final fun getSizeBytes ()I
+}
+
+public final class io/github/artemidius/blowhard/core/domain/GenerationImage$Companion {
+	public final fun from (Lio/github/artemidius/blowhard/core/domain/GenerationImageMediaType;[B)Lio/github/artemidius/blowhard/core/domain/GenerationImage;
+}
+
+public final class io/github/artemidius/blowhard/core/domain/GenerationImageMediaType : java/lang/Enum {
+	public static final field JPEG Lio/github/artemidius/blowhard/core/domain/GenerationImageMediaType;
+	public static final field PNG Lio/github/artemidius/blowhard/core/domain/GenerationImageMediaType;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public final fun getValue ()Ljava/lang/String;
+	public static fun valueOf (Ljava/lang/String;)Lio/github/artemidius/blowhard/core/domain/GenerationImageMediaType;
+	public static fun values ()[Lio/github/artemidius/blowhard/core/domain/GenerationImageMediaType;
+}
+
 public final class io/github/artemidius/blowhard/core/domain/GenerationRequest {
-	public synthetic fun <init> (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Lio/github/artemidius/blowhard/core/api/GenerationTarget;Lio/github/artemidius/blowhard/core/api/GenerationParameters;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
-	public synthetic fun <init> (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Lio/github/artemidius/blowhard/core/api/GenerationTarget;Lio/github/artemidius/blowhard/core/api/GenerationParameters;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public synthetic fun <init> (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Lio/github/artemidius/blowhard/core/api/GenerationTarget;Lio/github/artemidius/blowhard/core/api/GenerationParameters;Lio/github/artemidius/blowhard/core/domain/GenerationImage;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public synthetic fun <init> (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Lio/github/artemidius/blowhard/core/api/GenerationTarget;Lio/github/artemidius/blowhard/core/api/GenerationParameters;Lio/github/artemidius/blowhard/core/domain/GenerationImage;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
 	public final fun component1-oS5FZMg ()Ljava/lang/String;
 	public final fun component2-j0uiRXY ()Ljava/lang/String;
 	public final fun component3-oK7e1FM ()Ljava/lang/String;
 	public final fun component4 ()Lio/github/artemidius/blowhard/core/api/GenerationTarget;
 	public final fun component5 ()Lio/github/artemidius/blowhard/core/api/GenerationParameters;
-	public final fun copy-IipjwcU (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Lio/github/artemidius/blowhard/core/api/GenerationTarget;Lio/github/artemidius/blowhard/core/api/GenerationParameters;)Lio/github/artemidius/blowhard/core/domain/GenerationRequest;
-	public static synthetic fun copy-IipjwcU$default (Lio/github/artemidius/blowhard/core/domain/GenerationRequest;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Lio/github/artemidius/blowhard/core/api/GenerationTarget;Lio/github/artemidius/blowhard/core/api/GenerationParameters;ILjava/lang/Object;)Lio/github/artemidius/blowhard/core/domain/GenerationRequest;
+	public final fun component6 ()Lio/github/artemidius/blowhard/core/domain/GenerationImage;
+	public final fun copy-0K0OcO4 (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Lio/github/artemidius/blowhard/core/api/GenerationTarget;Lio/github/artemidius/blowhard/core/api/GenerationParameters;Lio/github/artemidius/blowhard/core/domain/GenerationImage;)Lio/github/artemidius/blowhard/core/domain/GenerationRequest;
+	public static synthetic fun copy-0K0OcO4$default (Lio/github/artemidius/blowhard/core/domain/GenerationRequest;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Lio/github/artemidius/blowhard/core/api/GenerationTarget;Lio/github/artemidius/blowhard/core/api/GenerationParameters;Lio/github/artemidius/blowhard/core/domain/GenerationImage;ILjava/lang/Object;)Lio/github/artemidius/blowhard/core/domain/GenerationRequest;
 	public fun equals (Ljava/lang/Object;)Z
 	public final fun getConversationId-j0uiRXY ()Ljava/lang/String;
+	public final fun getImage ()Lio/github/artemidius/blowhard/core/domain/GenerationImage;
 	public final fun getParameters ()Lio/github/artemidius/blowhard/core/api/GenerationParameters;
 	public final fun getPrompt-oK7e1FM ()Ljava/lang/String;
 	public final fun getRunId-oS5FZMg ()Ljava/lang/String;
@@ -722,6 +744,10 @@ public final class io/github/artemidius/blowhard/core/domain/StoredTranscript {
 
 public abstract interface class io/github/artemidius/blowhard/core/domain/TextGenerationPort {
 	public abstract fun generate (Lio/github/artemidius/blowhard/core/domain/GenerationRequest;)Lkotlinx/coroutines/flow/Flow;
+}
+
+public final class io/github/artemidius/blowhard/core/domain/TextGenerationPortKt {
+	public static final field MAX_GENERATION_IMAGE_BYTES I
 }
 
 public final class io/github/artemidius/blowhard/core/domain/TranscriptSaveResult : java/lang/Enum {

@@ -562,6 +562,17 @@ public final class io/github/artemidius/blowhard/core/api/ObserveRunResult$NotFo
 	public fun toString ()Ljava/lang/String;
 }
 
+public final class io/github/artemidius/blowhard/core/api/RunAttachment {
+	public synthetic fun <init> (Ljava/lang/String;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1-VJy53Lc ()Ljava/lang/String;
+	public final fun copy-1IVQLQQ (Ljava/lang/String;)Lio/github/artemidius/blowhard/core/api/RunAttachment;
+	public static synthetic fun copy-1IVQLQQ$default (Lio/github/artemidius/blowhard/core/api/RunAttachment;Ljava/lang/String;ILjava/lang/Object;)Lio/github/artemidius/blowhard/core/api/RunAttachment;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getDocumentId-VJy53Lc ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
 public final class io/github/artemidius/blowhard/core/api/RunDiagnosticReport {
 	public static final field Companion Lio/github/artemidius/blowhard/core/api/RunDiagnosticReport$Companion;
 	public static final field FILE_NAME Ljava/lang/String;
@@ -881,23 +892,29 @@ public final class io/github/artemidius/blowhard/core/api/RunTimestamp {
 }
 
 public final class io/github/artemidius/blowhard/core/api/SelectableModel {
-	public fun <init> (Ljava/lang/String;Ljava/lang/Long;)V
+	public fun <init> (Ljava/lang/String;Ljava/lang/Long;Z)V
+	public synthetic fun <init> (Ljava/lang/String;Ljava/lang/Long;ZILkotlin/jvm/internal/DefaultConstructorMarker;)V
 	public final fun component1 ()Ljava/lang/String;
 	public final fun component2 ()Ljava/lang/Long;
-	public final fun copy (Ljava/lang/String;Ljava/lang/Long;)Lio/github/artemidius/blowhard/core/api/SelectableModel;
-	public static synthetic fun copy$default (Lio/github/artemidius/blowhard/core/api/SelectableModel;Ljava/lang/String;Ljava/lang/Long;ILjava/lang/Object;)Lio/github/artemidius/blowhard/core/api/SelectableModel;
+	public final fun component3 ()Z
+	public final fun copy (Ljava/lang/String;Ljava/lang/Long;Z)Lio/github/artemidius/blowhard/core/api/SelectableModel;
+	public static synthetic fun copy$default (Lio/github/artemidius/blowhard/core/api/SelectableModel;Ljava/lang/String;Ljava/lang/Long;ZILjava/lang/Object;)Lio/github/artemidius/blowhard/core/api/SelectableModel;
 	public fun equals (Ljava/lang/Object;)Z
 	public final fun getContextWindowTokens ()Ljava/lang/Long;
 	public final fun getId ()Ljava/lang/String;
+	public final fun getSupportsVision ()Z
 	public fun hashCode ()I
 	public fun toString ()Ljava/lang/String;
 }
 
 public final class io/github/artemidius/blowhard/core/api/StartRunRejection : java/lang/Enum {
+	public static final field ATTACHMENT_NOT_AVAILABLE Lio/github/artemidius/blowhard/core/api/StartRunRejection;
+	public static final field ATTACHMENT_NOT_SUPPORTED Lio/github/artemidius/blowhard/core/api/StartRunRejection;
 	public static final field BLANK_PROMPT Lio/github/artemidius/blowhard/core/api/StartRunRejection;
 	public static final field CONVERSATION_BUSY Lio/github/artemidius/blowhard/core/api/StartRunRejection;
 	public static final field LIFECYCLE_CLOSED Lio/github/artemidius/blowhard/core/api/StartRunRejection;
 	public static final field LIVE_CONFIGURATION_NOT_READY Lio/github/artemidius/blowhard/core/api/StartRunRejection;
+	public static final field MODEL_DOES_NOT_SUPPORT_VISION Lio/github/artemidius/blowhard/core/api/StartRunRejection;
 	public static final field STORAGE_UNAVAILABLE Lio/github/artemidius/blowhard/core/api/StartRunRejection;
 	public static fun getEntries ()Lkotlin/enums/EnumEntries;
 	public static fun valueOf (Ljava/lang/String;)Lio/github/artemidius/blowhard/core/api/StartRunRejection;
@@ -905,12 +922,15 @@ public final class io/github/artemidius/blowhard/core/api/StartRunRejection : ja
 }
 
 public final class io/github/artemidius/blowhard/core/api/StartRunRequest {
-	public synthetic fun <init> (Ljava/lang/String;Ljava/lang/String;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public synthetic fun <init> (Ljava/lang/String;Ljava/lang/String;Lio/github/artemidius/blowhard/core/api/RunAttachment;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public synthetic fun <init> (Ljava/lang/String;Ljava/lang/String;Lio/github/artemidius/blowhard/core/api/RunAttachment;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
 	public final fun component1-j0uiRXY ()Ljava/lang/String;
 	public final fun component2 ()Ljava/lang/String;
-	public final fun copy-TKNjWRg (Ljava/lang/String;Ljava/lang/String;)Lio/github/artemidius/blowhard/core/api/StartRunRequest;
-	public static synthetic fun copy-TKNjWRg$default (Lio/github/artemidius/blowhard/core/api/StartRunRequest;Ljava/lang/String;Ljava/lang/String;ILjava/lang/Object;)Lio/github/artemidius/blowhard/core/api/StartRunRequest;
+	public final fun component3 ()Lio/github/artemidius/blowhard/core/api/RunAttachment;
+	public final fun copy-5cztZUo (Ljava/lang/String;Ljava/lang/String;Lio/github/artemidius/blowhard/core/api/RunAttachment;)Lio/github/artemidius/blowhard/core/api/StartRunRequest;
+	public static synthetic fun copy-5cztZUo$default (Lio/github/artemidius/blowhard/core/api/StartRunRequest;Ljava/lang/String;Ljava/lang/String;Lio/github/artemidius/blowhard/core/api/RunAttachment;ILjava/lang/Object;)Lio/github/artemidius/blowhard/core/api/StartRunRequest;
 	public fun equals (Ljava/lang/Object;)Z
+	public final fun getAttachment ()Lio/github/artemidius/blowhard/core/api/RunAttachment;
 	public final fun getConversationId-j0uiRXY ()Ljava/lang/String;
 	public final fun getPrompt ()Ljava/lang/String;
 	public fun hashCode ()I
