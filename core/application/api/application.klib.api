@@ -14,6 +14,10 @@ abstract fun interface io.github.artemidius.blowhard.core.application/DocumentIm
     abstract fun nowEpochMilliseconds(): kotlin/Long // io.github.artemidius.blowhard.core.application/DocumentImportClock.nowEpochMilliseconds|nowEpochMilliseconds(){}[0]
 }
 
+abstract fun interface io.github.artemidius.blowhard.core.application/DocumentProcessingClock { // io.github.artemidius.blowhard.core.application/DocumentProcessingClock|null[0]
+    abstract fun nowEpochMilliseconds(): kotlin/Long // io.github.artemidius.blowhard.core.application/DocumentProcessingClock.nowEpochMilliseconds|nowEpochMilliseconds(){}[0]
+}
+
 abstract fun interface io.github.artemidius.blowhard.core.application/RunClock { // io.github.artemidius.blowhard.core.application/RunClock|null[0]
     abstract fun now(): io.github.artemidius.blowhard.core.api/RunTimestamp // io.github.artemidius.blowhard.core.application/RunClock.now|now(){}[0]
 }
@@ -96,6 +100,13 @@ final class io.github.artemidius.blowhard.core.application/DefaultDocumentLibrar
     final suspend fun list(): io.github.artemidius.blowhard.core.api/DocumentListResult // io.github.artemidius.blowhard.core.application/DefaultDocumentLibrary.list|list(){}[0]
 }
 
+final class io.github.artemidius.blowhard.core.application/DefaultDocumentOcr : io.github.artemidius.blowhard.core.api/DocumentOcr { // io.github.artemidius.blowhard.core.application/DefaultDocumentOcr|null[0]
+    constructor <init>(io.github.artemidius.blowhard.core.domain/DocumentProcessingStore, io.github.artemidius.blowhard.core.domain/DocumentOcrPort, io.github.artemidius.blowhard.core.application/DocumentProcessingClock, io.github.artemidius.blowhard.core.application/DocumentOcrPolicy = ...) // io.github.artemidius.blowhard.core.application/DefaultDocumentOcr.<init>|<init>(io.github.artemidius.blowhard.core.domain.DocumentProcessingStore;io.github.artemidius.blowhard.core.domain.DocumentOcrPort;io.github.artemidius.blowhard.core.application.DocumentProcessingClock;io.github.artemidius.blowhard.core.application.DocumentOcrPolicy){}[0]
+
+    final suspend fun find(io.github.artemidius.blowhard.core.api/DocumentId): io.github.artemidius.blowhard.core.api/DocumentExtractionLookupResult // io.github.artemidius.blowhard.core.application/DefaultDocumentOcr.find|find(io.github.artemidius.blowhard.core.api.DocumentId){}[0]
+    final suspend fun process(io.github.artemidius.blowhard.core.api/DocumentId): io.github.artemidius.blowhard.core.api/DocumentProcessingResult // io.github.artemidius.blowhard.core.application/DefaultDocumentOcr.process|process(io.github.artemidius.blowhard.core.api.DocumentId){}[0]
+}
+
 final class io.github.artemidius.blowhard.core.application/DefaultRunDiagnosticReportGenerator : io.github.artemidius.blowhard.core.api/RunDiagnosticReportGenerator { // io.github.artemidius.blowhard.core.application/DefaultRunDiagnosticReportGenerator|null[0]
     constructor <init>(io.github.artemidius.blowhard.core.api/RunInspector) // io.github.artemidius.blowhard.core.application/DefaultRunDiagnosticReportGenerator.<init>|<init>(io.github.artemidius.blowhard.core.api.RunInspector){}[0]
 
@@ -127,6 +138,34 @@ final class io.github.artemidius.blowhard.core.application/DocumentImportPolicy 
             final fun <get-DEFAULT_MAXIMUM_IMAGE_PIXELS>(): kotlin/Long // io.github.artemidius.blowhard.core.application/DocumentImportPolicy.Companion.DEFAULT_MAXIMUM_IMAGE_PIXELS.<get-DEFAULT_MAXIMUM_IMAGE_PIXELS>|<get-DEFAULT_MAXIMUM_IMAGE_PIXELS>(){}[0]
         final const val DEFAULT_MAXIMUM_PDF_PAGES // io.github.artemidius.blowhard.core.application/DocumentImportPolicy.Companion.DEFAULT_MAXIMUM_PDF_PAGES|{}DEFAULT_MAXIMUM_PDF_PAGES[0]
             final fun <get-DEFAULT_MAXIMUM_PDF_PAGES>(): kotlin/Int // io.github.artemidius.blowhard.core.application/DocumentImportPolicy.Companion.DEFAULT_MAXIMUM_PDF_PAGES.<get-DEFAULT_MAXIMUM_PDF_PAGES>|<get-DEFAULT_MAXIMUM_PDF_PAGES>(){}[0]
+    }
+}
+
+final class io.github.artemidius.blowhard.core.application/DocumentOcrPolicy { // io.github.artemidius.blowhard.core.application/DocumentOcrPolicy|null[0]
+    constructor <init>(kotlin/Int = ..., kotlin/Int = ..., kotlin/Int = ...) // io.github.artemidius.blowhard.core.application/DocumentOcrPolicy.<init>|<init>(kotlin.Int;kotlin.Int;kotlin.Int){}[0]
+
+    final val maximumPageCharacters // io.github.artemidius.blowhard.core.application/DocumentOcrPolicy.maximumPageCharacters|{}maximumPageCharacters[0]
+        final fun <get-maximumPageCharacters>(): kotlin/Int // io.github.artemidius.blowhard.core.application/DocumentOcrPolicy.maximumPageCharacters.<get-maximumPageCharacters>|<get-maximumPageCharacters>(){}[0]
+    final val maximumPages // io.github.artemidius.blowhard.core.application/DocumentOcrPolicy.maximumPages|{}maximumPages[0]
+        final fun <get-maximumPages>(): kotlin/Int // io.github.artemidius.blowhard.core.application/DocumentOcrPolicy.maximumPages.<get-maximumPages>|<get-maximumPages>(){}[0]
+    final val maximumTotalCharacters // io.github.artemidius.blowhard.core.application/DocumentOcrPolicy.maximumTotalCharacters|{}maximumTotalCharacters[0]
+        final fun <get-maximumTotalCharacters>(): kotlin/Int // io.github.artemidius.blowhard.core.application/DocumentOcrPolicy.maximumTotalCharacters.<get-maximumTotalCharacters>|<get-maximumTotalCharacters>(){}[0]
+
+    final fun component1(): kotlin/Int // io.github.artemidius.blowhard.core.application/DocumentOcrPolicy.component1|component1(){}[0]
+    final fun component2(): kotlin/Int // io.github.artemidius.blowhard.core.application/DocumentOcrPolicy.component2|component2(){}[0]
+    final fun component3(): kotlin/Int // io.github.artemidius.blowhard.core.application/DocumentOcrPolicy.component3|component3(){}[0]
+    final fun copy(kotlin/Int = ..., kotlin/Int = ..., kotlin/Int = ...): io.github.artemidius.blowhard.core.application/DocumentOcrPolicy // io.github.artemidius.blowhard.core.application/DocumentOcrPolicy.copy|copy(kotlin.Int;kotlin.Int;kotlin.Int){}[0]
+    final fun equals(kotlin/Any?): kotlin/Boolean // io.github.artemidius.blowhard.core.application/DocumentOcrPolicy.equals|equals(kotlin.Any?){}[0]
+    final fun hashCode(): kotlin/Int // io.github.artemidius.blowhard.core.application/DocumentOcrPolicy.hashCode|hashCode(){}[0]
+    final fun toString(): kotlin/String // io.github.artemidius.blowhard.core.application/DocumentOcrPolicy.toString|toString(){}[0]
+
+    final object Companion { // io.github.artemidius.blowhard.core.application/DocumentOcrPolicy.Companion|null[0]
+        final const val DEFAULT_MAXIMUM_PAGES // io.github.artemidius.blowhard.core.application/DocumentOcrPolicy.Companion.DEFAULT_MAXIMUM_PAGES|{}DEFAULT_MAXIMUM_PAGES[0]
+            final fun <get-DEFAULT_MAXIMUM_PAGES>(): kotlin/Int // io.github.artemidius.blowhard.core.application/DocumentOcrPolicy.Companion.DEFAULT_MAXIMUM_PAGES.<get-DEFAULT_MAXIMUM_PAGES>|<get-DEFAULT_MAXIMUM_PAGES>(){}[0]
+        final const val DEFAULT_MAXIMUM_PAGE_CHARACTERS // io.github.artemidius.blowhard.core.application/DocumentOcrPolicy.Companion.DEFAULT_MAXIMUM_PAGE_CHARACTERS|{}DEFAULT_MAXIMUM_PAGE_CHARACTERS[0]
+            final fun <get-DEFAULT_MAXIMUM_PAGE_CHARACTERS>(): kotlin/Int // io.github.artemidius.blowhard.core.application/DocumentOcrPolicy.Companion.DEFAULT_MAXIMUM_PAGE_CHARACTERS.<get-DEFAULT_MAXIMUM_PAGE_CHARACTERS>|<get-DEFAULT_MAXIMUM_PAGE_CHARACTERS>(){}[0]
+        final const val DEFAULT_MAXIMUM_TOTAL_CHARACTERS // io.github.artemidius.blowhard.core.application/DocumentOcrPolicy.Companion.DEFAULT_MAXIMUM_TOTAL_CHARACTERS|{}DEFAULT_MAXIMUM_TOTAL_CHARACTERS[0]
+            final fun <get-DEFAULT_MAXIMUM_TOTAL_CHARACTERS>(): kotlin/Int // io.github.artemidius.blowhard.core.application/DocumentOcrPolicy.Companion.DEFAULT_MAXIMUM_TOTAL_CHARACTERS.<get-DEFAULT_MAXIMUM_TOTAL_CHARACTERS>|<get-DEFAULT_MAXIMUM_TOTAL_CHARACTERS>(){}[0]
     }
 }
 

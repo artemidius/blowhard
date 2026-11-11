@@ -189,6 +189,63 @@ public final class io/github/artemidius/blowhard/core/api/DocumentDeletionResult
 	public static fun values ()[Lio/github/artemidius/blowhard/core/api/DocumentDeletionResult;
 }
 
+public final class io/github/artemidius/blowhard/core/api/DocumentExtraction {
+	public static final field Companion Lio/github/artemidius/blowhard/core/api/DocumentExtraction$Companion;
+	public static final field MAX_PROCESSOR_LENGTH I
+	public synthetic fun <init> (Ljava/lang/String;Ljava/lang/String;JLjava/util/List;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1-VJy53Lc ()Ljava/lang/String;
+	public final fun component2 ()Ljava/lang/String;
+	public final fun component3 ()J
+	public final fun component4 ()Ljava/util/List;
+	public final fun copy-ki_Js7E (Ljava/lang/String;Ljava/lang/String;JLjava/util/List;)Lio/github/artemidius/blowhard/core/api/DocumentExtraction;
+	public static synthetic fun copy-ki_Js7E$default (Lio/github/artemidius/blowhard/core/api/DocumentExtraction;Ljava/lang/String;Ljava/lang/String;JLjava/util/List;ILjava/lang/Object;)Lio/github/artemidius/blowhard/core/api/DocumentExtraction;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getPages ()Ljava/util/List;
+	public final fun getProcessedAtEpochMilliseconds ()J
+	public final fun getProcessor ()Ljava/lang/String;
+	public final fun getSourceDocumentId-VJy53Lc ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class io/github/artemidius/blowhard/core/api/DocumentExtraction$Companion {
+}
+
+public abstract interface class io/github/artemidius/blowhard/core/api/DocumentExtractionLookupResult {
+}
+
+public final class io/github/artemidius/blowhard/core/api/DocumentExtractionLookupResult$DocumentNotFound : io/github/artemidius/blowhard/core/api/DocumentExtractionLookupResult {
+	public static final field INSTANCE Lio/github/artemidius/blowhard/core/api/DocumentExtractionLookupResult$DocumentNotFound;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class io/github/artemidius/blowhard/core/api/DocumentExtractionLookupResult$Found : io/github/artemidius/blowhard/core/api/DocumentExtractionLookupResult {
+	public fun <init> (Lio/github/artemidius/blowhard/core/api/DocumentExtraction;)V
+	public final fun component1 ()Lio/github/artemidius/blowhard/core/api/DocumentExtraction;
+	public final fun copy (Lio/github/artemidius/blowhard/core/api/DocumentExtraction;)Lio/github/artemidius/blowhard/core/api/DocumentExtractionLookupResult$Found;
+	public static synthetic fun copy$default (Lio/github/artemidius/blowhard/core/api/DocumentExtractionLookupResult$Found;Lio/github/artemidius/blowhard/core/api/DocumentExtraction;ILjava/lang/Object;)Lio/github/artemidius/blowhard/core/api/DocumentExtractionLookupResult$Found;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getExtraction ()Lio/github/artemidius/blowhard/core/api/DocumentExtraction;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class io/github/artemidius/blowhard/core/api/DocumentExtractionLookupResult$NotProcessed : io/github/artemidius/blowhard/core/api/DocumentExtractionLookupResult {
+	public static final field INSTANCE Lio/github/artemidius/blowhard/core/api/DocumentExtractionLookupResult$NotProcessed;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class io/github/artemidius/blowhard/core/api/DocumentExtractionLookupResult$StorageUnavailable : io/github/artemidius/blowhard/core/api/DocumentExtractionLookupResult {
+	public static final field INSTANCE Lio/github/artemidius/blowhard/core/api/DocumentExtractionLookupResult$StorageUnavailable;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
 public final class io/github/artemidius/blowhard/core/api/DocumentFormat : java/lang/Enum {
 	public static final field JPEG Lio/github/artemidius/blowhard/core/api/DocumentFormat;
 	public static final field PDF Lio/github/artemidius/blowhard/core/api/DocumentFormat;
@@ -314,6 +371,48 @@ public final class io/github/artemidius/blowhard/core/api/DocumentLookupResult$S
 	public fun toString ()Ljava/lang/String;
 }
 
+public abstract interface class io/github/artemidius/blowhard/core/api/DocumentOcr {
+	public abstract fun find-SXksg0M (Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public abstract fun process-SXksg0M (Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+}
+
+public final class io/github/artemidius/blowhard/core/api/DocumentProcessingRejection : java/lang/Enum {
+	public static final field CONTENT_UNAVAILABLE Lio/github/artemidius/blowhard/core/api/DocumentProcessingRejection;
+	public static final field DOCUMENT_NOT_FOUND Lio/github/artemidius/blowhard/core/api/DocumentProcessingRejection;
+	public static final field OUTPUT_INVALID Lio/github/artemidius/blowhard/core/api/DocumentProcessingRejection;
+	public static final field OUTPUT_TOO_LARGE Lio/github/artemidius/blowhard/core/api/DocumentProcessingRejection;
+	public static final field PROCESSOR_UNAVAILABLE Lio/github/artemidius/blowhard/core/api/DocumentProcessingRejection;
+	public static final field STORAGE_UNAVAILABLE Lio/github/artemidius/blowhard/core/api/DocumentProcessingRejection;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public static fun valueOf (Ljava/lang/String;)Lio/github/artemidius/blowhard/core/api/DocumentProcessingRejection;
+	public static fun values ()[Lio/github/artemidius/blowhard/core/api/DocumentProcessingRejection;
+}
+
+public abstract interface class io/github/artemidius/blowhard/core/api/DocumentProcessingResult {
+}
+
+public final class io/github/artemidius/blowhard/core/api/DocumentProcessingResult$Processed : io/github/artemidius/blowhard/core/api/DocumentProcessingResult {
+	public fun <init> (Lio/github/artemidius/blowhard/core/api/DocumentExtraction;)V
+	public final fun component1 ()Lio/github/artemidius/blowhard/core/api/DocumentExtraction;
+	public final fun copy (Lio/github/artemidius/blowhard/core/api/DocumentExtraction;)Lio/github/artemidius/blowhard/core/api/DocumentProcessingResult$Processed;
+	public static synthetic fun copy$default (Lio/github/artemidius/blowhard/core/api/DocumentProcessingResult$Processed;Lio/github/artemidius/blowhard/core/api/DocumentExtraction;ILjava/lang/Object;)Lio/github/artemidius/blowhard/core/api/DocumentProcessingResult$Processed;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getExtraction ()Lio/github/artemidius/blowhard/core/api/DocumentExtraction;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class io/github/artemidius/blowhard/core/api/DocumentProcessingResult$Rejected : io/github/artemidius/blowhard/core/api/DocumentProcessingResult {
+	public fun <init> (Lio/github/artemidius/blowhard/core/api/DocumentProcessingRejection;)V
+	public final fun component1 ()Lio/github/artemidius/blowhard/core/api/DocumentProcessingRejection;
+	public final fun copy (Lio/github/artemidius/blowhard/core/api/DocumentProcessingRejection;)Lio/github/artemidius/blowhard/core/api/DocumentProcessingResult$Rejected;
+	public static synthetic fun copy$default (Lio/github/artemidius/blowhard/core/api/DocumentProcessingResult$Rejected;Lio/github/artemidius/blowhard/core/api/DocumentProcessingRejection;ILjava/lang/Object;)Lio/github/artemidius/blowhard/core/api/DocumentProcessingResult$Rejected;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getReason ()Lio/github/artemidius/blowhard/core/api/DocumentProcessingRejection;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
 public abstract interface class io/github/artemidius/blowhard/core/api/DocumentReadResult {
 }
 
@@ -332,6 +431,19 @@ public final class io/github/artemidius/blowhard/core/api/DocumentReadResult$Too
 public final class io/github/artemidius/blowhard/core/api/DocumentReadResult$Unavailable : io/github/artemidius/blowhard/core/api/DocumentReadResult {
 	public static final field INSTANCE Lio/github/artemidius/blowhard/core/api/DocumentReadResult$Unavailable;
 	public fun equals (Ljava/lang/Object;)Z
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class io/github/artemidius/blowhard/core/api/ExtractedDocumentPage {
+	public fun <init> (ILjava/lang/String;)V
+	public final fun component1 ()I
+	public final fun component2 ()Ljava/lang/String;
+	public final fun copy (ILjava/lang/String;)Lio/github/artemidius/blowhard/core/api/ExtractedDocumentPage;
+	public static synthetic fun copy$default (Lio/github/artemidius/blowhard/core/api/ExtractedDocumentPage;ILjava/lang/String;ILjava/lang/Object;)Lio/github/artemidius/blowhard/core/api/ExtractedDocumentPage;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getIndex ()I
+	public final fun getMarkdown ()Ljava/lang/String;
 	public fun hashCode ()I
 	public fun toString ()Ljava/lang/String;
 }
