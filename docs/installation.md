@@ -36,16 +36,18 @@ system security controls to install an untrusted candidate.
 
 | Platform | Candidate | Installation | Current capability |
 | --- | --- | --- | --- |
-| macOS 15, Apple silicon | `.dmg` | Open the image and copy `Blowhard.app` to Applications | Offline demo and Keychain-backed live Mistral configuration |
-| Windows x64 | `.msi` | Run the per-user installer; uninstall through Installed apps | Offline demo only |
-| Ubuntu 24.04, amd64 | `.deb` | `sudo apt install ./path-to-candidate.deb` | Offline demo only |
+| macOS 15, Apple silicon | `.dmg` | Open the image and copy `Blowhard.app` to Applications | Keychain-backed live Mistral configuration |
+| Windows x64 | `.msi` | Run the per-user installer; uninstall through Installed apps | Installation verification; credential storage unavailable |
+| Ubuntu 24.04, amd64 | `.deb` | `sudo apt install ./path-to-candidate.deb` | Installation verification; credential storage unavailable |
 
 Exact filenames are recorded in the candidate manifest. Windows and Linux intentionally fail
 closed for live mode because their secure credential adapters have not been implemented.
 
-After launch, the application starts in **Offline Demo**. Select a bundled scenario and submit any
-non-blank prompt; no account, API credential, or provider network request is required. On macOS,
-live mode must be configured and selected explicitly in Settings.
+On macOS, enter a Mistral API key when prompted. Blowhard stores it in Keychain and verifies the
+connection through the model catalog. A failed check keeps the conversation inactive; retry the
+check or replace the key in settings. Choose a verified model before sending a message. Windows
+and Linux currently show that secure credential storage is unavailable, so the conversation stays
+inactive on those hosts.
 
 ## Local data and removal
 

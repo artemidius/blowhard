@@ -20,6 +20,7 @@ public fun BlowhardApp(
     conversationPresenter: ConversationPresenter,
     connectionSettingsPresenter: ConnectionSettingsPresenter,
     runInspectorPresenter: RunInspectorPresenter,
+    requiresConnection: Boolean = false,
 ) {
     val conversationState by conversationPresenter.state.collectAsState()
     val settingsState by connectionSettingsPresenter.state.collectAsState()
@@ -27,6 +28,14 @@ public fun BlowhardApp(
     var destination by remember { mutableStateOf(WorkspaceDestination.CONVERSATION) }
     MaterialTheme(colorScheme = BlowhardColors, shapes = BlowhardShapes, typography = BlowhardTypography) {
         Surface {
+            if (requiresConnection && !settingsState.settings.canUseLiveMode) {
+                ConnectionSettingsScreen(
+                    state = settingsState,
+                    onAction = connectionSettingsPresenter::dispatch,
+                    onBack = null,
+                )
+                return@Surface
+            }
             when (destination) {
                 WorkspaceDestination.CONVERSATION -> ConversationScreen(
                     state = conversationState,

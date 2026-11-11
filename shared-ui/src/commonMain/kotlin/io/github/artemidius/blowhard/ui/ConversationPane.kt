@@ -39,7 +39,7 @@ internal fun ConversationPane(
 ) {
     Column(Modifier.fillMaxSize(), horizontalAlignment = Alignment.CenterHorizontally) {
         if (compact) CompactConversationNavigation(state, onAction, onOpenSettings)
-        ConversationHeader(state, connection, onAction)
+        ConversationHeader(state, connection, onAction, onOpenSettings)
         HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
         MessageList(
             messages = state.selectedConversation.messages,
@@ -64,6 +64,7 @@ private fun ConversationHeader(
     state: ConversationUiState,
     connection: ConnectionSettingsState,
     onAction: (ConversationAction) -> Unit,
+    onOpenSettings: () -> Unit,
 ) {
     Row(
         modifier = Modifier.fillMaxWidth().padding(horizontal = 24.dp, vertical = 18.dp),
@@ -92,7 +93,13 @@ private fun ConversationHeader(
         ) {
             Text("Delete")
         }
-        ModeBadge(connection.mode)
+        TextButton(onClick = onOpenSettings, modifier = Modifier.widthIn(max = 240.dp)) {
+            Text(
+                connection.selectedModelId?.let { "Model: $it" } ?: "Choose model",
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
+            )
+        }
     }
 }
 

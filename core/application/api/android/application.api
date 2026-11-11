@@ -30,7 +30,8 @@ public final class io/github/artemidius/blowhard/core/application/ConversationHi
 }
 
 public final class io/github/artemidius/blowhard/core/application/DefaultConnectionSettings : io/github/artemidius/blowhard/core/api/ConnectionSettings {
-	public fun <init> (Lio/github/artemidius/blowhard/core/domain/CredentialStore;Lio/github/artemidius/blowhard/core/domain/ModelCatalogPort;)V
+	public fun <init> (Lio/github/artemidius/blowhard/core/domain/CredentialStore;Lio/github/artemidius/blowhard/core/domain/ModelCatalogPort;Z)V
+	public synthetic fun <init> (Lio/github/artemidius/blowhard/core/domain/CredentialStore;Lio/github/artemidius/blowhard/core/domain/ModelCatalogPort;ZILkotlin/jvm/internal/DefaultConstructorMarker;)V
 	public fun acknowledgeLiveDataDisclosure (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public fun deleteCredential (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public fun getState ()Lkotlinx/coroutines/flow/StateFlow;

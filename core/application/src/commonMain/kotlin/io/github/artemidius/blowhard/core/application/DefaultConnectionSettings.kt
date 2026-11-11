@@ -29,7 +29,7 @@ import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 
 /**
- * Coordinates secure credentials, provider verification, and explicit generation-mode selection.
+ * Coordinates secure credentials, provider verification, and generation-mode selection.
  *
  * The observable state never contains credential material. Provider models become selectable only
  * after the catalog explicitly reports both current availability and chat-completion support.
@@ -37,9 +37,15 @@ import kotlinx.coroutines.sync.withLock
 public class DefaultConnectionSettings(
     private val credentials: CredentialStore,
     private val catalog: ModelCatalogPort,
+    startInLiveMode: Boolean = false,
 ) : ConnectionSettings {
     private val operations = Mutex()
-    private val mutableState = MutableStateFlow(ConnectionSettingsState())
+    private val mutableState = MutableStateFlow(
+        ConnectionSettingsState(
+            mode = if (startInLiveMode) GenerationMode.LIVE else GenerationMode.DEMO,
+            liveDataDisclosureAccepted = startInLiveMode,
+        ),
+    )
 
     override val state: StateFlow<ConnectionSettingsState> = mutableState.asStateFlow()
 
@@ -143,7 +149,11 @@ public class DefaultConnectionSettings(
         result: ModelCatalogResult,
     ): ConnectionTestResult = when (result) {
         is ModelCatalogResult.Failure -> {
-            mutableState.value = previous.copy(connectionStatus = ConnectionStatus.FAILED)
+            mutableState.value = previous.copy(
+                connectionStatus = ConnectionStatus.FAILED,
+                models = emptyList(),
+                selectedModelId = null,
+            )
             ConnectionTestResult.Failure(result.failure.kind.toConnectionFailure())
         }
 
@@ -164,16 +174,18 @@ public class DefaultConnectionSettings(
             .toList()
 
         if (compatible.isEmpty()) {
-            mutableState.value = previous.copy(connectionStatus = ConnectionStatus.FAILED)
+            mutableState.value = previous.copy(
+                connectionStatus = ConnectionStatus.FAILED,
+                models = emptyList(),
+                selectedModelId = null,
+            )
             return ConnectionTestResult.Failure(ConnectionTestFailureKind.NO_COMPATIBLE_MODELS)
         }
 
         val priorSelection = previous.selectedModelId?.takeIf { selected ->
             compatible.any { it.id == selected }
         }
-        val selectedModel = priorSelection ?: compatible.firstOrNull()
-            ?.takeIf { previous.mode == GenerationMode.DEMO }
-            ?.id
+        val selectedModel = priorSelection ?: compatible.first().id
         mutableState.value = previous.copy(
             connectionStatus = ConnectionStatus.READY,
             models = compatible,
@@ -198,8 +210,10 @@ private suspend fun mutateCredential(mutation: suspend () -> CredentialMutationR
 private fun ConnectionSettingsState.resetConnectionEvidence(
     credentialStatus: CredentialStatus,
 ): ConnectionSettingsState = ConnectionSettingsState(
+    mode = mode,
     credentialStatus = credentialStatus,
     generationParameters = generationParameters,
+    liveDataDisclosureAccepted = liveDataDisclosureAccepted,
 )
 
 private suspend fun CredentialStore.readStatus(): CredentialStatus = try {

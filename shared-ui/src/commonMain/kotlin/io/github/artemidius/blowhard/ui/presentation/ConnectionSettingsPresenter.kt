@@ -3,6 +3,7 @@ package io.github.artemidius.blowhard.ui.presentation
 import io.github.artemidius.blowhard.core.api.ConnectionSettings
 import io.github.artemidius.blowhard.core.api.ConnectionTestFailureKind
 import io.github.artemidius.blowhard.core.api.ConnectionTestResult
+import io.github.artemidius.blowhard.core.api.CredentialStatus
 import io.github.artemidius.blowhard.core.api.CredentialUpdateResult
 import io.github.artemidius.blowhard.core.api.GenerationMode
 import io.github.artemidius.blowhard.core.api.GenerationParameters
@@ -30,6 +31,7 @@ import kotlin.coroutines.CoroutineContext
 public class ConnectionSettingsPresenter(
     private val connectionSettings: ConnectionSettings,
     coroutineContext: CoroutineContext,
+    private val autoVerifyCredential: Boolean = false,
 ) {
     private val scope = CoroutineScope(coroutineContext + SupervisorJob())
     private val actions = Channel<ConnectionSettingsAction>(Channel.UNLIMITED)
@@ -100,7 +102,14 @@ public class ConnectionSettingsPresenter(
 
             ConnectionSettingsAction.NoticeDismissed -> notice.value = null
 
-            ConnectionSettingsAction.RefreshRequested -> connectionSettings.refreshCredentialStatus()
+            ConnectionSettingsAction.RefreshRequested -> {
+                connectionSettings.refreshCredentialStatus()
+                if (autoVerifyCredential &&
+                    connectionSettings.state.value.credentialStatus == CredentialStatus.CONFIGURED
+                ) {
+                    testConnection()
+                }
+            }
         }
     }
 
@@ -110,8 +119,16 @@ public class ConnectionSettingsPresenter(
             return
         }
         notice.value = when (connectionSettings.replaceCredential(secret)) {
-            CredentialUpdateResult.SUCCESS -> "Credential saved. Test the connection to discover compatible models."
+            CredentialUpdateResult.SUCCESS -> {
+                if (autoVerifyCredential) {
+                    testConnection()
+                    return
+                }
+                "Credential saved. Test the connection to discover compatible models."
+            }
+
             CredentialUpdateResult.REJECTED -> "The credential does not satisfy secure-storage requirements."
+
             CredentialUpdateResult.UNAVAILABLE -> "Secure credential storage is unavailable on this device."
         }
     }

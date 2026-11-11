@@ -37,6 +37,37 @@ class ConnectionSettingsPresenterTest {
     }
 
     @Test
+    fun `saved credential is verified on startup and failure is shown safely`() = runTest {
+        val service = FakeConnectionSettings(initialCredentialStatus = CredentialStatus.CONFIGURED)
+        service.connectionResult = ConnectionTestResult.Failure(ConnectionTestFailureKind.UNAUTHORIZED)
+        val presenter =
+            ConnectionSettingsPresenter(service, StandardTestDispatcher(testScheduler), autoVerifyCredential = true)
+
+        runCurrent()
+
+        assertEquals(1, service.connectionTestCalls)
+        assertEquals("The provider rejected the credential.", presenter.state.value.notice)
+        presenter.close()
+    }
+
+    @Test
+    fun `new credential is verified automatically`() = runTest {
+        val service = FakeConnectionSettings()
+        service.connectionResult = ConnectionTestResult.Success(listOf(SelectableModel("chat", 32_000)))
+        val presenter =
+            ConnectionSettingsPresenter(service, StandardTestDispatcher(testScheduler), autoVerifyCredential = true)
+        runCurrent()
+
+        presenter.dispatch(ConnectionSettingsAction.CredentialSubmitted("private-api-key"))
+        runCurrent()
+
+        assertEquals(1, service.connectionTestCalls)
+        assertEquals("Connection verified. 1 compatible chat model(s) available.", presenter.state.value.notice)
+        assertFalse(presenter.state.value.toString().contains("private-api-key"))
+        presenter.close()
+    }
+
+    @Test
     fun `credential passes to service but never enters observable or diagnostic state`() = runTest {
         val service = FakeConnectionSettings()
         val presenter = presenter(service)
@@ -214,10 +245,14 @@ class ConnectionSettingsPresenterTest {
         )
 }
 
-private class FakeConnectionSettings(private val throwsOnRefresh: Boolean = false) : ConnectionSettings {
+private class FakeConnectionSettings(
+    private val throwsOnRefresh: Boolean = false,
+    private val initialCredentialStatus: CredentialStatus = CredentialStatus.MISSING,
+) : ConnectionSettings {
     private val mutableState = MutableStateFlow(ConnectionSettingsState())
     override val state: StateFlow<ConnectionSettingsState> = mutableState
     var refreshCalls = 0
+    var connectionTestCalls = 0
     var replacedCredential: String? = null
     var deleteCalls = 0
     var disclosureAccepted = false
@@ -235,7 +270,7 @@ private class FakeConnectionSettings(private val throwsOnRefresh: Boolean = fals
     override suspend fun refreshCredentialStatus() {
         refreshCalls += 1
         if (throwsOnRefresh) error("private provider detail")
-        mutableState.value = mutableState.value.copy(credentialStatus = CredentialStatus.MISSING)
+        mutableState.value = mutableState.value.copy(credentialStatus = initialCredentialStatus)
     }
 
     override suspend fun replaceCredential(secret: String): CredentialUpdateResult {
@@ -248,7 +283,10 @@ private class FakeConnectionSettings(private val throwsOnRefresh: Boolean = fals
         return deleteResult
     }
 
-    override suspend fun testConnection(): ConnectionTestResult = connectionResult
+    override suspend fun testConnection(): ConnectionTestResult {
+        connectionTestCalls += 1
+        return connectionResult
+    }
 
     override suspend fun selectModel(modelId: String): ModelSelectionResult {
         selectedModels += modelId
