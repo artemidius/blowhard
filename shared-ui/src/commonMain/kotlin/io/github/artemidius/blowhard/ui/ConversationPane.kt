@@ -23,6 +23,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import io.github.artemidius.blowhard.core.api.ConnectionSettingsState
 import io.github.artemidius.blowhard.core.api.GenerationMode
+import io.github.artemidius.blowhard.core.api.ImportedDocument
 import io.github.artemidius.blowhard.core.api.RunId
 import io.github.artemidius.blowhard.ui.presentation.ConversationAction
 import io.github.artemidius.blowhard.ui.presentation.ConversationUiState
@@ -31,6 +32,7 @@ import io.github.artemidius.blowhard.ui.presentation.ConversationUiState
 internal fun ConversationPane(
     state: ConversationUiState,
     connection: ConnectionSettingsState,
+    availableImages: List<ImportedDocument>,
     onAction: (ConversationAction) -> Unit,
     onOpenSettings: () -> Unit,
     onOpenDocuments: () -> Unit,
@@ -55,7 +57,13 @@ internal fun ConversationPane(
                 modifier = Modifier.padding(horizontal = 24.dp),
             )
         }
-        ComposerPanel(state = state, connection = connection, onAction = onAction)
+        ComposerPanel(
+            state = state,
+            connection = connection,
+            availableImages = availableImages,
+            onOpenDocuments = onOpenDocuments,
+            onAction = onAction,
+        )
     }
 }
 

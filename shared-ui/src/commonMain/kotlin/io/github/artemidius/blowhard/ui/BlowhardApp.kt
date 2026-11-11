@@ -10,6 +10,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import io.github.artemidius.blowhard.core.api.DocumentContentDescriptor
 import io.github.artemidius.blowhard.ui.presentation.ConnectionSettingsPresenter
 import io.github.artemidius.blowhard.ui.presentation.ConnectionSettingsUiState
 import io.github.artemidius.blowhard.ui.presentation.ConversationPresenter
@@ -102,6 +103,9 @@ private fun WorkspaceDestinationContent(
         WorkspaceDestination.CONVERSATION -> ConversationScreen(
             state = conversationState,
             connection = settingsState.settings,
+            availableImages = documentLibraryState.documents.filter {
+                it.content is DocumentContentDescriptor.Image
+            },
             onAction = conversationPresenter::dispatch,
             onOpenSettings = { navigate(WorkspaceDestination.SETTINGS) },
             onOpenDocuments = { navigate(WorkspaceDestination.DOCUMENTS) },

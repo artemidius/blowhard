@@ -21,8 +21,8 @@ internal fun LiveReadinessSection(settings: ConnectionSettingsState) {
         Column(Modifier.padding(20.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
             Text("External processing", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold)
             Text(
-                "Live requests send message content and the selected model identifier to Mistral. " +
-                    "The connection must be verified before you can send a message.",
+                "Live requests send message content, any explicitly attached image, and the selected model " +
+                    "identifier to Mistral. The connection must be verified before you can send a message.",
                 style = MaterialTheme.typography.bodyMedium,
             )
             ReadinessStatus(settings)

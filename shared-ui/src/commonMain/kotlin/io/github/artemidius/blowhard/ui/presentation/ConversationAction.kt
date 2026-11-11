@@ -1,6 +1,7 @@
 package io.github.artemidius.blowhard.ui.presentation
 
 import io.github.artemidius.blowhard.core.api.ConversationId
+import io.github.artemidius.blowhard.core.api.DocumentId
 
 /** User intent accepted by [ConversationPresenter]. */
 public sealed interface ConversationAction {
@@ -12,6 +13,12 @@ public sealed interface ConversationAction {
 
     /** Selects the offline behavior prepared for the next run. */
     public data class ScenarioChanged(public val scenario: DemoScenario) : ConversationAction
+
+    /** Attaches one explicitly selected, already imported image to the next attempt. */
+    public data class ImageSelected(public val id: DocumentId, public val displayName: String) : ConversationAction
+
+    /** Removes the image selected for the next attempt. */
+    public data object ImageCleared : ConversationAction
 
     /** Creates and selects a local in-memory conversation. */
     public data object NewConversation : ConversationAction
