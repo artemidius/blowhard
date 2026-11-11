@@ -24,7 +24,7 @@ internal data class MistralChatRequestDto(
 internal data class MistralStreamOptionsDto(@SerialName("include_usage") val includeUsage: Boolean)
 
 @Serializable
-internal data class MistralChatMessageDto(val role: String, val content: String)
+internal data class MistralChatMessageDto(val role: String, val content: JsonElement)
 
 @Serializable
 internal data class MistralChatChunkDto(

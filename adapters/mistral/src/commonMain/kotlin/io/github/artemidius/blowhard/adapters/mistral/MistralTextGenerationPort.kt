@@ -26,6 +26,11 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.channelFlow
 import kotlinx.io.IOException
 import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.JsonArray
+import kotlinx.serialization.json.JsonElement
+import kotlinx.serialization.json.JsonObject
+import kotlinx.serialization.json.JsonPrimitive
+import kotlin.io.encoding.Base64
 
 /** Streaming Mistral chat adapter for the core-owned text-generation boundary. */
 public class MistralTextGenerationPort private constructor(
@@ -134,12 +139,33 @@ public class MistralTextGenerationPort private constructor(
 
     private fun GenerationRequest.toDto(): MistralChatRequestDto = MistralChatRequestDto(
         model = configuration.modelId,
-        messages = listOf(MistralChatMessageDto(role = "user", content = prompt.value)),
+        messages = listOf(MistralChatMessageDto(role = "user", content = toMessageContent())),
         stream = true,
         streamOptions = MistralStreamOptionsDto(includeUsage = true),
         maxTokens = parameters.maxOutputTokens,
         temperature = parameters.temperature,
     )
+
+    private fun GenerationRequest.toMessageContent(): JsonElement {
+        val selectedImage = image ?: return JsonPrimitive(prompt.value)
+        val encoded = Base64.Default.encode(selectedImage.copyBytes())
+        return JsonArray(
+            listOf(
+                JsonObject(
+                    mapOf(
+                        "type" to JsonPrimitive("text"),
+                        "text" to JsonPrimitive(prompt.value),
+                    ),
+                ),
+                JsonObject(
+                    mapOf(
+                        "type" to JsonPrimitive("image_url"),
+                        "image_url" to JsonPrimitive("data:${selectedImage.mediaType.value};base64,$encoded"),
+                    ),
+                ),
+            ),
+        )
+    }
 
     /** Creates streaming adapters with the production HTTP policy. */
     public companion object {
