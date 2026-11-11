@@ -89,9 +89,63 @@ public sealed interface ToolExecutionResult {
     public data class Failed(public val outputJson: String) : ToolExecutionResult
 }
 
+/** Provider boundary for one non-streaming tool-orchestration turn. */
+public fun interface ToolModelPort {
+    /** Returns exactly one text, call-batch, or safely classified failure response. */
+    public suspend fun next(request: ToolModelRequest): ToolModelResponse
+}
+
+/** Bounded provider request containing the fixed registry and ordered conversation history. */
+public data class ToolModelRequest(
+    public val definitions: List<ToolDefinition>,
+    public val messages: List<ToolModelMessage>,
+) {
+    init {
+        require(definitions.isNotEmpty() && definitions.size <= MAX_TOOL_DEFINITIONS) {
+            "Tool definitions are invalid"
+        }
+        require(messages.isNotEmpty() && messages.size <= MAX_TOOL_MESSAGES) { "Tool messages are invalid" }
+    }
+}
+
+/** Provider-neutral conversation item retained in exact orchestration order. */
+public sealed interface ToolModelMessage {
+    /** Original user instruction. */
+    public data class User(public val text: String) : ToolModelMessage
+
+    /** Complete assistant call batch. */
+    public data class AssistantCalls(public val calls: List<ToolCallProposal>) : ToolModelMessage
+
+    /** Results paired with the preceding assistant calls. */
+    public data class ToolResults(public val results: List<ToolCallResult>) : ToolModelMessage
+}
+
+/** One provider turn; malformed shapes remain representable for fail-closed validation. */
+public sealed interface ToolModelResponse {
+    /** Candidate terminal answer. */
+    public data class Text(public val text: String) : ToolModelResponse
+
+    /** Candidate call batch; nonblank [accompanyingText] represents a forbidden mixed response. */
+    public data class Calls(public val calls: List<ToolCallProposal>, public val accompanyingText: String? = null) :
+        ToolModelResponse
+
+    /** Safely classified provider failure. */
+    public data class Failed(public val kind: ToolModelFailureKind) : ToolModelResponse
+}
+
+/** Provider failures safe for application state. */
+public enum class ToolModelFailureKind {
+    AUTHENTICATION,
+    RATE_LIMITED,
+    UNAVAILABLE,
+    INVALID_RESPONSE,
+}
+
 public const val MAX_TOOL_CALL_ID_CHARACTERS: Int = 128
 public const val MAX_TOOL_DESCRIPTION_CHARACTERS: Int = 1_024
 public const val MAX_TOOL_JSON_CHARACTERS: Int = 32 * 1_024
 public const val MAX_TOOL_OUTPUT_CHARACTERS: Int = 64 * 1_024
+public const val MAX_TOOL_DEFINITIONS: Int = 16
+public const val MAX_TOOL_MESSAGES: Int = 32
 
 private val TOOL_NAME_PATTERN = Regex("^[a-z][a-z0-9_]{0,63}$")

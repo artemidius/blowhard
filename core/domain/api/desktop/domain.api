@@ -1003,6 +1003,108 @@ public abstract interface class io/github/artemidius/blowhard/core/domain/ToolEx
 	public abstract fun execute (Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 }
 
+public final class io/github/artemidius/blowhard/core/domain/ToolModelFailureKind : java/lang/Enum {
+	public static final field AUTHENTICATION Lio/github/artemidius/blowhard/core/domain/ToolModelFailureKind;
+	public static final field INVALID_RESPONSE Lio/github/artemidius/blowhard/core/domain/ToolModelFailureKind;
+	public static final field RATE_LIMITED Lio/github/artemidius/blowhard/core/domain/ToolModelFailureKind;
+	public static final field UNAVAILABLE Lio/github/artemidius/blowhard/core/domain/ToolModelFailureKind;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public static fun valueOf (Ljava/lang/String;)Lio/github/artemidius/blowhard/core/domain/ToolModelFailureKind;
+	public static fun values ()[Lio/github/artemidius/blowhard/core/domain/ToolModelFailureKind;
+}
+
+public abstract interface class io/github/artemidius/blowhard/core/domain/ToolModelMessage {
+}
+
+public final class io/github/artemidius/blowhard/core/domain/ToolModelMessage$AssistantCalls : io/github/artemidius/blowhard/core/domain/ToolModelMessage {
+	public fun <init> (Ljava/util/List;)V
+	public final fun component1 ()Ljava/util/List;
+	public final fun copy (Ljava/util/List;)Lio/github/artemidius/blowhard/core/domain/ToolModelMessage$AssistantCalls;
+	public static synthetic fun copy$default (Lio/github/artemidius/blowhard/core/domain/ToolModelMessage$AssistantCalls;Ljava/util/List;ILjava/lang/Object;)Lio/github/artemidius/blowhard/core/domain/ToolModelMessage$AssistantCalls;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getCalls ()Ljava/util/List;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class io/github/artemidius/blowhard/core/domain/ToolModelMessage$ToolResults : io/github/artemidius/blowhard/core/domain/ToolModelMessage {
+	public fun <init> (Ljava/util/List;)V
+	public final fun component1 ()Ljava/util/List;
+	public final fun copy (Ljava/util/List;)Lio/github/artemidius/blowhard/core/domain/ToolModelMessage$ToolResults;
+	public static synthetic fun copy$default (Lio/github/artemidius/blowhard/core/domain/ToolModelMessage$ToolResults;Ljava/util/List;ILjava/lang/Object;)Lio/github/artemidius/blowhard/core/domain/ToolModelMessage$ToolResults;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getResults ()Ljava/util/List;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class io/github/artemidius/blowhard/core/domain/ToolModelMessage$User : io/github/artemidius/blowhard/core/domain/ToolModelMessage {
+	public fun <init> (Ljava/lang/String;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun copy (Ljava/lang/String;)Lio/github/artemidius/blowhard/core/domain/ToolModelMessage$User;
+	public static synthetic fun copy$default (Lio/github/artemidius/blowhard/core/domain/ToolModelMessage$User;Ljava/lang/String;ILjava/lang/Object;)Lio/github/artemidius/blowhard/core/domain/ToolModelMessage$User;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getText ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public abstract interface class io/github/artemidius/blowhard/core/domain/ToolModelPort {
+	public abstract fun next (Lio/github/artemidius/blowhard/core/domain/ToolModelRequest;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+}
+
+public final class io/github/artemidius/blowhard/core/domain/ToolModelRequest {
+	public fun <init> (Ljava/util/List;Ljava/util/List;)V
+	public final fun component1 ()Ljava/util/List;
+	public final fun component2 ()Ljava/util/List;
+	public final fun copy (Ljava/util/List;Ljava/util/List;)Lio/github/artemidius/blowhard/core/domain/ToolModelRequest;
+	public static synthetic fun copy$default (Lio/github/artemidius/blowhard/core/domain/ToolModelRequest;Ljava/util/List;Ljava/util/List;ILjava/lang/Object;)Lio/github/artemidius/blowhard/core/domain/ToolModelRequest;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getDefinitions ()Ljava/util/List;
+	public final fun getMessages ()Ljava/util/List;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public abstract interface class io/github/artemidius/blowhard/core/domain/ToolModelResponse {
+}
+
+public final class io/github/artemidius/blowhard/core/domain/ToolModelResponse$Calls : io/github/artemidius/blowhard/core/domain/ToolModelResponse {
+	public fun <init> (Ljava/util/List;Ljava/lang/String;)V
+	public synthetic fun <init> (Ljava/util/List;Ljava/lang/String;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()Ljava/util/List;
+	public final fun component2 ()Ljava/lang/String;
+	public final fun copy (Ljava/util/List;Ljava/lang/String;)Lio/github/artemidius/blowhard/core/domain/ToolModelResponse$Calls;
+	public static synthetic fun copy$default (Lio/github/artemidius/blowhard/core/domain/ToolModelResponse$Calls;Ljava/util/List;Ljava/lang/String;ILjava/lang/Object;)Lio/github/artemidius/blowhard/core/domain/ToolModelResponse$Calls;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getAccompanyingText ()Ljava/lang/String;
+	public final fun getCalls ()Ljava/util/List;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class io/github/artemidius/blowhard/core/domain/ToolModelResponse$Failed : io/github/artemidius/blowhard/core/domain/ToolModelResponse {
+	public fun <init> (Lio/github/artemidius/blowhard/core/domain/ToolModelFailureKind;)V
+	public final fun component1 ()Lio/github/artemidius/blowhard/core/domain/ToolModelFailureKind;
+	public final fun copy (Lio/github/artemidius/blowhard/core/domain/ToolModelFailureKind;)Lio/github/artemidius/blowhard/core/domain/ToolModelResponse$Failed;
+	public static synthetic fun copy$default (Lio/github/artemidius/blowhard/core/domain/ToolModelResponse$Failed;Lio/github/artemidius/blowhard/core/domain/ToolModelFailureKind;ILjava/lang/Object;)Lio/github/artemidius/blowhard/core/domain/ToolModelResponse$Failed;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getKind ()Lio/github/artemidius/blowhard/core/domain/ToolModelFailureKind;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class io/github/artemidius/blowhard/core/domain/ToolModelResponse$Text : io/github/artemidius/blowhard/core/domain/ToolModelResponse {
+	public fun <init> (Ljava/lang/String;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun copy (Ljava/lang/String;)Lio/github/artemidius/blowhard/core/domain/ToolModelResponse$Text;
+	public static synthetic fun copy$default (Lio/github/artemidius/blowhard/core/domain/ToolModelResponse$Text;Ljava/lang/String;ILjava/lang/Object;)Lio/github/artemidius/blowhard/core/domain/ToolModelResponse$Text;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getText ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
 public final class io/github/artemidius/blowhard/core/domain/ToolName {
 	public static final synthetic fun box-impl (Ljava/lang/String;)Lio/github/artemidius/blowhard/core/domain/ToolName;
 	public static fun constructor-impl (Ljava/lang/String;)Ljava/lang/String;
@@ -1019,8 +1121,10 @@ public final class io/github/artemidius/blowhard/core/domain/ToolName {
 
 public final class io/github/artemidius/blowhard/core/domain/ToolProtocolKt {
 	public static final field MAX_TOOL_CALL_ID_CHARACTERS I
+	public static final field MAX_TOOL_DEFINITIONS I
 	public static final field MAX_TOOL_DESCRIPTION_CHARACTERS I
 	public static final field MAX_TOOL_JSON_CHARACTERS I
+	public static final field MAX_TOOL_MESSAGES I
 	public static final field MAX_TOOL_OUTPUT_CHARACTERS I
 }
 
