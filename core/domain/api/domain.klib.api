@@ -193,6 +193,7 @@ abstract interface io.github.artemidius.blowhard.core.domain/CredentialStore { /
 }
 
 abstract interface io.github.artemidius.blowhard.core.domain/DocumentStore { // io.github.artemidius.blowhard.core.domain/DocumentStore|null[0]
+    abstract suspend fun close() // io.github.artemidius.blowhard.core.domain/DocumentStore.close|close(){}[0]
     abstract suspend fun delete(io.github.artemidius.blowhard.core.api/DocumentId): io.github.artemidius.blowhard.core.domain/DocumentStoreDeletionResult // io.github.artemidius.blowhard.core.domain/DocumentStore.delete|delete(io.github.artemidius.blowhard.core.api.DocumentId){}[0]
     abstract suspend fun find(io.github.artemidius.blowhard.core.api/DocumentId): io.github.artemidius.blowhard.core.domain/DocumentStoreLookupResult // io.github.artemidius.blowhard.core.domain/DocumentStore.find|find(io.github.artemidius.blowhard.core.api.DocumentId){}[0]
     abstract suspend fun list(): io.github.artemidius.blowhard.core.domain/DocumentStoreListResult // io.github.artemidius.blowhard.core.domain/DocumentStore.list|list(){}[0]
