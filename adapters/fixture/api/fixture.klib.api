@@ -81,6 +81,12 @@ sealed interface io.github.artemidius.blowhard.adapters.fixture/FixtureScenario 
     }
 }
 
+final class io.github.artemidius.blowhard.adapters.fixture/FixtureDocumentOcrPort : io.github.artemidius.blowhard.core.domain/DocumentOcrPort { // io.github.artemidius.blowhard.adapters.fixture/FixtureDocumentOcrPort|null[0]
+    constructor <init>() // io.github.artemidius.blowhard.adapters.fixture/FixtureDocumentOcrPort.<init>|<init>(){}[0]
+
+    final suspend fun process(io.github.artemidius.blowhard.core.domain/DocumentOcrRequest): io.github.artemidius.blowhard.core.domain/DocumentOcrPortResult // io.github.artemidius.blowhard.adapters.fixture/FixtureDocumentOcrPort.process|process(io.github.artemidius.blowhard.core.domain.DocumentOcrRequest){}[0]
+}
+
 final class io.github.artemidius.blowhard.adapters.fixture/FixtureTextGenerationPort : io.github.artemidius.blowhard.core.domain/TextGenerationPort { // io.github.artemidius.blowhard.adapters.fixture/FixtureTextGenerationPort|null[0]
     constructor <init>(kotlin/Function1<io.github.artemidius.blowhard.core.domain/GenerationRequest, io.github.artemidius.blowhard.adapters.fixture/FixtureScenario>) // io.github.artemidius.blowhard.adapters.fixture/FixtureTextGenerationPort.<init>|<init>(kotlin.Function1<io.github.artemidius.blowhard.core.domain.GenerationRequest,io.github.artemidius.blowhard.adapters.fixture.FixtureScenario>){}[0]
 
