@@ -120,6 +120,112 @@ public abstract interface class io/github/artemidius/blowhard/core/domain/Creden
 	public abstract fun replace (Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 }
 
+public abstract interface class io/github/artemidius/blowhard/core/domain/DocumentInspectionResult {
+}
+
+public final class io/github/artemidius/blowhard/core/domain/DocumentInspectionResult$Inspected : io/github/artemidius/blowhard/core/domain/DocumentInspectionResult {
+	public fun <init> (Lio/github/artemidius/blowhard/core/api/DocumentContentDescriptor;)V
+	public final fun component1 ()Lio/github/artemidius/blowhard/core/api/DocumentContentDescriptor;
+	public final fun copy (Lio/github/artemidius/blowhard/core/api/DocumentContentDescriptor;)Lio/github/artemidius/blowhard/core/domain/DocumentInspectionResult$Inspected;
+	public static synthetic fun copy$default (Lio/github/artemidius/blowhard/core/domain/DocumentInspectionResult$Inspected;Lio/github/artemidius/blowhard/core/api/DocumentContentDescriptor;ILjava/lang/Object;)Lio/github/artemidius/blowhard/core/domain/DocumentInspectionResult$Inspected;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getDescriptor ()Lio/github/artemidius/blowhard/core/api/DocumentContentDescriptor;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class io/github/artemidius/blowhard/core/domain/DocumentInspectionResult$InvalidContent : io/github/artemidius/blowhard/core/domain/DocumentInspectionResult {
+	public static final field INSTANCE Lio/github/artemidius/blowhard/core/domain/DocumentInspectionResult$InvalidContent;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class io/github/artemidius/blowhard/core/domain/DocumentInspectionResult$UnsupportedFormat : io/github/artemidius/blowhard/core/domain/DocumentInspectionResult {
+	public static final field INSTANCE Lio/github/artemidius/blowhard/core/domain/DocumentInspectionResult$UnsupportedFormat;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public abstract interface class io/github/artemidius/blowhard/core/domain/DocumentInspector {
+	public abstract fun inspect ([BLkotlin/coroutines/Continuation;)Ljava/lang/Object;
+}
+
+public final class io/github/artemidius/blowhard/core/domain/DocumentSaveResult : java/lang/Enum {
+	public static final field ID_CONFLICT Lio/github/artemidius/blowhard/core/domain/DocumentSaveResult;
+	public static final field SAVED Lio/github/artemidius/blowhard/core/domain/DocumentSaveResult;
+	public static final field UNAVAILABLE Lio/github/artemidius/blowhard/core/domain/DocumentSaveResult;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public static fun valueOf (Ljava/lang/String;)Lio/github/artemidius/blowhard/core/domain/DocumentSaveResult;
+	public static fun values ()[Lio/github/artemidius/blowhard/core/domain/DocumentSaveResult;
+}
+
+public abstract interface class io/github/artemidius/blowhard/core/domain/DocumentStore {
+	public abstract fun delete-SXksg0M (Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public abstract fun find-SXksg0M (Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public abstract fun list (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public abstract fun save (Lio/github/artemidius/blowhard/core/api/ImportedDocument;[BLkotlin/coroutines/Continuation;)Ljava/lang/Object;
+}
+
+public final class io/github/artemidius/blowhard/core/domain/DocumentStoreDeletionResult : java/lang/Enum {
+	public static final field DELETED Lio/github/artemidius/blowhard/core/domain/DocumentStoreDeletionResult;
+	public static final field NOT_FOUND Lio/github/artemidius/blowhard/core/domain/DocumentStoreDeletionResult;
+	public static final field UNAVAILABLE Lio/github/artemidius/blowhard/core/domain/DocumentStoreDeletionResult;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public static fun valueOf (Ljava/lang/String;)Lio/github/artemidius/blowhard/core/domain/DocumentStoreDeletionResult;
+	public static fun values ()[Lio/github/artemidius/blowhard/core/domain/DocumentStoreDeletionResult;
+}
+
+public abstract interface class io/github/artemidius/blowhard/core/domain/DocumentStoreListResult {
+}
+
+public final class io/github/artemidius/blowhard/core/domain/DocumentStoreListResult$Available : io/github/artemidius/blowhard/core/domain/DocumentStoreListResult {
+	public fun <init> (Ljava/util/List;)V
+	public final fun component1 ()Ljava/util/List;
+	public final fun copy (Ljava/util/List;)Lio/github/artemidius/blowhard/core/domain/DocumentStoreListResult$Available;
+	public static synthetic fun copy$default (Lio/github/artemidius/blowhard/core/domain/DocumentStoreListResult$Available;Ljava/util/List;ILjava/lang/Object;)Lio/github/artemidius/blowhard/core/domain/DocumentStoreListResult$Available;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getDocuments ()Ljava/util/List;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class io/github/artemidius/blowhard/core/domain/DocumentStoreListResult$Unavailable : io/github/artemidius/blowhard/core/domain/DocumentStoreListResult {
+	public static final field INSTANCE Lio/github/artemidius/blowhard/core/domain/DocumentStoreListResult$Unavailable;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public abstract interface class io/github/artemidius/blowhard/core/domain/DocumentStoreLookupResult {
+}
+
+public final class io/github/artemidius/blowhard/core/domain/DocumentStoreLookupResult$Found : io/github/artemidius/blowhard/core/domain/DocumentStoreLookupResult {
+	public fun <init> (Lio/github/artemidius/blowhard/core/api/ImportedDocument;)V
+	public final fun component1 ()Lio/github/artemidius/blowhard/core/api/ImportedDocument;
+	public final fun copy (Lio/github/artemidius/blowhard/core/api/ImportedDocument;)Lio/github/artemidius/blowhard/core/domain/DocumentStoreLookupResult$Found;
+	public static synthetic fun copy$default (Lio/github/artemidius/blowhard/core/domain/DocumentStoreLookupResult$Found;Lio/github/artemidius/blowhard/core/api/ImportedDocument;ILjava/lang/Object;)Lio/github/artemidius/blowhard/core/domain/DocumentStoreLookupResult$Found;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getDocument ()Lio/github/artemidius/blowhard/core/api/ImportedDocument;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class io/github/artemidius/blowhard/core/domain/DocumentStoreLookupResult$NotFound : io/github/artemidius/blowhard/core/domain/DocumentStoreLookupResult {
+	public static final field INSTANCE Lio/github/artemidius/blowhard/core/domain/DocumentStoreLookupResult$NotFound;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class io/github/artemidius/blowhard/core/domain/DocumentStoreLookupResult$Unavailable : io/github/artemidius/blowhard/core/domain/DocumentStoreLookupResult {
+	public static final field INSTANCE Lio/github/artemidius/blowhard/core/domain/DocumentStoreLookupResult$Unavailable;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
 public abstract interface class io/github/artemidius/blowhard/core/domain/GenerationEvent {
 }
 

@@ -27,6 +27,13 @@ class IdentifierTest {
     }
 
     @Test
+    fun `document ID rejects blank values`() {
+        assertFailsWith<IllegalArgumentException> {
+            DocumentId("\t")
+        }
+    }
+
+    @Test
     fun `run timestamp rejects negative epoch values`() {
         assertFailsWith<IllegalArgumentException> {
             RunTimestamp(-1)
