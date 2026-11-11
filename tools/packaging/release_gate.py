@@ -214,10 +214,10 @@ def verify_release_assets(repository_root: Path, assets_directory: Path, revisio
         }
         if manifest != expected_manifest:
             raise ReleaseGateError(f"manifest or package mismatch: {manifest_file.name}")
-        expected_checksum = f"{expected_manifest['artifact']['sha256']}  {package.name}\n"
+        expected_checksum = f"{expected_manifest['artifact']['sha256']}  {package.name}\n".encode("utf-8")
         try:
-            checksum_content = checksum_file.read_text(encoding="utf-8")
-        except (OSError, UnicodeError) as error:
+            checksum_content = checksum_file.read_bytes()
+        except OSError as error:
             raise ReleaseGateError(f"checksum file is missing: {checksum_file.name}") from error
         if checksum_content != expected_checksum:
             raise ReleaseGateError(f"checksum file mismatch: {checksum_file.name}")
