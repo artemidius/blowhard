@@ -6,6 +6,14 @@
 // - Show declarations: true
 
 // Library unique name: <Blowhard.core:application>
+abstract fun interface io.github.artemidius.blowhard.core.application/DocumentIdFactory { // io.github.artemidius.blowhard.core.application/DocumentIdFactory|null[0]
+    abstract fun create(): io.github.artemidius.blowhard.core.api/DocumentId // io.github.artemidius.blowhard.core.application/DocumentIdFactory.create|create(){}[0]
+}
+
+abstract fun interface io.github.artemidius.blowhard.core.application/DocumentImportClock { // io.github.artemidius.blowhard.core.application/DocumentImportClock|null[0]
+    abstract fun nowEpochMilliseconds(): kotlin/Long // io.github.artemidius.blowhard.core.application/DocumentImportClock.nowEpochMilliseconds|nowEpochMilliseconds(){}[0]
+}
+
 abstract fun interface io.github.artemidius.blowhard.core.application/RunClock { // io.github.artemidius.blowhard.core.application/RunClock|null[0]
     abstract fun now(): io.github.artemidius.blowhard.core.api/RunTimestamp // io.github.artemidius.blowhard.core.application/RunClock.now|now(){}[0]
 }
@@ -79,10 +87,47 @@ final class io.github.artemidius.blowhard.core.application/DefaultConversationRu
     final suspend fun start(io.github.artemidius.blowhard.core.api/StartRunRequest): io.github.artemidius.blowhard.core.api/StartRunResult // io.github.artemidius.blowhard.core.application/DefaultConversationRuns.start|start(io.github.artemidius.blowhard.core.api.StartRunRequest){}[0]
 }
 
+final class io.github.artemidius.blowhard.core.application/DefaultDocumentLibrary : io.github.artemidius.blowhard.core.api/DocumentLibrary { // io.github.artemidius.blowhard.core.application/DefaultDocumentLibrary|null[0]
+    constructor <init>(io.github.artemidius.blowhard.core.domain/DocumentStore, io.github.artemidius.blowhard.core.domain/DocumentInspector, io.github.artemidius.blowhard.core.application/DocumentIdFactory, io.github.artemidius.blowhard.core.application/DocumentImportClock, io.github.artemidius.blowhard.core.application/DocumentImportPolicy = ...) // io.github.artemidius.blowhard.core.application/DefaultDocumentLibrary.<init>|<init>(io.github.artemidius.blowhard.core.domain.DocumentStore;io.github.artemidius.blowhard.core.domain.DocumentInspector;io.github.artemidius.blowhard.core.application.DocumentIdFactory;io.github.artemidius.blowhard.core.application.DocumentImportClock;io.github.artemidius.blowhard.core.application.DocumentImportPolicy){}[0]
+
+    final suspend fun delete(io.github.artemidius.blowhard.core.api/DocumentId): io.github.artemidius.blowhard.core.api/DocumentDeletionResult // io.github.artemidius.blowhard.core.application/DefaultDocumentLibrary.delete|delete(io.github.artemidius.blowhard.core.api.DocumentId){}[0]
+    final suspend fun find(io.github.artemidius.blowhard.core.api/DocumentId): io.github.artemidius.blowhard.core.api/DocumentLookupResult // io.github.artemidius.blowhard.core.application/DefaultDocumentLibrary.find|find(io.github.artemidius.blowhard.core.api.DocumentId){}[0]
+    final suspend fun import(io.github.artemidius.blowhard.core.api/DocumentImportSource): io.github.artemidius.blowhard.core.api/DocumentImportResult // io.github.artemidius.blowhard.core.application/DefaultDocumentLibrary.import|import(io.github.artemidius.blowhard.core.api.DocumentImportSource){}[0]
+    final suspend fun list(): io.github.artemidius.blowhard.core.api/DocumentListResult // io.github.artemidius.blowhard.core.application/DefaultDocumentLibrary.list|list(){}[0]
+}
+
 final class io.github.artemidius.blowhard.core.application/DefaultRunDiagnosticReportGenerator : io.github.artemidius.blowhard.core.api/RunDiagnosticReportGenerator { // io.github.artemidius.blowhard.core.application/DefaultRunDiagnosticReportGenerator|null[0]
     constructor <init>(io.github.artemidius.blowhard.core.api/RunInspector) // io.github.artemidius.blowhard.core.application/DefaultRunDiagnosticReportGenerator.<init>|<init>(io.github.artemidius.blowhard.core.api.RunInspector){}[0]
 
     final suspend fun generate(io.github.artemidius.blowhard.core.api/RunId): io.github.artemidius.blowhard.core.api/RunDiagnosticReportResult // io.github.artemidius.blowhard.core.application/DefaultRunDiagnosticReportGenerator.generate|generate(io.github.artemidius.blowhard.core.api.RunId){}[0]
+}
+
+final class io.github.artemidius.blowhard.core.application/DocumentImportPolicy { // io.github.artemidius.blowhard.core.application/DocumentImportPolicy|null[0]
+    constructor <init>(kotlin/Long = ..., kotlin/Int = ..., kotlin/Long = ...) // io.github.artemidius.blowhard.core.application/DocumentImportPolicy.<init>|<init>(kotlin.Long;kotlin.Int;kotlin.Long){}[0]
+
+    final val maximumBytes // io.github.artemidius.blowhard.core.application/DocumentImportPolicy.maximumBytes|{}maximumBytes[0]
+        final fun <get-maximumBytes>(): kotlin/Long // io.github.artemidius.blowhard.core.application/DocumentImportPolicy.maximumBytes.<get-maximumBytes>|<get-maximumBytes>(){}[0]
+    final val maximumImagePixels // io.github.artemidius.blowhard.core.application/DocumentImportPolicy.maximumImagePixels|{}maximumImagePixels[0]
+        final fun <get-maximumImagePixels>(): kotlin/Long // io.github.artemidius.blowhard.core.application/DocumentImportPolicy.maximumImagePixels.<get-maximumImagePixels>|<get-maximumImagePixels>(){}[0]
+    final val maximumPdfPages // io.github.artemidius.blowhard.core.application/DocumentImportPolicy.maximumPdfPages|{}maximumPdfPages[0]
+        final fun <get-maximumPdfPages>(): kotlin/Int // io.github.artemidius.blowhard.core.application/DocumentImportPolicy.maximumPdfPages.<get-maximumPdfPages>|<get-maximumPdfPages>(){}[0]
+
+    final fun component1(): kotlin/Long // io.github.artemidius.blowhard.core.application/DocumentImportPolicy.component1|component1(){}[0]
+    final fun component2(): kotlin/Int // io.github.artemidius.blowhard.core.application/DocumentImportPolicy.component2|component2(){}[0]
+    final fun component3(): kotlin/Long // io.github.artemidius.blowhard.core.application/DocumentImportPolicy.component3|component3(){}[0]
+    final fun copy(kotlin/Long = ..., kotlin/Int = ..., kotlin/Long = ...): io.github.artemidius.blowhard.core.application/DocumentImportPolicy // io.github.artemidius.blowhard.core.application/DocumentImportPolicy.copy|copy(kotlin.Long;kotlin.Int;kotlin.Long){}[0]
+    final fun equals(kotlin/Any?): kotlin/Boolean // io.github.artemidius.blowhard.core.application/DocumentImportPolicy.equals|equals(kotlin.Any?){}[0]
+    final fun hashCode(): kotlin/Int // io.github.artemidius.blowhard.core.application/DocumentImportPolicy.hashCode|hashCode(){}[0]
+    final fun toString(): kotlin/String // io.github.artemidius.blowhard.core.application/DocumentImportPolicy.toString|toString(){}[0]
+
+    final object Companion { // io.github.artemidius.blowhard.core.application/DocumentImportPolicy.Companion|null[0]
+        final const val DEFAULT_MAXIMUM_BYTES // io.github.artemidius.blowhard.core.application/DocumentImportPolicy.Companion.DEFAULT_MAXIMUM_BYTES|{}DEFAULT_MAXIMUM_BYTES[0]
+            final fun <get-DEFAULT_MAXIMUM_BYTES>(): kotlin/Long // io.github.artemidius.blowhard.core.application/DocumentImportPolicy.Companion.DEFAULT_MAXIMUM_BYTES.<get-DEFAULT_MAXIMUM_BYTES>|<get-DEFAULT_MAXIMUM_BYTES>(){}[0]
+        final const val DEFAULT_MAXIMUM_IMAGE_PIXELS // io.github.artemidius.blowhard.core.application/DocumentImportPolicy.Companion.DEFAULT_MAXIMUM_IMAGE_PIXELS|{}DEFAULT_MAXIMUM_IMAGE_PIXELS[0]
+            final fun <get-DEFAULT_MAXIMUM_IMAGE_PIXELS>(): kotlin/Long // io.github.artemidius.blowhard.core.application/DocumentImportPolicy.Companion.DEFAULT_MAXIMUM_IMAGE_PIXELS.<get-DEFAULT_MAXIMUM_IMAGE_PIXELS>|<get-DEFAULT_MAXIMUM_IMAGE_PIXELS>(){}[0]
+        final const val DEFAULT_MAXIMUM_PDF_PAGES // io.github.artemidius.blowhard.core.application/DocumentImportPolicy.Companion.DEFAULT_MAXIMUM_PDF_PAGES|{}DEFAULT_MAXIMUM_PDF_PAGES[0]
+            final fun <get-DEFAULT_MAXIMUM_PDF_PAGES>(): kotlin/Int // io.github.artemidius.blowhard.core.application/DocumentImportPolicy.Companion.DEFAULT_MAXIMUM_PDF_PAGES.<get-DEFAULT_MAXIMUM_PDF_PAGES>|<get-DEFAULT_MAXIMUM_PDF_PAGES>(){}[0]
+    }
 }
 
 final class io.github.artemidius.blowhard.core.application/RunCheckpointPolicy { // io.github.artemidius.blowhard.core.application/RunCheckpointPolicy|null[0]
