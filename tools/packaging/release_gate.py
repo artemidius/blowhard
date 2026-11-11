@@ -63,7 +63,10 @@ def validate_source(repository_root: Path, tag: str, revision: str, git_ref: str
 
 
 def _write_deterministic_zip(source: Path, destination: Path, prefix: str) -> None:
-    files = sorted(path for path in source.rglob("*") if path.is_file())
+    files = sorted(
+        (path for path in source.rglob("*") if path.is_file()),
+        key=lambda path: path.relative_to(source).as_posix(),
+    )
     if not files:
         raise ReleaseGateError(f"cannot archive an empty directory: {source}")
     for path in source.rglob("*"):
