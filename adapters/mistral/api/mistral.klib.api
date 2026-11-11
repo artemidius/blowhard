@@ -32,6 +32,15 @@ final class io.github.artemidius.blowhard.adapters.mistral/MistralDocumentOcrPor
     }
 }
 
+final class io.github.artemidius.blowhard.adapters.mistral/MistralMeetingNoteGenerationPort : io.github.artemidius.blowhard.core.domain/MeetingNoteGenerationPort { // io.github.artemidius.blowhard.adapters.mistral/MistralMeetingNoteGenerationPort|null[0]
+    final fun close() // io.github.artemidius.blowhard.adapters.mistral/MistralMeetingNoteGenerationPort.close|close(){}[0]
+    final suspend fun generate(io.github.artemidius.blowhard.core.domain/MeetingNoteGenerationRequest): io.github.artemidius.blowhard.core.domain/MeetingNoteGenerationResult // io.github.artemidius.blowhard.adapters.mistral/MistralMeetingNoteGenerationPort.generate|generate(io.github.artemidius.blowhard.core.domain.MeetingNoteGenerationRequest){}[0]
+
+    final object Companion { // io.github.artemidius.blowhard.adapters.mistral/MistralMeetingNoteGenerationPort.Companion|null[0]
+        final fun create(io.github.artemidius.blowhard.adapters.mistral/MistralCredentialProvider, io.github.artemidius.blowhard.adapters.mistral/MistralChatConfiguration): io.github.artemidius.blowhard.adapters.mistral/MistralMeetingNoteGenerationPort // io.github.artemidius.blowhard.adapters.mistral/MistralMeetingNoteGenerationPort.Companion.create|create(io.github.artemidius.blowhard.adapters.mistral.MistralCredentialProvider;io.github.artemidius.blowhard.adapters.mistral.MistralChatConfiguration){}[0]
+    }
+}
+
 final class io.github.artemidius.blowhard.adapters.mistral/MistralModelCatalog : io.github.artemidius.blowhard.core.domain/ModelCatalogPort { // io.github.artemidius.blowhard.adapters.mistral/MistralModelCatalog|null[0]
     final fun close() // io.github.artemidius.blowhard.adapters.mistral/MistralModelCatalog.close|close(){}[0]
     final suspend fun listModels(): io.github.artemidius.blowhard.core.domain/ModelCatalogResult // io.github.artemidius.blowhard.adapters.mistral/MistralModelCatalog.listModels|listModels(){}[0]
