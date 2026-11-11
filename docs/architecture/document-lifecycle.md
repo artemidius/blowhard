@@ -111,7 +111,9 @@ delete.
 - Valid PDFs using encryption, object streams, or page structures outside the explicit subset are
   rejected.
 - The source panel shows verified metadata and page identity, not a rendered PDF or bitmap.
-- Documents cannot yet be attached to a conversation, indexed, searched, or used by chat.
+- One explicitly selected PNG or JPEG can be attached to the next conversation attempt through the
+  separately documented image-question boundary. PDFs, multiple images, indexing, and search remain
+  unsupported.
 - Desktop has a picker implementation; mobile clients can reuse the lifecycle after supplying their
   own platform picker and storage composition.
 
