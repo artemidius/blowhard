@@ -82,6 +82,7 @@ private fun ApplicationScope.BlowhardDesktopApplication(bootstrap: DesktopBootst
             connectionSettingsPresenter = bootstrap.runtime.connectionSettingsPresenter,
             runInspectorPresenter = bootstrap.runtime.runInspectorPresenter,
             documentLibraryPresenter = bootstrap.runtime.documentLibraryPresenter,
+            meetingNotePresenter = bootstrap.runtime.meetingNotePresenter,
             requiresConnection = !packagingSmokeTest,
         )
         PackagingSmokeEffect(packagingSmokeTest, bootstrap.runtime.presenter, shutdown)
@@ -125,6 +126,11 @@ private fun createDesktopRuntime(environment: DesktopEnvironment, configurationD
     val documents = DesktopDocumentSession.open(configurationDirectory, processor = providers.documentOcr)
     val scenarios = FixtureScenarioRouter()
     val generation = createGenerationRouter(scenarios, providers.credentialProvider)
+    val meetingNoteGeneration = DesktopMeetingNoteGenerationRouter.mistral(
+        providers.connectionSettings,
+        providers.credentialProvider,
+    )
+    val meetingNotes = createMeetingNotes(documents, meetingNoteGeneration)
     val runtime = DesktopRuntime.create(
         clipboardWriter = AwtClipboardWriter(sessionAvailable = { environment.hasClipboardSession }),
         connectionSettings = providers.connectionSettings,
@@ -140,17 +146,8 @@ private fun createDesktopRuntime(environment: DesktopEnvironment, configurationD
         documentProcessingStore = documents.processingStore,
         documentPicker = AwtDocumentPicker,
         closeDocumentResources = documents::close,
-        closeProviderResources = {
-            try {
-                generation.close()
-            } finally {
-                try {
-                    providers.documentOcr.close()
-                } finally {
-                    providers.modelCatalog.close()
-                }
-            }
-        },
+        meetingNotes = meetingNotes,
+        closeProviderResources = { closeDesktopProviders(generation, meetingNoteGeneration, providers) },
     )
     if (!packagingSmokeTest && history.initialState.selectedConversation.messages.isNotEmpty()) {
         runtime.presenter.dispatch(ConversationAction.NewConversation)
@@ -189,7 +186,7 @@ private data class DesktopBootstrap(
     val runtime: DesktopRuntime,
 )
 
-private data class DesktopProviderComposition(
+internal data class DesktopProviderComposition(
     val connectionSettings: DefaultConnectionSettings,
     val credentialProvider: MistralCredentialProvider,
     val modelCatalog: MistralModelCatalog,

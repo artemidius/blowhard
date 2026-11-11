@@ -1,5 +1,6 @@
 package io.github.artemidius.blowhard.desktop
 
+import io.github.artemidius.blowhard.adapters.fixture.FixtureScenario
 import io.github.artemidius.blowhard.adapters.fixture.FixtureTextGenerationPort
 import io.github.artemidius.blowhard.core.api.ConnectionSettings
 import io.github.artemidius.blowhard.core.api.ConnectionSettingsState
@@ -246,7 +247,11 @@ class DesktopRuntimeTest {
 
     @Test
     fun `real desktop runtime cancels streaming fixture output`() = runBlocking {
-        val runtime = createDesktopRuntime()
+        val runtime = createDesktopRuntime(
+            generation = FixtureTextGenerationPort {
+                FixtureScenario.Success(listOf("Stream started", "Stream continued"), 30.seconds)
+            },
+        )
         try {
             runtime.presenter.dispatch(ConversationAction.ComposerChanged("Cancel the demo"))
             runtime.presenter.dispatch(ConversationAction.Send)
@@ -375,12 +380,13 @@ private fun createDesktopRuntime(
     reportSaver: RunDiagnosticReportSaver = RunDiagnosticReportSaver {
         RunDiagnosticReportSaveResult.UNAVAILABLE
     },
+    generation: TextGenerationPort? = null,
 ): DesktopRuntime {
     val scenarios = FixtureScenarioRouter()
     return DesktopRuntime.create(
         clipboardWriter = testClipboard,
         connectionSettings = FakeDesktopConnectionSettings(),
-        generation = FixtureTextGenerationPort(scenarios::scenarioFor),
+        generation = generation ?: FixtureTextGenerationPort(scenarios::scenarioFor),
         scenarioSelection = scenarios,
         reportSaver = reportSaver,
         initialState = initialState,
