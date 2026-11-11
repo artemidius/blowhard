@@ -21,3 +21,19 @@ On 2026-11-11, the reference macOS host completed this check using a securely st
 one connection and generation smoke result, not an availability, model-quality, or billing claim.
 Native package CI separately verifies installation and launch on macOS, Windows, and Linux with
 an internal deterministic fixture.
+
+For a macOS installer candidate, run the same check from the copied app in a temporary installation
+directory. The second argument is deliberately opt-in and is never passed by CI:
+
+```shell
+check_root="$(mktemp -d)"
+RUNNER_TEMP="$check_root" GITHUB_WORKSPACE="$PWD" \
+  ./tools/packaging/verify_macos_package.sh . --live
+rmdir "$check_root"
+```
+
+The package check verifies the DMG, copies its app bundle, runs the internal package fixture, then
+launches the copied app's own executable for the bounded live check. It cleans the temporary app
+copy and mount point before returning. On 2026-11-11, this installed-app check passed on the
+reference host. It validates the candidate executable and its credential access on that host;
+it does not provide a trusted publisher signature or verify the eventual release workflow build.
