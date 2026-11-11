@@ -2,6 +2,7 @@ package io.github.artemidius.blowhard.adapters.mistral
 
 import io.github.artemidius.blowhard.core.api.TokenUsage
 import kotlinx.serialization.json.JsonNull
+import kotlinx.serialization.json.JsonPrimitive
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNull
@@ -24,7 +25,7 @@ class MistralChatDtoTest {
         )
         val requestWithoutLimit = MistralChatRequestDto(
             model = "model",
-            messages = listOf(MistralChatMessageDto("user", "prompt")),
+            messages = listOf(MistralChatMessageDto("user", JsonPrimitive("prompt"))),
             stream = true,
             streamOptions = MistralStreamOptionsDto(includeUsage = true),
         )
