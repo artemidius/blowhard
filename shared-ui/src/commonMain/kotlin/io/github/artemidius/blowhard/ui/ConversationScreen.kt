@@ -22,24 +22,24 @@ internal fun ConversationScreen(
     connection: ConnectionSettingsState,
     onAction: (ConversationAction) -> Unit,
     onOpenSettings: () -> Unit,
+    onOpenDocuments: () -> Unit,
     onInspectRun: (RunId) -> Unit,
 ) {
     BoxWithConstraints(
         modifier = Modifier.fillMaxSize().background(MaterialTheme.colorScheme.background),
     ) {
         if (conversationLayoutFor(maxWidth) == ConversationLayout.WIDE) {
-            Row(Modifier.fillMaxSize()) {
-                ConversationSidebar(
-                    state = state,
-                    connection = connection,
-                    onAction = onAction,
-                    onOpenSettings = onOpenSettings,
-                    modifier = Modifier.width(SIDEBAR_WIDTH),
-                )
-                ConversationPane(state, connection, onAction, onOpenSettings, onInspectRun, compact = false)
-            }
+            WideConversationScreen(state, connection, onAction, onOpenSettings, onOpenDocuments, onInspectRun)
         } else {
-            ConversationPane(state, connection, onAction, onOpenSettings, onInspectRun, compact = true)
+            ConversationPane(
+                state,
+                connection,
+                onAction,
+                onOpenSettings,
+                onOpenDocuments,
+                onInspectRun,
+                compact = true,
+            )
         }
     }
     state.pendingDeletionConversation?.let { conversation ->
@@ -47,6 +47,36 @@ internal fun ConversationScreen(
             title = conversation.title,
             onConfirm = { onAction(ConversationAction.DeleteConversationConfirmed) },
             onDismiss = { onAction(ConversationAction.DeleteConversationDismissed) },
+        )
+    }
+}
+
+@Composable
+private fun WideConversationScreen(
+    state: ConversationUiState,
+    connection: ConnectionSettingsState,
+    onAction: (ConversationAction) -> Unit,
+    onOpenSettings: () -> Unit,
+    onOpenDocuments: () -> Unit,
+    onInspectRun: (RunId) -> Unit,
+) {
+    Row(Modifier.fillMaxSize()) {
+        ConversationSidebar(
+            state = state,
+            connection = connection,
+            onAction = onAction,
+            onOpenSettings = onOpenSettings,
+            onOpenDocuments = onOpenDocuments,
+            modifier = Modifier.width(SIDEBAR_WIDTH),
+        )
+        ConversationPane(
+            state,
+            connection,
+            onAction,
+            onOpenSettings,
+            onOpenDocuments,
+            onInspectRun,
+            compact = false,
         )
     }
 }

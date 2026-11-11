@@ -27,6 +27,7 @@ import io.github.artemidius.blowhard.adapters.platform.DesktopCredentialStores
 import io.github.artemidius.blowhard.core.application.DefaultConnectionSettings
 import io.github.artemidius.blowhard.ui.BlowhardApp
 import io.github.artemidius.blowhard.ui.presentation.ConversationAction
+import java.nio.file.Path
 
 private const val PACKAGING_SMOKE_TEST_ENVIRONMENT_VARIABLE = "BLOWHARD_PACKAGING_SMOKE_TEST"
 private const val PACKAGING_SMOKE_TEST_ENABLED = "1"
@@ -79,6 +80,7 @@ private fun ApplicationScope.BlowhardDesktopApplication(bootstrap: DesktopBootst
             conversationPresenter = bootstrap.runtime.presenter,
             connectionSettingsPresenter = bootstrap.runtime.connectionSettingsPresenter,
             runInspectorPresenter = bootstrap.runtime.runInspectorPresenter,
+            documentLibraryPresenter = bootstrap.runtime.documentLibraryPresenter,
             requiresConnection = !packagingSmokeTest,
         )
         PackagingSmokeEffect(packagingSmokeTest, bootstrap.runtime.presenter, shutdown)
@@ -111,39 +113,51 @@ private fun createDesktopBootstrap(): DesktopBootstrap {
     val directories = AppDirectoryResolver.resolve(environment)
     val preferencesStore = WindowPreferencesStore(directories.configuration)
     val preferences = preferencesStore.load()
-    val history = DesktopHistorySession.open(directories.configuration)
-    val clipboard = AwtClipboardWriter(sessionAvailable = { environment.hasClipboardSession })
-    val diagnosticReportSaver = AwtRunDiagnosticReportSaver()
-    val credentialStore = DesktopCredentialStores.mistralApiKey()
-    val credentialProvider = credentialStore.asMistralCredentialProvider()
-    val modelCatalog = MistralModelCatalog.create(credentialProvider)
+    val runtime = createDesktopRuntime(environment, directories.configuration)
+    return DesktopBootstrap(environment, preferencesStore, preferences, runtime)
+}
+
+private fun createDesktopRuntime(environment: DesktopEnvironment, configurationDirectory: Path): DesktopRuntime {
     val packagingSmokeTest = isPackagingSmokeTest(System.getenv())
-    val connectionSettings = DefaultConnectionSettings(
-        credentialStore,
-        modelCatalog,
-        startInLiveMode = !packagingSmokeTest,
-    )
+    val history = DesktopHistorySession.open(configurationDirectory)
+    val documents = DesktopDocumentSession.open(configurationDirectory)
+    val providers = createProviderComposition(packagingSmokeTest)
     val scenarios = FixtureScenarioRouter()
-    val generation = createGenerationRouter(scenarios, credentialProvider)
+    val generation = createGenerationRouter(scenarios, providers.credentialProvider)
     val runtime = DesktopRuntime.create(
-        clipboardWriter = clipboard,
-        connectionSettings = connectionSettings,
+        clipboardWriter = AwtClipboardWriter(sessionAvailable = { environment.hasClipboardSession }),
+        connectionSettings = providers.connectionSettings,
         generation = generation,
         scenarioSelection = scenarios,
         autoVerifyCredential = !packagingSmokeTest,
-        reportSaver = diagnosticReportSaver,
+        reportSaver = AwtRunDiagnosticReportSaver(),
         initialState = history.initialState,
         conversationStore = history.conversationStore,
         closeHistoryResources = history::close,
+        documentLibrary = documents.library,
+        documentPicker = AwtDocumentPicker,
+        closeDocumentResources = documents::close,
         closeProviderResources = {
             generation.close()
-            modelCatalog.close()
+            providers.modelCatalog.close()
         },
     )
     if (!packagingSmokeTest && history.initialState.selectedConversation.messages.isNotEmpty()) {
         runtime.presenter.dispatch(ConversationAction.NewConversation)
     }
-    return DesktopBootstrap(environment, preferencesStore, preferences, runtime)
+    return runtime
+}
+
+private fun createProviderComposition(packagingSmokeTest: Boolean): DesktopProviderComposition {
+    val credentialStore = DesktopCredentialStores.mistralApiKey()
+    val credentialProvider = credentialStore.asMistralCredentialProvider()
+    val modelCatalog = MistralModelCatalog.create(credentialProvider)
+    val connectionSettings = DefaultConnectionSettings(
+        credentialStore,
+        modelCatalog,
+        startInLiveMode = !packagingSmokeTest,
+    )
+    return DesktopProviderComposition(connectionSettings, credentialProvider, modelCatalog)
 }
 
 private fun createGenerationRouter(
@@ -162,6 +176,12 @@ private data class DesktopBootstrap(
     val preferencesStore: WindowPreferencesStore,
     val preferences: WindowPreferences,
     val runtime: DesktopRuntime,
+)
+
+private data class DesktopProviderComposition(
+    val connectionSettings: DefaultConnectionSettings,
+    val credentialProvider: MistralCredentialProvider,
+    val modelCatalog: MistralModelCatalog,
 )
 
 internal fun isPackagingSmokeTest(environment: Map<String, String>): Boolean =
