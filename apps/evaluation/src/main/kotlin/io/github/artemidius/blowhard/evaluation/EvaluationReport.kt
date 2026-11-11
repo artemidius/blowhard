@@ -53,12 +53,13 @@ internal object EvaluationReportRenderer {
     fun json(report: EvaluationReport): String = json.encodeToString(report) + "\n"
 
     fun markdown(report: EvaluationReport): String = buildString {
-        appendLine("# Meeting-note fixture evaluation")
+        appendLine("# Meeting-note ${report.executionKind} evaluation")
         appendLine()
         appendLine("- Dataset: `${report.datasetVersion}` (${report.sampleCount} synthetic cases)")
         appendLine("- Template: `${report.templateVersion}`")
         appendLine("- Model: `${report.modelId}`")
-        appendLine("- Execution: fixture; latency is deterministic zero and usage is unavailable")
+        appendLine("- Execution: ${report.executionKind}; latency policy: ${report.latencyPolicy}")
+        appendLine("- Usage: ${report.usage ?: "unavailable"}")
         appendLine("- Date: ${report.reportDate}")
         appendLine()
         appendLine("| Metric | Passed | Failed | Applicable |")
@@ -68,19 +69,21 @@ internal object EvaluationReportRenderer {
         }
         appendLine()
         appendLine("Source resolution verifies literal page evidence only; it is not a factuality score.")
+        appendLine(report.semanticReview)
     }
 }
 
-internal fun MeetingNoteEvaluationScore.toReport(): EvaluationCaseReport = EvaluationCaseReport(
-    id = caseId,
-    latencyMilliseconds = 0,
-    schemaValidity = schemaValidity.name,
-    fieldCorrectness = fieldCorrectness.name,
-    missingFieldHandling = missingFieldHandling.name,
-    sourceResolution = sourceResolution.name,
-    expectedOutcome = expectedOutcome.name,
-    observedRejection = observedRejection?.name,
-)
+internal fun MeetingNoteEvaluationScore.toReport(latencyMilliseconds: Long = 0): EvaluationCaseReport =
+    EvaluationCaseReport(
+        id = caseId,
+        latencyMilliseconds = latencyMilliseconds,
+        schemaValidity = schemaValidity.name,
+        fieldCorrectness = fieldCorrectness.name,
+        missingFieldHandling = missingFieldHandling.name,
+        sourceResolution = sourceResolution.name,
+        expectedOutcome = expectedOutcome.name,
+        observedRejection = observedRejection?.name,
+    )
 
 internal fun MeetingNoteEvaluationSummary.toDto(): EvaluationSummaryDto = EvaluationSummaryDto(
     schemaValidity.toDto(),

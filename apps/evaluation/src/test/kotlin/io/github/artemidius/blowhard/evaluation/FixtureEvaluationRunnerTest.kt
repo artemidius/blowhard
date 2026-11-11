@@ -44,8 +44,11 @@ class FixtureEvaluationRunnerTest {
 
     @Test
     fun `arguments permit only an explicit bounded output option`() {
-        assertTrue(EvaluationArguments.parse(emptyArray()).endsWith("build/reports/evaluation"))
-        assertTrue(EvaluationArguments.parse(arrayOf("--output", "build/custom")).endsWith("build/custom"))
+        val defaults = EvaluationArguments.parse(emptyArray())
+        assertTrue(defaults is EvaluationRunConfiguration.Fixture)
+        assertTrue(defaults.output.endsWith("build/reports/evaluation"))
+        val custom = EvaluationArguments.parse(arrayOf("--output", "build/custom"))
+        assertTrue(custom.output.endsWith("build/custom"))
         assertFailsWith<IllegalArgumentException> { EvaluationArguments.parse(arrayOf("--live")) }
         assertFailsWith<IllegalArgumentException> { EvaluationArguments.parse(arrayOf("--output", "")) }
     }
