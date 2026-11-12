@@ -42,6 +42,7 @@ dependencies {
     implementation(project(":app-composition"))
     implementation(project(":adapters:mistral"))
     implementation(project(":adapters:mobile-platform"))
+    implementation(project(":adapters:persistence"))
     implementation(project(":core:api"))
     implementation(project(":core:application"))
     implementation(project(":shared-ui"))
