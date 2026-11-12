@@ -16,6 +16,17 @@ The runner writes JSON and Markdown reports. Fixture execution uses a fixed loca
 reports zero latency by policy, and has no token usage. It is regression evidence for parsing,
 validation, scoring, and orchestration—not a claim about Mistral model quality.
 
+Live evaluation is deliberately opt-in and reads the API key only from the desktop secure store:
+
+```shell
+./gradlew :apps:evaluation:run --args="--live --model MODEL_ID --max-cases 3 --output build/reports/live-evaluation"
+```
+
+The CLI accepts at most six cases, applies the adapter's per-request timeout and a seven-minute
+whole-run timeout, and uses the template's fixed 4,096-token output ceiling. It never accepts an API
+key on the command line. Live reports record wall-clock latency and explicitly mark provider usage
+unavailable until the structured-output adapter exposes trustworthy usage metadata.
+
 ## Scoring dimensions
 
 - **Schema validity** records whether accepted and deliberately invalid outputs cross the strict

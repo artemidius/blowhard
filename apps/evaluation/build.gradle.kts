@@ -7,6 +7,8 @@ plugins {
 }
 
 dependencies {
+    implementation(project(":adapters:mistral"))
+    implementation(project(":adapters:platform"))
     implementation(project(":core:api"))
     implementation(project(":core:application"))
     implementation(project(":core:domain"))
