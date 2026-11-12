@@ -35,6 +35,9 @@ kotlin {
             defFile(project.file("src/nativeInterop/cinterop/iosKeychain.def"))
             includeDirs(project.file("src/nativeInterop/cinterop/include"))
         }
+        target.compilations.getByName("test").defaultSourceSet.dependencies {
+            implementation(libs.kotlinx.coroutines.test)
+        }
     }
 
     jvmToolchain(21)
