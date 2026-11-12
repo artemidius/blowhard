@@ -1,0 +1,5 @@
+public final class io/github/artemidius/blowhard/adapters/mobile/AndroidCredentialStores {
+	public static final field INSTANCE Lio/github/artemidius/blowhard/adapters/mobile/AndroidCredentialStores;
+	public final fun mistralApiKey (Landroid/content/Context;)Lio/github/artemidius/blowhard/core/domain/CredentialStore;
+}
+

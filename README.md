@@ -72,11 +72,13 @@ automatic POST replay. Its framing, terminal-state, and retry decisions are docu
 [`ADR 0010`](docs/decisions/0010-mistral-streaming-chat.md) and the
 [streaming chat guide](docs/architecture/mistral-streaming-chat.md).
 
-Secure credential lifecycle is isolated behind a provider-neutral store. The macOS implementation
-uses native Keychain generic-password items and other desktop hosts currently fail closed. The
-boundary and its limitations are documented in
+Secure credential lifecycle is isolated behind a provider-neutral store. macOS uses native
+Keychain generic-password items; the mobile platform adapter protects Android credentials with a
+Keystore-backed AES-GCM envelope and backup-excluded app storage. Hosts without an injected secure
+adapter remain fail-closed. The boundary and its limitations are documented in
 [`ADR 0011`](docs/decisions/0011-macos-keychain-credentials.md) and the
-[credential storage guide](docs/architecture/credential-storage.md).
+[credential storage guide](docs/architecture/credential-storage.md); the Android decision is
+captured in [`ADR 0035`](docs/decisions/0035-android-keystore-credential-envelope.md).
 
 Live-provider configuration is coordinated through a shared, secret-free settings contract. It
 requires a verified compatible model. The desktop client discloses external processing before
