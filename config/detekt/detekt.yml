@@ -8,6 +8,8 @@ comments:
     excludes:
       - '**/test/**'
       - '**/commonTest/**'
+      - '**/androidHostTest/**'
+      - '**/androidDeviceTest/**'
     searchInNestedClass: true
     searchInInnerObject: true
     searchInInnerInterface: true
@@ -16,6 +18,8 @@ comments:
     excludes:
       - '**/test/**'
       - '**/commonTest/**'
+      - '**/androidHostTest/**'
+      - '**/androidDeviceTest/**'
 
 complexity:
   LongMethod:
