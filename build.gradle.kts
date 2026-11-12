@@ -30,6 +30,7 @@ subprojects {
 
 val documentedModules = listOf(
     project(":apps:android"),
+    project(":apps:ios-shared"),
     project(":apps:evaluation"),
     project(":adapters:documents"),
     project(":adapters:fixture"),
@@ -185,6 +186,7 @@ tasks.matching { it.name == "koverXmlReport" || it.name == "koverVerify" }.confi
 
 private val allowedProjectDependencies = mapOf(
     ":apps:android" to setOf(":core:api", ":shared-ui"),
+    ":apps:ios-shared" to setOf(":core:api", ":shared-ui"),
     ":adapters:documents" to setOf(":core:domain"),
     ":adapters:fixture" to setOf(":core:domain"),
     ":adapters:mistral" to setOf(":core:domain"),
@@ -255,6 +257,7 @@ tasks.register("qualityCheck") {
         ":apps:android:assembleDebug",
         ":apps:android:lintDebug",
         ":apps:android:testDebugUnitTest",
+        ":apps:ios-shared:checkKotlinAbi",
         ":core:api:checkKotlinAbi",
         ":core:api:desktopTest",
         ":core:application:checkKotlinAbi",
