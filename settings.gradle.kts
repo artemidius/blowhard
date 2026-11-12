@@ -16,6 +16,7 @@ dependencyResolutionManagement {
 
 rootProject.name = "Blowhard"
 
+include(":app-composition")
 include(":apps:desktop")
 include(":apps:android")
 include(":apps:ios-shared")
