@@ -9,6 +9,15 @@ public interface MeetingNoteStore {
     /** Inserts a newly generated revision-zero record. */
     public suspend fun insert(note: MeetingNoteRecord): MeetingNoteInsertResult
 
+    /** Atomically inserts one approved note and its replay-safe execution receipt. */
+    public suspend fun insertApproved(write: ApprovedMeetingNoteWrite): ApprovedMeetingNoteInsertResult =
+        ApprovedMeetingNoteInsertResult.Unavailable
+
+    /** Finds a committed approval receipt without repeating its write. */
+    public suspend fun findApprovedOperation(
+        operationId: ApprovedNoteWriteOperationId,
+    ): ApprovedMeetingNoteReceiptLookup = ApprovedMeetingNoteReceiptLookup.Unavailable
+
     /** Finds one record. */
     public suspend fun find(id: MeetingNoteId): MeetingNoteStoreLookup
 

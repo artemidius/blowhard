@@ -1,3 +1,115 @@
+public abstract interface class io/github/artemidius/blowhard/core/domain/ApprovedMeetingNoteInsertResult {
+}
+
+public final class io/github/artemidius/blowhard/core/domain/ApprovedMeetingNoteInsertResult$AlreadyCommitted : io/github/artemidius/blowhard/core/domain/ApprovedMeetingNoteInsertResult {
+	public synthetic fun <init> (Ljava/lang/String;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1-_5zNQ1E ()Ljava/lang/String;
+	public final fun copy-R0fzwac (Ljava/lang/String;)Lio/github/artemidius/blowhard/core/domain/ApprovedMeetingNoteInsertResult$AlreadyCommitted;
+	public static synthetic fun copy-R0fzwac$default (Lio/github/artemidius/blowhard/core/domain/ApprovedMeetingNoteInsertResult$AlreadyCommitted;Ljava/lang/String;ILjava/lang/Object;)Lio/github/artemidius/blowhard/core/domain/ApprovedMeetingNoteInsertResult$AlreadyCommitted;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getNoteId-_5zNQ1E ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class io/github/artemidius/blowhard/core/domain/ApprovedMeetingNoteInsertResult$IdConflict : io/github/artemidius/blowhard/core/domain/ApprovedMeetingNoteInsertResult {
+	public static final field INSTANCE Lio/github/artemidius/blowhard/core/domain/ApprovedMeetingNoteInsertResult$IdConflict;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class io/github/artemidius/blowhard/core/domain/ApprovedMeetingNoteInsertResult$Inserted : io/github/artemidius/blowhard/core/domain/ApprovedMeetingNoteInsertResult {
+	public static final field INSTANCE Lio/github/artemidius/blowhard/core/domain/ApprovedMeetingNoteInsertResult$Inserted;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class io/github/artemidius/blowhard/core/domain/ApprovedMeetingNoteInsertResult$OperationConflict : io/github/artemidius/blowhard/core/domain/ApprovedMeetingNoteInsertResult {
+	public static final field INSTANCE Lio/github/artemidius/blowhard/core/domain/ApprovedMeetingNoteInsertResult$OperationConflict;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class io/github/artemidius/blowhard/core/domain/ApprovedMeetingNoteInsertResult$SourceNotFound : io/github/artemidius/blowhard/core/domain/ApprovedMeetingNoteInsertResult {
+	public static final field INSTANCE Lio/github/artemidius/blowhard/core/domain/ApprovedMeetingNoteInsertResult$SourceNotFound;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class io/github/artemidius/blowhard/core/domain/ApprovedMeetingNoteInsertResult$Unavailable : io/github/artemidius/blowhard/core/domain/ApprovedMeetingNoteInsertResult {
+	public static final field INSTANCE Lio/github/artemidius/blowhard/core/domain/ApprovedMeetingNoteInsertResult$Unavailable;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public abstract interface class io/github/artemidius/blowhard/core/domain/ApprovedMeetingNoteReceiptLookup {
+}
+
+public final class io/github/artemidius/blowhard/core/domain/ApprovedMeetingNoteReceiptLookup$Committed : io/github/artemidius/blowhard/core/domain/ApprovedMeetingNoteReceiptLookup {
+	public synthetic fun <init> (Ljava/lang/String;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1-_5zNQ1E ()Ljava/lang/String;
+	public final fun copy-R0fzwac (Ljava/lang/String;)Lio/github/artemidius/blowhard/core/domain/ApprovedMeetingNoteReceiptLookup$Committed;
+	public static synthetic fun copy-R0fzwac$default (Lio/github/artemidius/blowhard/core/domain/ApprovedMeetingNoteReceiptLookup$Committed;Ljava/lang/String;ILjava/lang/Object;)Lio/github/artemidius/blowhard/core/domain/ApprovedMeetingNoteReceiptLookup$Committed;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getNoteId-_5zNQ1E ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class io/github/artemidius/blowhard/core/domain/ApprovedMeetingNoteReceiptLookup$NotFound : io/github/artemidius/blowhard/core/domain/ApprovedMeetingNoteReceiptLookup {
+	public static final field INSTANCE Lio/github/artemidius/blowhard/core/domain/ApprovedMeetingNoteReceiptLookup$NotFound;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class io/github/artemidius/blowhard/core/domain/ApprovedMeetingNoteReceiptLookup$Unavailable : io/github/artemidius/blowhard/core/domain/ApprovedMeetingNoteReceiptLookup {
+	public static final field INSTANCE Lio/github/artemidius/blowhard/core/domain/ApprovedMeetingNoteReceiptLookup$Unavailable;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class io/github/artemidius/blowhard/core/domain/ApprovedMeetingNoteWrite {
+	public synthetic fun <init> (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Lio/github/artemidius/blowhard/core/api/MeetingNoteRecord;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1-a7ZyJ7Y ()Ljava/lang/String;
+	public final fun component2 ()Ljava/lang/String;
+	public final fun component3 ()Ljava/lang/String;
+	public final fun component4 ()Ljava/lang/String;
+	public final fun component5 ()Ljava/lang/String;
+	public final fun component6 ()Lio/github/artemidius/blowhard/core/api/MeetingNoteRecord;
+	public final fun copy-C_FQvNQ (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Lio/github/artemidius/blowhard/core/api/MeetingNoteRecord;)Lio/github/artemidius/blowhard/core/domain/ApprovedMeetingNoteWrite;
+	public static synthetic fun copy-C_FQvNQ$default (Lio/github/artemidius/blowhard/core/domain/ApprovedMeetingNoteWrite;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Lio/github/artemidius/blowhard/core/api/MeetingNoteRecord;ILjava/lang/Object;)Lio/github/artemidius/blowhard/core/domain/ApprovedMeetingNoteWrite;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getApprovalId ()Ljava/lang/String;
+	public final fun getArgumentsJson ()Ljava/lang/String;
+	public final fun getCallId ()Ljava/lang/String;
+	public final fun getNote ()Lio/github/artemidius/blowhard/core/api/MeetingNoteRecord;
+	public final fun getOperationId-a7ZyJ7Y ()Ljava/lang/String;
+	public final fun getRunId ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class io/github/artemidius/blowhard/core/domain/ApprovedNoteWriteOperationId {
+	public static final synthetic fun box-impl (Ljava/lang/String;)Lio/github/artemidius/blowhard/core/domain/ApprovedNoteWriteOperationId;
+	public static fun constructor-impl (Ljava/lang/String;)Ljava/lang/String;
+	public fun equals (Ljava/lang/Object;)Z
+	public static fun equals-impl (Ljava/lang/String;Ljava/lang/Object;)Z
+	public static final fun equals-impl0 (Ljava/lang/String;Ljava/lang/String;)Z
+	public final fun getValue ()Ljava/lang/String;
+	public fun hashCode ()I
+	public static fun hashCode-impl (Ljava/lang/String;)I
+	public fun toString ()Ljava/lang/String;
+	public static fun toString-impl (Ljava/lang/String;)Ljava/lang/String;
+	public final synthetic fun unbox-impl ()Ljava/lang/String;
+}
+
 public final class io/github/artemidius/blowhard/core/domain/AvailableModel {
 	public fun <init> (Ljava/lang/String;Ljava/util/List;Ljava/lang/Long;Lio/github/artemidius/blowhard/core/domain/ModelAvailability;Lio/github/artemidius/blowhard/core/domain/ModelCapabilities;)V
 	public final fun component1 ()Ljava/lang/String;
@@ -565,8 +677,15 @@ public final class io/github/artemidius/blowhard/core/domain/MeetingNoteInsertRe
 public abstract interface class io/github/artemidius/blowhard/core/domain/MeetingNoteStore {
 	public abstract fun close (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public abstract fun find-0lfORfk (Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public fun findApprovedOperation-uLEIwYA (Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public abstract fun insert (Lio/github/artemidius/blowhard/core/api/MeetingNoteRecord;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public fun insertApproved (Lio/github/artemidius/blowhard/core/domain/ApprovedMeetingNoteWrite;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public abstract fun update-vOGpzuw (Ljava/lang/String;JLio/github/artemidius/blowhard/core/api/MeetingNoteContent;JLkotlin/coroutines/Continuation;)Ljava/lang/Object;
+}
+
+public final class io/github/artemidius/blowhard/core/domain/MeetingNoteStore$DefaultImpls {
+	public static fun findApprovedOperation-uLEIwYA (Lio/github/artemidius/blowhard/core/domain/MeetingNoteStore;Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public static fun insertApproved (Lio/github/artemidius/blowhard/core/domain/MeetingNoteStore;Lio/github/artemidius/blowhard/core/domain/ApprovedMeetingNoteWrite;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 }
 
 public abstract interface class io/github/artemidius/blowhard/core/domain/MeetingNoteStoreLookup {
