@@ -4,6 +4,7 @@ package io.github.artemidius.blowhard.ios
 
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.ui.window.ComposeUIViewController
+import io.github.artemidius.blowhard.adapters.mistral.MistralLiveTextGenerationPort
 import io.github.artemidius.blowhard.adapters.mistral.MistralModelCatalog
 import io.github.artemidius.blowhard.adapters.mistral.asMistralCredentialProvider
 import io.github.artemidius.blowhard.adapters.mobile.IosCredentialStores
@@ -39,7 +40,10 @@ private class IosApplicationRuntime {
     private val closeScope = CoroutineScope(SupervisorJob() + Dispatchers.Default)
     private val providers = createProviderComposition()
     val runtime = ApplicationRuntime.create(
-        dependencies = ApplicationRuntimeDependencies.failClosed(providers.connectionSettings),
+        dependencies = ApplicationRuntimeDependencies.conversationOnly(
+            providers.connectionSettings,
+            providers.generation,
+        ),
         configuration = ApplicationRuntimeConfiguration(
             initialState = initialConversationState(),
             runIdFactory = SequentialRunIdFactory("ios-${NSUUID().UUIDString}"),
@@ -64,6 +68,7 @@ private class IosApplicationRuntime {
 
 private class IosProviderComposition(
     val connectionSettings: DefaultConnectionSettings,
+    val generation: MistralLiveTextGenerationPort,
     private val modelCatalog: MistralModelCatalog,
 ) {
     fun close(): Unit = modelCatalog.close()
@@ -71,13 +76,18 @@ private class IosProviderComposition(
 
 private fun createProviderComposition(): IosProviderComposition {
     val credentialStore = IosCredentialStores.mistralApiKey()
-    val modelCatalog = MistralModelCatalog.create(credentialStore.asMistralCredentialProvider())
+    val credentialProvider = credentialStore.asMistralCredentialProvider()
+    val modelCatalog = MistralModelCatalog.create(credentialProvider)
     val connectionSettings = DefaultConnectionSettings(
         credentials = credentialStore,
         catalog = modelCatalog,
         startInLiveMode = true,
     )
-    return IosProviderComposition(connectionSettings, modelCatalog)
+    return IosProviderComposition(
+        connectionSettings = connectionSettings,
+        generation = MistralLiveTextGenerationPort.create(credentialProvider),
+        modelCatalog = modelCatalog,
+    )
 }
 
 private fun initialConversationState(): ConversationUiState {
