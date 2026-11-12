@@ -6,3 +6,6 @@
 // - Show declarations: true
 
 // Library unique name: <Blowhard.adapters:mobile-platform>
+final object io.github.artemidius.blowhard.adapters.mobile/IosCredentialStores { // io.github.artemidius.blowhard.adapters.mobile/IosCredentialStores|null[0]
+    final fun mistralApiKey(): io.github.artemidius.blowhard.core.domain/CredentialStore // io.github.artemidius.blowhard.adapters.mobile/IosCredentialStores.mistralApiKey|mistralApiKey(){}[0]
+}

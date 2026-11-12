@@ -25,8 +25,17 @@ kotlin {
         }
     }
 
-    iosArm64()
-    iosSimulatorArm64()
+    val iosTargets = listOf(
+        iosArm64(),
+        iosSimulatorArm64(),
+    )
+
+    iosTargets.forEach { target ->
+        target.compilations.getByName("main").cinterops.create("iosKeychain") {
+            defFile(project.file("src/nativeInterop/cinterop/iosKeychain.def"))
+            includeDirs(project.file("src/nativeInterop/cinterop/include"))
+        }
+    }
 
     jvmToolchain(21)
 
