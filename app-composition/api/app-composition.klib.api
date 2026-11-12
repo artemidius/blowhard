@@ -84,6 +84,24 @@ final class io.github.artemidius.blowhard.composition/ApplicationRuntimeDependen
     }
 }
 
+final class io.github.artemidius.blowhard.composition/ConversationHistorySession { // io.github.artemidius.blowhard.composition/ConversationHistorySession|null[0]
+    final val available // io.github.artemidius.blowhard.composition/ConversationHistorySession.available|{}available[0]
+        final fun <get-available>(): kotlin/Boolean // io.github.artemidius.blowhard.composition/ConversationHistorySession.available.<get-available>|<get-available>(){}[0]
+    final val conversationStore // io.github.artemidius.blowhard.composition/ConversationHistorySession.conversationStore|{}conversationStore[0]
+        final fun <get-conversationStore>(): io.github.artemidius.blowhard.core.domain/ConversationStore? // io.github.artemidius.blowhard.composition/ConversationHistorySession.conversationStore.<get-conversationStore>|<get-conversationStore>(){}[0]
+    final val initialState // io.github.artemidius.blowhard.composition/ConversationHistorySession.initialState|{}initialState[0]
+        final fun <get-initialState>(): io.github.artemidius.blowhard.ui.presentation/ConversationUiState // io.github.artemidius.blowhard.composition/ConversationHistorySession.initialState.<get-initialState>|<get-initialState>(){}[0]
+    final val recoveredAttemptCount // io.github.artemidius.blowhard.composition/ConversationHistorySession.recoveredAttemptCount|{}recoveredAttemptCount[0]
+        final fun <get-recoveredAttemptCount>(): kotlin/Long // io.github.artemidius.blowhard.composition/ConversationHistorySession.recoveredAttemptCount.<get-recoveredAttemptCount>|<get-recoveredAttemptCount>(){}[0]
+
+    final suspend fun close() // io.github.artemidius.blowhard.composition/ConversationHistorySession.close|close(){}[0]
+
+    final object Companion { // io.github.artemidius.blowhard.composition/ConversationHistorySession.Companion|null[0]
+        final fun unavailable(): io.github.artemidius.blowhard.composition/ConversationHistorySession // io.github.artemidius.blowhard.composition/ConversationHistorySession.Companion.unavailable|unavailable(){}[0]
+        final suspend fun open(io.github.artemidius.blowhard.core.application/RunClock = ..., kotlin/Function0<io.github.artemidius.blowhard.core.domain/ConversationStore>): io.github.artemidius.blowhard.composition/ConversationHistorySession // io.github.artemidius.blowhard.composition/ConversationHistorySession.Companion.open|open(io.github.artemidius.blowhard.core.application.RunClock;kotlin.Function0<io.github.artemidius.blowhard.core.domain.ConversationStore>){}[0]
+    }
+}
+
 final class io.github.artemidius.blowhard.composition/FailClosedConnectionSettings : io.github.artemidius.blowhard.core.api/ConnectionSettings { // io.github.artemidius.blowhard.composition/FailClosedConnectionSettings|null[0]
     constructor <init>() // io.github.artemidius.blowhard.composition/FailClosedConnectionSettings.<init>|<init>(){}[0]
 
