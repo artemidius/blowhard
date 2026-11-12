@@ -33,6 +33,7 @@ public final class io/github/artemidius/blowhard/composition/ApplicationRuntimeC
 }
 
 public final class io/github/artemidius/blowhard/composition/ApplicationRuntimeDependencies {
+	public static final field Companion Lio/github/artemidius/blowhard/composition/ApplicationRuntimeDependencies$Companion;
 	public fun <init> (Lio/github/artemidius/blowhard/core/api/ConnectionSettings;Lio/github/artemidius/blowhard/core/domain/TextGenerationPort;Lio/github/artemidius/blowhard/ui/presentation/DemoScenarioSelection;Lio/github/artemidius/blowhard/ui/presentation/ClipboardWriter;Lio/github/artemidius/blowhard/ui/presentation/RunDiagnosticReportSaver;Lio/github/artemidius/blowhard/core/api/DocumentLibrary;Lio/github/artemidius/blowhard/core/api/DocumentOcr;Lio/github/artemidius/blowhard/ui/presentation/DocumentPicker;Lio/github/artemidius/blowhard/core/api/MeetingNotes;Lio/github/artemidius/blowhard/ui/presentation/MeetingNoteApprovalPort;Lio/github/artemidius/blowhard/core/domain/ConversationStore;Lio/github/artemidius/blowhard/core/domain/DocumentProcessingStore;)V
 	public synthetic fun <init> (Lio/github/artemidius/blowhard/core/api/ConnectionSettings;Lio/github/artemidius/blowhard/core/domain/TextGenerationPort;Lio/github/artemidius/blowhard/ui/presentation/DemoScenarioSelection;Lio/github/artemidius/blowhard/ui/presentation/ClipboardWriter;Lio/github/artemidius/blowhard/ui/presentation/RunDiagnosticReportSaver;Lio/github/artemidius/blowhard/core/api/DocumentLibrary;Lio/github/artemidius/blowhard/core/api/DocumentOcr;Lio/github/artemidius/blowhard/ui/presentation/DocumentPicker;Lio/github/artemidius/blowhard/core/api/MeetingNotes;Lio/github/artemidius/blowhard/ui/presentation/MeetingNoteApprovalPort;Lio/github/artemidius/blowhard/core/domain/ConversationStore;Lio/github/artemidius/blowhard/core/domain/DocumentProcessingStore;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
 	public final fun getClipboardWriter ()Lio/github/artemidius/blowhard/ui/presentation/ClipboardWriter;
@@ -47,5 +48,22 @@ public final class io/github/artemidius/blowhard/composition/ApplicationRuntimeD
 	public final fun getMeetingNotes ()Lio/github/artemidius/blowhard/core/api/MeetingNotes;
 	public final fun getReportSaver ()Lio/github/artemidius/blowhard/ui/presentation/RunDiagnosticReportSaver;
 	public final fun getScenarioSelection ()Lio/github/artemidius/blowhard/ui/presentation/DemoScenarioSelection;
+}
+
+public final class io/github/artemidius/blowhard/composition/ApplicationRuntimeDependencies$Companion {
+	public final fun failClosed (Lio/github/artemidius/blowhard/core/api/ConnectionSettings;)Lio/github/artemidius/blowhard/composition/ApplicationRuntimeDependencies;
+}
+
+public final class io/github/artemidius/blowhard/composition/FailClosedConnectionSettings : io/github/artemidius/blowhard/core/api/ConnectionSettings {
+	public fun <init> ()V
+	public fun acknowledgeLiveDataDisclosure (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public fun deleteCredential (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public fun getState ()Lkotlinx/coroutines/flow/StateFlow;
+	public fun refreshCredentialStatus (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public fun replaceCredential (Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public fun selectMode (Lio/github/artemidius/blowhard/core/api/GenerationMode;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public fun selectModel (Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public fun testConnection (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public fun updateGenerationParameters (Lio/github/artemidius/blowhard/core/api/GenerationParameters;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 }
 
