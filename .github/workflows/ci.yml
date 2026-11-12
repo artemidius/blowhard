@@ -186,7 +186,7 @@ jobs:
   android-shared:
     name: Android
     runs-on: ubuntu-24.04
-    timeout-minutes: 25
+    timeout-minutes: 35
 
     steps:
       - name: Check out source
@@ -221,6 +221,15 @@ jobs:
           :adapters:persistence:testAndroidHostTest
           :shared-ui:testAndroidHostTest
 
+      - name: Grant the runner access to hardware virtualization
+        run: sudo setfacl --modify "user:${USER}:rw" /dev/kvm
+
+      - name: Install, launch, and inspect the Android application
+        run: >-
+          ./gradlew --no-daemon
+          -Pandroid.testoptions.manageddevices.emulator.gpu=swiftshader_indirect
+          :apps:android:pixel2Api35DebugAndroidTest
+
       - name: Upload Android evidence
         if: ${{ always() }}
         uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
@@ -229,6 +238,8 @@ jobs:
           path: |
             apps/android/build/outputs/apk/debug/
             apps/android/build/reports/lint-results-debug.*
+            apps/android/build/reports/androidTests/managedDevice/
+            apps/android/build/outputs/androidTest-results/managedDevice/
             apps/android/build/test-results/testDebugUnitTest/
             adapters/**/build/test-results/testAndroidHostTest/
             core/**/build/test-results/testAndroidHostTest/
