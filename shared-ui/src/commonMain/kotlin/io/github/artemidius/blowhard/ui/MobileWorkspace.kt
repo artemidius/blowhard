@@ -3,6 +3,7 @@
 package io.github.artemidius.blowhard.ui
 
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
@@ -38,6 +39,7 @@ internal fun MobileWorkspace(
         return
     }
     Scaffold(
+        contentWindowInsets = WindowInsets(0, 0, 0, 0),
         bottomBar = {
             if (navigation.current.isRoot) {
                 MobileNavigationBar(navigation.selectedRoot) { navigate(navigation.selectRoot(it)) }

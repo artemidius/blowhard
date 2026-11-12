@@ -2,6 +2,7 @@
 
 package io.github.artemidius.blowhard.ui
 
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
@@ -16,6 +17,7 @@ internal fun MobileNavigationBar(selected: MobileRootDestination, onSelect: (Mob
     NavigationBar(
         containerColor = MaterialTheme.colorScheme.surfaceContainerLow,
         tonalElevation = 0.dp,
+        windowInsets = WindowInsets(0, 0, 0, 0),
     ) {
         MobileRootDestination.entries.forEach { destination ->
             NavigationBarItem(
