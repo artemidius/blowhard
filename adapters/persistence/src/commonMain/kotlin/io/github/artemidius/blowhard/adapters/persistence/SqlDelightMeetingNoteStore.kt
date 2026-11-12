@@ -47,11 +47,21 @@ internal class SqlDelightMeetingNoteStore(private val driver: SqlDriver) : Meeti
         safely(ApprovedMeetingNoteInsertResult.Unavailable) {
             var result: ApprovedMeetingNoteInsertResult = ApprovedMeetingNoteInsertResult.Unavailable
             queries.transaction {
-                val committedNoteId = queries.findMeetingNoteWriteReceipt(write.operationId.value).executeAsOneOrNull()
+                val committedReceipt = queries.findMeetingNoteWriteReceipt(write.operationId.value) {
+                        approvalId,
+                        runId,
+                        callId,
+                        argumentsJson,
+                        noteId,
+                    ->
+                    ApprovedWriteReceipt(approvalId, runId, callId, argumentsJson, noteId)
+                }.executeAsOneOrNull()
                 result = when {
-                    committedNoteId != null -> ApprovedMeetingNoteInsertResult.AlreadyCommitted(
-                        io.github.artemidius.blowhard.core.api.MeetingNoteId(committedNoteId),
+                    committedReceipt?.matches(write) == true -> ApprovedMeetingNoteInsertResult.AlreadyCommitted(
+                        io.github.artemidius.blowhard.core.api.MeetingNoteId(committedReceipt.noteId),
                     )
+
+                    committedReceipt != null -> ApprovedMeetingNoteInsertResult.OperationConflict
 
                     queries.meetingNoteExists(write.note.id.value).executeAsOne() ->
                         ApprovedMeetingNoteInsertResult.IdConflict
@@ -81,7 +91,8 @@ internal class SqlDelightMeetingNoteStore(private val driver: SqlDriver) : Meeti
     override suspend fun findApprovedOperation(
         operationId: ApprovedNoteWriteOperationId,
     ): ApprovedMeetingNoteReceiptLookup = safely(ApprovedMeetingNoteReceiptLookup.Unavailable) {
-        queries.findMeetingNoteWriteReceipt(operationId.value).executeAsOneOrNull()
+        queries.findMeetingNoteWriteReceipt(operationId.value) { _, _, _, _, noteId -> noteId }
+            .executeAsOneOrNull()
             ?.let { noteId ->
                 ApprovedMeetingNoteReceiptLookup.Committed(
                     io.github.artemidius.blowhard.core.api.MeetingNoteId(noteId),
@@ -172,4 +183,18 @@ internal class SqlDelightMeetingNoteStore(private val driver: SqlDriver) : Meeti
     } catch (_: Exception) {
         fallback
     }
+}
+
+private data class ApprovedWriteReceipt(
+    val approvalId: String,
+    val runId: String,
+    val callId: String,
+    val argumentsJson: String,
+    val noteId: String,
+) {
+    fun matches(write: ApprovedMeetingNoteWrite): Boolean = approvalId == write.approvalId &&
+        runId == write.runId &&
+        callId == write.callId &&
+        argumentsJson == write.argumentsJson &&
+        noteId == write.note.id.value
 }
