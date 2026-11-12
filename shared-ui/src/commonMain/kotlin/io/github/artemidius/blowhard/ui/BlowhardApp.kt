@@ -61,6 +61,21 @@ public fun BlowhardApp(
     }
 }
 
+/** Renders the provider connection workflow for a client that has not assembled the full workspace yet. */
+@Composable
+public fun BlowhardConnectionApp(connectionSettingsPresenter: ConnectionSettingsPresenter) {
+    val settingsState by connectionSettingsPresenter.state.collectAsState()
+    MaterialTheme(colorScheme = BlowhardColors, shapes = BlowhardShapes, typography = BlowhardTypography) {
+        Surface {
+            ConnectionSettingsScreen(
+                state = settingsState,
+                onAction = connectionSettingsPresenter::dispatch,
+                onBack = null,
+            )
+        }
+    }
+}
+
 @Composable
 private fun WorkspaceContent(
     destination: WorkspaceDestination,
