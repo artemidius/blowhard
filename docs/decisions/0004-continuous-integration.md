@@ -22,8 +22,8 @@ Run one credential-free GitHub Actions workflow for pull requests, `main` pushes
 - `Desktop / Linux`, `Desktop / Windows`, and `Desktop / macOS` build the JVM application and run
   the three core modules' desktop tests on fixed runner images.
 - `Android shared` compiles shared Android code and runs Android host tests on Ubuntu.
-- `Apple shared` compiles iOS device and ARM64 simulator code and runs core tests in the iOS
-  simulator environment on macOS.
+- `Apple shared` validates the iOS application ABI, compiles iOS device and ARM64 simulator code,
+  and runs core tests in the iOS simulator environment on macOS.
 
 Use `ubuntu-24.04`, `windows-2025`, and `macos-15` instead of mutable `*-latest` labels. Set JDK 21
 explicitly. Pin every action to a full commit SHA with the release tag retained in a comment for

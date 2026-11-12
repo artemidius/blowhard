@@ -282,7 +282,6 @@ tasks.register("qualityCheck") {
         ":apps:android:assembleDebug",
         ":apps:android:lintDebug",
         ":apps:android:testDebugUnitTest",
-        ":apps:ios-shared:checkKotlinAbi",
         ":core:api:checkKotlinAbi",
         ":core:api:desktopTest",
         ":core:application:checkKotlinAbi",

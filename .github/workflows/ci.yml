@@ -295,6 +295,7 @@ jobs:
           ./gradlew --no-daemon
           :app-composition:compileKotlinIosArm64
           :app-composition:iosSimulatorArm64Test
+          :apps:ios-shared:checkKotlinAbi
           :apps:ios-shared:iosSimulatorArm64Test
           :shared-ui:compileKotlinIosArm64
           :shared-ui:compileKotlinIosSimulatorArm64
