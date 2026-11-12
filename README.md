@@ -8,7 +8,7 @@ The current milestone demonstrates an end-to-end document-to-meeting-note workfl
 import, explicit provider processing, structured evidence-linked output, typed editing, measurable
 evaluation, scoped read tools, exact mutation approval, and crash-safe persistence. Dedicated
 Android and iOS application shells render the shared connection workflow and fail closed until
-their native credential adapters are installed.
+their native credential adapters are wired into host composition.
 
 If you are reviewing the repository, start with the
 [five-minute reviewer guide](docs/reviewer-guide.md), the
@@ -74,11 +74,13 @@ automatic POST replay. Its framing, terminal-state, and retry decisions are docu
 
 Secure credential lifecycle is isolated behind a provider-neutral store. macOS uses native
 Keychain generic-password items; the mobile platform adapter protects Android credentials with a
-Keystore-backed AES-GCM envelope and backup-excluded app storage. Hosts without an injected secure
-adapter remain fail-closed. The boundary and its limitations are documented in
+Keystore-backed AES-GCM envelope and backup-excluded app storage, while iOS uses a non-synchronizing,
+device-bound Keychain item available only after device unlock. Hosts without an injected secure adapter
+remain fail-closed. The boundary and its limitations are documented in
 [`ADR 0011`](docs/decisions/0011-macos-keychain-credentials.md) and the
 [credential storage guide](docs/architecture/credential-storage.md); the Android decision is
-captured in [`ADR 0035`](docs/decisions/0035-android-keystore-credential-envelope.md).
+captured in [`ADR 0035`](docs/decisions/0035-android-keystore-credential-envelope.md), and the iOS
+policy in [`ADR 0036`](docs/decisions/0036-ios-keychain-credentials.md).
 
 Live-provider configuration is coordinated through a shared, secret-free settings contract. It
 requires a verified compatible model. The desktop client discloses external processing before

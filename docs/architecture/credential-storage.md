@@ -13,6 +13,8 @@ flowchart LR
     AndroidFactory[AndroidCredentialStores] --> AndroidStore[AndroidKeystoreCredentialStore]
     AndroidStore -->|AES-GCM key operations| AndroidKeyStore[Android Keystore]
     AndroidStore -->|versioned IV and ciphertext| PrivatePrefs[Backup-excluded app preferences]
+    IosFactory[IosCredentialStores] --> IosStore[IosKeychainCredentialStore]
+    IosStore -->|generic-password item| IosKeychain[iOS Keychain]
 ```
 
 `CredentialStore` exposes only typed read, replace, and delete outcomes. It does not expose native
@@ -31,6 +33,14 @@ with randomized GCM plus application-specific authenticated data; only a version
 enters app-private preferences. Cloud backup and device transfer exclude that file. Corrupt records, missing
 keys, and cryptographic failures return sanitized unavailable results without deleting or replacing data during
 a read. See [ADR 0035](../decisions/0035-android-keystore-credential-envelope.md).
+
+iOS stores one non-synchronizing generic-password item under an application-scoped service and account.
+The item uses `WhenUnlockedThisDeviceOnly`: it is available only while the device is unlocked and does not
+migrate to another device or enter iCloud Keychain. Replacement updates before adding, resolves an add race,
+and reapplies the accessibility policy. The adapter never requests a shared access group or presents an
+authentication prompt. Keychain items can survive application uninstall; reinstall therefore preserves an
+existing credential until the user explicitly replaces or deletes it. See
+[ADR 0036](../decisions/0036-ios-keychain-credentials.md).
 
 The desktop settings screen keeps typed credential text only in transient, non-saveable UI state.
 Submission clears the field and sends the value directly through `ConnectionSettings` to this
@@ -56,3 +66,12 @@ process-isolated preference file and Keystore alias:
 ```shell
 ./gradlew :adapters:mobile-platform:connectedAndroidDeviceTest
 ```
+
+The Apple CI job runs the iOS simulator suite, including an isolated native Keychain lifecycle:
+
+```shell
+./gradlew :adapters:mobile-platform:iosSimulatorArm64Test
+```
+
+It uses a random test-only service, removes the item in `finally`, and never addresses the application's
+Mistral credential.
