@@ -1,6 +1,8 @@
 package io.github.artemidius.blowhard.desktop
 
 import io.github.artemidius.blowhard.adapters.persistence.DesktopConversationStores
+import io.github.artemidius.blowhard.composition.toConversationUiState
+import io.github.artemidius.blowhard.composition.unavailableConversationHistoryState
 import io.github.artemidius.blowhard.core.application.ConversationHistoryLoader
 import io.github.artemidius.blowhard.core.application.RunClock
 import io.github.artemidius.blowhard.core.application.SystemRunClock
@@ -45,7 +47,7 @@ internal class DesktopHistorySession private constructor(
             } catch (_: Exception) {
                 store.closeSafely()
                 DesktopHistorySession(
-                    initialState = unavailableHistoryState(),
+                    initialState = unavailableConversationHistoryState(),
                     available = false,
                     recoveredAttemptCount = 0,
                     conversationStore = null,
