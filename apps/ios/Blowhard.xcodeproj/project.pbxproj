@@ -299,6 +299,7 @@
 					"$(inherited)",
 					"-framework",
 					BlowhardIos,
+					"-lsqlite3",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = io.github.artemidius.blowhard;
 				PRODUCT_NAME = Blowhard;
@@ -334,6 +335,7 @@
 					"$(inherited)",
 					"-framework",
 					BlowhardIos,
+					"-lsqlite3",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = io.github.artemidius.blowhard;
 				PRODUCT_NAME = Blowhard;
