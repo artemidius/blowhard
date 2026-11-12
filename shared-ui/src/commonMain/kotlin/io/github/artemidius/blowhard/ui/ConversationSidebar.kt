@@ -63,9 +63,13 @@ internal fun ConversationSidebar(
             modifier = Modifier.fillMaxWidth(),
             shape = MaterialTheme.shapes.medium,
         ) {
-            Text("+  New conversation")
+            Text("+  New chat")
         }
-        Text("CONVERSATIONS", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.outline)
+        Text(
+            "YOUR CONVERSATIONS",
+            style = MaterialTheme.typography.labelSmall,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+        )
         LazyColumn(
             modifier = Modifier.weight(1f),
             state = listState,
@@ -90,16 +94,16 @@ private fun SidebarStatus(
     onOpenDocuments: () -> Unit,
 ) {
     OutlinedButton(onClick = onOpenDocuments, modifier = Modifier.fillMaxWidth()) {
-        Text("Local documents")
+        Text("Documents")
     }
     OutlinedButton(onClick = onOpenSettings, modifier = Modifier.fillMaxWidth()) {
-        Text("Provider settings")
+        Text("Settings")
     }
     Text(
         if (connection.mode == GenerationMode.DEMO) {
             "Offline fixture • no API key • no network"
         } else {
-            "Live Mistral • external processing • no fallback"
+            "Mistral · cloud processing"
         },
         style = MaterialTheme.typography.labelSmall,
         color = MaterialTheme.colorScheme.onSurfaceVariant,
@@ -127,7 +131,7 @@ private fun BrandHeader() {
         Column {
             Text("blowhard", style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold)
             Text(
-                "A space to think.",
+                "THINK BEYOND.",
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
             )
@@ -154,7 +158,7 @@ private fun ConversationItem(conversation: ConversationUiModel, selected: Boolea
                 MaterialTheme.colorScheme.surface
             },
         ),
-        border = if (selected) BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant) else null,
+        border = if (selected) BorderStroke(1.dp, MaterialTheme.colorScheme.primary.copy(alpha = 0.4f)) else null,
     ) {
         Column(Modifier.padding(12.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
             Text(
@@ -171,18 +175,11 @@ private fun ConversationItem(conversation: ConversationUiModel, selected: Boolea
 
 @Composable
 private fun ConversationMetadata(conversation: ConversationUiModel) {
-    if (conversation.runState != ConversationRunState.IDLE) {
+    if (conversation.runState != ConversationRunState.IDLE && conversation.runState != ConversationRunState.SUCCEEDED) {
         Text(
             conversation.runState.displayLabel(),
             style = MaterialTheme.typography.labelSmall,
             color = MaterialTheme.colorScheme.primary,
-        )
-    }
-    conversation.latestTarget?.let { target ->
-        Text(
-            if (target == GenerationTarget.Demo) "Demo" else "Live",
-            style = MaterialTheme.typography.labelSmall,
-            color = MaterialTheme.colorScheme.onSurfaceVariant,
         )
     }
 }
