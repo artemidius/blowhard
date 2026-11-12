@@ -72,8 +72,20 @@ trap cleanup EXIT
 
 xcrun simctl bootstatus "$device_id" -b
 xcrun simctl install "$device_id" "$app_path"
-xcrun simctl launch "$device_id" "$bundle_id"
+launch_output="$(xcrun simctl launch "$device_id" "$bundle_id")"
+echo "$launch_output"
+
+if [[ "$launch_output" =~ :[[:space:]]+([0-9]+)$ ]]; then
+  process_id="${BASH_REMATCH[1]}"
+else
+  echo "Simulator launch did not return an application process identifier." >&2
+  exit 1
+fi
+
 sleep 3
-xcrun simctl spawn "$device_id" pgrep -x Blowhard >/dev/null
+if ! kill -0 "$process_id" 2>/dev/null; then
+  echo "Application process $process_id exited after launch." >&2
+  exit 1
+fi
 
 echo "Installed and launched $bundle_id on simulator $device_id."
