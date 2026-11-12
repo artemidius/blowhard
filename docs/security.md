@@ -36,7 +36,8 @@ credential to its report.
   Windows and Linux packages are unsigned.
 - Live Mistral use is currently supported only on macOS. Windows and Linux packages are useful for deterministic UI,
   packaging, and architecture review but cannot configure a live credential.
-- Android and iOS are compilation-tested shared targets, not distributed applications.
+- Android and iOS have installable, CI launch-tested connection shells, but no native credential adapter or live
+  provider path yet. They are unsigned development builds, not distributed applications.
 - The tool protocol is intentionally narrow. It is not a general-purpose agent sandbox and never executes arbitrary
   commands.
 - Local database encryption at rest is not implemented. Operating-system account and disk protections remain part of

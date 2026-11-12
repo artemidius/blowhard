@@ -18,6 +18,7 @@ rootProject.name = "Blowhard"
 
 include(":apps:desktop")
 include(":apps:android")
+include(":apps:ios-shared")
 include(":apps:evaluation")
 include(":adapters:documents")
 include(":adapters:fixture")

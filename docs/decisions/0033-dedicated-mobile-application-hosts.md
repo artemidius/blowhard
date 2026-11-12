@@ -26,6 +26,11 @@ The Android build targets the current API while retaining the project's establis
 device transfer are disabled for all app-owned data. Android application assembly, lint, and unit tests run in both
 the local quality gate and CI.
 
+The iOS host is a small SwiftUI application embedding one Compose `UIViewController`. A separate KMP composition
+module exports that controller factory through the static `BlowhardIos` framework; Swift does not receive the wider
+shared UI API. The initial iOS 15 host also reports credentials as unavailable. CI builds the Xcode project without
+signing, installs it on an available iPhone simulator, launches it, and verifies that the process remains alive.
+
 ## Consequences
 
 - Mobile lifecycle and security decisions remain visible at the application boundary.

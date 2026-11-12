@@ -55,7 +55,8 @@ history and the working tree.
 
 ## 5. Check the public delivery evidence
 
-Pull requests run Linux, Windows, macOS, Android, and Apple shared targets with read-only permissions and no provider
-credentials. Native packages are built, installed, launched in a deterministic smoke mode, inventoried, and bound to
-their source revision by SHA-256 evidence. Signing limitations are disclosed in the [security and limitations](security.md)
-document rather than hidden behind a successful build badge.
+Pull requests run Linux, Windows, macOS, Android, and Apple targets with read-only permissions and no provider
+credentials. Desktop packages and mobile application shells are built, installed, and launched; desktop release
+artifacts are also inventoried and bound to their source revision by SHA-256 evidence. Signing and mobile capability
+limitations are disclosed in the [security and limitations](security.md) document rather than hidden behind a
+successful build badge.
