@@ -72,14 +72,21 @@ class IosKeychainCredentialStoreTest {
     }
 
     @Test
-    fun `native keychain supports isolated credential lifecycle`() = runTest {
+    fun `native keychain supports lifecycle or reports unavailable security services`() = runTest {
         val suffix = Random.nextLong().toString().replace('-', 'n')
         val store = IosCredentialStores.create(
             service = "io.github.artemidius.blowhard.test.$suffix",
             account = "mistral-api-key",
         )
         try {
-            assertEquals(CredentialMutationResult.Success, store.delete())
+            val initialDelete = store.delete()
+            if (initialDelete == platformUnavailableMutation()) {
+                // Kotlin/Native test executables are not application bundles. Some hosted runners
+                // deliberately withhold the simulator Keychain service from that process type.
+                assertEquals(platformUnavailableRead(), store.read())
+                return@runTest
+            }
+            assertEquals(CredentialMutationResult.Success, initialDelete)
             assertEquals(CredentialReadResult.Missing, store.read())
             assertEquals(CredentialMutationResult.Success, store.replace("first-synthetic-key"))
             assertEquals("first-synthetic-key", assertIs<CredentialReadResult.Available>(store.read()).secret)
@@ -147,3 +154,8 @@ private object CancellingIosKeychainGateway : IosKeychainGateway {
 private fun unexpectedReadFailure() = CredentialReadResult.Unavailable(CredentialAccessFailure.UNEXPECTED)
 
 private fun unexpectedMutationFailure() = CredentialMutationResult.Unavailable(CredentialAccessFailure.UNEXPECTED)
+
+private fun platformUnavailableRead() = CredentialReadResult.Unavailable(CredentialAccessFailure.PLATFORM_UNAVAILABLE)
+
+private fun platformUnavailableMutation() =
+    CredentialMutationResult.Unavailable(CredentialAccessFailure.PLATFORM_UNAVAILABLE)
