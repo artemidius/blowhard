@@ -184,7 +184,7 @@ jobs:
           retention-days: 7
 
   android-shared:
-    name: Android shared
+    name: Android
     runs-on: ubuntu-24.04
     timeout-minutes: 25
 
@@ -205,9 +205,12 @@ jobs:
         with:
           cache-read-only: ${{ github.event_name == 'pull_request' }}
 
-      - name: Compile Android shared code and run host tests
+      - name: Build Android application and run host tests
         run: >-
           ./gradlew --no-daemon
+          :apps:android:assembleDebug
+          :apps:android:lintDebug
+          :apps:android:testDebugUnitTest
           :shared-ui:compileAndroidMain
           :core:api:testAndroidHostTest
           :core:application:testAndroidHostTest
@@ -222,8 +225,11 @@ jobs:
         if: ${{ always() }}
         uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
-          name: android-shared-evidence
+          name: android-evidence
           path: |
+            apps/android/build/outputs/apk/debug/
+            apps/android/build/reports/lint-results-debug.*
+            apps/android/build/test-results/testDebugUnitTest/
             adapters/**/build/test-results/testAndroidHostTest/
             core/**/build/test-results/testAndroidHostTest/
             shared-ui/build/test-results/testAndroidHostTest/
