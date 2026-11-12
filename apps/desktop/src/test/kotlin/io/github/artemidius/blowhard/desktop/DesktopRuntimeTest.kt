@@ -2,6 +2,7 @@ package io.github.artemidius.blowhard.desktop
 
 import io.github.artemidius.blowhard.adapters.fixture.FixtureScenario
 import io.github.artemidius.blowhard.adapters.fixture.FixtureTextGenerationPort
+import io.github.artemidius.blowhard.composition.emptyConversationState
 import io.github.artemidius.blowhard.core.api.ConnectionSettings
 import io.github.artemidius.blowhard.core.api.ConnectionSettingsState
 import io.github.artemidius.blowhard.core.api.ConnectionStatus
@@ -341,7 +342,7 @@ class DesktopRuntimeTest {
     @Test
     fun `restored startup state does not invoke generation`() {
         var generationCalls = 0
-        val initialState = emptyDesktopConversationState().copy(
+        val initialState = emptyConversationState().copy(
             conversations = listOf(
                 io.github.artemidius.blowhard.ui.presentation.ConversationUiModel(
                     id = ConversationId("stored"),
@@ -404,7 +405,7 @@ private suspend fun DesktopRuntime.completeAttempt(prompt: String): RunId? {
 }
 
 private fun createDesktopRuntime(
-    initialState: ConversationUiState = emptyDesktopConversationState(),
+    initialState: ConversationUiState = emptyConversationState(),
     conversationStore: ConversationStore? = null,
     closeHistoryResources: () -> Unit = {},
     closeProviderResources: () -> Unit = {},

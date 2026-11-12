@@ -1,4 +1,4 @@
-package io.github.artemidius.blowhard.desktop
+package io.github.artemidius.blowhard.composition
 
 import io.github.artemidius.blowhard.core.api.ConversationId
 import io.github.artemidius.blowhard.core.api.MessageId
@@ -16,8 +16,9 @@ import io.github.artemidius.blowhard.ui.presentation.ConversationUiState
 import io.github.artemidius.blowhard.ui.presentation.MessageDelivery
 import io.github.artemidius.blowhard.ui.presentation.UiNotice
 
-internal fun ConversationHistorySnapshot.toConversationUiState(): ConversationUiState {
-    if (entries.isEmpty()) return emptyDesktopConversationState()
+/** Maps durable history into provider-inert presentation state without replaying work. */
+public fun ConversationHistorySnapshot.toConversationUiState(): ConversationUiState {
+    if (entries.isEmpty()) return emptyConversationState()
     val conversations = entries.map(ConversationHistoryEntry::toConversationUiModel)
     return ConversationUiState(
         conversations = conversations,
@@ -25,11 +26,13 @@ internal fun ConversationHistorySnapshot.toConversationUiState(): ConversationUi
     )
 }
 
-internal fun unavailableHistoryState(): ConversationUiState = emptyDesktopConversationState(
+/** Creates a deterministic workspace that makes unavailable durable history explicit. */
+public fun unavailableConversationHistoryState(): ConversationUiState = emptyConversationState(
     UiNotice("Local conversation history is unavailable. This session is not connected to durable storage."),
 )
 
-internal fun emptyDesktopConversationState(notice: UiNotice? = null): ConversationUiState {
+/** Creates a deterministic empty conversation workspace. */
+public fun emptyConversationState(notice: UiNotice? = null): ConversationUiState {
     val id = ConversationId("conversation-1")
     return ConversationUiState(
         conversations = listOf(ConversationUiModel(id, "New conversation", notice = notice)),
