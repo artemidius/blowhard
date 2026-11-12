@@ -51,7 +51,8 @@ public final class io/github/artemidius/blowhard/composition/ApplicationRuntimeD
 }
 
 public final class io/github/artemidius/blowhard/composition/ApplicationRuntimeDependencies$Companion {
-	public final fun conversationOnly (Lio/github/artemidius/blowhard/core/api/ConnectionSettings;Lio/github/artemidius/blowhard/core/domain/TextGenerationPort;)Lio/github/artemidius/blowhard/composition/ApplicationRuntimeDependencies;
+	public final fun conversationOnly (Lio/github/artemidius/blowhard/core/api/ConnectionSettings;Lio/github/artemidius/blowhard/core/domain/TextGenerationPort;Lio/github/artemidius/blowhard/core/domain/ConversationStore;)Lio/github/artemidius/blowhard/composition/ApplicationRuntimeDependencies;
+	public static synthetic fun conversationOnly$default (Lio/github/artemidius/blowhard/composition/ApplicationRuntimeDependencies$Companion;Lio/github/artemidius/blowhard/core/api/ConnectionSettings;Lio/github/artemidius/blowhard/core/domain/TextGenerationPort;Lio/github/artemidius/blowhard/core/domain/ConversationStore;ILjava/lang/Object;)Lio/github/artemidius/blowhard/composition/ApplicationRuntimeDependencies;
 	public final fun failClosed (Lio/github/artemidius/blowhard/core/api/ConnectionSettings;)Lio/github/artemidius/blowhard/composition/ApplicationRuntimeDependencies;
 }
 

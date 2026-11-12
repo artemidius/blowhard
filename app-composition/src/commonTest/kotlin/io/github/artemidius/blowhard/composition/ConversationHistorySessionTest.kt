@@ -47,7 +47,7 @@ class ConversationHistorySessionTest {
     }
 }
 
-private class RecordingStore(private val failOnList: Boolean = false) : ConversationStore {
+internal class RecordingStore(private val failOnList: Boolean = false) : ConversationStore {
     var closeCount: Int = 0
         private set
 

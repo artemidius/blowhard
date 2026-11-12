@@ -6,32 +6,38 @@ import io.github.artemidius.blowhard.adapters.mistral.MistralLiveTextGenerationP
 import io.github.artemidius.blowhard.adapters.mistral.MistralModelCatalog
 import io.github.artemidius.blowhard.adapters.mistral.asMistralCredentialProvider
 import io.github.artemidius.blowhard.adapters.mobile.AndroidCredentialStores
+import io.github.artemidius.blowhard.adapters.persistence.AndroidConversationStores
 import io.github.artemidius.blowhard.composition.ApplicationRuntime
 import io.github.artemidius.blowhard.composition.ApplicationRuntimeConfiguration
 import io.github.artemidius.blowhard.composition.ApplicationRuntimeDependencies
-import io.github.artemidius.blowhard.core.api.ConversationId
+import io.github.artemidius.blowhard.composition.ConversationHistorySession
 import io.github.artemidius.blowhard.core.application.DefaultConnectionSettings
 import io.github.artemidius.blowhard.core.application.SequentialRunIdFactory
-import io.github.artemidius.blowhard.ui.presentation.ConversationUiModel
-import io.github.artemidius.blowhard.ui.presentation.ConversationUiState
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import java.util.UUID
 
 /** Retains application-owned services across Android activity recreation. */
 internal class AndroidApplicationRuntime(application: Application) : AndroidViewModel(application) {
     private val closeScope = CoroutineScope(SupervisorJob() + Dispatchers.Default)
     private val providers = createProviderComposition(application)
+    private val history = runBlocking(Dispatchers.IO) {
+        ConversationHistorySession.open {
+            AndroidConversationStores.open(application, CONVERSATION_DATABASE_NAME)
+        }
+    }
     val runtime: ApplicationRuntime = ApplicationRuntime.create(
         dependencies = ApplicationRuntimeDependencies.conversationOnly(
             providers.connectionSettings,
             providers.generation,
+            history.conversationStore,
         ),
         configuration = ApplicationRuntimeConfiguration(
-            initialState = initialConversationState(),
+            initialState = history.initialState,
             runIdFactory = SequentialRunIdFactory("android-${UUID.randomUUID()}"),
             autoVerifyCredential = true,
         ),
@@ -43,9 +49,13 @@ internal class AndroidApplicationRuntime(application: Application) : AndroidView
                 runtime.close()
             } finally {
                 try {
-                    providers.close()
+                    history.close()
                 } finally {
-                    closeScope.cancel()
+                    try {
+                        providers.close()
+                    } finally {
+                        closeScope.cancel()
+                    }
                 }
             }
         }
@@ -76,10 +86,4 @@ private fun createProviderComposition(application: Application): AndroidProvider
     )
 }
 
-private fun initialConversationState(): ConversationUiState {
-    val id = ConversationId("conversation-1")
-    return ConversationUiState(
-        conversations = listOf(ConversationUiModel(id, "New conversation")),
-        selectedConversationId = id,
-    )
-}
+private const val CONVERSATION_DATABASE_NAME = "blowhard.db"
