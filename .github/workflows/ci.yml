@@ -293,6 +293,7 @@ jobs:
           -scheme Blowhard
           -configuration Debug
           -sdk iphonesimulator
+          -destination 'generic/platform=iOS Simulator'
           -derivedDataPath apps/ios/build/DerivedData
           CODE_SIGNING_ALLOWED=NO
           build
