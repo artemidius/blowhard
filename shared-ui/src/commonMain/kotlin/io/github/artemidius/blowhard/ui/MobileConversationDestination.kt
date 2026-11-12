@@ -21,13 +21,14 @@ internal fun MobileConversationDestination(
     runInspectorPresenter: RunInspectorPresenter,
     navigate: (MobileNavigationState) -> Unit,
 ) {
-    ConversationScreen(
+    MobileConversationScreen(
         state = conversationState,
         connection = settingsState.settings,
         availableImages = documentLibraryState.documents.filter {
             it.content is DocumentContentDescriptor.Image
         },
         onAction = conversationPresenter::dispatch,
+        onOpenConversations = { navigate(navigation.open(MobileDestination.CONVERSATION_LIST)) },
         onOpenSettings = { navigate(navigation.selectRoot(MobileRootDestination.SETTINGS)) },
         onOpenDocuments = { navigate(navigation.selectRoot(MobileRootDestination.DOCUMENTS)) },
         onInspectRun = { runId ->
