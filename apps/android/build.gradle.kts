@@ -40,7 +40,10 @@ android {
 
 dependencies {
     implementation(project(":app-composition"))
+    implementation(project(":adapters:mistral"))
+    implementation(project(":adapters:mobile-platform"))
     implementation(project(":core:api"))
+    implementation(project(":core:application"))
     implementation(project(":shared-ui"))
     implementation(libs.androidx.activity.compose)
     implementation(libs.compose.foundation)

@@ -232,10 +232,15 @@ Install the Android debug application on a connected API 26 or newer device or e
 ./gradlew :apps:android:installDebug
 ```
 
+The Android host stores its Mistral credential with an app-scoped Android Keystore key, starts in
+live-only mode, and verifies any saved credential against Mistral's model catalog on launch. Until
+verification succeeds, provider actions remain inactive. Cloud backup and device transfer stay
+disabled for app-owned data.
+
 Open `apps/ios/Blowhard.xcodeproj` in Xcode to run the iOS 15 or newer application on an Apple
 silicon simulator or device. The Xcode build invokes the narrow `apps:ios-shared` Kotlin framework
-automatically. These initial hosts expose the real shared connection UI but intentionally cannot
-store a credential or make a provider call yet.
+automatically. The iOS shell has a device-bound Keychain adapter; provider composition is introduced
+separately so each platform increment remains independently reviewable.
 
 Reproduce the 12-case synthetic meeting-note evaluation without a credential or network call:
 
