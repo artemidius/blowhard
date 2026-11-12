@@ -206,8 +206,8 @@ attach PDFs, send every imported file, accept provider-fetched image URLs, or re
 regeneration.
 
 For PDFs with extracted text, choose **Generate meeting notes** in the document workbench. Blowhard
-requests a strict structured response, validates source references, and presents typed summary,
-decision, action-item, and risk fields for editing. **Approve local copy** opens a separate consent
+requests a strict structured response, validates source references, and presents typed title,
+decision, action-item, and evidence fields for editing. **Approve local copy** opens a separate consent
 step showing the exact content and destination. Denial writes nothing; approval is single-use and
 the local write is paired atomically with a recovery receipt.
 
