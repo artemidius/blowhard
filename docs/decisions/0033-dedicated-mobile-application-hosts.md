@@ -23,7 +23,7 @@ sensitive operations fail closed. No placeholder token, implicit demo mode, or n
 the shell.
 
 The Android build targets the current API while retaining the project's established minimum API. Cloud backup and
-device transfer are disabled for all app-owned data. Android application assembly, lint, unit tests, and a managed-device
+device transfer are disabled for all app-owned data. Android application assembly, lint, unit tests, and an emulator
 launch assertion run in CI.
 
 The iOS host is a small SwiftUI application embedding one Compose `UIViewController`. A separate KMP composition

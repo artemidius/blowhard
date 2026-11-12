@@ -222,13 +222,20 @@ jobs:
           :shared-ui:testAndroidHostTest
 
       - name: Grant the runner access to hardware virtualization
-        run: sudo setfacl --modify "user:${USER}:rw" /dev/kvm
+        run: |
+          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' |
+            sudo tee /etc/udev/rules.d/99-kvm4all.rules
+          sudo udevadm control --reload-rules
+          sudo udevadm trigger --name-match=kvm
 
       - name: Install, launch, and inspect the Android application
-        run: >-
-          ./gradlew --no-daemon
-          -Pandroid.testoptions.manageddevices.emulator.gpu=swiftshader_indirect
-          :apps:android:pixel2Api35DebugAndroidTest
+        uses: reactivecircus/android-emulator-runner@a421e43855164a8197daf9d8d40fe71c6996bb0d # v2.38.0
+        with:
+          api-level: 35
+          target: default
+          arch: x86_64
+          profile: pixel_2
+          script: ./gradlew --no-daemon :apps:android:connectedDebugAndroidTest
 
       - name: Upload Android evidence
         if: ${{ always() }}
