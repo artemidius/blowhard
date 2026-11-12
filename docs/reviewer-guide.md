@@ -56,7 +56,7 @@ history and the working tree.
 ## 5. Check the public delivery evidence
 
 Pull requests run Linux, Windows, macOS, Android, and Apple targets with read-only permissions and no provider
-credentials. Desktop packages and both mobile application shells are built; desktop and iOS candidates are also
-installed and launched; desktop release artifacts are also inventoried and bound to their source revision by SHA-256
-evidence. Signing and mobile capability limitations are disclosed in the
+credentials. Desktop packages and both mobile application shells are built, installed, and launched; desktop release
+artifacts are also inventoried and bound to their source revision by SHA-256 evidence. Signing and mobile capability
+limitations are disclosed in the
 [security and limitations](security.md) document rather than hidden behind a successful build badge.
