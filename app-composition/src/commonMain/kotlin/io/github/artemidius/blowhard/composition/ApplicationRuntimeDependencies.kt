@@ -39,6 +39,12 @@ public class ApplicationRuntimeDependencies(
         /** Uses [connectionSettings] and rejects every unavailable platform or provider operation. */
         public fun failClosed(connectionSettings: ConnectionSettings): ApplicationRuntimeDependencies =
             failClosedDependencies(connectionSettings)
+
+        /** Provides live conversation generation while every other optional capability fails closed. */
+        public fun conversationOnly(
+            connectionSettings: ConnectionSettings,
+            generation: TextGenerationPort,
+        ): ApplicationRuntimeDependencies = failClosedDependencies(connectionSettings, generation)
     }
 }
 
