@@ -16,6 +16,7 @@
 /* Begin PBXFileReference section */
 		04CE261E5B496EFC0DFD3B66 /* Blowhard.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = Blowhard.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		271EC8A92CDBDF68B38C4B50 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
+		3F3865F4BA889EEECF7ECD21 /* Blowhard.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Blowhard.entitlements; sourceTree = "<group>"; };
 		5B775082FCA962561860FBA8 /* ComposeRootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComposeRootView.swift; sourceTree = "<group>"; };
 		69A3BB9BFFE0AB7B21340050 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		945519FC3ED7F5925B849BA3 /* BlowhardApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlowhardApp.swift; sourceTree = "<group>"; };
@@ -34,6 +35,7 @@
 			isa = PBXGroup;
 			children = (
 				69A3BB9BFFE0AB7B21340050 /* Assets.xcassets */,
+				3F3865F4BA889EEECF7ECD21 /* Blowhard.entitlements */,
 				945519FC3ED7F5925B849BA3 /* BlowhardApp.swift */,
 				5B775082FCA962561860FBA8 /* ComposeRootView.swift */,
 				271EC8A92CDBDF68B38C4B50 /* PrivacyInfo.xcprivacy */,
@@ -278,6 +280,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = Blowhard/Blowhard.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
@@ -314,6 +317,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = Blowhard/Blowhard.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
