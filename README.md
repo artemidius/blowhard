@@ -275,8 +275,8 @@ Generated API documentation is written to `build/dokka/html`, and the XML covera
 written to `build/reports/kover/report.xml`.
 
 GitHub Actions builds and tests the desktop JVM application on pinned Linux, Windows, and macOS
-runners. Separate jobs build, lint, install, and launch the Android application and compile, install,
-and launch the iOS application with shared simulator tests. The workflow uses read-only permissions
+runners. Separate jobs build and lint the Android application and compile, install, and launch the
+iOS application with shared simulator tests. The workflow uses read-only permissions
 and no provider credentials.
 
 On macOS, also verify the shared iOS target:
