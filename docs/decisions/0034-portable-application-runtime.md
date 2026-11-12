@@ -22,8 +22,10 @@ The runtime is created outside UI recomposition. Its suspending, idempotent shut
 before application run execution. Platform stores and provider clients remain host-owned and close after the portable
 runtime. No provider or fixture is selected implicitly by the composition module.
 
-Desktop now delegates portable assembly to this runtime while retaining ownership of JVM resources and synchronous
-process shutdown. Android and iOS can adopt the same runtime without depending on desktop adapters.
+Desktop delegates portable assembly to this runtime while retaining ownership of JVM resources and synchronous
+process shutdown. Android retains the runtime in an activity-independent `ViewModel`; iOS retains it for the exported
+Compose controller lifetime. Until each host installs native capabilities, both mobile graphs explicitly inject
+fail-closed implementations rather than a demo provider or an implicit fallback.
 
 ## Consequences
 

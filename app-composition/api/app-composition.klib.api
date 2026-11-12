@@ -77,4 +77,24 @@ final class io.github.artemidius.blowhard.composition/ApplicationRuntimeDependen
         final fun <get-reportSaver>(): io.github.artemidius.blowhard.ui.presentation/RunDiagnosticReportSaver // io.github.artemidius.blowhard.composition/ApplicationRuntimeDependencies.reportSaver.<get-reportSaver>|<get-reportSaver>(){}[0]
     final val scenarioSelection // io.github.artemidius.blowhard.composition/ApplicationRuntimeDependencies.scenarioSelection|{}scenarioSelection[0]
         final fun <get-scenarioSelection>(): io.github.artemidius.blowhard.ui.presentation/DemoScenarioSelection // io.github.artemidius.blowhard.composition/ApplicationRuntimeDependencies.scenarioSelection.<get-scenarioSelection>|<get-scenarioSelection>(){}[0]
+
+    final object Companion { // io.github.artemidius.blowhard.composition/ApplicationRuntimeDependencies.Companion|null[0]
+        final fun failClosed(io.github.artemidius.blowhard.core.api/ConnectionSettings): io.github.artemidius.blowhard.composition/ApplicationRuntimeDependencies // io.github.artemidius.blowhard.composition/ApplicationRuntimeDependencies.Companion.failClosed|failClosed(io.github.artemidius.blowhard.core.api.ConnectionSettings){}[0]
+    }
+}
+
+final class io.github.artemidius.blowhard.composition/FailClosedConnectionSettings : io.github.artemidius.blowhard.core.api/ConnectionSettings { // io.github.artemidius.blowhard.composition/FailClosedConnectionSettings|null[0]
+    constructor <init>() // io.github.artemidius.blowhard.composition/FailClosedConnectionSettings.<init>|<init>(){}[0]
+
+    final val state // io.github.artemidius.blowhard.composition/FailClosedConnectionSettings.state|{}state[0]
+        final fun <get-state>(): kotlinx.coroutines.flow/StateFlow<io.github.artemidius.blowhard.core.api/ConnectionSettingsState> // io.github.artemidius.blowhard.composition/FailClosedConnectionSettings.state.<get-state>|<get-state>(){}[0]
+
+    final suspend fun acknowledgeLiveDataDisclosure() // io.github.artemidius.blowhard.composition/FailClosedConnectionSettings.acknowledgeLiveDataDisclosure|acknowledgeLiveDataDisclosure(){}[0]
+    final suspend fun deleteCredential(): io.github.artemidius.blowhard.core.api/CredentialUpdateResult // io.github.artemidius.blowhard.composition/FailClosedConnectionSettings.deleteCredential|deleteCredential(){}[0]
+    final suspend fun refreshCredentialStatus() // io.github.artemidius.blowhard.composition/FailClosedConnectionSettings.refreshCredentialStatus|refreshCredentialStatus(){}[0]
+    final suspend fun replaceCredential(kotlin/String): io.github.artemidius.blowhard.core.api/CredentialUpdateResult // io.github.artemidius.blowhard.composition/FailClosedConnectionSettings.replaceCredential|replaceCredential(kotlin.String){}[0]
+    final suspend fun selectMode(io.github.artemidius.blowhard.core.api/GenerationMode): io.github.artemidius.blowhard.core.api/ModeSelectionResult // io.github.artemidius.blowhard.composition/FailClosedConnectionSettings.selectMode|selectMode(io.github.artemidius.blowhard.core.api.GenerationMode){}[0]
+    final suspend fun selectModel(kotlin/String): io.github.artemidius.blowhard.core.api/ModelSelectionResult // io.github.artemidius.blowhard.composition/FailClosedConnectionSettings.selectModel|selectModel(kotlin.String){}[0]
+    final suspend fun testConnection(): io.github.artemidius.blowhard.core.api/ConnectionTestResult // io.github.artemidius.blowhard.composition/FailClosedConnectionSettings.testConnection|testConnection(){}[0]
+    final suspend fun updateGenerationParameters(io.github.artemidius.blowhard.core.api/GenerationParameters) // io.github.artemidius.blowhard.composition/FailClosedConnectionSettings.updateGenerationParameters|updateGenerationParameters(io.github.artemidius.blowhard.core.api.GenerationParameters){}[0]
 }

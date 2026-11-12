@@ -1,4 +1,4 @@
-package io.github.artemidius.blowhard.android
+package io.github.artemidius.blowhard.composition
 
 import io.github.artemidius.blowhard.core.api.ConnectionSettings
 import io.github.artemidius.blowhard.core.api.ConnectionSettingsState
@@ -14,10 +14,11 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 
-/** Fail-closed connection boundary used until Android Keystore integration is installed. */
-internal class UnavailableAndroidConnectionSettings : ConnectionSettings {
-    private val mutableState =
-        MutableStateFlow(ConnectionSettingsState(credentialStatus = CredentialStatus.UNAVAILABLE))
+/** Connection boundary that remains inactive until a host installs native credential storage. */
+public class FailClosedConnectionSettings : ConnectionSettings {
+    private val mutableState = MutableStateFlow(
+        ConnectionSettingsState(credentialStatus = CredentialStatus.UNAVAILABLE),
+    )
     override val state: StateFlow<ConnectionSettingsState> = mutableState.asStateFlow()
 
     override suspend fun refreshCredentialStatus(): Unit = Unit

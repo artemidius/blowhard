@@ -9,7 +9,8 @@ creates an independently stored local copy.
 The project keeps portable contracts in `core:api` and `core:domain`, application policy in `core:application`, and
 provider, persistence, and platform details in adapters and platform composition roots. The portable
 `app-composition` module owns shared application services and presenters without selecting native implementations.
-Gradle rejects forbidden module dependencies.
+Desktop, Android, and iOS assemble that same runtime outside UI recomposition; incomplete mobile capabilities are
+explicitly fail-closed. Gradle rejects forbidden module dependencies.
 
 Read these representative files:
 
