@@ -254,6 +254,19 @@ public abstract interface class io/github/artemidius/blowhard/core/application/M
 	public abstract fun create-_5zNQ1E ()Ljava/lang/String;
 }
 
+public final class io/github/artemidius/blowhard/core/application/RegisteredTool {
+	public fun <init> (Lio/github/artemidius/blowhard/core/domain/ToolDefinition;Lio/github/artemidius/blowhard/core/domain/ToolExecutor;)V
+	public final fun component1 ()Lio/github/artemidius/blowhard/core/domain/ToolDefinition;
+	public final fun component2 ()Lio/github/artemidius/blowhard/core/domain/ToolExecutor;
+	public final fun copy (Lio/github/artemidius/blowhard/core/domain/ToolDefinition;Lio/github/artemidius/blowhard/core/domain/ToolExecutor;)Lio/github/artemidius/blowhard/core/application/RegisteredTool;
+	public static synthetic fun copy$default (Lio/github/artemidius/blowhard/core/application/RegisteredTool;Lio/github/artemidius/blowhard/core/domain/ToolDefinition;Lio/github/artemidius/blowhard/core/domain/ToolExecutor;ILjava/lang/Object;)Lio/github/artemidius/blowhard/core/application/RegisteredTool;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getDefinition ()Lio/github/artemidius/blowhard/core/domain/ToolDefinition;
+	public final fun getExecutor ()Lio/github/artemidius/blowhard/core/domain/ToolExecutor;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
 public final class io/github/artemidius/blowhard/core/application/RunCheckpointPolicy {
 	public fun <init> ()V
 	public fun <init> (IJ)V
@@ -300,5 +313,15 @@ public final class io/github/artemidius/blowhard/core/application/SequentialRunI
 public final class io/github/artemidius/blowhard/core/application/SystemRunClock : io/github/artemidius/blowhard/core/application/RunClock {
 	public static final field INSTANCE Lio/github/artemidius/blowhard/core/application/SystemRunClock;
 	public fun now-Yj_JHEY ()J
+}
+
+public final class io/github/artemidius/blowhard/core/application/ToolRegistry {
+	public static final field Companion Lio/github/artemidius/blowhard/core/application/ToolRegistry$Companion;
+	public final fun execute (Lio/github/artemidius/blowhard/core/domain/ToolCallProposal;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public final fun getDefinitions ()Ljava/util/List;
+}
+
+public final class io/github/artemidius/blowhard/core/application/ToolRegistry$Companion {
+	public final fun create (Ljava/util/List;)Lio/github/artemidius/blowhard/core/application/ToolRegistry;
 }
 
