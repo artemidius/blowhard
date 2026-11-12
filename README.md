@@ -20,6 +20,7 @@ If you are reviewing the repository, start with the
 - Kotlin Multiplatform and Compose Multiplatform.
 - Streaming conversations, document workflows, and controlled AI tool execution.
 - Small, focused modules with explicit contracts and platform-specific adapters.
+- One portable application runtime with host-injected native capabilities and deterministic shutdown.
 - Security-conscious design, automated testing, static analysis, and documented APIs.
 - Reproducible synthetic evaluation with deterministic machine- and human-readable reports.
 

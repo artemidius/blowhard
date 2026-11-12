@@ -1,0 +1,80 @@
+// Klib ABI Dump
+// Targets: [iosArm64, iosSimulatorArm64]
+// Rendering settings:
+// - Signature version: 2
+// - Show manifest properties: true
+// - Show declarations: true
+
+// Library unique name: <Blowhard:app-composition>
+final class io.github.artemidius.blowhard.composition/ApplicationRuntime { // io.github.artemidius.blowhard.composition/ApplicationRuntime|null[0]
+    final val connectionSettingsPresenter // io.github.artemidius.blowhard.composition/ApplicationRuntime.connectionSettingsPresenter|{}connectionSettingsPresenter[0]
+        final fun <get-connectionSettingsPresenter>(): io.github.artemidius.blowhard.ui.presentation/ConnectionSettingsPresenter // io.github.artemidius.blowhard.composition/ApplicationRuntime.connectionSettingsPresenter.<get-connectionSettingsPresenter>|<get-connectionSettingsPresenter>(){}[0]
+    final val conversationPresenter // io.github.artemidius.blowhard.composition/ApplicationRuntime.conversationPresenter|{}conversationPresenter[0]
+        final fun <get-conversationPresenter>(): io.github.artemidius.blowhard.ui.presentation/ConversationPresenter // io.github.artemidius.blowhard.composition/ApplicationRuntime.conversationPresenter.<get-conversationPresenter>|<get-conversationPresenter>(){}[0]
+    final val documentLibraryPresenter // io.github.artemidius.blowhard.composition/ApplicationRuntime.documentLibraryPresenter|{}documentLibraryPresenter[0]
+        final fun <get-documentLibraryPresenter>(): io.github.artemidius.blowhard.ui.presentation/DocumentLibraryPresenter // io.github.artemidius.blowhard.composition/ApplicationRuntime.documentLibraryPresenter.<get-documentLibraryPresenter>|<get-documentLibraryPresenter>(){}[0]
+    final val meetingNotePresenter // io.github.artemidius.blowhard.composition/ApplicationRuntime.meetingNotePresenter|{}meetingNotePresenter[0]
+        final fun <get-meetingNotePresenter>(): io.github.artemidius.blowhard.ui.presentation/MeetingNotePresenter // io.github.artemidius.blowhard.composition/ApplicationRuntime.meetingNotePresenter.<get-meetingNotePresenter>|<get-meetingNotePresenter>(){}[0]
+    final val runInspectorPresenter // io.github.artemidius.blowhard.composition/ApplicationRuntime.runInspectorPresenter|{}runInspectorPresenter[0]
+        final fun <get-runInspectorPresenter>(): io.github.artemidius.blowhard.ui.presentation/RunInspectorPresenter // io.github.artemidius.blowhard.composition/ApplicationRuntime.runInspectorPresenter.<get-runInspectorPresenter>|<get-runInspectorPresenter>(){}[0]
+
+    final suspend fun close() // io.github.artemidius.blowhard.composition/ApplicationRuntime.close|close(){}[0]
+
+    final object Companion { // io.github.artemidius.blowhard.composition/ApplicationRuntime.Companion|null[0]
+        final fun create(io.github.artemidius.blowhard.composition/ApplicationRuntimeDependencies, io.github.artemidius.blowhard.composition/ApplicationRuntimeConfiguration): io.github.artemidius.blowhard.composition/ApplicationRuntime // io.github.artemidius.blowhard.composition/ApplicationRuntime.Companion.create|create(io.github.artemidius.blowhard.composition.ApplicationRuntimeDependencies;io.github.artemidius.blowhard.composition.ApplicationRuntimeConfiguration){}[0]
+    }
+}
+
+final class io.github.artemidius.blowhard.composition/ApplicationRuntimeConfiguration { // io.github.artemidius.blowhard.composition/ApplicationRuntimeConfiguration|null[0]
+    constructor <init>(io.github.artemidius.blowhard.ui.presentation/ConversationUiState, io.github.artemidius.blowhard.core.application/RunIdFactory, io.github.artemidius.blowhard.core.application/RunClock = ..., kotlin.coroutines/CoroutineContext = ..., kotlin/Boolean = ...) // io.github.artemidius.blowhard.composition/ApplicationRuntimeConfiguration.<init>|<init>(io.github.artemidius.blowhard.ui.presentation.ConversationUiState;io.github.artemidius.blowhard.core.application.RunIdFactory;io.github.artemidius.blowhard.core.application.RunClock;kotlin.coroutines.CoroutineContext;kotlin.Boolean){}[0]
+
+    final val autoVerifyCredential // io.github.artemidius.blowhard.composition/ApplicationRuntimeConfiguration.autoVerifyCredential|{}autoVerifyCredential[0]
+        final fun <get-autoVerifyCredential>(): kotlin/Boolean // io.github.artemidius.blowhard.composition/ApplicationRuntimeConfiguration.autoVerifyCredential.<get-autoVerifyCredential>|<get-autoVerifyCredential>(){}[0]
+    final val clock // io.github.artemidius.blowhard.composition/ApplicationRuntimeConfiguration.clock|{}clock[0]
+        final fun <get-clock>(): io.github.artemidius.blowhard.core.application/RunClock // io.github.artemidius.blowhard.composition/ApplicationRuntimeConfiguration.clock.<get-clock>|<get-clock>(){}[0]
+    final val coroutineContext // io.github.artemidius.blowhard.composition/ApplicationRuntimeConfiguration.coroutineContext|{}coroutineContext[0]
+        final fun <get-coroutineContext>(): kotlin.coroutines/CoroutineContext // io.github.artemidius.blowhard.composition/ApplicationRuntimeConfiguration.coroutineContext.<get-coroutineContext>|<get-coroutineContext>(){}[0]
+    final val initialState // io.github.artemidius.blowhard.composition/ApplicationRuntimeConfiguration.initialState|{}initialState[0]
+        final fun <get-initialState>(): io.github.artemidius.blowhard.ui.presentation/ConversationUiState // io.github.artemidius.blowhard.composition/ApplicationRuntimeConfiguration.initialState.<get-initialState>|<get-initialState>(){}[0]
+    final val runIdFactory // io.github.artemidius.blowhard.composition/ApplicationRuntimeConfiguration.runIdFactory|{}runIdFactory[0]
+        final fun <get-runIdFactory>(): io.github.artemidius.blowhard.core.application/RunIdFactory // io.github.artemidius.blowhard.composition/ApplicationRuntimeConfiguration.runIdFactory.<get-runIdFactory>|<get-runIdFactory>(){}[0]
+
+    final fun component1(): io.github.artemidius.blowhard.ui.presentation/ConversationUiState // io.github.artemidius.blowhard.composition/ApplicationRuntimeConfiguration.component1|component1(){}[0]
+    final fun component2(): io.github.artemidius.blowhard.core.application/RunIdFactory // io.github.artemidius.blowhard.composition/ApplicationRuntimeConfiguration.component2|component2(){}[0]
+    final fun component3(): io.github.artemidius.blowhard.core.application/RunClock // io.github.artemidius.blowhard.composition/ApplicationRuntimeConfiguration.component3|component3(){}[0]
+    final fun component4(): kotlin.coroutines/CoroutineContext // io.github.artemidius.blowhard.composition/ApplicationRuntimeConfiguration.component4|component4(){}[0]
+    final fun component5(): kotlin/Boolean // io.github.artemidius.blowhard.composition/ApplicationRuntimeConfiguration.component5|component5(){}[0]
+    final fun copy(io.github.artemidius.blowhard.ui.presentation/ConversationUiState = ..., io.github.artemidius.blowhard.core.application/RunIdFactory = ..., io.github.artemidius.blowhard.core.application/RunClock = ..., kotlin.coroutines/CoroutineContext = ..., kotlin/Boolean = ...): io.github.artemidius.blowhard.composition/ApplicationRuntimeConfiguration // io.github.artemidius.blowhard.composition/ApplicationRuntimeConfiguration.copy|copy(io.github.artemidius.blowhard.ui.presentation.ConversationUiState;io.github.artemidius.blowhard.core.application.RunIdFactory;io.github.artemidius.blowhard.core.application.RunClock;kotlin.coroutines.CoroutineContext;kotlin.Boolean){}[0]
+    final fun equals(kotlin/Any?): kotlin/Boolean // io.github.artemidius.blowhard.composition/ApplicationRuntimeConfiguration.equals|equals(kotlin.Any?){}[0]
+    final fun hashCode(): kotlin/Int // io.github.artemidius.blowhard.composition/ApplicationRuntimeConfiguration.hashCode|hashCode(){}[0]
+    final fun toString(): kotlin/String // io.github.artemidius.blowhard.composition/ApplicationRuntimeConfiguration.toString|toString(){}[0]
+}
+
+final class io.github.artemidius.blowhard.composition/ApplicationRuntimeDependencies { // io.github.artemidius.blowhard.composition/ApplicationRuntimeDependencies|null[0]
+    constructor <init>(io.github.artemidius.blowhard.core.api/ConnectionSettings, io.github.artemidius.blowhard.core.domain/TextGenerationPort, io.github.artemidius.blowhard.ui.presentation/DemoScenarioSelection, io.github.artemidius.blowhard.ui.presentation/ClipboardWriter, io.github.artemidius.blowhard.ui.presentation/RunDiagnosticReportSaver, io.github.artemidius.blowhard.core.api/DocumentLibrary, io.github.artemidius.blowhard.core.api/DocumentOcr, io.github.artemidius.blowhard.ui.presentation/DocumentPicker, io.github.artemidius.blowhard.core.api/MeetingNotes, io.github.artemidius.blowhard.ui.presentation/MeetingNoteApprovalPort, io.github.artemidius.blowhard.core.domain/ConversationStore? = ..., io.github.artemidius.blowhard.core.domain/DocumentProcessingStore? = ...) // io.github.artemidius.blowhard.composition/ApplicationRuntimeDependencies.<init>|<init>(io.github.artemidius.blowhard.core.api.ConnectionSettings;io.github.artemidius.blowhard.core.domain.TextGenerationPort;io.github.artemidius.blowhard.ui.presentation.DemoScenarioSelection;io.github.artemidius.blowhard.ui.presentation.ClipboardWriter;io.github.artemidius.blowhard.ui.presentation.RunDiagnosticReportSaver;io.github.artemidius.blowhard.core.api.DocumentLibrary;io.github.artemidius.blowhard.core.api.DocumentOcr;io.github.artemidius.blowhard.ui.presentation.DocumentPicker;io.github.artemidius.blowhard.core.api.MeetingNotes;io.github.artemidius.blowhard.ui.presentation.MeetingNoteApprovalPort;io.github.artemidius.blowhard.core.domain.ConversationStore?;io.github.artemidius.blowhard.core.domain.DocumentProcessingStore?){}[0]
+
+    final val clipboardWriter // io.github.artemidius.blowhard.composition/ApplicationRuntimeDependencies.clipboardWriter|{}clipboardWriter[0]
+        final fun <get-clipboardWriter>(): io.github.artemidius.blowhard.ui.presentation/ClipboardWriter // io.github.artemidius.blowhard.composition/ApplicationRuntimeDependencies.clipboardWriter.<get-clipboardWriter>|<get-clipboardWriter>(){}[0]
+    final val connectionSettings // io.github.artemidius.blowhard.composition/ApplicationRuntimeDependencies.connectionSettings|{}connectionSettings[0]
+        final fun <get-connectionSettings>(): io.github.artemidius.blowhard.core.api/ConnectionSettings // io.github.artemidius.blowhard.composition/ApplicationRuntimeDependencies.connectionSettings.<get-connectionSettings>|<get-connectionSettings>(){}[0]
+    final val conversationStore // io.github.artemidius.blowhard.composition/ApplicationRuntimeDependencies.conversationStore|{}conversationStore[0]
+        final fun <get-conversationStore>(): io.github.artemidius.blowhard.core.domain/ConversationStore? // io.github.artemidius.blowhard.composition/ApplicationRuntimeDependencies.conversationStore.<get-conversationStore>|<get-conversationStore>(){}[0]
+    final val documentLibrary // io.github.artemidius.blowhard.composition/ApplicationRuntimeDependencies.documentLibrary|{}documentLibrary[0]
+        final fun <get-documentLibrary>(): io.github.artemidius.blowhard.core.api/DocumentLibrary // io.github.artemidius.blowhard.composition/ApplicationRuntimeDependencies.documentLibrary.<get-documentLibrary>|<get-documentLibrary>(){}[0]
+    final val documentOcr // io.github.artemidius.blowhard.composition/ApplicationRuntimeDependencies.documentOcr|{}documentOcr[0]
+        final fun <get-documentOcr>(): io.github.artemidius.blowhard.core.api/DocumentOcr // io.github.artemidius.blowhard.composition/ApplicationRuntimeDependencies.documentOcr.<get-documentOcr>|<get-documentOcr>(){}[0]
+    final val documentPicker // io.github.artemidius.blowhard.composition/ApplicationRuntimeDependencies.documentPicker|{}documentPicker[0]
+        final fun <get-documentPicker>(): io.github.artemidius.blowhard.ui.presentation/DocumentPicker // io.github.artemidius.blowhard.composition/ApplicationRuntimeDependencies.documentPicker.<get-documentPicker>|<get-documentPicker>(){}[0]
+    final val documentProcessingStore // io.github.artemidius.blowhard.composition/ApplicationRuntimeDependencies.documentProcessingStore|{}documentProcessingStore[0]
+        final fun <get-documentProcessingStore>(): io.github.artemidius.blowhard.core.domain/DocumentProcessingStore? // io.github.artemidius.blowhard.composition/ApplicationRuntimeDependencies.documentProcessingStore.<get-documentProcessingStore>|<get-documentProcessingStore>(){}[0]
+    final val generation // io.github.artemidius.blowhard.composition/ApplicationRuntimeDependencies.generation|{}generation[0]
+        final fun <get-generation>(): io.github.artemidius.blowhard.core.domain/TextGenerationPort // io.github.artemidius.blowhard.composition/ApplicationRuntimeDependencies.generation.<get-generation>|<get-generation>(){}[0]
+    final val meetingNoteApprovals // io.github.artemidius.blowhard.composition/ApplicationRuntimeDependencies.meetingNoteApprovals|{}meetingNoteApprovals[0]
+        final fun <get-meetingNoteApprovals>(): io.github.artemidius.blowhard.ui.presentation/MeetingNoteApprovalPort // io.github.artemidius.blowhard.composition/ApplicationRuntimeDependencies.meetingNoteApprovals.<get-meetingNoteApprovals>|<get-meetingNoteApprovals>(){}[0]
+    final val meetingNotes // io.github.artemidius.blowhard.composition/ApplicationRuntimeDependencies.meetingNotes|{}meetingNotes[0]
+        final fun <get-meetingNotes>(): io.github.artemidius.blowhard.core.api/MeetingNotes // io.github.artemidius.blowhard.composition/ApplicationRuntimeDependencies.meetingNotes.<get-meetingNotes>|<get-meetingNotes>(){}[0]
+    final val reportSaver // io.github.artemidius.blowhard.composition/ApplicationRuntimeDependencies.reportSaver|{}reportSaver[0]
+        final fun <get-reportSaver>(): io.github.artemidius.blowhard.ui.presentation/RunDiagnosticReportSaver // io.github.artemidius.blowhard.composition/ApplicationRuntimeDependencies.reportSaver.<get-reportSaver>|<get-reportSaver>(){}[0]
+    final val scenarioSelection // io.github.artemidius.blowhard.composition/ApplicationRuntimeDependencies.scenarioSelection|{}scenarioSelection[0]
+        final fun <get-scenarioSelection>(): io.github.artemidius.blowhard.ui.presentation/DemoScenarioSelection // io.github.artemidius.blowhard.composition/ApplicationRuntimeDependencies.scenarioSelection.<get-scenarioSelection>|<get-scenarioSelection>(){}[0]
+}
