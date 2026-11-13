@@ -22,6 +22,9 @@ import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.semantics.LiveRegionMode
+import androidx.compose.ui.semantics.liveRegion
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -136,7 +139,10 @@ internal fun DocumentLibraryNoticePanel(
     modifier: Modifier = Modifier,
 ) {
     Card(
-        modifier = modifier.widthIn(max = 680.dp).fillMaxWidth(),
+        modifier = modifier
+            .widthIn(max = 680.dp)
+            .fillMaxWidth()
+            .semantics { liveRegion = LiveRegionMode.Polite },
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.secondaryContainer),
     ) {
         Row(

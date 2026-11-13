@@ -23,6 +23,10 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.semantics.LiveRegionMode
+import androidx.compose.ui.semantics.heading
+import androidx.compose.ui.semantics.liveRegion
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import io.github.artemidius.blowhard.core.api.ConnectionStatus
@@ -84,7 +88,12 @@ private fun SettingsHeader(state: ConnectionSettingsUiState, onBack: (() -> Unit
                 state.settings.connectionStatus == ConnectionStatus.TESTING -> "Verifying your connection"
                 else -> "Connection needs attention"
             }
-            Text(title, style = MaterialTheme.typography.headlineSmall, fontWeight = FontWeight.Bold)
+            Text(
+                title,
+                modifier = Modifier.semantics { heading() },
+                style = MaterialTheme.typography.headlineSmall,
+                fontWeight = FontWeight.Bold,
+            )
             Text(
                 when (state.settings.credentialStatus) {
                     CredentialStatus.CONFIGURED ->
@@ -107,6 +116,7 @@ private fun SettingsNotice(message: String, onAction: (ConnectionSettingsAction)
     Row(
         modifier = Modifier
             .fillMaxWidth()
+            .semantics { liveRegion = LiveRegionMode.Polite }
             .background(MaterialTheme.colorScheme.secondaryContainer, MaterialTheme.shapes.medium)
             .padding(horizontal = 16.dp, vertical = 10.dp),
         verticalAlignment = Alignment.CenterVertically,

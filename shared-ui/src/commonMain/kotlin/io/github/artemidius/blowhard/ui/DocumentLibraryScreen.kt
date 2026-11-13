@@ -18,6 +18,8 @@ import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.semantics.heading
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import io.github.artemidius.blowhard.ui.presentation.DocumentLibraryAction
@@ -106,6 +108,7 @@ private fun DocumentLibraryTitle(state: DocumentLibraryUiState, modifier: Modifi
     Column(modifier) {
         Text(
             state.selectedDocument?.displayName ?: "Local documents",
+            modifier = Modifier.semantics { heading() },
             style = MaterialTheme.typography.titleLarge,
             fontWeight = FontWeight.SemiBold,
         )
