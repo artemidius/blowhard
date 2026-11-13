@@ -42,6 +42,7 @@ import androidx.compose.ui.input.key.key
 import androidx.compose.ui.input.key.onPreviewKeyEvent
 import androidx.compose.ui.input.key.type
 import androidx.compose.ui.semantics.LiveRegionMode
+import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.liveRegion
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
@@ -188,6 +189,7 @@ private fun ComposerInput(
         onValueChange = { onAction(ConversationAction.ComposerChanged(it)) },
         modifier = Modifier
             .fillMaxWidth()
+            .semantics { contentDescription = "Message" }
             .focusRequester(focusRequester)
             .onPreviewKeyEvent { event ->
                 val sendShortcut = event.type == KeyEventType.KeyDown &&
@@ -276,9 +278,12 @@ private fun ComposerActions(
         if (state.canStop) {
             OutlinedButton(onClick = { onAction(ConversationAction.Stop) }) { Text("Stop") }
         } else {
-            Button(onClick = {
-                onAction(ConversationAction.Send)
-            }, enabled = state.canSend, shape = MaterialTheme.shapes.medium) {
+            Button(
+                onClick = { onAction(ConversationAction.Send) },
+                modifier = Modifier.semantics { contentDescription = "Send message" },
+                enabled = state.canSend,
+                shape = MaterialTheme.shapes.medium,
+            ) {
                 Text("Send ↑")
             }
         }
