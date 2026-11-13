@@ -46,7 +46,7 @@ internal class IosDocumentPicker : DocumentPicker {
                 forOpeningContentTypes = listOf(UTTypePDF, UTTypePNG, UTTypeJPEG),
                 asCopy = true,
             )
-            picker.delegate = this@IosDocumentPicker
+            picker.delegate = delegate
             activePresenter.presentViewController(picker, animated = true, completion = null)
         }
     }
