@@ -52,6 +52,7 @@ public final class io/github/artemidius/blowhard/composition/ApplicationRuntimeD
 	public final fun getMeetingNotes ()Lio/github/artemidius/blowhard/core/api/MeetingNotes;
 	public final fun getReportSaver ()Lio/github/artemidius/blowhard/ui/presentation/RunDiagnosticReportSaver;
 	public final fun getScenarioSelection ()Lio/github/artemidius/blowhard/ui/presentation/DemoScenarioSelection;
+	public final fun withDocuments (Lio/github/artemidius/blowhard/core/api/DocumentLibrary;Lio/github/artemidius/blowhard/core/api/DocumentOcr;Lio/github/artemidius/blowhard/ui/presentation/DocumentPicker;Lio/github/artemidius/blowhard/core/domain/DocumentProcessingStore;)Lio/github/artemidius/blowhard/composition/ApplicationRuntimeDependencies;
 }
 
 public final class io/github/artemidius/blowhard/composition/ApplicationRuntimeDependencies$Companion {
