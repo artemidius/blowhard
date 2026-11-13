@@ -46,7 +46,10 @@ internal class IosApplicationSession(
 }
 
 @Suppress("TooGenericExceptionCaught")
-internal suspend fun createIosApplicationSession(documentPicker: IosDocumentPicker): IosApplicationSession {
+internal suspend fun createIosApplicationSession(
+    documentPicker: IosDocumentPicker,
+    reportSaver: IosRunDiagnosticReportSaver,
+): IosApplicationSession {
     val providers = createProviderComposition()
     var history: ConversationHistorySession? = null
     var documents: IosDocumentSession? = null
@@ -59,7 +62,7 @@ internal suspend fun createIosApplicationSession(documentPicker: IosDocumentPick
             processor = providers.documentOcr,
             meetingNoteGeneration = providers.meetingNoteGeneration,
         )
-        val dependencies = createDependencies(providers, openedHistory, documents, documentPicker)
+        val dependencies = createDependencies(providers, openedHistory, documents, documentPicker, reportSaver)
         val runtime = ApplicationRuntime.create(
             dependencies = dependencies,
             configuration = ApplicationRuntimeConfiguration(
@@ -88,13 +91,14 @@ private fun createDependencies(
     history: ConversationHistorySession,
     documents: IosDocumentSession?,
     documentPicker: IosDocumentPicker,
+    reportSaver: IosRunDiagnosticReportSaver,
 ): ApplicationRuntimeDependencies {
     val base = ApplicationRuntimeDependencies.conversationOnly(
         providers.connectionSettings,
         providers.generation,
         history.conversationStore,
     )
-    return documents?.let {
+    val configured = documents?.let {
         val approvals = LocalMeetingNoteApprovalPort.create(
             store = it.meetingNoteStore,
             now = ::currentApprovalTimeMillis,
@@ -103,6 +107,7 @@ private fun createDependencies(
         base.withDocuments(it.library, it.ocr, documentPicker, it.processingStore)
             .withMeetingNotes(it.meetingNotes, approvals)
     } ?: base
+    return configured.withReportSaver(reportSaver)
 }
 
 private fun currentApprovalTimeMillis(): Long = (NSDate().timeIntervalSince1970() * MILLISECONDS_PER_SECOND).toLong()
