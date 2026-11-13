@@ -17,12 +17,12 @@ import platform.darwin.NSObject
 import kotlin.coroutines.resume
 
 /** UIKit document picker that keeps native URLs outside shared presentation state. */
-internal class IosDocumentPicker :
-    NSObject(),
-    UIDocumentPickerDelegateProtocol,
-    DocumentPicker {
+internal class IosDocumentPicker : DocumentPicker {
     private var presenter: UIViewController? = null
     private var pending: CancellableContinuation<DocumentImportSource?>? = null
+    private val delegate = IosDocumentPickerDelegate { url ->
+        complete(url?.let(::IosDocumentImportSource))
+    }
 
     fun bind(viewController: UIViewController) {
         presenter = viewController
@@ -51,21 +51,25 @@ internal class IosDocumentPicker :
         }
     }
 
+    private fun complete(source: DocumentImportSource?) {
+        val continuation = pending ?: return
+        pending = null
+        if (continuation.isActive) continuation.resume(source)
+    }
+}
+
+private class IosDocumentPickerDelegate(private val complete: (NSURL?) -> Unit) :
+    NSObject(),
+    UIDocumentPickerDelegateProtocol {
     override fun documentPickerWasCancelled(controller: UIDocumentPickerViewController) {
         complete(null)
     }
 
     override fun documentPicker(controller: UIDocumentPickerViewController, didPickDocumentAtURL: NSURL) {
-        complete(IosDocumentImportSource(didPickDocumentAtURL))
+        complete(didPickDocumentAtURL)
     }
 
     override fun documentPicker(controller: UIDocumentPickerViewController, didPickDocumentsAtURLs: List<*>) {
-        complete((didPickDocumentsAtURLs.firstOrNull() as? NSURL)?.let(::IosDocumentImportSource))
-    }
-
-    private fun complete(source: DocumentImportSource?) {
-        val continuation = pending ?: return
-        pending = null
-        if (continuation.isActive) continuation.resume(source)
+        complete(didPickDocumentsAtURLs.firstOrNull() as? NSURL)
     }
 }
