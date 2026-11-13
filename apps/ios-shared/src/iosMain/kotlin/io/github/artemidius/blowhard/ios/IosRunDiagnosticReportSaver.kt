@@ -10,14 +10,16 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlinx.coroutines.withContext
 import platform.Foundation.NSFileManager
-import platform.Foundation.NSObject
+import platform.Foundation.NSString
 import platform.Foundation.NSURL
 import platform.Foundation.NSUTF8StringEncoding
+import platform.Foundation.create
 import platform.Foundation.temporaryDirectory
 import platform.Foundation.writeToURL
 import platform.UIKit.UIDocumentPickerDelegateProtocol
 import platform.UIKit.UIDocumentPickerViewController
 import platform.UIKit.UIViewController
+import platform.darwin.NSObject
 import kotlin.coroutines.resume
 
 /** UIKit exporter for bounded, sanitized diagnostic JSON files. */
@@ -114,7 +116,7 @@ private fun writeTemporaryReport(report: RunDiagnosticReport): NSURL? = try {
     val destination = NSFileManager.defaultManager.temporaryDirectory
         .URLByAppendingPathComponent(report.suggestedFileName)
         ?: return null
-    val written = report.content.writeToURL(
+    val written = NSString.create(string = report.content).writeToURL(
         destination,
         atomically = true,
         encoding = NSUTF8StringEncoding,
