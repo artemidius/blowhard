@@ -55,6 +55,25 @@ public class ApplicationRuntimeDependencies(
         documentProcessingStore = processingStore,
     )
 
+    /** Returns an equivalent graph with generation and explicit approval for meeting notes. */
+    public fun withMeetingNotes(
+        notes: MeetingNotes,
+        approvals: MeetingNoteApprovalPort,
+    ): ApplicationRuntimeDependencies = ApplicationRuntimeDependencies(
+        connectionSettings = connectionSettings,
+        generation = generation,
+        scenarioSelection = scenarioSelection,
+        clipboardWriter = clipboardWriter,
+        reportSaver = reportSaver,
+        documentLibrary = documentLibrary,
+        documentOcr = documentOcr,
+        documentPicker = documentPicker,
+        meetingNotes = notes,
+        meetingNoteApprovals = approvals,
+        conversationStore = conversationStore,
+        documentProcessingStore = documentProcessingStore,
+    )
+
     /** Creates an explicit inactive graph for hosts that do not yet provide native capabilities. */
     public companion object {
         /** Uses [connectionSettings] and rejects every unavailable platform or provider operation. */
