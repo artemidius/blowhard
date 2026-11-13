@@ -18,3 +18,12 @@ public final class io/github/artemidius/blowhard/adapters/persistence/DesktopMee
 	public final fun open (Ljava/lang/String;)Lio/github/artemidius/blowhard/core/domain/MeetingNoteStore;
 }
 
+public final class io/github/artemidius/blowhard/adapters/persistence/LocalDatabaseDeletionResult : java/lang/Enum {
+	public static final field DELETED Lio/github/artemidius/blowhard/adapters/persistence/LocalDatabaseDeletionResult;
+	public static final field FAILED Lio/github/artemidius/blowhard/adapters/persistence/LocalDatabaseDeletionResult;
+	public static final field NOT_FOUND Lio/github/artemidius/blowhard/adapters/persistence/LocalDatabaseDeletionResult;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public static fun valueOf (Ljava/lang/String;)Lio/github/artemidius/blowhard/adapters/persistence/LocalDatabaseDeletionResult;
+	public static fun values ()[Lio/github/artemidius/blowhard/adapters/persistence/LocalDatabaseDeletionResult;
+}
+
