@@ -1,4 +1,7 @@
-@file:OptIn(kotlinx.cinterop.ExperimentalForeignApi::class)
+@file:OptIn(
+    kotlinx.cinterop.BetaInteropApi::class,
+    kotlinx.cinterop.ExperimentalForeignApi::class,
+)
 
 package io.github.artemidius.blowhard.ios
 
@@ -46,7 +49,7 @@ internal class IosRunDiagnosticReportSaver private constructor(
     }
 
     override suspend fun save(report: RunDiagnosticReport): RunDiagnosticReportSaveResult =
-        withContext(Dispatchers.Main) {
+        withContext(Dispatchers.Main.immediate) {
             val activePresenter = presenter ?: return@withContext RunDiagnosticReportSaveResult.UNAVAILABLE
             if (pending != null) return@withContext RunDiagnosticReportSaveResult.UNAVAILABLE
             val temporary = writeTemporary(report) ?: return@withContext RunDiagnosticReportSaveResult.UNAVAILABLE
