@@ -19,6 +19,7 @@ import io.github.artemidius.blowhard.core.application.DefaultConnectionSettings
 import io.github.artemidius.blowhard.core.application.SequentialRunIdFactory
 import platform.Foundation.NSDate
 import platform.Foundation.NSUUID
+import platform.Foundation.timeIntervalSince1970
 
 /** Owns one iOS runtime together with the native resources supplied to it. */
 internal class IosApplicationSession(
@@ -104,7 +105,7 @@ private fun createDependencies(
     } ?: base
 }
 
-private fun currentApprovalTimeMillis(): Long = (NSDate().timeIntervalSince1970 * MILLISECONDS_PER_SECOND).toLong()
+private fun currentApprovalTimeMillis(): Long = (NSDate().timeIntervalSince1970() * MILLISECONDS_PER_SECOND).toLong()
 
 internal class IosProviderComposition(
     val connectionSettings: DefaultConnectionSettings,
