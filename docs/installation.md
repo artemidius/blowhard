@@ -43,11 +43,40 @@ system security controls to install an untrusted package.
 Exact filenames are recorded in each manifest. Windows and Linux intentionally fail
 closed for live mode because their secure credential adapters have not been implemented.
 
-On macOS, enter a Mistral API key when prompted. Blowhard stores it in Keychain and verifies the
-connection through the model catalog. A failed check keeps the conversation inactive; retry the
-check or replace the key in settings. Choose a verified model before sending a message. Windows
-and Linux currently show that secure credential storage is unavailable, so the conversation stays
-inactive on those hosts.
+## Mobile development builds
+
+The repository builds Android and iOS development applications for architecture review. It does
+not publish Play Store or TestFlight packages, and it does not configure production mobile signing.
+
+Install Android on a connected API 26 or newer emulator or development device:
+
+```shell
+./gradlew :apps:android:installDebug
+```
+
+Open `apps/ios/Blowhard.xcodeproj` in Xcode and select an iOS 15 or newer simulator. Command-line
+simulator builds can disable signing explicitly:
+
+```shell
+xcodebuild \
+  -project apps/ios/Blowhard.xcodeproj \
+  -scheme Blowhard \
+  -configuration Debug \
+  -sdk iphonesimulator \
+  -destination 'generic/platform=iOS Simulator' \
+  CODE_SIGNING_ALLOWED=NO \
+  build
+```
+
+These builds use native Android Keystore or iOS Keychain credential storage and app-private local
+databases. Use the in-app **Erase local data** action before removing a development build when
+you want Blowhard-owned records and the saved credential erased together.
+
+On macOS, Android, or iOS, enter a Mistral API key when prompted. Blowhard stores it in the native
+credential vault and verifies the connection through the model catalog. A failed check keeps the
+conversation inactive; retry the check or replace the key in settings. Choose a verified model
+before sending a message. Windows and Linux currently show that secure credential storage is
+unavailable, so the conversation stays inactive on those hosts.
 
 ## Local data and removal
 
