@@ -18,9 +18,10 @@ import kotlinx.coroutines.runBlocking
 /** Retains and safely replaces application-owned services for the iOS host surface. */
 internal class IosApplicationRuntime {
     private val closeScope = CoroutineScope(SupervisorJob() + Dispatchers.Default)
+    val documentPicker = IosDocumentPicker()
     private val sessionOwner = ReplaceableApplicationSession(
-        initialSession = runBlocking { createIosApplicationSession() },
-        factory = ApplicationSessionFactory { createIosApplicationSession() },
+        initialSession = runBlocking { createIosApplicationSession(documentPicker) },
+        factory = ApplicationSessionFactory { createIosApplicationSession(documentPicker) },
         closer = ApplicationSessionCloser(IosApplicationSession::close),
         eraser = IosLocalDataEraser(
             credentialStore = IosCredentialStores.mistralApiKey(),

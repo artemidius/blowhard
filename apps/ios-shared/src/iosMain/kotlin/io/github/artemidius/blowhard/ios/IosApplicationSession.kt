@@ -17,6 +17,7 @@ import platform.Foundation.NSUUID
 internal class IosApplicationSession(
     val runtime: ApplicationRuntime,
     private val history: ConversationHistorySession,
+    private val documents: IosDocumentSession?,
     private val providers: IosProviderComposition,
 ) {
     suspend fun close() {
@@ -26,42 +27,65 @@ internal class IosApplicationSession(
             try {
                 history.close()
             } finally {
-                providers.close()
+                try {
+                    documents?.close()
+                } finally {
+                    providers.close()
+                }
             }
         }
     }
 }
 
 @Suppress("TooGenericExceptionCaught")
-internal suspend fun createIosApplicationSession(): IosApplicationSession {
+internal suspend fun createIosApplicationSession(documentPicker: IosDocumentPicker): IosApplicationSession {
     val providers = createProviderComposition()
     var history: ConversationHistorySession? = null
+    var documents: IosDocumentSession? = null
     return try {
         val openedHistory = ConversationHistorySession.open {
             NativeConversationStores.open(CONVERSATION_DATABASE_NAME)
         }
         history = openedHistory
+        documents = IosDocumentSession.openOrNull()
+        val dependencies = createDependencies(providers, openedHistory, documents, documentPicker)
         val runtime = ApplicationRuntime.create(
-            dependencies = ApplicationRuntimeDependencies.conversationOnly(
-                providers.connectionSettings,
-                providers.generation,
-                openedHistory.conversationStore,
-            ),
+            dependencies = dependencies,
             configuration = ApplicationRuntimeConfiguration(
                 initialState = openedHistory.initialState,
                 runIdFactory = SequentialRunIdFactory("ios-${NSUUID().UUIDString}"),
                 autoVerifyCredential = true,
             ),
         )
-        IosApplicationSession(runtime, openedHistory, providers)
+        IosApplicationSession(runtime, openedHistory, documents, providers)
     } catch (failure: RuntimeException) {
         try {
             history?.close()
         } finally {
-            providers.close()
+            try {
+                documents?.close()
+            } finally {
+                providers.close()
+            }
         }
         throw failure
     }
+}
+
+private fun createDependencies(
+    providers: IosProviderComposition,
+    history: ConversationHistorySession,
+    documents: IosDocumentSession?,
+    documentPicker: IosDocumentPicker,
+): ApplicationRuntimeDependencies {
+    val base = ApplicationRuntimeDependencies.conversationOnly(
+        providers.connectionSettings,
+        providers.generation,
+        history.conversationStore,
+    )
+    return documents?.let {
+        base.withDocuments(it.library, it.ocr, documentPicker, it.processingStore)
+    } ?: base
 }
 
 internal class IosProviderComposition(

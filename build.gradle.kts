@@ -204,6 +204,7 @@ private val allowedProjectDependencies = mapOf(
     ),
     ":apps:ios-shared" to setOf(
         ":app-composition",
+        ":adapters:documents",
         ":adapters:mistral",
         ":adapters:mobile-platform",
         ":adapters:persistence",
