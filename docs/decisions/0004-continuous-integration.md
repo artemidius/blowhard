@@ -20,10 +20,12 @@ Run one credential-free GitHub Actions workflow for pull requests, `main` pushes
 - `Quality` runs the complete local gate on Ubuntu, including dependency verification, coverage,
   API compatibility, documentation generation, and Gitleaks history/working-tree scans.
 - `Desktop / Linux`, `Desktop / Windows`, and `Desktop / macOS` build the JVM application and run
-  the three core modules' desktop tests on fixed runner images.
-- `Android shared` compiles shared Android code and runs Android host tests on Ubuntu.
+  portable and desktop tests on fixed runner images, builds a native package, and launch-checks it.
+- `Android` compiles and lints the application, runs portable and host tests, then uses an emulator
+  to run native integration/UI tests, reinstall, cold-launch, and record bounded startup evidence.
 - `Apple shared` validates the iOS application ABI, compiles iOS device and ARM64 simulator code,
-  and runs core tests in the iOS simulator environment on macOS.
+  runs native simulator tests, builds the Xcode application without signing, verifies data
+  protection, and installs and launches it in an iPhone simulator.
 
 Use `ubuntu-24.04`, `windows-2025`, and `macos-15` instead of mutable `*-latest` labels. Set JDK 21
 explicitly. Pin every action to a full commit SHA with the release tag retained in a comment for
@@ -40,6 +42,7 @@ retained for seven days; no environment or provider credentials are uploaded.
   the default branch.
 - A runner-image or toolchain incompatibility fails visibly; it is not converted into a skipped
   success.
-- Native desktop installers, GUI launch tests, and signing remain part of the packaging increment.
+- Desktop package evidence and credential-free mobile build/install/launch evidence are produced on
+  every change; distribution signing remains a separately disclosed concern.
 - Action and runner-image updates require an explicit reviewed change rather than silently following
   a mutable major tag or `latest` image.
