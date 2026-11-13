@@ -17,6 +17,7 @@ public fun BlowhardViewController(): UIViewController {
         DisposableEffect(owner) {
             onDispose {
                 owner.documentPicker.unbind(controller)
+                owner.diagnosticReportSaver.unbind(controller)
                 owner.close()
             }
         }
@@ -32,5 +33,6 @@ public fun BlowhardViewController(): UIViewController {
         )
     }
     owner.documentPicker.bind(controller)
+    owner.diagnosticReportSaver.bind(controller)
     return controller
 }
