@@ -11,9 +11,7 @@ import io.github.artemidius.blowhard.core.application.DefaultDocumentOcr
 import io.github.artemidius.blowhard.core.application.DocumentIdFactory
 import io.github.artemidius.blowhard.core.application.DocumentImportClock
 import io.github.artemidius.blowhard.core.application.DocumentProcessingClock
-import io.github.artemidius.blowhard.core.domain.DocumentOcrFailureKind
 import io.github.artemidius.blowhard.core.domain.DocumentOcrPort
-import io.github.artemidius.blowhard.core.domain.DocumentOcrPortResult
 import io.github.artemidius.blowhard.core.domain.DocumentProcessingStore
 import io.github.artemidius.blowhard.core.domain.DocumentStore
 import platform.Foundation.NSDate
@@ -36,7 +34,10 @@ internal class IosDocumentSession private constructor(
     }
 
     companion object {
-        suspend fun openOrNull(databaseName: String = CONVERSATION_DATABASE_NAME): IosDocumentSession? {
+        suspend fun openOrNull(
+            databaseName: String = CONVERSATION_DATABASE_NAME,
+            processor: DocumentOcrPort,
+        ): IosDocumentSession? {
             var documentStore: DocumentStore? = null
             var processingStore: DocumentProcessingStore? = null
             return try {
@@ -53,7 +54,7 @@ internal class IosDocumentSession private constructor(
                     ),
                     ocr = DefaultDocumentOcr(
                         store = processing,
-                        processor = UnavailableIosDocumentOcr,
+                        processor = processor,
                         clock = DocumentProcessingClock(::currentTimeMillis),
                     ),
                     processingStore = processing,
@@ -66,11 +67,6 @@ internal class IosDocumentSession private constructor(
             }
         }
     }
-}
-
-private object UnavailableIosDocumentOcr : DocumentOcrPort {
-    override suspend fun process(request: io.github.artemidius.blowhard.core.domain.DocumentOcrRequest) =
-        DocumentOcrPortResult.Failed(DocumentOcrFailureKind.REMOTE_FAILURE)
 }
 
 private fun currentTimeMillis(): Long = (NSDate().timeIntervalSince1970() * MILLISECONDS_PER_SECOND).toLong()
