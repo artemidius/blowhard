@@ -1,6 +1,7 @@
 package io.github.artemidius.blowhard.android
 
 import android.content.Context
+import io.github.artemidius.blowhard.adapters.mistral.MistralDocumentOcrPort
 import io.github.artemidius.blowhard.adapters.mistral.MistralLiveTextGenerationPort
 import io.github.artemidius.blowhard.adapters.mistral.MistralModelCatalog
 import io.github.artemidius.blowhard.adapters.mistral.asMistralCredentialProvider
@@ -51,7 +52,7 @@ internal suspend fun createAndroidApplicationSession(
     return try {
         val openedHistory = openHistory(context)
         history = openedHistory
-        documents = AndroidDocumentSession.openOrNull(context)
+        documents = AndroidDocumentSession.openOrNull(context, processor = providers.documentOcr)
         val dependencies = createDependencies(providers, openedHistory, documents, documentPicker)
         val runtime = createRuntime(dependencies, openedHistory)
         AndroidApplicationSession(runtime, openedHistory, documents, providers)
@@ -114,15 +115,23 @@ private suspend fun closePartialSession(
 internal class AndroidProviderComposition(
     val connectionSettings: DefaultConnectionSettings,
     val generation: MistralLiveTextGenerationPort,
+    val documentOcr: MistralDocumentOcrPort,
     private val modelCatalog: MistralModelCatalog,
 ) {
-    fun close(): Unit = modelCatalog.close()
+    fun close() {
+        try {
+            documentOcr.close()
+        } finally {
+            modelCatalog.close()
+        }
+    }
 }
 
 private fun createProviderComposition(context: Context): AndroidProviderComposition {
     val credentialStore = AndroidCredentialStores.mistralApiKey(context)
     val credentialProvider = credentialStore.asMistralCredentialProvider()
     val modelCatalog = MistralModelCatalog.create(credentialProvider)
+    val documentOcr = MistralDocumentOcrPort.create(credentialProvider)
     val connectionSettings = DefaultConnectionSettings(
         credentials = credentialStore,
         catalog = modelCatalog,
@@ -131,6 +140,7 @@ private fun createProviderComposition(context: Context): AndroidProviderComposit
     return AndroidProviderComposition(
         connectionSettings = connectionSettings,
         generation = MistralLiveTextGenerationPort.create(credentialProvider),
+        documentOcr = documentOcr,
         modelCatalog = modelCatalog,
     )
 }

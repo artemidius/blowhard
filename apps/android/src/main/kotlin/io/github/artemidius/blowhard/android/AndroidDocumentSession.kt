@@ -12,9 +12,7 @@ import io.github.artemidius.blowhard.core.application.DefaultDocumentOcr
 import io.github.artemidius.blowhard.core.application.DocumentIdFactory
 import io.github.artemidius.blowhard.core.application.DocumentImportClock
 import io.github.artemidius.blowhard.core.application.DocumentProcessingClock
-import io.github.artemidius.blowhard.core.domain.DocumentOcrFailureKind
 import io.github.artemidius.blowhard.core.domain.DocumentOcrPort
-import io.github.artemidius.blowhard.core.domain.DocumentOcrPortResult
 import io.github.artemidius.blowhard.core.domain.DocumentProcessingStore
 import io.github.artemidius.blowhard.core.domain.DocumentStore
 import java.util.UUID
@@ -38,6 +36,7 @@ internal class AndroidDocumentSession private constructor(
         suspend fun openOrNull(
             context: Context,
             databaseName: String = CONVERSATION_DATABASE_NAME,
+            processor: DocumentOcrPort,
         ): AndroidDocumentSession? {
             var documentStore: DocumentStore? = null
             var processingStore: DocumentProcessingStore? = null
@@ -55,7 +54,7 @@ internal class AndroidDocumentSession private constructor(
                     ),
                     ocr = DefaultDocumentOcr(
                         store = processing,
-                        processor = UnavailableAndroidDocumentOcr,
+                        processor = processor,
                         clock = DocumentProcessingClock(System::currentTimeMillis),
                     ),
                     processingStore = processing,
@@ -68,11 +67,6 @@ internal class AndroidDocumentSession private constructor(
             }
         }
     }
-}
-
-private object UnavailableAndroidDocumentOcr : DocumentOcrPort {
-    override suspend fun process(request: io.github.artemidius.blowhard.core.domain.DocumentOcrRequest) =
-        DocumentOcrPortResult.Failed(DocumentOcrFailureKind.REMOTE_FAILURE)
 }
 
 private suspend fun DocumentProcessingStore?.closeSafely() {
