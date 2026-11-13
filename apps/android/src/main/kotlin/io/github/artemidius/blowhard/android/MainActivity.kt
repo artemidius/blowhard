@@ -5,6 +5,8 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import io.github.artemidius.blowhard.ui.BlowhardMobileApp
 
 /** Android host for the shared Blowhard presentation layer. */
@@ -15,13 +17,15 @@ public class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            val runtime = applicationRuntime.runtime
+            val session by applicationRuntime.session.collectAsState()
+            val runtime = session.runtime
             BlowhardMobileApp(
                 conversationPresenter = runtime.conversationPresenter,
                 connectionSettingsPresenter = runtime.connectionSettingsPresenter,
                 runInspectorPresenter = runtime.runInspectorPresenter,
                 documentLibraryPresenter = runtime.documentLibraryPresenter,
                 meetingNotePresenter = runtime.meetingNotePresenter,
+                localDataResetPresenter = applicationRuntime.localDataResetPresenter,
             )
         }
     }
