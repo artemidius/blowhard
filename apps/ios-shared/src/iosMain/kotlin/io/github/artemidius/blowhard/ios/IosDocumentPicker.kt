@@ -6,7 +6,6 @@ import kotlinx.coroutines.CancellableContinuation
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlinx.coroutines.withContext
-import platform.Foundation.NSObject
 import platform.Foundation.NSURL
 import platform.UIKit.UIDocumentPickerDelegateProtocol
 import platform.UIKit.UIDocumentPickerViewController
@@ -14,6 +13,7 @@ import platform.UIKit.UIViewController
 import platform.UniformTypeIdentifiers.UTTypeJPEG
 import platform.UniformTypeIdentifiers.UTTypePDF
 import platform.UniformTypeIdentifiers.UTTypePNG
+import platform.darwin.NSObject
 import kotlin.coroutines.resume
 
 /** UIKit document picker that keeps native URLs outside shared presentation state. */

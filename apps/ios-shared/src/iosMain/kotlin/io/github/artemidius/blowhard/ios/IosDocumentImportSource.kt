@@ -26,7 +26,7 @@ internal class IosDocumentImportSource(private val url: NSURL) : DocumentImportS
         if (declaredSizeBytes?.let { it > maximumBytes } == true) return@withContext DocumentReadResult.TooLarge
         val scoped = url.startAccessingSecurityScopedResource()
         try {
-            val data = NSData.dataWithContentsOfURL(url) ?: return@withContext DocumentReadResult.Unavailable
+            val data = NSData(contentsOfURL = url) ?: return@withContext DocumentReadResult.Unavailable
             if (data.length > maximumBytes.toULong()) return@withContext DocumentReadResult.TooLarge
             DocumentReadResult.Content(data.copyBytes())
         } catch (cancelled: CancellationException) {

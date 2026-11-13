@@ -72,7 +72,7 @@ private object UnavailableIosDocumentOcr : DocumentOcrPort {
         DocumentOcrPortResult.Failed(DocumentOcrFailureKind.REMOTE_FAILURE)
 }
 
-private fun currentTimeMillis(): Long = (NSDate().timeIntervalSince1970 * MILLISECONDS_PER_SECOND).toLong()
+private fun currentTimeMillis(): Long = (NSDate().timeIntervalSince1970() * MILLISECONDS_PER_SECOND).toLong()
 
 private suspend fun DocumentProcessingStore?.closeSafely() {
     try {
