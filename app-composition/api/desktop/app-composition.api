@@ -1,3 +1,7 @@
+public abstract interface class io/github/artemidius/blowhard/composition/ApplicationLocalDataEraser {
+	public abstract fun erase (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+}
+
 public final class io/github/artemidius/blowhard/composition/ApplicationRuntime {
 	public static final field Companion Lio/github/artemidius/blowhard/composition/ApplicationRuntime$Companion;
 	public final fun close (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
@@ -56,6 +60,26 @@ public final class io/github/artemidius/blowhard/composition/ApplicationRuntimeD
 	public final fun failClosed (Lio/github/artemidius/blowhard/core/api/ConnectionSettings;)Lio/github/artemidius/blowhard/composition/ApplicationRuntimeDependencies;
 }
 
+public abstract interface class io/github/artemidius/blowhard/composition/ApplicationSessionCloser {
+	public abstract fun close (Ljava/lang/Object;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+}
+
+public abstract interface class io/github/artemidius/blowhard/composition/ApplicationSessionFactory {
+	public abstract fun create (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+}
+
+public final class io/github/artemidius/blowhard/composition/ApplicationSessionResetResult : java/lang/Enum {
+	public static final field ALREADY_RUNNING Lio/github/artemidius/blowhard/composition/ApplicationSessionResetResult;
+	public static final field LOCAL_DATA_ERASURE_FAILED Lio/github/artemidius/blowhard/composition/ApplicationSessionResetResult;
+	public static final field OWNER_CLOSED Lio/github/artemidius/blowhard/composition/ApplicationSessionResetResult;
+	public static final field REPLACEMENT_FAILED Lio/github/artemidius/blowhard/composition/ApplicationSessionResetResult;
+	public static final field RESET Lio/github/artemidius/blowhard/composition/ApplicationSessionResetResult;
+	public static final field SESSION_CLOSE_FAILED Lio/github/artemidius/blowhard/composition/ApplicationSessionResetResult;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public static fun valueOf (Ljava/lang/String;)Lio/github/artemidius/blowhard/composition/ApplicationSessionResetResult;
+	public static fun values ()[Lio/github/artemidius/blowhard/composition/ApplicationSessionResetResult;
+}
+
 public final class io/github/artemidius/blowhard/composition/ConversationHistoryPresentationKt {
 	public static final fun emptyConversationState (Lio/github/artemidius/blowhard/ui/presentation/UiNotice;)Lio/github/artemidius/blowhard/ui/presentation/ConversationUiState;
 	public static synthetic fun emptyConversationState$default (Lio/github/artemidius/blowhard/ui/presentation/UiNotice;ILjava/lang/Object;)Lio/github/artemidius/blowhard/ui/presentation/ConversationUiState;
@@ -89,5 +113,12 @@ public final class io/github/artemidius/blowhard/composition/FailClosedConnectio
 	public fun selectModel (Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public fun testConnection (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public fun updateGenerationParameters (Lio/github/artemidius/blowhard/core/api/GenerationParameters;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+}
+
+public final class io/github/artemidius/blowhard/composition/ReplaceableApplicationSession {
+	public fun <init> (Ljava/lang/Object;Lio/github/artemidius/blowhard/composition/ApplicationSessionFactory;Lio/github/artemidius/blowhard/composition/ApplicationSessionCloser;Lio/github/artemidius/blowhard/composition/ApplicationLocalDataEraser;)V
+	public final fun close (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public final fun getSession ()Lkotlinx/coroutines/flow/StateFlow;
+	public final fun reset (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 }
 

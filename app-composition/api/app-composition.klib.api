@@ -6,6 +6,43 @@
 // - Show declarations: true
 
 // Library unique name: <Blowhard:app-composition>
+final enum class io.github.artemidius.blowhard.composition/ApplicationSessionResetResult : kotlin/Enum<io.github.artemidius.blowhard.composition/ApplicationSessionResetResult> { // io.github.artemidius.blowhard.composition/ApplicationSessionResetResult|null[0]
+    enum entry ALREADY_RUNNING // io.github.artemidius.blowhard.composition/ApplicationSessionResetResult.ALREADY_RUNNING|null[0]
+    enum entry LOCAL_DATA_ERASURE_FAILED // io.github.artemidius.blowhard.composition/ApplicationSessionResetResult.LOCAL_DATA_ERASURE_FAILED|null[0]
+    enum entry OWNER_CLOSED // io.github.artemidius.blowhard.composition/ApplicationSessionResetResult.OWNER_CLOSED|null[0]
+    enum entry REPLACEMENT_FAILED // io.github.artemidius.blowhard.composition/ApplicationSessionResetResult.REPLACEMENT_FAILED|null[0]
+    enum entry RESET // io.github.artemidius.blowhard.composition/ApplicationSessionResetResult.RESET|null[0]
+    enum entry SESSION_CLOSE_FAILED // io.github.artemidius.blowhard.composition/ApplicationSessionResetResult.SESSION_CLOSE_FAILED|null[0]
+
+    final val entries // io.github.artemidius.blowhard.composition/ApplicationSessionResetResult.entries|#static{}entries[0]
+        final fun <get-entries>(): kotlin.enums/EnumEntries<io.github.artemidius.blowhard.composition/ApplicationSessionResetResult> // io.github.artemidius.blowhard.composition/ApplicationSessionResetResult.entries.<get-entries>|<get-entries>#static(){}[0]
+
+    final fun valueOf(kotlin/String): io.github.artemidius.blowhard.composition/ApplicationSessionResetResult // io.github.artemidius.blowhard.composition/ApplicationSessionResetResult.valueOf|valueOf#static(kotlin.String){}[0]
+    final fun values(): kotlin/Array<io.github.artemidius.blowhard.composition/ApplicationSessionResetResult> // io.github.artemidius.blowhard.composition/ApplicationSessionResetResult.values|values#static(){}[0]
+}
+
+abstract fun interface <#A: kotlin/Any?> io.github.artemidius.blowhard.composition/ApplicationSessionCloser { // io.github.artemidius.blowhard.composition/ApplicationSessionCloser|null[0]
+    abstract suspend fun close(#A) // io.github.artemidius.blowhard.composition/ApplicationSessionCloser.close|close(1:0){}[0]
+}
+
+abstract fun interface <#A: kotlin/Any?> io.github.artemidius.blowhard.composition/ApplicationSessionFactory { // io.github.artemidius.blowhard.composition/ApplicationSessionFactory|null[0]
+    abstract suspend fun create(): #A // io.github.artemidius.blowhard.composition/ApplicationSessionFactory.create|create(){}[0]
+}
+
+abstract fun interface io.github.artemidius.blowhard.composition/ApplicationLocalDataEraser { // io.github.artemidius.blowhard.composition/ApplicationLocalDataEraser|null[0]
+    abstract suspend fun erase(): kotlin/Boolean // io.github.artemidius.blowhard.composition/ApplicationLocalDataEraser.erase|erase(){}[0]
+}
+
+final class <#A: kotlin/Any?> io.github.artemidius.blowhard.composition/ReplaceableApplicationSession { // io.github.artemidius.blowhard.composition/ReplaceableApplicationSession|null[0]
+    constructor <init>(#A, io.github.artemidius.blowhard.composition/ApplicationSessionFactory<#A>, io.github.artemidius.blowhard.composition/ApplicationSessionCloser<#A>, io.github.artemidius.blowhard.composition/ApplicationLocalDataEraser) // io.github.artemidius.blowhard.composition/ReplaceableApplicationSession.<init>|<init>(1:0;io.github.artemidius.blowhard.composition.ApplicationSessionFactory<1:0>;io.github.artemidius.blowhard.composition.ApplicationSessionCloser<1:0>;io.github.artemidius.blowhard.composition.ApplicationLocalDataEraser){}[0]
+
+    final val session // io.github.artemidius.blowhard.composition/ReplaceableApplicationSession.session|{}session[0]
+        final fun <get-session>(): kotlinx.coroutines.flow/StateFlow<#A> // io.github.artemidius.blowhard.composition/ReplaceableApplicationSession.session.<get-session>|<get-session>(){}[0]
+
+    final suspend fun close() // io.github.artemidius.blowhard.composition/ReplaceableApplicationSession.close|close(){}[0]
+    final suspend fun reset(): io.github.artemidius.blowhard.composition/ApplicationSessionResetResult // io.github.artemidius.blowhard.composition/ReplaceableApplicationSession.reset|reset(){}[0]
+}
+
 final class io.github.artemidius.blowhard.composition/ApplicationRuntime { // io.github.artemidius.blowhard.composition/ApplicationRuntime|null[0]
     final val connectionSettingsPresenter // io.github.artemidius.blowhard.composition/ApplicationRuntime.connectionSettingsPresenter|{}connectionSettingsPresenter[0]
         final fun <get-connectionSettingsPresenter>(): io.github.artemidius.blowhard.ui.presentation/ConnectionSettingsPresenter // io.github.artemidius.blowhard.composition/ApplicationRuntime.connectionSettingsPresenter.<get-connectionSettingsPresenter>|<get-connectionSettingsPresenter>(){}[0]
