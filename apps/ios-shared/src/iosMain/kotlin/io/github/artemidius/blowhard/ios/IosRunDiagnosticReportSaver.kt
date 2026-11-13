@@ -27,12 +27,11 @@ internal class IosRunDiagnosticReportSaver private constructor(
     private val writeTemporary: (RunDiagnosticReport) -> NSURL?,
     private val presentExport: (UIViewController, NSURL, UIDocumentPickerDelegateProtocol) -> Boolean,
     private val deleteTemporary: (NSURL) -> Unit,
-) : NSObject(),
-    UIDocumentPickerDelegateProtocol,
-    RunDiagnosticReportSaver {
+) : RunDiagnosticReportSaver {
     private var presenter: UIViewController? = null
     private var pending: CancellableContinuation<RunDiagnosticReportSaveResult>? = null
     private var temporaryUrl: NSURL? = null
+    private var exportDelegate: IosDocumentExportDelegate? = null
 
     constructor() : this(::writeTemporaryReport, ::presentExportPicker, ::deleteTemporaryReport)
 
@@ -54,34 +53,19 @@ internal class IosRunDiagnosticReportSaver private constructor(
             temporaryUrl = temporary
             suspendCancellableCoroutine { continuation ->
                 pending = continuation
+                val delegate = IosDocumentExportDelegate(::complete)
+                exportDelegate = delegate
                 continuation.invokeOnCancellation {
                     if (pending === continuation) {
                         pending = null
                         cleanupTemporary()
                     }
                 }
-                if (!presentExport(activePresenter, temporary, this@IosRunDiagnosticReportSaver)) {
+                if (!presentExport(activePresenter, temporary, delegate)) {
                     complete(RunDiagnosticReportSaveResult.UNAVAILABLE)
                 }
             }
         }
-
-    override fun documentPickerWasCancelled(controller: UIDocumentPickerViewController) {
-        complete(RunDiagnosticReportSaveResult.CANCELLED)
-    }
-
-    override fun documentPicker(controller: UIDocumentPickerViewController, didPickDocumentAtURL: NSURL) {
-        complete(RunDiagnosticReportSaveResult.SAVED)
-    }
-
-    override fun documentPicker(controller: UIDocumentPickerViewController, didPickDocumentsAtURLs: List<*>) {
-        val result = if (didPickDocumentsAtURLs.isEmpty()) {
-            RunDiagnosticReportSaveResult.CANCELLED
-        } else {
-            RunDiagnosticReportSaveResult.SAVED
-        }
-        complete(result)
-    }
 
     internal fun completeForTest(result: RunDiagnosticReportSaveResult) {
         complete(result)
@@ -97,6 +81,7 @@ internal class IosRunDiagnosticReportSaver private constructor(
     private fun cleanupTemporary() {
         temporaryUrl?.let(deleteTemporary)
         temporaryUrl = null
+        exportDelegate = null
     }
 
     companion object {
@@ -109,6 +94,27 @@ internal class IosRunDiagnosticReportSaver private constructor(
             presentExport,
             deleteTemporary,
         )
+    }
+}
+
+private class IosDocumentExportDelegate(private val complete: (RunDiagnosticReportSaveResult) -> Unit) :
+    NSObject(),
+    UIDocumentPickerDelegateProtocol {
+    override fun documentPickerWasCancelled(controller: UIDocumentPickerViewController) {
+        complete(RunDiagnosticReportSaveResult.CANCELLED)
+    }
+
+    override fun documentPicker(controller: UIDocumentPickerViewController, didPickDocumentAtURL: NSURL) {
+        complete(RunDiagnosticReportSaveResult.SAVED)
+    }
+
+    override fun documentPicker(controller: UIDocumentPickerViewController, didPickDocumentsAtURLs: List<*>) {
+        val result = if (didPickDocumentsAtURLs.isEmpty()) {
+            RunDiagnosticReportSaveResult.CANCELLED
+        } else {
+            RunDiagnosticReportSaveResult.SAVED
+        }
+        complete(result)
     }
 }
 
