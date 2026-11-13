@@ -158,6 +158,16 @@ final class io.github.artemidius.blowhard.composition/FailClosedConnectionSettin
     final suspend fun updateGenerationParameters(io.github.artemidius.blowhard.core.api/GenerationParameters) // io.github.artemidius.blowhard.composition/FailClosedConnectionSettings.updateGenerationParameters|updateGenerationParameters(io.github.artemidius.blowhard.core.api.GenerationParameters){}[0]
 }
 
+final class io.github.artemidius.blowhard.composition/LocalMeetingNoteApprovalPort : io.github.artemidius.blowhard.ui.presentation/MeetingNoteApprovalPort { // io.github.artemidius.blowhard.composition/LocalMeetingNoteApprovalPort|null[0]
+    final suspend fun approve(): io.github.artemidius.blowhard.ui.presentation/ProposedMeetingNoteStatus // io.github.artemidius.blowhard.composition/LocalMeetingNoteApprovalPort.approve|approve(){}[0]
+    final suspend fun deny(): io.github.artemidius.blowhard.ui.presentation/ProposedMeetingNoteStatus // io.github.artemidius.blowhard.composition/LocalMeetingNoteApprovalPort.deny|deny(){}[0]
+    final suspend fun propose(io.github.artemidius.blowhard.core.api/MeetingNoteRecord): io.github.artemidius.blowhard.ui.presentation/MeetingNoteApprovalProposalResult // io.github.artemidius.blowhard.composition/LocalMeetingNoteApprovalPort.propose|propose(io.github.artemidius.blowhard.core.api.MeetingNoteRecord){}[0]
+
+    final object Companion { // io.github.artemidius.blowhard.composition/LocalMeetingNoteApprovalPort.Companion|null[0]
+        final fun create(io.github.artemidius.blowhard.core.domain/MeetingNoteStore?, kotlin/Function0<kotlin/Long>, kotlin/Function0<kotlin/String>): io.github.artemidius.blowhard.ui.presentation/MeetingNoteApprovalPort // io.github.artemidius.blowhard.composition/LocalMeetingNoteApprovalPort.Companion.create|create(io.github.artemidius.blowhard.core.domain.MeetingNoteStore?;kotlin.Function0<kotlin.Long>;kotlin.Function0<kotlin.String>){}[0]
+    }
+}
+
 final class io.github.artemidius.blowhard.composition/OwnedMeetingNoteGenerationPort { // io.github.artemidius.blowhard.composition/OwnedMeetingNoteGenerationPort|null[0]
     constructor <init>(io.github.artemidius.blowhard.core.domain/MeetingNoteGenerationPort, kotlin/Function0<kotlin/Unit>) // io.github.artemidius.blowhard.composition/OwnedMeetingNoteGenerationPort.<init>|<init>(io.github.artemidius.blowhard.core.domain.MeetingNoteGenerationPort;kotlin.Function0<kotlin.Unit>){}[0]
 

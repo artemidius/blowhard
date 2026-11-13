@@ -13,11 +13,11 @@ import io.github.artemidius.blowhard.composition.ApplicationRuntime
 import io.github.artemidius.blowhard.composition.ApplicationRuntimeConfiguration
 import io.github.artemidius.blowhard.composition.ApplicationRuntimeDependencies
 import io.github.artemidius.blowhard.composition.ConversationHistorySession
+import io.github.artemidius.blowhard.composition.LocalMeetingNoteApprovalPort
 import io.github.artemidius.blowhard.composition.OwnedMeetingNoteGenerationPort
 import io.github.artemidius.blowhard.composition.VerifiedModelMeetingNoteGenerationRouter
 import io.github.artemidius.blowhard.core.application.DefaultConnectionSettings
 import io.github.artemidius.blowhard.core.application.SequentialRunIdFactory
-import io.github.artemidius.blowhard.ui.presentation.UnavailableMeetingNoteApprovalPort
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.util.UUID
@@ -89,8 +89,13 @@ private fun createDependencies(
         history.conversationStore,
     )
     return documents?.let {
+        val approvals = LocalMeetingNoteApprovalPort.create(
+            store = it.meetingNoteStore,
+            now = System::currentTimeMillis,
+            identity = { UUID.randomUUID().toString() },
+        )
         base.withDocuments(it.library, it.ocr, documentPicker, it.processingStore)
-            .withMeetingNotes(it.meetingNotes, UnavailableMeetingNoteApprovalPort)
+            .withMeetingNotes(it.meetingNotes, approvals)
     } ?: base
 }
 

@@ -12,11 +12,12 @@ import io.github.artemidius.blowhard.composition.ApplicationRuntime
 import io.github.artemidius.blowhard.composition.ApplicationRuntimeConfiguration
 import io.github.artemidius.blowhard.composition.ApplicationRuntimeDependencies
 import io.github.artemidius.blowhard.composition.ConversationHistorySession
+import io.github.artemidius.blowhard.composition.LocalMeetingNoteApprovalPort
 import io.github.artemidius.blowhard.composition.OwnedMeetingNoteGenerationPort
 import io.github.artemidius.blowhard.composition.VerifiedModelMeetingNoteGenerationRouter
 import io.github.artemidius.blowhard.core.application.DefaultConnectionSettings
 import io.github.artemidius.blowhard.core.application.SequentialRunIdFactory
-import io.github.artemidius.blowhard.ui.presentation.UnavailableMeetingNoteApprovalPort
+import platform.Foundation.NSDate
 import platform.Foundation.NSUUID
 
 /** Owns one iOS runtime together with the native resources supplied to it. */
@@ -93,10 +94,17 @@ private fun createDependencies(
         history.conversationStore,
     )
     return documents?.let {
+        val approvals = LocalMeetingNoteApprovalPort.create(
+            store = it.meetingNoteStore,
+            now = ::currentApprovalTimeMillis,
+            identity = { NSUUID().UUIDString },
+        )
         base.withDocuments(it.library, it.ocr, documentPicker, it.processingStore)
-            .withMeetingNotes(it.meetingNotes, UnavailableMeetingNoteApprovalPort)
+            .withMeetingNotes(it.meetingNotes, approvals)
     } ?: base
 }
+
+private fun currentApprovalTimeMillis(): Long = (NSDate().timeIntervalSince1970 * MILLISECONDS_PER_SECOND).toLong()
 
 internal class IosProviderComposition(
     val connectionSettings: DefaultConnectionSettings,
@@ -143,3 +151,5 @@ private fun createProviderComposition(): IosProviderComposition {
         modelCatalog = modelCatalog,
     )
 }
+
+private const val MILLISECONDS_PER_SECOND = 1_000.0

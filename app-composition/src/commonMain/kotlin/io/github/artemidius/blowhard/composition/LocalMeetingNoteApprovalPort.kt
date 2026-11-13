@@ -1,4 +1,4 @@
-package io.github.artemidius.blowhard.desktop
+package io.github.artemidius.blowhard.composition
 
 import io.github.artemidius.blowhard.core.api.MeetingNoteId
 import io.github.artemidius.blowhard.core.api.MeetingNoteRecord
@@ -22,9 +22,9 @@ import io.github.artemidius.blowhard.ui.presentation.UnavailableMeetingNoteAppro
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.NonCancellable
 import kotlinx.coroutines.withContext
-import java.util.UUID
 
-internal class DesktopMeetingNoteApprovalPort private constructor(
+/** Exact-consent boundary for publishing an approved local meeting-note copy. */
+public class LocalMeetingNoteApprovalPort private constructor(
     private val writer: ApprovedMeetingNoteWriter,
     private val now: () -> Long,
     private val identity: () -> String,
@@ -44,12 +44,7 @@ internal class DesktopMeetingNoteApprovalPort private constructor(
                 expiresAtEpochMilliseconds = preparedAt + APPROVAL_LIFETIME_MILLISECONDS,
             )
         ) {
-            is ApprovedMeetingNotePreparation.Proposed -> {
-                proposal = prepared.value
-                MeetingNoteApprovalProposalResult.Proposed(
-                    ProposedMeetingNoteUiState(prepared.value.note, prepared.value.binding.destination.value),
-                )
-            }
+            is ApprovedMeetingNotePreparation.Proposed -> prepared.toUiProposal()
 
             ApprovedMeetingNotePreparation.ContentTooLarge,
             is ApprovedMeetingNotePreparation.Rejected,
@@ -73,6 +68,13 @@ internal class DesktopMeetingNoteApprovalPort private constructor(
             ToolApprovalOutcome.EXPIRED -> ProposedMeetingNoteStatus.EXPIRED
             else -> ProposedMeetingNoteStatus.FAILED
         }
+    }
+
+    private fun ApprovedMeetingNotePreparation.Proposed.toUiProposal(): MeetingNoteApprovalProposalResult.Proposed {
+        proposal = value
+        return MeetingNoteApprovalProposalResult.Proposed(
+            ProposedMeetingNoteUiState(value.note, value.binding.destination.value),
+        )
     }
 
     private suspend fun execute(current: ApprovedMeetingNoteProposal): ProposedMeetingNoteStatus = try {
@@ -100,18 +102,17 @@ internal class DesktopMeetingNoteApprovalPort private constructor(
         ApprovedMeetingNoteRecovery.Uncertain -> ProposedMeetingNoteStatus.UNCERTAIN
     }
 
-    internal companion object {
-        fun create(
-            store: MeetingNoteStore?,
-            now: () -> Long = System::currentTimeMillis,
-            identity: () -> String = { UUID.randomUUID().toString() },
-        ): MeetingNoteApprovalPort = store?.let {
-            DesktopMeetingNoteApprovalPort(
-                ApprovedMeetingNoteWriter.create(it, ToolApprovalClock(now)),
-                now,
-                identity,
-            )
-        } ?: UnavailableMeetingNoteApprovalPort
+    /** Creates the capability or returns the fail-closed implementation when storage is unavailable. */
+    public companion object {
+        /** Platform hosts retain ownership of identity and clock generation. */
+        public fun create(store: MeetingNoteStore?, now: () -> Long, identity: () -> String): MeetingNoteApprovalPort =
+            store?.let {
+                LocalMeetingNoteApprovalPort(
+                    ApprovedMeetingNoteWriter.create(it, ToolApprovalClock(now)),
+                    now,
+                    identity,
+                )
+            } ?: UnavailableMeetingNoteApprovalPort
     }
 }
 

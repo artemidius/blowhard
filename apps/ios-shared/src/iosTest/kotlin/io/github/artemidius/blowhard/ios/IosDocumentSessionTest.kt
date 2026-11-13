@@ -1,6 +1,7 @@
 package io.github.artemidius.blowhard.ios
 
 import io.github.artemidius.blowhard.adapters.persistence.NativeLocalDatabaseFiles
+import io.github.artemidius.blowhard.composition.LocalMeetingNoteApprovalPort
 import io.github.artemidius.blowhard.core.api.DocumentImportResult
 import io.github.artemidius.blowhard.core.api.DocumentImportSource
 import io.github.artemidius.blowhard.core.api.DocumentListResult
@@ -14,6 +15,8 @@ import io.github.artemidius.blowhard.core.domain.DocumentOcrPortResult
 import io.github.artemidius.blowhard.core.domain.DocumentOcrRequest
 import io.github.artemidius.blowhard.core.domain.MeetingNoteGenerationPort
 import io.github.artemidius.blowhard.core.domain.MeetingNoteGenerationResult
+import io.github.artemidius.blowhard.ui.presentation.MeetingNoteApprovalProposalResult
+import io.github.artemidius.blowhard.ui.presentation.ProposedMeetingNoteStatus
 import kotlinx.coroutines.test.runTest
 import platform.Foundation.NSUUID
 import kotlin.test.Test
@@ -39,12 +42,25 @@ internal class IosDocumentSessionTest {
             val generated = assertIs<MeetingNoteGenerationOutcome.Generated>(
                 first.meetingNotes.generate(imported.document.id),
             )
+            var nextIdentity = 0
+            val approvals = LocalMeetingNoteApprovalPort.create(
+                first.meetingNoteStore,
+                now = { 100 },
+                identity = {
+                    val value = "ios-approval-$nextIdentity"
+                    nextIdentity += 1
+                    value
+                },
+            )
+            val proposed = assertIs<MeetingNoteApprovalProposalResult.Proposed>(approvals.propose(generated.note))
+            assertEquals(ProposedMeetingNoteStatus.COMMITTED, approvals.approve())
             first.close()
 
             val second = requireNotNull(IosDocumentSession.openOrNull(databaseName, processor, noteGeneration))
             val stored = assertIs<DocumentListResult.Available>(second.library.list())
             assertEquals(listOf("scan.png"), stored.documents.map { it.displayName })
             assertIs<MeetingNoteLookupOutcome.Found>(second.meetingNotes.find(generated.note.id))
+            assertIs<MeetingNoteLookupOutcome.Found>(second.meetingNotes.find(proposed.state.note.id))
             second.close()
         } finally {
             NativeLocalDatabaseFiles.delete(databaseName)

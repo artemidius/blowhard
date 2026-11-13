@@ -117,6 +117,17 @@ public final class io/github/artemidius/blowhard/composition/FailClosedConnectio
 	public fun updateGenerationParameters (Lio/github/artemidius/blowhard/core/api/GenerationParameters;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 }
 
+public final class io/github/artemidius/blowhard/composition/LocalMeetingNoteApprovalPort : io/github/artemidius/blowhard/ui/presentation/MeetingNoteApprovalPort {
+	public static final field Companion Lio/github/artemidius/blowhard/composition/LocalMeetingNoteApprovalPort$Companion;
+	public fun approve (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public fun deny (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public fun propose (Lio/github/artemidius/blowhard/core/api/MeetingNoteRecord;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+}
+
+public final class io/github/artemidius/blowhard/composition/LocalMeetingNoteApprovalPort$Companion {
+	public final fun create (Lio/github/artemidius/blowhard/core/domain/MeetingNoteStore;Lkotlin/jvm/functions/Function0;Lkotlin/jvm/functions/Function0;)Lio/github/artemidius/blowhard/ui/presentation/MeetingNoteApprovalPort;
+}
+
 public final class io/github/artemidius/blowhard/composition/OwnedMeetingNoteGenerationPort {
 	public fun <init> (Lio/github/artemidius/blowhard/core/domain/MeetingNoteGenerationPort;Lkotlin/jvm/functions/Function0;)V
 	public final fun close ()V
