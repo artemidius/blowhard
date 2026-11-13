@@ -14,7 +14,29 @@ storage, document pickers, diagnostic export, restart recovery, and local-data r
 If you are reviewing the repository, start with the
 [five-minute reviewer guide](docs/reviewer-guide.md), the
 [showcase architecture](docs/architecture/meeting-note-showcase.md), and the
-[mobile verification guide](docs/mobile-verification.md), and the [security disclosure](docs/security.md).
+[mobile verification guide](docs/mobile-verification.md), and the
+[security disclosure](docs/security.md).
+
+## Product preview
+
+<table>
+  <tr>
+    <th>Desktop — deterministic package verification</th>
+    <th>Android — secure provider setup</th>
+  </tr>
+  <tr>
+    <td width="68%">
+      <img src="docs/media/blowhard-desktop-verification.png" alt="Blowhard desktop conversation workspace running the deterministic offline package verification flow">
+    </td>
+    <td width="32%">
+      <img src="docs/media/blowhard-android-connect.png" alt="Blowhard Android connection screen with credential, model, and external-processing controls">
+    </td>
+  </tr>
+</table>
+
+The desktop capture uses the built-in network-free packaging fixture. The Android capture shows the
+fail-closed provider setup shared by the mobile presentation layer. No production credential or
+personal data is present in either image.
 
 ## Technical direction
 
