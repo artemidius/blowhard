@@ -34,6 +34,27 @@ public class ApplicationRuntimeDependencies(
     public val conversationStore: ConversationStore? = null,
     public val documentProcessingStore: DocumentProcessingStore? = null,
 ) {
+    /** Returns an equivalent graph with a complete, explicitly owned document capability set. */
+    public fun withDocuments(
+        library: DocumentLibrary,
+        ocr: DocumentOcr,
+        picker: DocumentPicker,
+        processingStore: DocumentProcessingStore,
+    ): ApplicationRuntimeDependencies = ApplicationRuntimeDependencies(
+        connectionSettings = connectionSettings,
+        generation = generation,
+        scenarioSelection = scenarioSelection,
+        clipboardWriter = clipboardWriter,
+        reportSaver = reportSaver,
+        documentLibrary = library,
+        documentOcr = ocr,
+        documentPicker = picker,
+        meetingNotes = meetingNotes,
+        meetingNoteApprovals = meetingNoteApprovals,
+        conversationStore = conversationStore,
+        documentProcessingStore = processingStore,
+    )
+
     /** Creates an explicit inactive graph for hosts that do not yet provide native capabilities. */
     public companion object {
         /** Uses [connectionSettings] and rejects every unavailable platform or provider operation. */
