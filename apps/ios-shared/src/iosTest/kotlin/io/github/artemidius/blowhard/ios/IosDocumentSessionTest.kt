@@ -6,10 +6,14 @@ import io.github.artemidius.blowhard.core.api.DocumentImportSource
 import io.github.artemidius.blowhard.core.api.DocumentListResult
 import io.github.artemidius.blowhard.core.api.DocumentProcessingResult
 import io.github.artemidius.blowhard.core.api.DocumentReadResult
+import io.github.artemidius.blowhard.core.api.MeetingNoteGenerationOutcome
+import io.github.artemidius.blowhard.core.api.MeetingNoteLookupOutcome
 import io.github.artemidius.blowhard.core.domain.DocumentOcrPage
 import io.github.artemidius.blowhard.core.domain.DocumentOcrPort
 import io.github.artemidius.blowhard.core.domain.DocumentOcrPortResult
 import io.github.artemidius.blowhard.core.domain.DocumentOcrRequest
+import io.github.artemidius.blowhard.core.domain.MeetingNoteGenerationPort
+import io.github.artemidius.blowhard.core.domain.MeetingNoteGenerationResult
 import kotlinx.coroutines.test.runTest
 import platform.Foundation.NSUUID
 import kotlin.test.Test
@@ -23,17 +27,24 @@ internal class IosDocumentSessionTest {
         val databaseName = "documents-${NSUUID().UUIDString}.db"
         val source = IosByteDocumentSource("scan.png", PNG)
         val processor = RecordingIosDocumentOcrPort()
+        val noteGeneration = MeetingNoteGenerationPort {
+            MeetingNoteGenerationResult.Generated(MEETING_NOTE_JSON, "mobile-test-model")
+        }
 
         try {
-            val first = requireNotNull(IosDocumentSession.openOrNull(databaseName, processor))
+            val first = requireNotNull(IosDocumentSession.openOrNull(databaseName, processor, noteGeneration))
             val imported = assertIs<DocumentImportResult.Imported>(first.library.import(source))
             assertIs<DocumentProcessingResult.Processed>(first.ocr.process(imported.document.id))
             assertEquals(1, processor.requests)
+            val generated = assertIs<MeetingNoteGenerationOutcome.Generated>(
+                first.meetingNotes.generate(imported.document.id),
+            )
             first.close()
 
-            val second = requireNotNull(IosDocumentSession.openOrNull(databaseName, processor))
+            val second = requireNotNull(IosDocumentSession.openOrNull(databaseName, processor, noteGeneration))
             val stored = assertIs<DocumentListResult.Available>(second.library.list())
             assertEquals(listOf("scan.png"), stored.documents.map { it.displayName })
+            assertIs<MeetingNoteLookupOutcome.Found>(second.meetingNotes.find(generated.note.id))
             second.close()
         } finally {
             NativeLocalDatabaseFiles.delete(databaseName)
@@ -66,6 +77,15 @@ private val PNG = hex(
     "89504e470d0a1a0a0000000d4948445200000002000000030806000000b9eade81" +
         "0000000b49444154789c636080020000090001fb52b8a90000000049454e44ae426082",
 )
+
+private val MEETING_NOTE_JSON = """
+    {
+      "template_version":"meeting-note-v1",
+      "title":"Scan review",
+      "decisions":[{"summary":"Keep the scan","sources":[{"page_index":0,"excerpt":"Scan"}]}],
+      "action_items":[]
+    }
+""".trimIndent()
 
 private fun hex(value: String): ByteArray = ByteArray(value.length / 2) { index ->
     val offset = index * 2
