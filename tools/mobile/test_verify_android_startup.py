@@ -3,8 +3,10 @@
 from __future__ import annotations
 
 import unittest
+from subprocess import CalledProcessError
+from unittest.mock import patch
 
-from verify_android_startup import create_evidence, parse_activity_start
+from verify_android_startup import create_evidence, parse_activity_start, run_adb
 
 
 LAUNCH_OUTPUT = """\
@@ -56,6 +58,21 @@ class AndroidStartupEvidenceTest(unittest.TestCase):
                 "io.github.artemidius.blowhard/io.github.artemidius.blowhard.android.MainActivity",
                 10_000,
             )
+
+    @patch("verify_android_startup.subprocess.run")
+    def test_adb_failure_includes_platform_diagnostic(self, run: unittest.mock.Mock) -> None:
+        run.side_effect = CalledProcessError(
+            1,
+            ["adb", "shell", "am", "start"],
+            output="Error type 3",
+            stderr="Activity class does not exist",
+        )
+
+        with self.assertRaisesRegex(
+            ValueError,
+            "Error type 3[\\s\\S]*Activity class does not exist",
+        ):
+            run_adb("adb", "shell", "am", "start")
 
 
 if __name__ == "__main__":

@@ -68,12 +68,22 @@ def parse_non_negative_milliseconds(fields: dict[str, str], name: str) -> int:
 
 
 def run_adb(adb: str, *arguments: str) -> str:
-    completed = subprocess.run(
-        [adb, *arguments],
-        check=True,
-        capture_output=True,
-        text=True,
-    )
+    command = [adb, *arguments]
+    try:
+        completed = subprocess.run(
+            command,
+            check=True,
+            capture_output=True,
+            text=True,
+        )
+    except subprocess.CalledProcessError as error:
+        details = "\n".join(
+            output.strip()
+            for output in (error.stdout, error.stderr)
+            if output and output.strip()
+        )
+        suffix = f": {details}" if details else ""
+        raise ValueError(f"ADB command failed ({' '.join(command[1:])}){suffix}") from error
     return completed.stdout
 
 
