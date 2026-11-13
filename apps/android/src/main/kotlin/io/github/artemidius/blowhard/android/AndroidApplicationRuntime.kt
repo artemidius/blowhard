@@ -22,9 +22,14 @@ internal class AndroidApplicationRuntime(application: Application) : AndroidView
     private val closeScope = CoroutineScope(SupervisorJob() + Dispatchers.Default)
     private val applicationContext = application.applicationContext
     val documentPicker = AndroidDocumentPicker(applicationContext.contentResolver)
+    val diagnosticReportSaver = AndroidRunDiagnosticReportSaver(applicationContext.contentResolver)
     private val sessionOwner = ReplaceableApplicationSession(
-        initialSession = runBlocking { createAndroidApplicationSession(applicationContext, documentPicker) },
-        factory = ApplicationSessionFactory { createAndroidApplicationSession(applicationContext, documentPicker) },
+        initialSession = runBlocking {
+            createAndroidApplicationSession(applicationContext, documentPicker, diagnosticReportSaver)
+        },
+        factory = ApplicationSessionFactory {
+            createAndroidApplicationSession(applicationContext, documentPicker, diagnosticReportSaver)
+        },
         closer = ApplicationSessionCloser(AndroidApplicationSession::close),
         eraser = AndroidLocalDataEraser(
             context = applicationContext,
