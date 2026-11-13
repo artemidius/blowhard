@@ -18,6 +18,7 @@ import io.github.artemidius.blowhard.core.domain.DocumentProcessingStore
 import io.github.artemidius.blowhard.core.domain.DocumentStore
 import platform.Foundation.NSDate
 import platform.Foundation.NSUUID
+import platform.Foundation.timeIntervalSince1970
 
 /** Owns native iOS document storage and portable document application services. */
 internal class IosDocumentSession private constructor(

@@ -15,6 +15,7 @@ import platform.Foundation.NSFileManager
 import platform.Foundation.NSFileSize
 import platform.Foundation.NSNumber
 import platform.Foundation.NSURL
+import platform.Foundation.dataWithContentsOfURL
 
 /** Bounded reader for the app-local copy returned by UIKit's document picker. */
 internal class IosDocumentImportSource(private val url: NSURL) : DocumentImportSource {
@@ -26,7 +27,7 @@ internal class IosDocumentImportSource(private val url: NSURL) : DocumentImportS
         if (declaredSizeBytes?.let { it > maximumBytes } == true) return@withContext DocumentReadResult.TooLarge
         val scoped = url.startAccessingSecurityScopedResource()
         try {
-            val data = NSData(contentsOfURL = url) ?: return@withContext DocumentReadResult.Unavailable
+            val data = NSData.dataWithContentsOfURL(url) ?: return@withContext DocumentReadResult.Unavailable
             if (data.length > maximumBytes.toULong()) return@withContext DocumentReadResult.TooLarge
             DocumentReadResult.Content(data.copyBytes())
         } catch (cancelled: CancellationException) {
