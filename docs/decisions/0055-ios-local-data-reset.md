@@ -30,3 +30,5 @@ outcome after replacement and remains usable from the post-reset connection gate
 - Successful reset publishes empty history and requires a newly verified API key.
 - Partial deletion is visible and retryable without exposing native paths or errors.
 - Controller disposal closes the reset presenter and whichever session is current.
+- The iOS host binaries link the system SQLite library explicitly because reset integration tests
+  exercise the native driver directly.
