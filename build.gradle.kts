@@ -194,6 +194,7 @@ private val allowedProjectDependencies = mapOf(
     ":app-composition" to setOf(":core:application", ":shared-ui"),
     ":apps:android" to setOf(
         ":app-composition",
+        ":adapters:documents",
         ":adapters:mistral",
         ":adapters:mobile-platform",
         ":adapters:persistence",
