@@ -13,8 +13,22 @@ public final class io/github/artemidius/blowhard/adapters/persistence/AndroidDoc
 	public final fun open (Landroid/content/Context;Ljava/lang/String;)Lio/github/artemidius/blowhard/core/domain/DocumentStore;
 }
 
+public final class io/github/artemidius/blowhard/adapters/persistence/AndroidLocalDatabaseFiles {
+	public static final field INSTANCE Lio/github/artemidius/blowhard/adapters/persistence/AndroidLocalDatabaseFiles;
+	public final fun delete (Landroid/content/Context;Ljava/lang/String;)Lio/github/artemidius/blowhard/adapters/persistence/LocalDatabaseDeletionResult;
+}
+
 public final class io/github/artemidius/blowhard/adapters/persistence/AndroidMeetingNoteStores {
 	public static final field INSTANCE Lio/github/artemidius/blowhard/adapters/persistence/AndroidMeetingNoteStores;
 	public final fun open (Landroid/content/Context;Ljava/lang/String;)Lio/github/artemidius/blowhard/core/domain/MeetingNoteStore;
+}
+
+public final class io/github/artemidius/blowhard/adapters/persistence/LocalDatabaseDeletionResult : java/lang/Enum {
+	public static final field DELETED Lio/github/artemidius/blowhard/adapters/persistence/LocalDatabaseDeletionResult;
+	public static final field FAILED Lio/github/artemidius/blowhard/adapters/persistence/LocalDatabaseDeletionResult;
+	public static final field NOT_FOUND Lio/github/artemidius/blowhard/adapters/persistence/LocalDatabaseDeletionResult;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public static fun valueOf (Ljava/lang/String;)Lio/github/artemidius/blowhard/adapters/persistence/LocalDatabaseDeletionResult;
+	public static fun values ()[Lio/github/artemidius/blowhard/adapters/persistence/LocalDatabaseDeletionResult;
 }
 
