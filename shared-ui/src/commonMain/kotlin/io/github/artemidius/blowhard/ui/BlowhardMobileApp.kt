@@ -17,6 +17,7 @@ import androidx.compose.ui.Modifier
 import io.github.artemidius.blowhard.ui.presentation.ConnectionSettingsPresenter
 import io.github.artemidius.blowhard.ui.presentation.ConversationPresenter
 import io.github.artemidius.blowhard.ui.presentation.DocumentLibraryPresenter
+import io.github.artemidius.blowhard.ui.presentation.LocalDataResetPresenter
 import io.github.artemidius.blowhard.ui.presentation.MeetingNotePresenter
 import io.github.artemidius.blowhard.ui.presentation.RunInspectorPresenter
 
@@ -28,12 +29,14 @@ public fun BlowhardMobileApp(
     runInspectorPresenter: RunInspectorPresenter,
     documentLibraryPresenter: DocumentLibraryPresenter,
     meetingNotePresenter: MeetingNotePresenter,
+    localDataResetPresenter: LocalDataResetPresenter? = null,
 ) {
     val conversationState by conversationPresenter.state.collectAsState()
     val settingsState by connectionSettingsPresenter.state.collectAsState()
     val inspectorState by runInspectorPresenter.state.collectAsState()
     val documentLibraryState by documentLibraryPresenter.state.collectAsState()
     val meetingNoteState by meetingNotePresenter.state.collectAsState()
+    val localDataResetState = localDataResetPresenter?.state?.collectAsState()?.value
     var navigation by rememberSaveable(stateSaver = MobileNavigationStateSaver) {
         mutableStateOf(MobileNavigationState.initial())
     }
@@ -52,6 +55,8 @@ public fun BlowhardMobileApp(
                 runInspectorPresenter = runInspectorPresenter,
                 documentLibraryPresenter = documentLibraryPresenter,
                 meetingNotePresenter = meetingNotePresenter,
+                localDataResetState = localDataResetState,
+                onLocalDataResetAction = { action -> localDataResetPresenter?.dispatch(action) },
                 navigate = { navigation = it },
             )
         }
