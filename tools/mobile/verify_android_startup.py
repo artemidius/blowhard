@@ -10,7 +10,7 @@ from pathlib import Path
 from typing import Any
 
 
-REQUIRED_FIELDS = ("Status", "TotalTime", "WaitTime")
+REQUIRED_FIELDS = ("Status", "LaunchState", "TotalTime", "WaitTime")
 
 
 def parse_activity_start(output: str) -> dict[str, str]:
@@ -36,6 +36,10 @@ def create_evidence(
 ) -> dict[str, Any]:
     """Validate launch output and return the allowlisted evidence model."""
     fields = parse_activity_start(output)
+    if fields["LaunchState"] != "COLD":
+        raise ValueError(
+            f"Android launch was {fields['LaunchState']!r}; expected a cold launch",
+        )
     total_time = parse_non_negative_milliseconds(fields, "TotalTime")
     if total_time > maximum_total_time_ms:
         raise ValueError(
@@ -45,6 +49,7 @@ def create_evidence(
         "schema_version": 1,
         "package": package_name,
         "component": component_name,
+        "launch_state": fields["LaunchState"],
         "status": fields["Status"],
         "total_time_ms": total_time,
         "wait_time_ms": parse_non_negative_milliseconds(fields, "WaitTime"),
@@ -52,8 +57,6 @@ def create_evidence(
     }
     if "ThisTime" in fields:
         evidence["this_time_ms"] = parse_non_negative_milliseconds(fields, "ThisTime")
-    if "LaunchState" in fields:
-        evidence["launch_state"] = fields["LaunchState"]
     return evidence
 
 

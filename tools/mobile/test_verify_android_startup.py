@@ -33,9 +33,9 @@ class AndroidStartupEvidenceTest(unittest.TestCase):
 
     def test_failed_or_incomplete_launch_is_rejected(self) -> None:
         with self.assertRaisesRegex(ValueError, "status 'Error'"):
-            parse_activity_start("Status: Error\nTotalTime: 1\nWaitTime: 1")
+            parse_activity_start("Status: Error\nLaunchState: COLD\nTotalTime: 1\nWaitTime: 1")
         with self.assertRaisesRegex(ValueError, "omitted: WaitTime"):
-            parse_activity_start("Status: ok\nTotalTime: 1")
+            parse_activity_start("Status: ok\nLaunchState: COLD\nTotalTime: 1")
 
     def test_budget_regression_is_rejected(self) -> None:
         with self.assertRaisesRegex(ValueError, "budget is 500 ms"):
@@ -44,6 +44,17 @@ class AndroidStartupEvidenceTest(unittest.TestCase):
                 "io.github.artemidius.blowhard",
                 "io.github.artemidius.blowhard/io.github.artemidius.blowhard.android.MainActivity",
                 500,
+            )
+
+    def test_warm_launch_is_rejected(self) -> None:
+        warm_output = LAUNCH_OUTPUT.replace("LaunchState: COLD", "LaunchState: WARM")
+
+        with self.assertRaisesRegex(ValueError, "expected a cold launch"):
+            create_evidence(
+                warm_output,
+                "io.github.artemidius.blowhard",
+                "io.github.artemidius.blowhard/io.github.artemidius.blowhard.android.MainActivity",
+                10_000,
             )
 
 
