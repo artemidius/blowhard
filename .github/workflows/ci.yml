@@ -50,6 +50,9 @@ jobs:
       - name: Test distribution inspection
         run: python3 -m unittest discover -s tools/packaging -p 'test_*.py' -v
 
+      - name: Test mobile evidence tooling
+        run: python3 -m unittest discover -s tools/mobile -p 'test_*.py' -v
+
       - name: Upload quality evidence
         if: ${{ always() }}
         uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
@@ -238,10 +241,7 @@ jobs:
           target: default
           arch: x86_64
           profile: pixel_2
-          script: >-
-            ./gradlew --no-daemon
-            :adapters:mobile-platform:connectedAndroidDeviceTest
-            :apps:android:connectedDebugAndroidTest
+          script: ./tools/mobile/verify_android_startup_ci.sh
 
       - name: Upload Android evidence
         if: ${{ always() }}
@@ -251,6 +251,7 @@ jobs:
           path: |
             apps/android/build/outputs/apk/debug/
             apps/android/build/reports/lint-results-debug.*
+            apps/android/build/reports/startup/
             apps/android/build/reports/androidTests/managedDevice/
             apps/android/build/outputs/androidTest-results/managedDevice/
             apps/android/build/test-results/testDebugUnitTest/
