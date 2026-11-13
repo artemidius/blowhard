@@ -116,10 +116,22 @@ public final class io/github/artemidius/blowhard/composition/FailClosedConnectio
 	public fun updateGenerationParameters (Lio/github/artemidius/blowhard/core/api/GenerationParameters;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 }
 
+public final class io/github/artemidius/blowhard/composition/OwnedMeetingNoteGenerationPort {
+	public fun <init> (Lio/github/artemidius/blowhard/core/domain/MeetingNoteGenerationPort;Lkotlin/jvm/functions/Function0;)V
+	public final fun close ()V
+	public final fun getGeneration ()Lio/github/artemidius/blowhard/core/domain/MeetingNoteGenerationPort;
+}
+
 public final class io/github/artemidius/blowhard/composition/ReplaceableApplicationSession {
 	public fun <init> (Ljava/lang/Object;Lio/github/artemidius/blowhard/composition/ApplicationSessionFactory;Lio/github/artemidius/blowhard/composition/ApplicationSessionCloser;Lio/github/artemidius/blowhard/composition/ApplicationLocalDataEraser;)V
 	public final fun close (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public final fun getSession ()Lkotlinx/coroutines/flow/StateFlow;
 	public final fun reset (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+}
+
+public final class io/github/artemidius/blowhard/composition/VerifiedModelMeetingNoteGenerationRouter : io/github/artemidius/blowhard/core/domain/MeetingNoteGenerationPort {
+	public fun <init> (Lio/github/artemidius/blowhard/core/api/ConnectionSettings;Lkotlin/jvm/functions/Function1;)V
+	public final fun close (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public fun generate (Lio/github/artemidius/blowhard/core/domain/MeetingNoteGenerationRequest;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 }
 
